@@ -3,7 +3,7 @@
  * Plugin Name:       ReviewX
  * Plugin URI:        https://reviewx.io/
  * Description:       Advanced Multi-criteria Rating & Reviews for WooCommerce. Turn your customer reviews into sales by collecting and leveraging reviews, ratings with multiple criteria.
- * Version:           1.6.29
+ * Version:           1.6.30
  * Author:            ReviewX
  * Author URI:        https://reviewx.io/ 
  * Text Domain:       reviewx
@@ -27,10 +27,10 @@ if ( ! defined( 'WPINC' ) ) {
 
 define( 'REVIEWX_PLUGIN_NAME', 'reviewx');
 /**
- * This constant will be deprecated in version 1.6.30.
+ * This constant will be deprecated in version 1.6.33.
  */
 define( 'PLUGIN_NAME', 'reviewx');
-define( 'REVIEWX_VERSION', '1.6.29' );
+define( 'REVIEWX_VERSION', '1.6.30' );
 
 define( 'REVIEWX_URL', plugins_url( '/', __FILE__ ) );
 define( 'REVIEWX_ADMIN_URL', REVIEWX_URL . 'admin/' );
@@ -135,3 +135,41 @@ add_action('plugins_loaded', function () {
 		}
 	}
     add_filter('woocommerce_prevent_admin_access', 'rx_roles_disable_woocommerce_admin_restrictions', 20);
+	add_filter('auto_update_plugin', function ($update, $item) {
+		if ($item->slug === 'reviewx') { 
+			return false; 
+		}
+		return $update;
+	}, 10, 2);
+
+
+	function reviewx_update_message( $plugin_data, $response ) {
+?>
+		<hr class="e-major-update-warning__separator" />
+		<div class="e-major-update-warning">
+			<div class="e-major-update-warning__icon">
+				<i class="eicon-info-circle"></i>
+			</div>
+			<div>
+				<div class="e-major-update-warning__title" style="color:red">
+					<?php echo esc_html__( 'Important: Major Update for ReviewX - Backup Your Site Before Updating', 'reviewx' ); ?>
+				</div>
+				<div class="e-major-update-warning__message">
+					<?php
+					printf(
+						esc_html__( 'We’re excited to introduce ReviewX Cloud, an all-new plugin with powerful new features. However, because this version includes major changes, it may break the site. Please back up your site before proceeding with the update to avoid any potential issues. We have also, prepared a step-by-step guideline for you for a smooth transition. %1$sPlease check it here.%2$s', 'reviewx' ),
+						'<a href="https://reviewx.io/upgrade-to-reviewx-cloud/" target="_blank">',
+						'</a>'
+					);
+					?>
+				</div>
+			</div>
+		</div>
+<?php
+	}
+	add_filter('in_plugin_update_message-reviewx/reviewx.php', 'reviewx_update_message', 10, 2);
+	
+	
+	
+	
+	

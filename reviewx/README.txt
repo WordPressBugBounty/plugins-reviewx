@@ -1,203 +1,143 @@
 === ReviewX - Multi-criteria Rating & Reviews for WooCommerce ===
 Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar
 Donate link: https://reviewx.io
-Tags: woocommerce, review, rating, multi criteria, product review, store rating, review reminder, reminder email, customer review, review plugin, reviewx, woocommerce product review, woocommerce review, wc review, testimonials
+Tags: Woocommerce Reviews, Product Reviews, Customer Reviews, Review Reminder, Review Plugin
 Requires at least: 4.4
 Tested up to: 6.6.1
 WC requires at least: 3.1
 WC tested up to: 9.0.2
-Stable tag: 1.6.29
+Stable tag: 1.6.30
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Advanced Multi-criteria Rating & Reviews for WooCommerce. Turn your customer reviews into sales by collecting and leveraging reviews, ratings with multiple criteria.
+Drive woocommerce business growth with social proof: gather product reviews with multicriteria ratings, auto-reminder emails, discounts, and more.
 
 == Description ==
 
-Now you can add your authentic customer reviews on your WooCommerce store using the WooCommerce Review plugin - [ReviewX](https://reviewx.io/). It’s easy to set up and has an interactive dashboard that works seamlessly with any WooCommerce store and WordPress custom post type.
+Looking to enhance your WooCommerce store’s credibility with authentic customer feedback?
 
-By using our plugin, you can create different multiple review criteria for your WooCommerce store product such as product quality, delivery time, service, product quality, etc. Based on these multiple review criteria, users can leave their ratings. Also, users can upload photos/videos in the review, recommend, like/dislike, share reviews through their social profiles, and more.
+Meet [ReviewX](https://reviewx.io/) – the ultimate WooCommerce reviews plugin that makes collecting and managing reviews effortless. Whether you’re just getting started or aiming to take your store to the next level with multicriteria ratings, automated review reminders, or discounts for reviews, ReviewX fits right in. It also works seamlessly with Custom Post Type.
 
-Well, you can set limited criteria for your product review (with the free version). But if you want to add more criteria, you need to purchase the premium version of the [ReviewX plugin](https://reviewx.io/docs/how-to-install-reviewx-pro/).
+With ReviewX, you can create custom review criteria that perfectly match your products, whether it’s product quality, delivery speed, customer service, or anything else that matters to your customers.
 
-Now, let’s see a quick overview of our WooCommerce reviews plugin:
+Your customers can easily share their experiences by leaving detailed ratings, complete with photos and videos for that extra touch of authenticity.
 
-https://youtu.be/631xOZmr_A0
+Plus, customers can interact with reviews by giving them a thumbs-up or down and even sharing them on social media.
 
+The free version gets you started with essential features like setting up a few review criteria. But if you’re ready to unlock the full potential of your reviews, our premium version of [ReviewX plugin](https://reviewx.io/docs/how-to-install-reviewx-pro/) is where the magic truly begins\!
 
+Ready to elevate your WooCommerce reviews? Let’s dive into what ReviewX can do for you:
 
-## Free Features: ##
+[ReviewX: Multi-Criteria Rating & Reviews Solution for WooCommerce](https://www.youtube.com/watch?v=631xOZmr_A0)
 
-**🔥[Multicriteria Rating:](https://reviewx.io/docs/unlimited-review-criteria/)** Set up different multicriteria for reviews on your product page. It will help customers leave their satisfaction based on different criteria such as product quality, price, service, delivery time, etc. Which will give an in-depth understanding of the review.
+## Why Choose ReviewX?
 
+ReviewX is designed with WooCommerce store owners in mind. Unlike other review plugins, ReviewX offers advanced features like multi-criteria reviews, photo & video reviews, and review reminders, making it the ultimate WooCommerce reviews plugin.
 
-**📨[Review Reminder Email:](https://reviewx.io/docs/woocommerce-review-reminder-email/)** The review reminder feature is a great way to increase the number of authentic reviews of a product from customers. With the review reminder feature, an admin can send an email notification if any customer misses leaving feedback on the WooCommerce product.  So there is no chance to miss any opportunity to get customer reviews for WooCommerce.
+Whether you’re looking to boost customer engagement or improve product credibility, ReviewX has the tools you need.
 
+## Benefits of Using ReviewX
 
-**🖼️[Photo with Review:](https://reviewx.io/docs/photo-video-review/)** WooCommerce reviews with Images or relevant photos is another sophisticated feature. It lets customers include their reviews along with photos. They can describe their issues, or share their feelings by uploading images/photos. Hence, your online store will be more reliable and trustable.
+* Save Time: Collect reviews on autopilot by sending automatic review reminders.  
+* Increase Sales: Displaying detailed customer reviews can lead to higher conversion rates by building trust and credibility.  
+* Improve SEO: Enhance your WooCommerce store’s SEO with rich snippets that display star ratings in search results.  
+* Gain Customer Insights: Multi-criteria reviews provide deeper insights into customer satisfaction and product performance.  
+* Reduce Return Rates: Detailed reviews help customers make informed purchase decisions, reducing the likelihood of returns.
 
+## Free Features
 
-**📦[Review Based On Order Status:](https://reviewx.io/docs/reviews-based-on-order-status/)** With the ReviewX plugin, you can control and manage the reviews based on the different order statuses. This means you can set when you will receive reviews from your customers depending on the product purchase order status.
+**🔥 [Multicriteria Rating](https://reviewx.io/docs/unlimited-review-criteria/)**: Set up different criteria like product quality, price, service, and more on your product page. This helps customers give feedback based on what really matters to them, giving you deeper insights into their satisfaction. Multicriteria reviews are perfect for understanding different aspects of your product’s performance.
 
+**✉️ [Review Reminder Email](https://reviewx.io/docs/woocommerce-review-reminder-email/)**: Don’t miss out on customer reviews for WooCommerce\! Automatically send a friendly reminder to customers who forgot to leave feedback, making sure you get more authentic WooCommerce reviews for your store. The review reminder feature can bring up to 50% more reviews.
 
-**📊[Advanced Visual Representations:](https://reviewx.io/docs/advance-visual-representation/)** Another interesting and eye-catchy feature of the ReviewX plugin is an advanced visual representation. You can visualize all the reviews for your customers with amazing visuals such as graphs, ratings, recommendations, etc on the review section of the WooCommerce product page or custom post type. As an admin, you can choose from multiple built-in design layouts from the backend.
+**📸 [Photo with Review](https://reviewx.io/docs/photo-video-review/)**: Let your customers add photos to their reviews. Whether they're showing off their new purchase or highlighting an issue, it makes your store look more credible and trustworthy. Visual customer reviews can really boost the appeal of your products.
 
+**📦 [Review Based On Order Status](https://reviewx.io/docs/reviews-based-on-order-status/)**: You decide when reviews can be left, based on the order status. This way, feedback comes in at just the right time, ensuring that WooCommerce review management is smooth and effective.
 
-**🌈[Customizable Themes:](https://reviewx.io/docs/customizable-themes/)** You can showcase your customer reviews in two different yet stunning designs or templates. As an admin, you can choose the preferred templates that give different backgrounds and highlight styles. 
+**📊 [Advanced Visual Representations](https://reviewx.io/docs/advance-visual-representation/)**: Jazz up your product review plugin with graphs, ratings, and other visuals. Choose from multiple design layouts to make your review section look fantastic and engage your customers better.
 
+**🎨 [Customizable Themes](https://reviewx.io/docs/customizable-themes/)**: Pick between two stunning design templates to showcase your WordPress review plugin. Customize them to match your store's vibe perfectly.
 
-**🔍[Google Rich Schema: ](https://ps.w.org/reviewx/assets/screenshot-10.png)** One of the modern-day's ranking factors of SEO is to get visible on the search engine through the product review schema. Yes, by using the ReviewX plugin, you can surely rank your product page by adding the product review schema to your store. Thus, it will help you to get found on the Google SERP.
+**🔍 [Google Rich Schema](https://ps.w.org/reviewx/assets/screenshot-10.png)**: Boost your store’s SEO by getting your product ratings to show up in Google search results. More visibility, more clicks\! It’s a great feature for any woocommerce review plugin looking to enhance online presence.
 
+**💼 [Manage WooCommerce Reviews](https://reviewx.io/docs/manage-all-woocommerce-reviews/)**: Keep all your customer reviews organized in one place. Approve, delete, or manage them easily from the Review management plugin dashboard.
 
-**💼[Manage WooCommerce Reviews:](https://reviewx.io/docs/manage-all-woocommerce-reviews/)** Manage all your reviews & feedback from one centralized dashboard of the ReviewX plugin. You can moderate the WooCommerce reviews at your convenience. That means all the review insights are in one place to take necessary initiatives. And you’ll be able to see customer reviews and product details.
+**👍 [Recommendations to Others](https://reviewx.io/docs/recommendation-to-others/)**: Give your customers an easy way to recommend your products. They can choose from ‘Recommended,’ ‘Neutral,’ or ‘Not Recommended,’ and you’ll see an overall recommendation score in the review section. This makes your customer review plugin even more useful.
 
+**📐 [Elementor Integration](https://reviewx.io/docs/how-to-use-reviewx-product-data-tabs-elementor-widget/)**: Love using Elementor? We’ve got you covered. Use our widget to design your WooCommerce reviews section right from the Elementor editor, customizing everything from colors to icons.
 
-**👍[Recommendations to Others:](https://reviewx.io/docs/recommendation-to-others/)** Another feasible yet useful feature is called Recommendations to Others. With this feature a customer can choose one from three recommendation statuses, ‘Recommended’, ‘Natural’, ‘Not Recommended. Based on all the recommendation counts an overall recommendation will be displayed in the review section.  Just enable this option from your backend and customers could easily recommend your products/services to potential customers.
+**📐 [Oxygen Builder Integration](https://reviewx.io/docs/how-to-use-reviewx-woo-review-oxygen-builder-elements/)**: Prefer Oxygen Builder? No problem. Use our widget to design and customize your product review plugin section easily.
 
+**📐 [Divi Builder Integration](https://reviewx.io/docs/how-to-use-reviewx-woo-review-tab-divi-builder-module/)**: If Divi is your go-to, you can also design and customize your customer review plugin page with our Divi builder widget. Tweak colors, backgrounds, and fonts to your liking.
 
-**🔥[Elementor Integration:](https://reviewx.io/docs/how-to-use-reviewx-product-data-tabs-elementor-widget/)** If you are using Elementor page builder and you may want to keep your product page different instead of the default one. So no worry, our Elementor Widget lets you do that easily. We bring you the Elementor widget to get your job done. You only design your WooCommerce product review directly get from the Elementor editing panel. And then design your page, add colors, change the icons, and fonts and do more of what you need.
+**🌪️ [Extensive Filtering](https://reviewx.io/docs/extensive-filtering/)**: Let your customers find exactly the customer reviews they want with smart filtering options. They can sort by photo reviews, text, ratings, and more.
 
+**✅ [Verified Badge](https://reviewx.io/docs/verified-badge/)**: Add a verified badge to reviews from customers who actually bought the product, boosting trust for new shoppers who rely on WooCommerce reviews.
 
-**🔥[Oxygen Builder Integration:](https://reviewx.io/docs/how-to-use-reviewx-woo-review-oxygen-builder-elements/)** The ReviewX introduces another page builder integration, Oxygen builder. Like the Elementor widget, you can directly use the Oxygen builder widget to design & customize your product review section. Using the ‘ReviewX Woo Reviews’ widget each element of review information is customizable.
+**⚙️ [Advance Settings Panel](https://reviewx.io/docs/advanced-settings-panel/)**: Control all your WooCommerce reviews settings from a single, easy-to-use panel. Enable or disable features, customize designs, set up emails, and more with just a few clicks.
 
+**✉️ [Test Review Reminder Email](https://reviewx.io/docs/test-review-reminder-email/)**: Make sure your review reminder emails look just right before sending them out. Customize the template, add links, and preview everything before hitting send.
 
-**🔥[Divi Builder Integration:](https://reviewx.io/docs/how-to-use-reviewx-woo-review-tab-divi-builder-module/)** You can also design & customize your product review page of the Divi builder. Using the Divi builder widget, you can customize colors, background styles, font colors, and more at your convenience.
+**🔒 [reCAPTCHA](https://reviewx.io/docs/how-to-enable-recaptcha/)**: Keep spam and bots away by enabling reCAPTCHA on your customer review plugin. Only legit customers will be able to leave feedback.
 
+**✍️ [Review for Custom Post](https://reviewx.io/docs/how-to-use-reviewx-with-custom-post-types/)**: Use ReviewX to collect customer reviews for WooCommerce on custom posts too. Whether it’s a blog post or a custom content type, you can gather valuable feedback from your audience.
 
-**🌪️[Extensive Filtering:](https://reviewx.io/docs/extensive-filtering/)** Now users can easily filter and find the WooCommerce reviews they want to see or read. The extensive filter option lets you do that smartly. Customers can filter reviews based on the photo review, text, recent, low and top-rated.
+## Pro Features
 
+**🚀 [Review Import from Different Sources](https://reviewx.io/docs/how-to-import-product-reviews-and-ratings-using-reviewx/)**: Easily bring in WooCommerce reviews from other stores to your own. It’s a quick way to build credibility with minimal effort.
 
-**✅[Verified Badge:](https://reviewx.io/docs/verified-badge/)** With the ReviewX plugin, you can enable another useful feature, Verified badge. After you enable the option, you can add a verified badge to the customer reviews for WooCommerce store (who has purchased your product). So when visitors come to your shop, they’ll find the statement legit and convincing.
+**🎥 [Review with Video](https://reviewx.io/docs/photo-video-review/)**: Let your customers upload videos along with their customer reviews. They can either upload directly or share a video link, making their feedback even more engaging.
 
+**🌟 [Unlimited Review Criteria](https://reviewx.io/docs/unlimited-review-criteria/)**: Need more criteria? The pro version lets you add as many as you like, so your customers can leave the most detailed customer reviews for WooCommerce.
 
-**⚙️[Advance Settings Panel:](https://reviewx.io/docs/advanced-settings-panel/)** The advance setting panel helps to get several options related to the review page. It's more like a setup wizard and the options are arranged nicely. From this setting panel or dashboard, you can control all the features, such as enable/disable, design format, email options, and more. 
+**📱 [Share Review on Social Media](https://reviewx.io/docs/share-review-on-social-media/)**: Let your customers spread the word by sharing their WooCommerce reviews on social media, driving more traffic to your store.
 
+**✂️ [Review Moderation](https://reviewx.io/docs/edit-review/)**: Correct any mistakes or inappropriate comments with ease using our review management plugin feature. Keep your review section clean and professional.
 
-**📨[Test Review Reminder Email:](https://reviewx.io/docs/test-review-reminder-email/)** Another useful feature of the ReviewX plugin is the test review reminder email. It’s very important to check the email before you send it. So the ReviewX plugin offers you this opportunity to test the email to see if everything looks fine and okay. You can choose the premade email template, customize the name, product name, add links, and more. 
+**🗳️ [Voting System](https://reviewx.io/docs/voting-system-give-a-thumbs-up/)**: Enable a voting system on customer reviews so customers can upvote the most helpful feedback, making it easier for others to find valuable insights.
 
+**🙈 [Anonymous Review](https://reviewx.io/docs/anonymous-review/)**: Give your customers the option to leave WooCommerce reviews anonymously. It’s perfect for those who want to share their thoughts without revealing their identity.
 
-**[🔐reCAPTCHA:](https://reviewx.io/docs/how-to-enable-recaptcha/)** You can enable the reCaptcha feature in the  ReviewX-WooCommerce review plugin. By enabling this feature, you can protect the product review page from spam and bot reviews. So only the verified and legit users can submit their reviews.
+**🌟 [Highlight Review](https://reviewx.io/docs/highlight-a-review/)**: Feature the best customer reviews at the top of your product page to showcase customer satisfaction and build trust.
 
+**🗨️ [Admin Reply](https://reviewx.io/docs/add-admin-reply-to-a-review/)**: Engage with your customers by replying to their customer reviews. Show them that their feedback is valued and that you’re dedicated to improving their experience.
 
-**✍️[Review for Custom Post:](https://reviewx.io/docs/how-to-use-reviewx-with-custom-post-types/)** You can use ReviewX in your post/custom posts to collect reviews from your readers. Within the custom post type, you can utilize the ReviewX plugin both for the multi-criteria and the traditional rating system.
+**✅ [Manage Review Approval](https://reviewx.io/docs/manage-review-approval-process/)**: Automatically approve WooCommerce reviews to save time, or turn off auto-approval to keep full control over what gets published.
 
+**🌈 [Different Product Rating Styles](https://reviewx.io/docs/different-rating-style/)**: Choose from three different rating styles—stars, likes, or emojis. Match the rating style to your brand’s personality and make the customer reviews section more fun.
 
-## Pro Features: ##
+**🔖 [Custom Logo For Admin Reply](https://reviewx.io/docs/custom-logo-for-admin-reply/)**: Add a custom logo to your admin replies to make your responses stand out and reinforce your brand’s identity on your WordPress review plugin.
 
-**🚐[Review Import from Different Sources:](https://reviewx.io/docs/how-to-import-product-reviews-and-ratings-using-reviewx/)** You can now import the reviews collected from other online stores to your ones. The process is so easy made with our plugin that comes with the pro version.
+**🌍 [Display The Reviewer’s Country](https://reviewx.io/docs/how-to-display-the-reviewers-country-with-their-review/)**: Show off where your customers are from by displaying their country flag next to their WooCommerce reviews. It adds a global feel to your store and builds community.
 
+**🎖️ 24/7 Support**: Got questions or need help with your woocommerce review plugin? Our support team is here for you 24/7 to make sure everything runs smoothly.
 
-**📹[Review with Video:](https://reviewx.io/docs/photo-video-review/)** Like photo upload, your customers can upload videos with images to their reviews/feedback/ratings. You can do it in two ways, one from the direct upload and another from the URL.
+### 
 
+**📚 Resources**: [Handy WooCommerce Reviews Shortcodes](https://reviewx.io/docs/shortcode-to-display-product-review-lists/)
 
-**🌟[Unlimited Review Criteria:](https://reviewx.io/docs/unlimited-review-criteria//)** You can add unlimited criteria to your WooCommerce product review. But you can only add a limited number of criteria in the free version. By enabling the premium version, you can create unlimited criteria for the product review and customize them on your own.
+Want to make the most of ReviewX on your WooCommerce store? We’ve got some super useful WooCommerce Reviews shortcodes that let you efficiently showcase different review-related features.
 
+These shortcodes make it easy to display various review insights like product statistics, criteria graphs, review summaries, and more. Just drop these into your product review pages and start enhancing your customer experience instantly.
 
-**🚀[Share Review on Social Media:](https://reviewx.io/docs/share-review-on-social-media/)** You can enable this feature to let your customers share reviews on their social platforms. So different visitors from different places could grab and know about your product. Thus it generates more engagement in your online store.
+Here’s a quick rundown of what each shortcode does:
 
+1. 📊 [Product Statistics](https://reviewx.io/docs/shortcode-to-display-product-statistics/): Show off your product’s key stats with this shortcode: `[ rvx-stats product_id= ]`  
+2. 📈 [Product Criteria Graph](https://reviewx.io/docs/shortcode-to-display-product-criteria-graph/): Visualize product criteria ratings with a neat graph using: `[ rvx-criteria-graph product_id= ]`  
+3. 📝 [Product Review Summary](https://reviewx.io/docs/shortcode-to-display-product-review-summary/): Summarize all your reviews with this handy shortcode: `[ rvx-summary product_id= ]`  
+4. 📃 [All Product Review Lists](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): Display a complete list of reviews with: `[rvx-review-list]`  
+5. 🔍 [Specific Product Review List](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): Want to show reviews for a specific product? Use: `[rvx-review-list product_id= X]`  
+6. 👤 [Upload Profile Image](https://reviewx.io/docs/shortcode-profile-photo-uploader/): Let users upload their profile image with: `[rvx_user_avatar]`  
+7. 🛠️ [Elementor Widget Shortcode](https://reviewx.io/docs/how-to-use-rvx-woo-reviews-shortcode/): If you’re using Elementor, display reviews with this widget: `[rvx-woo-reviews]`  
+8. ⭐ [Review Star Rating with Count](https://reviewx.io/docs/shortcode-to-display-review-star-rating-with-count/): Show the star rating and count with: `[rvx-star-count]`  
+   * 📌 Post-ID Parameter: Customize it by adding the post-ID: `[rvx-star-count post_id=’xx’]`. You can also use the product-ID to fetch the star rating count for a specific product.  
+   * 🔧 Custom Post Types: This shortcode also supports custom post types. Just define the post id of the custom post type you want: `[rvx-star-count post_id=’xx’]`
 
-**✂️[Review Moderation:](https://reviewx.io/docs/edit-review/)** Use ReviewX’s review moderation feature if a customer mistakenly leaves a bad rating or comment on your store.
+## Installation
 
-
-**🗳️[Voting System:](https://reviewx.io/docs/voting-system-give-a-thumbs-up/)** Utilize the voting system on your online store with the ReviewX plugin. By enabling this feature, customers will get a voting icon beside the review. So visitors could show their acceptance by voting for the reviews or statements.
-
-
-**🙈[Anonymous Review:](https://reviewx.io/docs/anonymous-review/)** Your customers can post their reviews anonymously if you enable this feature on your WooCommerce store. This way, customers could hide their names instead of showing their personal information.
-
-
-**💡[Highlight Review:](https://reviewx.io/docs/highlight-a-review/)** You can highlight your most desired or top-rated WooCommerce customer’s review by using this feature.
-
-
-**✍️[Admin Reply:](https://reviewx.io/docs/add-admin-reply-to-a-review/)** With this feature, you can reply to every review or feedback as an admin. This way, customers or visitors will understand that you’re highly trustworthy and give them a priority for their purchase. The edit/preview option is also available to correct if you make any mistakes.
-
-
-**✅[Manage Review Approval:](https://reviewx.io/docs/manage-review-approval-process/)** Enable ‘Review Auto Approval’ to manage all your customer reviews on your store. The reviews will be automatically approved and visible in the store. But later, you can turn it off to remove/control spam reviews. 
-
-
-**🌈[Different Product Rating Styles:](https://reviewx.io/docs/different-rating-style/)** The ReviewX plugins offer three different product rating styles to show up on the store. As an admin, you can set the desired ones. And, customers will see the graphical preview on the product review page. Such as 5-star ratings, a like-dislike button, and happy-sad emoji.
-
-
-**🎭[Custom Logo For Admin Reply:](https://reviewx.io/docs/custom-logo-for-admin-reply/)** You can add a custom logo designed for Admin reply. So whenever the admin replies, it will display the custom logo of the admin on the product review page.
-
-
-**🏳️[Display The Reviewer’s Country:](https://reviewx.io/docs/how-to-display-the-reviewers-country-with-their-review/)** ReviewX introduced an exciting feature, now your reviewer’s country will be displayed along with their reviews. The country flag will be displayed from where your customer gives the review. This service is provided by ReviewX using IPinfo®.
-
-
-**🎖️24/7 Support:**  Get 24/7 dedicated support from our Support team to help you with every difficulty. Feel free to reach out to our Support team to get you every job done at your fingertips.
-
-
-**⭐Resources:** Useful [WooCommerce Reviews Shortcodes](https://reviewx.io/docs/shortcode-to-display-product-review-lists/)
-
-We have some available WooCommerce Reviews shortcodes to let you efficiently use the ReviewX features right on your WooCommerce store. 
-
-You can use them to display different review-related information such as product statistics, product criteria, graphs, product review summaries, product review lists, and so on. Add these functions to your product review page by using our available shortcodes.
-
-Let’s check out them one by one:
-1. [Shortcode to display product statistics](https://reviewx.io/docs/shortcode-to-display-product-statistics/): [ rvx-stats product_id= ]
-2. [Shortcode to display Product criteria graph](https://reviewx.io/docs/shortcode-to-display-product-criteria-graph/): [ rvx-criteria-graph product_id= ]
-3. [Shortcode to display product review summary](https://reviewx.io/docs/shortcode-to-display-product-review-summary/) : [ rvx-summary product_id= ]
-4. [Shortcode to display all product review lists](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): [rvx-review-list]
-5. [Shortcode to display a specific product review list](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): [rvx-review-list product_id= X]
-6. [Shortcode to upload profile image](https://reviewx.io/docs/shortcode-profile-photo-uploader/): [rvx_user_avatar]
-7. [Shortcode for Elementor widget](https://reviewx.io/docs/how-to-use-rvx-woo-reviews-shortcode/): [rvx-woo-reviews]
-8. [Shortcode To Display Review Star Rating With Count](https://reviewx.io/docs/shortcode-to-display-review-star-rating-with-count/): [rvx-star-count]
-	1. It accepts the Post-ID as a parameter [rvx-star-count post_id=’xx’], You can also utilize the product-ID to bring the star rating count from the specific product.
-	2. It supports custom post types. You need to define the post id of that Custom post type: [rvx-star-count post_id=’xx’]
-
-
-
-## 🚀 It’s Time to Get Started With ReviewX ##
-
-https://www.youtube.com/watch?v=BitZsbqEZF0
-
-### Let’s see what other influencers feel about the ReviewX plugin:
-
-**Our friend David McCan made a walk-through video**
-
-https://www.youtube.com/watch?v=e7kVfCWzovY
-
-
-**A Quick 'How to' by SaaS Master**
-
-https://www.youtube.com/watch?v=1744qytSrRc
-
-
-**Alston Antony loves it. A plugin review & tutorial by him**
-
-https://www.youtube.com/watch?v=D4Qy54U5Dhc
-
-
-
-## 🚀 Backed By A Trusted Team ##
-This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/), a dedicated team for WordPress store owners, trusted by 10,000+ happy users.
-
-## 👨‍💻 Documentation and Support ##
-
-- For documentation and tutorials go to our [Documentation](https://reviewx.io/docs/).
-- If you have any more questions, visit our support on the [Plugin’s Forum](https://wordpress.org/support/plugin/reviewx/).
-- For more information about features, FAQs and documentation, check out our website at [ReviewX](https://reviewx.io/).
-
-
-## 💙 Happy User of ReviewX? ##
-- Join our [Facebook Group](https://www.facebook.com/groups/reviewx).
-- Learn from our tutorials on [Youtube Channel](https://www.youtube.com/channel/UC3kxtXZYySXXtr6DydZHCsA).
-- Or rate us on [WordPress](https://wordpress.org/support/plugin/reviewx/reviews/?rate=5#new-post).
-- Learn More About ReviewX(PRO): [All The Features of the ReviewX](https://reviewx.io/free-vs-pro/).
-- Check out the plugin and compare it with other review plugins: [Compare here](https://reviewx.io/compare/).
-
-== Installation ==
-
-= Modern Way: =
-1. Go to the WordPress Dashboard "Add New Plugin" section.
-2. Search For "Reviewx". 
-3. Install, then Activate it.
-4. Follow the [Documentation](https://reviewx.io/docs/)
-
-= Old Way: =
-1. Upload `reviewx` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Follow the [Documentation](https://reviewx.io/docs/)
-
+1. Upload the Plugin Files: Upload the `reviewx.zip` file to your WordPress site via the plugins page or FTP.  
+2. Activate the Plugin: Go to the 'Plugins' menu in WordPress and click 'Activate.'  
+3. Configure Settings: Navigate to the ReviewX settings page to customize review forms, set up review reminders, and enable multi-criteria reviews.
 
 == Frequently Asked Questions ==
 
@@ -205,14 +145,22 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 Yes, it will work with any standard WordPress theme.
 
+= How does the multi-criteria review feature work? =
+
+Multi-criteria reviews allow customers to rate products on different aspects such as quality, value for money, and usability. You can customize the criteria to fit your products.
+
+= Can I customize the review reminder emails? =
+
+Yes, ReviewX allows you to fully customize the review reminder emails, including the content, timing, and design.
+
+= Is ReviewX compatible with other WooCommerce plugins? =
+
+Absolutely\! ReviewX is designed to work seamlessly with other popular WooCommerce plugins, ensuring a smooth and integrated experience.
 
 = Why are multi-criteria review important? =
 
 Multiple review criteria help to make your product more transparent for customers to get detailed feedback that will help you to improve the product quality.
 
-= How do I add review Criteria? =
-
-From the WordPress dashboard, you can decide to browse the ReviewX settings page. You’ll find a tab called ‘Product Review Criteria‘ where you can create the review criteria(s), that will allow your customers to submit their rating for. More Details
 
 = What If I uninstall the ReviewX plugin? =
 
@@ -223,10 +171,50 @@ All of your previous reviews with ratting data will be migrated automatically.
 
 But we assume that you’re not expecting the multi-criteria based ratting for those previous reviews as by that time you weren’t using ReviewX
 
+🚀 Let’s Get Started With ReviewX
+
+[How To Install, Activate & Get Started With ReviewX](https://www.youtube.com/watch?v=BitZsbqEZF0)
+
+## Influencers Take on ReviewX plugin:
+
+What David McCan Says About ReviewX
+
+[ReviewX - Advanced Reviews for WooCommerce](https://www.youtube.com/watch?v=e7kVfCWzovY)
+
+SaaS Master’s Take on ReviewX
+
+[How to enable reviews on WooCommerce with ReviewX](https://www.youtube.com/watch?v=1744qytSrRc)
+
+A Review from Alston Antony. He shared why he loves ReviewX
+
+[ReviewX Review & Tutorial - Best Free WooCommerce Reviews Plugin? (With 50% Discount & LTD)](https://www.youtube.com/watch?v=D4Qy54U5Dhc)
+
+
+
+🚀 Backed By A Trusted Team
+
+This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/), a dedicated team for WordPress store owners, trusted by 10,000+ happy users.
+
+👨‍💻 Documentation and Support
+
+* For documentation and tutorials go to our [Documentation](https://reviewx.io/docs/).  
+* If you have any more questions, visit our support on the [Plugin’s Forum](https://wordpress.org/support/plugin/reviewx/).  
+* For more information about features, FAQs and documentation, check out our website at [ReviewX](https://reviewx.io/).
+
+💙 Happy User of ReviewX?
+
+* Join our [Facebook Group](https://www.facebook.com/groups/reviewx).  
+* Learn from our tutorials on [Youtube Channel](https://www.youtube.com/channel/UC3kxtXZYySXXtr6DydZHCsA).  
+* Or rate us on [WordPress](https://wordpress.org/support/plugin/reviewx/reviews/?rate=5#new-post).  
+* Learn More About ReviewX(PRO): [All The Features of the ReviewX](https://reviewx.io/free-vs-pro/).  
+* Check out the plugin and compare it with other review plugins: [Compare here](https://reviewx.io/compare/)
 == Screenshots ==
 
 
 == Changelog ==
+= 1.6.30 - 17-10-2024 =
+- Update: Regular update
+
 = 1.6.29 - 05-08-2024 =
 - Update: Security patch update
 
