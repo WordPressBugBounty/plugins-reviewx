@@ -1,0 +1,124 @@
+<div class="rvx-flex rvx-gap-space8 rvx-review-user">
+    <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+        <div x-data="avatarComponent({src: '', alt: review.reviewer_name})" x-show="!review.is_anonymous"
+             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[50px] rvx-bg-white rvx-text-[28px] rvx-border rvx-border-neutral-400  rvx-rounded-full rvx-review-user__avatar">
+            <template x-if="showImage()">
+                <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
+            </template>
+            <template x-if="!showImage()">
+                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
+                    <span x-text="alt.charAt(0).toUpperCase()"></span>
+                </div>
+            </template>
+        </div>
+        <div x-data="avatarComponent({src: '', alt: 'Anonymous'})" x-show="review.is_anonymous"
+             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[50px] rvx-text-[28px] rvx-bg-white rvx-border rvx-border-neutral-400  rvx-rounded-full rvx-review-user__avatar">
+            <template x-if="showImage()">
+                <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
+            </template>
+            <template x-if="!showImage()">
+                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
+                    <span x-text="alt.charAt(0).toUpperCase()"></span>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <div>
+        <div class="rvx-flex rvx-flex-wrap rvx-items-center rvx-gap-space8 rvx-font-nunito">
+            <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                <p x-show="!review.is_anonymous" x-text="layoutView === 'list' ? censorReviewerName({isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name, str: review.reviewer_name}) : showDisplayReviewerName({haveVerifiedBadge: (reviewSettingsData?.data.setting?.review_settings?.reviews?.show_verified_badge && review?.is_verified), showCountryFlg: reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country, str: review.reviewer_name, isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name})"
+                   class="!rvx-text-[16px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-900 rvx-review-user__name">
+                </p>
+                <p x-show="review.is_anonymous"
+                   class="!rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-900 rvx-review-user__name">
+                     {{__('Anonymous', 'reviewx')}}
+                </p>
+            </div>
+
+            <div x-show="!reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                <p class="rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-review-user__name">
+                     {{__('Shopper', 'reviewx')}}
+                </p>
+            </div>
+
+            <p x-show="reviewSettingsData?.data.setting?.review_settings.reviews.show_verified_badge && review?.is_verified"
+               class="rvx-flex rvx-items-center rvx-text-success rvx-gap-space5 !rvx-text-[14px] rvx-review-user__verify">
+                <span class="material-symbols-rounded-fill rvx-text-[16px]"> {{__('check_circle', 'reviewx')}}</span>
+                {{__('Verified', 'reviewx')}}
+            </p>
+
+            <template x-if="reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country && review?.reviewer_flag">
+                <div x-data="__rvxTooltipComponent__()" x-init="initial()" class="rvx-relative">
+                    <div x-ref="tooltip" x-show="tooltipVisible"
+                         :class="{
+                            'rvx-top-[-15px] left-1/2 -rvx-translate-x-1/2 -rvx-mt-0.5 -rvx-translate-y-full' : tooltipPosition === 'top',
+                            'rvx-top-1/2 -rvx-translate-y-1/2 -rvx-ml-0.5 rvx-left-0 -rvx-translate-x-full' : tooltipPosition === 'left',
+                            'rvx-bottom-[-20px]  -rvx-translate-x-1/2 -rvx-mb-0.5 rvx-translate-y-full' : tooltipPosition === 'bottom',
+                            'rvx-top-1/2 -rvx-translate-y-1/2 -rvx-mr-0.5 rvx-right-0 rvx-translate-x-full' : tooltipPosition === 'right'
+                            }"
+                         class="rvx-absolute rvx-w-auto rvx-text-sm" x-cloak>
+
+                        <div x-show="tooltipVisible" x-transition class="rvx-relative rvx-px-2 rvx-py-1 rvx-text-white rvx-bg-black rvx-rounded rvx-bg-opacity-90">
+                            <p x-text="review?.reviewer_country_short_name" class="rvx-flex-shrink-0 rvx-block rvx-text-xs rvx-whitespace-nowrap"></p>
+                            {#                    <div x-ref="tooltipArrow" x-show="tooltipArrow"#}
+                            {#                         :class="{#}
+                            {#                             'rvx-bottom-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 rvx-translate-y-full' : tooltipPosition == 'top',#}
+                            {#                             'rvx-right-0 -rvx-translate-y-1/2 rvx-top-1/2 h-2.5 -rvx-mt-px rvx-translate-x-full' : tooltipPosition == 'left',#}
+                            {#                             'rvx-top-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 -rvx-translate-y-full' : tooltipPosition == 'bottom',#}
+                            {#                             'rvx-left-0 -rvx-translate-y-1/2 rvx-top-1/2 rvx-h-2.5 -rvx-mt-px -rvx-translate-x-full' : tooltipPosition == 'right' }"#}
+                            {#                         class="rvx-absolute rvx-inline-flex rvx-items-center rvx-justify-center rvx-overflow-hidden">#}
+
+                            {#                        <div :class="{ 'rvx-origin-top-left -rvx-rotate-45' : tooltipPosition == 'top', 'rvx-origin-top-left rvx-rotate-45' : tooltipPosition == 'left', 'rvx-origin-bottom-left rvx-rotate-45' : tooltipPosition == 'bottom', 'rvx-origin-top-right -rvx-rotate-45' : tooltipPosition == 'right' }" class="rvx-w-1.5 rvx-h-1.5 rvx-transform rvx-bg-black rvx-bg-opacity-90"></div>#}
+                            {#                    </div>#}
+                        </div>
+                    </div>
+                    <div x-ref="content">
+                        <img :src="review?.reviewer_flag" alt="flag" width="22" height="26">
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <template x-if="Number(review.rating)">
+            <div x-data="{
+                reviewAverage: Number(review.rating),
+                totalRating: 5
+            }" class="review rvx-flex rvx-gap-[4px] rvx-mb-2">
+                <template x-for="star in totalRating">
+                   <div>
+                       <!-- Full star -->
+                       <template x-if="isFullStar(star, reviewAverage)">
+                           <svg class="rvx-reviewer__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                           </svg>
+                       </template>
+
+                       <!-- Half star -->
+                       <template x-if="isHalfStar(star, reviewAverage)">
+                           <svg class="rvx-reviewer__star-half" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 24 24">
+                               <defs>
+                                   <linearGradient id="grad">
+                                       <stop offset="50%" class="rvx-reviewer__star-active-half-star" :stop-color="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" />
+                                       <stop offset="50%" class="rvx-reviewer__star-inactive-half-star" stop-color="grey" />
+                                   </linearGradient>
+                               </defs>
+                               <path fill="url(#grad)" d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                           </svg>
+                       </template>
+
+                       <!-- Empty star -->
+                       <template x-if="isFullEmptyStar(star, reviewAverage)">
+                           <svg class="rvx-reviewer__star-inactive rvx-fill-neutral-600" fill="none" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                               <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                           </svg>
+                       </template>
+                   </div>
+                </template>
+            </div>
+        </template>
+    </div>
+</div>
+
+
+

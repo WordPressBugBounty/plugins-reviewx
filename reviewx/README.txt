@@ -2,11 +2,12 @@
 Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar
 Donate link: https://reviewx.io
 Tags: Woocommerce Reviews, Product Reviews, Customer Reviews, Review Reminder, Review Plugin
-Requires at least: 4.4
-Tested up to: 6.6.1
+Requires at least: 5.0
+Tested up to: 6.7
 WC requires at least: 3.1
-WC tested up to: 9.0.2
-Stable tag: 1.6.30
+Requires PHP: 7.4
+WC tested up to: 9.4.1
+Stable tag: 2.0.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -38,10 +39,10 @@ Whether you’re looking to boost customer engagement or improve product credibi
 
 ## Benefits of Using ReviewX
 
-* Save Time: Collect reviews on autopilot by sending automatic review reminders.  
-* Increase Sales: Displaying detailed customer reviews can lead to higher conversion rates by building trust and credibility.  
-* Improve SEO: Enhance your WooCommerce store’s SEO with rich snippets that display star ratings in search results.  
-* Gain Customer Insights: Multi-criteria reviews provide deeper insights into customer satisfaction and product performance.  
+* Save Time: Collect reviews on autopilot by sending automatic review reminders.
+* Increase Sales: Displaying detailed customer reviews can lead to higher conversion rates by building trust and credibility.
+* Improve SEO: Enhance your WooCommerce store’s SEO with rich snippets that display star ratings in search results.
+* Gain Customer Insights: Multi-criteria reviews provide deeper insights into customer satisfaction and product performance.
 * Reduce Return Rates: Detailed reviews help customers make informed purchase decisions, reducing the likelihood of returns.
 
 ## Free Features
@@ -112,7 +113,7 @@ Whether you’re looking to boost customer engagement or improve product credibi
 
 **🎖️ 24/7 Support**: Got questions or need help with your woocommerce review plugin? Our support team is here for you 24/7 to make sure everything runs smoothly.
 
-### 
+###
 
 **📚 Resources**: [Handy WooCommerce Reviews Shortcodes](https://reviewx.io/docs/shortcode-to-display-product-review-lists/)
 
@@ -122,21 +123,21 @@ These shortcodes make it easy to display various review insights like product st
 
 Here’s a quick rundown of what each shortcode does:
 
-1. 📊 [Product Statistics](https://reviewx.io/docs/shortcode-to-display-product-statistics/): Show off your product’s key stats with this shortcode: `[ rvx-stats product_id= ]`  
-2. 📈 [Product Criteria Graph](https://reviewx.io/docs/shortcode-to-display-product-criteria-graph/): Visualize product criteria ratings with a neat graph using: `[ rvx-criteria-graph product_id= ]`  
-3. 📝 [Product Review Summary](https://reviewx.io/docs/shortcode-to-display-product-review-summary/): Summarize all your reviews with this handy shortcode: `[ rvx-summary product_id= ]`  
-4. 📃 [All Product Review Lists](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): Display a complete list of reviews with: `[rvx-review-list]`  
-5. 🔍 [Specific Product Review List](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): Want to show reviews for a specific product? Use: `[rvx-review-list product_id= X]`  
-6. 👤 [Upload Profile Image](https://reviewx.io/docs/shortcode-profile-photo-uploader/): Let users upload their profile image with: `[rvx_user_avatar]`  
-7. 🛠️ [Elementor Widget Shortcode](https://reviewx.io/docs/how-to-use-rvx-woo-reviews-shortcode/): If you’re using Elementor, display reviews with this widget: `[rvx-woo-reviews]`  
-8. ⭐ [Review Star Rating with Count](https://reviewx.io/docs/shortcode-to-display-review-star-rating-with-count/): Show the star rating and count with: `[rvx-star-count]`  
-   * 📌 Post-ID Parameter: Customize it by adding the post-ID: `[rvx-star-count post_id=’xx’]`. You can also use the product-ID to fetch the star rating count for a specific product.  
+1. 📊 [Product Statistics](https://reviewx.io/docs/shortcode-to-display-product-statistics/): Show off your product’s key stats with this shortcode: `[ rvx-stats product_id= ]`
+2. 📈 [Product Criteria Graph](https://reviewx.io/docs/shortcode-to-display-product-criteria-graph/): Visualize product criteria ratings with a neat graph using: `[ rvx-criteria-graph product_id= ]`
+3. 📝 [Product Review Summary](https://reviewx.io/docs/shortcode-to-display-product-review-summary/): Summarize all your reviews with this handy shortcode: `[ rvx-summary product_id= ]`
+4. 📃 [All Product Review Lists](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): Display a complete list of reviews with: `[rvx-review-list]`
+5. 🔍 [Specific Product Review List](https://reviewx.io/docs/shortcode-to-display-product-review-lists/): Want to show reviews for a specific product? Use: `[rvx-review-list product_id= X]`
+6. 👤 [Upload Profile Image](https://reviewx.io/docs/shortcode-profile-photo-uploader/): Let users upload their profile image with: `[rvx_user_avatar]`
+7. 🛠️ [Elementor Widget Shortcode](https://reviewx.io/docs/how-to-use-rvx-woo-reviews-shortcode/): If you’re using Elementor, display reviews with this widget: `[rvx-woo-reviews]`
+8. ⭐ [Review Star Rating with Count](https://reviewx.io/docs/shortcode-to-display-review-star-rating-with-count/): Show the star rating and count with: `[rvx-star-count]`
+   * 📌 Post-ID Parameter: Customize it by adding the post-ID: `[rvx-star-count post_id=’xx’]`. You can also use the product-ID to fetch the star rating count for a specific product.
    * 🔧 Custom Post Types: This shortcode also supports custom post types. Just define the post id of the custom post type you want: `[rvx-star-count post_id=’xx’]`
 
 ## Installation
 
-1. Upload the Plugin Files: Upload the `reviewx.zip` file to your WordPress site via the plugins page or FTP.  
-2. Activate the Plugin: Go to the 'Plugins' menu in WordPress and click 'Activate.'  
+1. Upload the Plugin Files: Upload the `reviewx.zip` file to your WordPress site via the plugins page or FTP.
+2. Activate the Plugin: Go to the 'Plugins' menu in WordPress and click 'Activate.'
 3. Configure Settings: Navigate to the ReviewX settings page to customize review forms, set up review reminders, and enable multi-criteria reviews.
 
 == Frequently Asked Questions ==
@@ -166,7 +167,7 @@ Multiple review criteria help to make your product more transparent for customer
 
 If you uninstalled the ReviewX plugin still all of your WooCommerce product reviews data is fully safe. But, we assume that you’re not expecting the multi-criteria based ratting once you uninstalled the ReviewX plugin.
 
-= Can I migrate from my existing review data?= 
+= Can I migrate from my existing review data?=
 All of your previous reviews with ratting data will be migrated automatically.
 
 But we assume that you’re not expecting the multi-criteria based ratting for those previous reviews as by that time you weren’t using ReviewX
@@ -197,21 +198,31 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 👨‍💻 Documentation and Support
 
-* For documentation and tutorials go to our [Documentation](https://reviewx.io/docs/).  
-* If you have any more questions, visit our support on the [Plugin’s Forum](https://wordpress.org/support/plugin/reviewx/).  
+* For documentation and tutorials go to our [Documentation](https://reviewx.io/docs/).
+* If you have any more questions, visit our support on the [Plugin’s Forum](https://wordpress.org/support/plugin/reviewx/).
 * For more information about features, FAQs and documentation, check out our website at [ReviewX](https://reviewx.io/).
 
 💙 Happy User of ReviewX?
 
-* Join our [Facebook Group](https://www.facebook.com/groups/reviewx).  
-* Learn from our tutorials on [Youtube Channel](https://www.youtube.com/channel/UC3kxtXZYySXXtr6DydZHCsA).  
-* Or rate us on [WordPress](https://wordpress.org/support/plugin/reviewx/reviews/?rate=5#new-post).  
-* Learn More About ReviewX(PRO): [All The Features of the ReviewX](https://reviewx.io/free-vs-pro/).  
+* Join our [Facebook Group](https://www.facebook.com/groups/reviewx).
+* Learn from our tutorials on [Youtube Channel](https://www.youtube.com/channel/UC3kxtXZYySXXtr6DydZHCsA).
+* Or rate us on [WordPress](https://wordpress.org/support/plugin/reviewx/reviews/?rate=5#new-post).
+* Learn More About ReviewX(PRO): [All The Features of the ReviewX](https://reviewx.io/free-vs-pro/).
 * Check out the plugin and compare it with other review plugins: [Compare here](https://reviewx.io/compare/)
 == Screenshots ==
 
 
 == Changelog ==
+= 2.0.0 - 11-24-2024 =
+- Complete plugin revamp with a modernized architecture and improved performance.
+- New user interface for a better and more intuitive user experience.
+- Enhanced compatibility with the latest WordPress versions and PHP updates.
+- Security improvements to meet the latest best practices.
+- Fixed various bugs reported in the previous versions.
+
+= 1.6.30 - 17-10-2024 =
+- Update: Regular update
+
 = 1.6.30 - 17-10-2024 =
 - Update: Regular update
 
@@ -239,7 +250,7 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 - Update: Security improve
 - Fix: PHP depricated issues
 - Fix: Groundhogg WordPress CRM plugin compatibility
-- Update: Overall plugin security enhancement 
+- Update: Overall plugin security enhancement
 
 = 1.6.22 - 11-09-2023 =
 - Update: Overall plugin security enhancement
@@ -256,7 +267,7 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 = 1.6.18 - 19-07-2023 =
 - Sequential Order Numbers for WooCommerce plugin support
-- Security improve 
+- Security improve
 
 = 1.6.17 - 11-07-2023 =
 - Regular Update
@@ -270,12 +281,12 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 - YITH WooCommerce Badge Management Compatibility
 
 = 1.6.14 - 22-05-2023 =
-- Security improve 
+- Security improve
 
 = 1.6.13 - 13-05-2023 =
 - WooCommerce template update
-- PHP 8 warning issue solve 
-- Security improve 
+- PHP 8 warning issue solve
+- Security improve
 
 = 1.6.12 - 2-05-2023 =
 - Minor bug fixes and performance improvement
@@ -431,7 +442,7 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 = 1.4.5 - 17-03-2022 =
 - Update: Performance improvement.
-- Update: Compatibility with WordPress 5.9.2 
+- Update: Compatibility with WordPress 5.9.2
 - Update: Compatibility with WooCommerce 6.3.1
 
 = 1.4.4 - 05-03-2022 =
@@ -623,7 +634,7 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 - New: Shortcode of the profile photo uploader
 - New: Actions for all scheduled review reminder email
 - New: Multi-select checkbox for all scheduled reminder email
-- New: Criteria element typography are editable from Elementor widget 
+- New: Criteria element typography are editable from Elementor widget
 - Update: URL redirection after the plugin activation
 - Update: Translatable strings
 - Fix: Compatibility issue with ' Kapee' theme
@@ -632,7 +643,7 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 = 1.1.12 - 29-09-2020 =
 - Fix: License activation issue
 - Fix: Edit CPT review issue from dashboard
-- Update: Translatable strings 
+- Update: Translatable strings
 - Few UX improvements
 
 = 1.1.11 - 22-09-2020 =
@@ -644,7 +655,7 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 - Fix: Missing method of auto review reminder
 
 = 1.1.9 - 14-09-2020 =
-- New: Option to filter before sending WooCommerce review reminder email 
+- New: Option to filter before sending WooCommerce review reminder email
 - Update: Translatable strings
 - Few minor fix & improvements
 
@@ -757,3 +768,6 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 * Initial beta release
 
 == Upgrade Notice ==
+This is a major update to the plugin. The codebase has been completely revamped to provide better performance, new features, and improved usability.
+* Important: Some old features may have been deprecated or replaced**. Please review the new plugin before upgrading if you rely on specific features of previous versions.
+** Backup your site ** before upgrading, especially if you rely on customizations or integrations with previous versions.

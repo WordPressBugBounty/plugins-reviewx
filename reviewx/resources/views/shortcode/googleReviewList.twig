@@ -1,0 +1,39 @@
+<div class="rvx-space-y-space24">
+    <header class="rvx-flex rvx-items-center rvx-justify-between">
+      <div class="rvx-flex rvx-items-center rvx-gap-space16">
+        <p class="rvx-font-medium rvx-text-neutral-800 rvx-leading-[26px] rvx-tracking-5">
+          Select Style:
+        </p>
+        <div class="rvx-w-[200px]">
+        </div>
+      </div>
+      <div class="rvx-flex rvx-items-center rvx-gap-space16">
+        <p class="rvx-text-neutral-700 !rvx-text-[14px] rvx-leading-[22px] rvx-tracking-14 rvx-font-normal">
+          Shortcode:
+        </p>
+        <div
+          class="rvx-flex rvx-gap-space16 rvx-items-center rvx-border rvx-border-neutral-500 rvx-border-solid rvx-rounded-md rvx-py-[9px] rvx-px-space12 ">
+          <p
+            class="rvx-text-neutral-900 !rvx-text-[14px] rvx-leading-[22px] rvx-tracking-14 rvx-font-normal">{{ source }}</p>
+          <div icon-name="content_copy" class="rvx-cursor-pointer" />
+        </div>
+      </div>
+    </header>
+    <div class="rvx-p-space24 rvx-bg-white rvx-rounded-md rvx-space-y-space16">
+      <p>Section Preview</p>
+      <div class="rvx-grid rvx-place-items-center">
+
+        </div>
+        <div v-else class="rvx-flex rvx-items-center rvx-gap-space16">
+          <UIIcon icon-name="chevron_left" class="rvx-cursor-pointer" />
+          <div class="rvx-flex rvx-flex-wrap rvx-gap-space16">
+            <GoogleReviewCard v-for="review in goggleReview?.reviews" :key="review.uid" :review="review"
+              :reviewStyle="reviewStyle" />
+          </div>
+          <UIIcon icon-name="chevron_right" class="rvx-cursor-pointer" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+  

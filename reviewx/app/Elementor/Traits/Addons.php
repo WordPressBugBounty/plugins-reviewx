@@ -1,16 +1,11 @@
 <?php
 
-namespace ReviewX\Elementor\Traits;
+namespace Rvx\Elementor\Traits;
 
-if (!defined('ABSPATH')) {
-    exit();
-} // Exit if accessed directly
-
-use \Elementor\Core\Settings\Manager as Settings_Manager;
-
+use Rvx\Elementor\Core\Settings\Manager as Settings_Manager;
 /**
  * Trait Addons
- * @package ReviewX\Elementor\Traits
+ * @package Rvx\Elementor\Traits
  */
 trait Addons
 {
@@ -22,14 +17,8 @@ trait Addons
      */
     public function register_widget_categories($elements_manager)
     {
-        $elements_manager->add_category(
-            'rx-addons-elementor',
-            [
-                'title' => __('ReviewX Addons', 'reviewx'),
-                'icon' => 'font',
-            ], 1);
+        $elements_manager->add_category('rx-addons-elementor', ['title' => __('ReviewX Addons', 'reviewx'), 'icon' => 'font'], 1);
     }
-
     /**
      * Register widgets
      *
@@ -39,47 +28,39 @@ trait Addons
     public function register_elements($widgets_manager)
     {
         $active_elements = (array) $this->get_settings();
-
+        $active_elements = ['rxcall-to-review', 'rxcall-to-review-widget', 'rx-promotion', 'quick_tools'];
         if (empty($active_elements)) {
             return;
         }
-
-        asort($active_elements);
-
+        \asort($active_elements);
         foreach ($active_elements as $active_element) {
             if (!isset($this->registered_elements[$active_element])) {
                 continue;
             }
-
             if (isset($this->registered_elements[$active_element]['condition'])) {
-                $check = false;
-
-                if(isset($this->registered_elements[$active_element]['condition'][2])) {
+                $check = \false;
+                if (isset($this->registered_elements[$active_element]['condition'][2])) {
                     $check = $this->registered_elements[$active_element]['condition'][2];
                 }
-
                 if ($this->registered_elements[$active_element]['condition'][0]($this->registered_elements[$active_element]['condition'][1]) == $check) {
                     continue;
                 }
             }
-
             // $widgets_manager->register_widget_type(new $this->registered_elements[$active_element]['class']);
-            $widgets_manager->register(new $this->registered_elements[$active_element]['class']);
+            $widgets_manager->register(new $this->registered_elements[$active_element]['class']());
         }
     }
-
-    public function cpt_register_element($widgets_manager) {
-
-        $new_path = REVIEWX_PRO_ROOT_DIR_PATH . '/app/Elementor/Elements/Cpt_Widget.php';
-        if(file_exists($new_path)) {
-            require_once( $new_path );
-	        $widgets_manager->register( new \Cpt_Widgets() );
+    public function cpt_register_element($widgets_manager)
+    {
+        $new_path = RVX_DIR_PATH . '/app/Elementor/Elements/Cpt_Widget.php';
+        if (\file_exists($new_path)) {
+            require_once $new_path;
+            $widgets_manager->register(new \Rvx\Cpt_Widgets());
         }
-        if(! file_exists($new_path)) {
-            error_log("File Pathe Not found", 0);
+        if (!\file_exists($new_path)) {
+            \error_log("File Pathe Not found", 0);
         }
     }
-
     /**
      * Register extensions
      *
@@ -88,27 +69,23 @@ trait Addons
     public function register_extensions()
     {
         $active_elements = (array) $this->get_settings();
-
         // set promotion extension enabled
-        array_push($active_elements, 'rx-promotion');
-
+        \array_push($active_elements, 'rx-promotion');
         foreach ($this->registered_extensions as $key => $extension) {
-            if (!in_array($key, $active_elements)) {
+            if (!\in_array($key, $active_elements)) {
                 continue;
             }
-
-            new $extension['class'];
+            new $extension['class']();
         }
     }
-
     /**
      * Register WC hooks
      * @return void
      */
-	public function register_wc_hooks()
+    public function register_wc_hooks()
     {
-		if (class_exists( 'WooCommerce' )){
-			wc()->frontend_includes();
-		}
-	}
+        if (\class_exists('WooCommerce')) {
+            wc()->frontend_includes();
+        }
+    }
 }

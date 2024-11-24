@@ -1,35 +1,33 @@
 <?php
-namespace ReviewX\Elementor\Elements;
+
+namespace Rvx\Elementor\Elements;
 
 // If this file is called directly, abort.
-if (!defined('ABSPATH')) {
+if (!\defined('ABSPATH')) {
     exit;
 }
-
-use \Elementor\Controls_Manager;
-use \Elementor\Plugin;
-use \Elementor\Group_Control_Border;
-use \Elementor\Group_Control_Box_Shadow;
-use \Elementor\Group_Control_Typography;
-use \Elementor\Utils;
-use \Elementor\Widget_Base;
-use ReviewX\Constants\Reviewx;
-
+use Rvx\Elementor\Controls_Manager;
+use Rvx\Elementor\Plugin;
+use Rvx\Elementor\Group_Control_Border;
+use Rvx\Elementor\Group_Control_Box_Shadow;
+use Rvx\Elementor\Group_Control_Typography;
+use Rvx\Elementor\Control_Base_Multiple;
+use Rvx\Elementor\Utils;
+use Rvx\Elementor\Widget_Base;
+use Rvx\ReviewX\Constants\Reviewx;
 /**
  * Class Data_Tabs
  * @package ReviewX\Elementor\Elements
  */
 class Data_Tabs extends Widget_Base
 {
-
     /**
      * @return string
      */
     public function get_name()
     {
-        return 'rx-review-data-tab';
+        return 'rvx-review-data-tab';
     }
-
     /**
      * @return string|void
      */
@@ -37,7 +35,6 @@ class Data_Tabs extends Widget_Base
     {
         return __('ReviewX Product Data Tabs', 'reviewx');
     }
-
     /**
      * @return string
      */
@@ -45,3631 +42,395 @@ class Data_Tabs extends Widget_Base
     {
         return 'eicon-review';
     }
-
     /**
      * @return array|string[]
      */
     public function get_categories()
     {
-        return ['rx-addons-elementor'];
+        return ['rvx-addons-elementor'];
     }
-
     /**
      * @return array
      */
     public function get_keywords()
     {
-        return [
-            'reviewx',
-            'woo review',
-            'woo',
-            'woocommerce',
-            'comment',
-            'review',
-            'addons',
-            'ea',
-            'essential addons'
-        ];
+        return ['reviewx', 'woo review', 'woo', 'woocommerce', 'comment', 'review', 'addons', 'ea', 'essential addons'];
     }
-
     /**
      * @return string
      */
     public function get_custom_help_url()
     {
         return esc_url('https://reviewx.io/docs');
-	}
-
+    }
     /**
      * @param $styles
      * @param bool $group
      * @return array|array[]|mixed
      */
-	private function get_options_by_groups( $styles, $group = false )
+    private function get_options_by_groups($styles, $group = \false)
     {
-		$groups = [
-			'line' => [
-				'label' => __( 'Line', 'reviewx' ),
-				'options' => [
-					'solid' => __( 'Solid', 'reviewx' ),
-					'double' => __( 'Double', 'reviewx' ),
-					'dotted' => __( 'Dotted', 'reviewx' ),
-					'dashed' => __( 'Dashed', 'reviewx' ),
-				],
-			],
-		];
-        if( ! empty( $cri ) ) {
+        $groups = ['line' => ['label' => __('Line', 'reviewx'), 'options' => ['solid' => __('Solid', 'reviewx'), 'double' => __('Double', 'reviewx'), 'dotted' => __('Dotted', 'reviewx'), 'dashed' => __('Dashed', 'reviewx')]]];
+        if (!empty($cri)) {
             foreach ($styles as $key => $style) {
                 if (!isset($groups[$style['group']])) {
-                    $groups[$style['group']] = [
-                        'label' => ucwords(str_replace('_', '', $style['group'])),
-                        'options' => [],
-                    ];
+                    $groups[$style['group']] = ['label' => \ucwords(\str_replace('_', '', $style['group'])), 'options' => []];
                 }
                 $groups[$style['group']]['options'][$key] = $style['label'];
             }
         }
-		if ( $group && isset( $groups[ $group ] ) ) {
-			return $groups[ $group ];
-		}
-		return $groups;
-	}
-
+        if ($group && isset($groups[$group])) {
+            return $groups[$group];
+        }
+        return $groups;
+    }
     /**
      * @param $array
      * @param $key
      * @param $value
      * @return array
      */
-	private function filter_styles_by( $array, $key, $value )
+    private function filter_styles_by($array, $key, $value)
     {
-		return array_filter( $array, function( $style ) use ( $key, $value ) {
-			return $value === $style[ $key ];
-		} );
-	}
-
+        return \array_filter($array, function ($style) use($key, $value) {
+            return $value === $style[$key];
+        });
+    }
     /**
      * Register Controls
      * @return void
      */
     protected function register_controls()
     {
-
-		$styles = '';
-        $this->start_controls_section(
-			'rx_section_review_tabs_style',
-			[
-				'label' => __( 'Tabs', 'reviewx' ),
-				'tab' => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'rx_wc_style_warning',
-			[
-				'type' => Controls_Manager::RAW_HTML,
-				'raw' => __( 'The style of this widget is often affected by your theme and plugins. If you experience any such issue, try to switch to a basic theme and deactivate related plugins.', 'reviewx' ),
-				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
-			]
-		);
-
-		$this->start_controls_tabs( 'tabs_style' );
-
-		$this->start_controls_tab( 'normal_tabs_style',
-			[
-				'label' => __( 'Normal', 'reviewx' ),
-			]
-		);
-
-		$this->add_control(
-			'rx_tab_text_color',
-			[
-				'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li a' => 'color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_tab_bg_color',
-			[
-				'label' => __( 'Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'alpha' => false,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li' => 'background-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_tabs_border_color',
-			[
-				'label' => __( 'Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-color: {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li' => 'border-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->end_controls_tab();
-
-		$this->start_controls_tab( 'active_tabs_style',
-			[
-				'label' => __( 'Active', 'reviewx' ),
-			]
-		);
-
-		$this->add_control(
-			'rx_active_tab_text_color',
-			[
-				'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active a' => 'color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_active_tab_bg_color',
-			[
-				'label' => __( 'Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'alpha' => false,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel, .woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active' => 'background-color: {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active' => 'border-bottom-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_active_tabs_border_color',
-			[
-				'label' => __( 'Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-color: {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active' => 'border-color: {{VALUE}} {{VALUE}} {{active_tab_bg_color.VALUE}} {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li:not(.active)' => 'border-bottom-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->end_controls_tab();
-
-		$this->end_controls_tabs();
-
-		$this->add_control(
-			'rx_separator_tabs_style',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_tab_typography',
-				'label' => __( 'Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li a',
-			]
-		);
-
-		$this->add_control(
-			'rx_tab_border_radius',
-			[
-				'label' => __( 'Border Radius', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li' => 'border-radius: {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} 0 0',
-				],
-			]
-		);
-
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'rx_section_product_panel_style',
-			[
-				'label' => __( 'Panel', 'reviewx' ),
-				'tab' => Controls_Manager::TAB_STYLE,
-			]
-		);
-
-		$this->add_control(
-			'rx_text_color',
-			[
-				'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel' => 'color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_content_typography',
-				'label' => __( 'Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel',
-			]
-		);
-
-		$this->add_control(
-			'rx_heading_panel_heading_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Heading', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_control(
-			'rx_heading_color',
-			[
-				'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel h2' => 'color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_content_heading_typography',
-				'label' => __( 'Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel h2',
-			]
-		);
-
-		$this->add_control(
-			'rx_separator_panel_style',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);
-
-		$this->add_control(
-			'rx_panel_border_width',
-			[
-				'label' => __( 'Border Width', 'reviewx' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; margin-top: -{{TOP}}{{UNIT}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_panel_border_radius',
-			[
-				'label' => __( 'Border Radius', 'reviewx' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs' => 'margin-left: {{TOP}}{{UNIT}}; margin-right: {{RIGHT}}{{UNIT}}',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_panel_box_shadow',
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel',
-			]
-		);
-
-		$this->end_controls_section();		
-
-		/*========================== 
-		*
-		* Review Style Controller Begin
-		*
-		============================*/
-
-		$this->start_controls_section(
-			'rx_section_title',
-			[
-				'label' => __( 'Review Section Title', 'reviewx' ),
-			]
-		);
-
-		$this->add_control(
-			'rx_review_section_title',
-			[
-				'label' => __( 'Section Title', 'reviewx' ),
-				'type' => Controls_Manager::TEXT,
-			]
-		);
-
-		$this->add_control(
-			'rx_review_section_title_color',
-			[
-				'label' => __( 'Section Title Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#333333',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .woocommerce-Reviews-title' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_review_section_title_typography',
-				'label' => __( 'Section Title Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .woocommerce-Reviews-title',
-			]
-		);	
-
-		$this->end_controls_section();		
-
-		$this->start_controls_section(
-			'section_product',
-			[
-				'label' => __( 'Review Template', 'reviewx' ),
-			]
-		);
-
-		$this->add_control(
-			'rx_template_type',
-			[
-				'label' => __( 'Select Template', 'reviewx' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => 'template_style_one',
-				'options' => [
-					'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-					'template_style_one' => __( 'Classic', 'reviewx' ),
-					'template_style_two' => __( 'Box Style', 'reviewx' ),
-				],
-			]
-		);
-
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'rx_section_summary_style',
-			[
-				'label' => __( 'Review Statistics', 'reviewx' ),
-			]
-		);
-
-		$this->start_controls_tabs( 'summary_style' );
-		
-        $this->add_control(
-			'rx_average_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Average Ratting Section', 'reviewx' ),
-				'separator' => 'after',
-			]
-		);		
-
-		$this->add_control(
-			'rx_summary_average_count_color_color',
-			[
-				'label' => __( 'Average Count Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#333333',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-rating .rx-temp-rating-number p' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_average_count_typography',
-				'label' => __( 'Average Count Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-rating .rx-temp-rating-number p',
-			]
-		);		
-		
-		$this->add_control(
-			'rx_summary_heighest_rating_point_color',
-			[
-				'label' => __( 'Highest Rating Point Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#9e9e9e',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-rating .rx-temp-rating-number span' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_rating_point_typography',
-				'label' => __( 'Highest Rating Point Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-rating .rx-temp-rating-number span',
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_average_star_rating_color',
-			[
-				'label' => __( 'Star Rating Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#FFAF22',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_avg_star_color' => 'fill: {{VALUE}} !important',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_star_rating_size',
-			[
-				'label' => __( 'Star Rating Size', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'unit' => 'px',
-					'size' => 14,
-				],
-				'selectors' => [					
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-rating-star svg' => 'width: {{SIZE}}{{UNIT}} !important; height: {{SIZE}}{{UNIT}} !important;',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_average_text_color',
-			[
-				'label' => __( 'Average Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#444',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-total-rating-count p' => 'color: {{VALUE}}',					
-				],
-			]
-		);	
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_average_text_typography',
-				'label' => __( 'Average Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-temp-total-rating-count p',
-			]
-		);
-
-        $this->add_control(
-			'rx_recommendation_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Recommendation Count Section', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_recommendation_count_color',
-			[
-				'label' => __( 'Recommendation Count Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#444',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_box .rx_recommended_box_heading' => 'color: {{VALUE}}',					
-				],
-			]
-		);		
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_recommendation_count_typography',
-				'label' => __( 'Recommendation Count Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_box .rx_recommended_box_heading',
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_recommendation_text_color',
-			[
-				'label' => __( 'Recommendation Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#444',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_box .rx_recommended_box_content' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_recommendation_text_typography',
-				'label' => __( 'Recommendation Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_box .rx_recommended_box_content',
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_separator_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Separator', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);	
-
-		$this->add_control(
-			'rx_summary_separator_border_style',
-			[
-				'label' => __( 'Style', 'reviewx' ),
-				'type' => Controls_Manager::SELECT,
-				'groups' => array_values( $this->get_options_by_groups( $styles ) ),
-				'render_type' => 'template',
-				'default' => 'solid',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper hr' => 'border-style: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_separator_type',
-			[
-				'type' => Controls_Manager::HIDDEN,
-				'default' => 'pattern',
-				'prefix_class' => 'elementor-widget-divider--separator-type-',
-				'condition' => [
-					'style!' => [
-						'',
-						'solid',
-						'double',
-						'dotted',
-						'dashed',
-					],
-				],
-				'render_type' => 'template',
-			]
-		);
-		
-		$this->add_responsive_control(
-			'rx_summary_separator_width',
-			[
-				'label' => __( 'Width', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ '%', 'px' ],
-				'range' => [
-					'px' => [
-						'max' => 1000,
-					],
-				],
-				'default' => [
-					'size' => 100,
-					'unit' => '%',
-				],
-				'tablet_default' => [
-					'unit' => '%',
-				],
-				'mobile_default' => [
-					'unit' => '%',
-				],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper hr' => 'width: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);	
-		
-		$this->add_control(
-			'rx_summary_separator_color',
-			[
-				'label' => __( 'Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper hr' => 'border-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_separator_weight',
-			[
-				'label' => __( 'Height', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'min' => 1,
-						'max' => 10,
-						'step' => 0.1,
-					],
-				],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper hr' => 'border-width: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);	
-		
-		$this->add_control(
-			'rx_summary_box_shadow_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Section Design', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);				
-		
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_summary_box_shadow_',
-				'selector' => '{{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper',
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_box_border_style',
-			[
-				'label' => __( 'Border Style', 'reviewx' ),
-				'type' => Controls_Manager::SELECT,
-				'groups' => array_values( $this->get_options_by_groups( $styles ) ),
-				'render_type' => 'template',
-				'default' => 'solid',
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper' => 'border-style: {{VALUE}}',
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_box_border_color',
-			[
-				'label' => __( 'Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper' => 'border-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_box_border_weight',
-			[
-				'label' => __( 'Border Weight', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'min' => 1,
-						'max' => 10,
-						'step' => 0.1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce-Tabs-panel .rx_recommended_wrapper' => 'border-width: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);		
-
-		$this->end_controls_tabs();
-		
-		$this->end_controls_section();				
-
-		/********************************* 
-		* 	Average End
-		* *********************************/
-
-		$this->start_controls_section(
-			'rx_section_graph_style',
-			[
-				'label' => __( 'Graph of Review Criteria', 'reviewx' )
-			]
-		);
-
-		$this->start_controls_tabs( 'graph_style' );
-
-		if( $this->is_pro() ) {
-
-			$this->add_control(
-				'rx_graph_type',
-				[
-					'label' => __( 'Select Graph Style', 'reviewx' ),
-					'type' => Controls_Manager::SELECT,
-					'default' => 'graph_style_default',
-					'options' => [
-						'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-						'graph_style_default' => __( 'Horizontal Style One', 'reviewx' ),
-						'graph_style_one' => __( 'Horizontal Style Two', 'reviewx' ),
-						'graph_style_two_free' => __( 'Horizontal Style Three', 'reviewx' ),
-						'graph_style_three' => __( 'Vertical Style One', 'reviewx' ),
-						//'graph_style_two' => __( 'Pie Chart Style', 'reviewx' ),
-					],
-				]
-			);
-
-		} else {
-
-			$this->add_control(
-				'rx_graph_type',
-				[
-					'label' => __( 'Select Graph Style', 'reviewx' ),
-					'type' => Controls_Manager::SELECT,
-					'default' => 'graph_style_default',
-					'options' => [
-						'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-						'graph_style_default' => __( 'Horizontal Style One', 'reviewx' ),
-						'graph_style_one' => __( 'Horizontal Style Two', 'reviewx' ),
-						'graph_style_two_free' => __( 'Horizontal Style Three', 'reviewx' ),
-										
-					],
-				]
-			);
-
-		}
-		
-		$this->add_control(
-			'rx_summary_graph_text_color',
-			[
-				'label' => __( 'Criteria Name Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#1a1a1a',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-graph-style-2 .progress-bar-t' => 'color: {{VALUE}}', 
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_two_free_progress_bar .progressbar-title' => 'color: {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .vertical .vertical_bar_label' => 'color: {{VALUE}}',										
-				],
-				'condition' => [
-					'rx_graph_type' => [ 'graph_style_default', 'graph_style_one', 'graph_style_two_free', 'graph_style_three' ],
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_graph_text_typography',
-				'label' => __( 'Criteria Name Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-graph-style-2 .progress-bar-t, 
-							   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_two_free_progress_bar .progressbar-title,
-							   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .vertical .vertical_bar_label',
-				'condition' => [
-								'rx_graph_type' => [ 'graph_style_default', 'graph_style_one', 'graph_style_two_free', 'graph_style_three' ],
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_graph_color',
-			[
-				'label' => __( 'Progress-bar Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-horizontal .progress-fill,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_one_progress .rx_style_one_progress-bar,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_two_free_progress_bar .progress .progress-bar,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .vertical .progress-fill
-					' => 'background-color: {{VALUE}} !important'											
-				],
-				'condition' => [
-					'rx_graph_type' => [ 'graph_style_default', 'graph_style_one', 'graph_style_two_free', 'graph_style_three' ],
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_progress_bar_text_color',
-			[
-				'label' => __( 'Progress-bar Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-horizontal .progress-fill span,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_one_progress.orange .rx_style_one_progress-icon, 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_one_progress.orange .rx_style_one_progress-value,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_two_free_progress_bar .progress .progress-bar span,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .vertical .progress-fill
-					' => 'color: {{VALUE}} !important'				
-				],
-				'condition' => [
-					'rx_graph_type' => [ 'graph_style_default', 'graph_style_one', 'graph_style_two_free', 'graph_style_three' ],
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_summary_progress_bar_text_typography',
-				'label' => __( 'Progress-bar Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-horizontal .progress-fill span,
-							.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_one_progress.orange .rx_style_one_progress-icon, 
-							.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_one_progress.orange .rx_style_one_progress-value,
-							.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_style_two_free_progress_bar .progress .progress-bar span,
-							.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .vertical .progress-fill',
-				'condition' => [
-					'rx_graph_type' => [ 'graph_style_default', 'graph_style_one', 'graph_style_two_free', 'graph_style_three' ],
-				],
-			]			
-		);
-		
-		$this->add_control(
-			'rx_summary_progress_bar_border_color',
-			[
-				'label' => __( 'Progress-bar Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .rx_style_one_progress.orange .rx_style_one_progress-icon, 
-					.woocommerce {{WRAPPER}} .rx_style_one_progress.orange .rx_style_one_progress-value
-					' => 'border-color: {{VALUE}} !important'				
-				],
-				'condition' => [
-					'rx_graph_type' => [ 'graph_style_one' ],
-				],
-			]
-		);
-		
-		// $review_criteria	= get_option( '_rx_option_review_criteria' );
-
-		// foreach ( $review_criteria as $key => $single_criteria ) {
-		// 	$this->add_control(
-		// 		'rx_criteria_color_'.$key.'',
-		// 		[
-		// 			'label' 	=> $single_criteria,
-		// 			'type' 		=> Controls_Manager::COLOR,
-		// 			'default' 	=> '#4054B2',
-		// 			'selectors' => [
-		// 				'rx_criteria_pie' => 'color: {{VALUE}} !important'
-		// 			],
-		// 			'condition' => [
-		// 				'rx_graph_type' => [ 'graph_style_two' ],
-		// 			],
-		// 		]
-		// 	);			
-
-		// }		
-
-		$this->add_control(
-			'rx_summary_progress_bar_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Section Design', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_summary_progress_bar_box_shadow',
-				'selector' => '{{WRAPPER}} .woocommerce-Tabs-panel .rx_rating_graph_wrapper',
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_progress_bar_box_border_style',
-			[
-				'label' => __( 'Border Style', 'reviewx' ),
-				'type' => Controls_Manager::SELECT,
-				'groups' => array_values( $this->get_options_by_groups( $styles ) ),
-				'render_type' => 'template',
-				'default' => 'solid',
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce-Tabs-panel .rx_rating_graph_wrapper' => 'border-style: {{VALUE}}',
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_summary_progress_bar_box_border_color',
-			[
-				'label' => __( 'Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce-Tabs-panel .rx_rating_graph_wrapper' => 'border-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_summary_progress_bar_box_border_weight',
-			[
-				'label' => __( 'Border Weight', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'min' => 1,
-						'max' => 10,
-						'step' => 0.1,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .woocommerce-Tabs-panel .rx_rating_graph_wrapper' => 'border-width: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);		
-		
-		$this->end_controls_tabs();
-		
-		$this->end_controls_section();
-
-		/********************************* 
-		* 	Graph End
-		* *********************************/
-
-		/*=======================
-		* Call template style
-		* 
-		=========================*/	
-		 
-		$this->template_one_style();
-		$this->template_two_style();		
-
-	}
-
-    /**
-     * @return bool
-     */
-	public static function is_pro()
-    {
-        return class_exists('ReviewXPro');
+        $styles = '';
+        $this->start_controls_section('rvx_section_review_tabs_style', ['label' => __('Tabs', 'reviewx'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->add_control('rvx_wc_style_warning', ['type' => Controls_Manager::RAW_HTML, 'raw' => __('The style of this widget is often affected by your theme and plugins. If you experience any such issue, try to switch to a basic theme and deactivate related plugins.', 'reviewx'), 'content_classes' => 'elementor-panel-alert elementor-panel-alert-info']);
+        $this->start_controls_tabs('tabs_style');
+        $this->start_controls_tab('normal_tabs_style', ['label' => __('Normal', 'reviewx')]);
+        $this->add_control('rvx_tab_text_color', ['label' => __('Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li a' => 'color: {{VALUE}}']]);
+        $this->add_control('rvx_tab_bg_color', ['label' => __('Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'alpha' => \false, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li' => 'background-color: {{VALUE}}']]);
+        $this->add_control('rvx_tabs_border_color', ['label' => __('Border Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-color: {{VALUE}}', '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li' => 'border-color: {{VALUE}}']]);
+        $this->end_controls_tab();
+        $this->start_controls_tab('active_tabs_style', ['label' => __('Active', 'reviewx')]);
+        $this->add_control('rvx_active_tab_text_color', ['label' => __('Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active a' => 'color: {{VALUE}}']]);
+        $this->add_control('rvx_active_tab_bg_color', ['label' => __('Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'alpha' => \false, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel, .woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active' => 'background-color: {{VALUE}}', '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active' => 'border-bottom-color: {{VALUE}}']]);
+        $this->add_control('rvx_active_tabs_border_color', ['label' => __('Border Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-color: {{VALUE}}', '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active' => 'border-color: {{VALUE}} {{VALUE}} {{active_tab_bg_color.VALUE}} {{VALUE}}', '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li:not(.active)' => 'border-bottom-color: {{VALUE}}']]);
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
+        $this->add_control('rvx_separator_tabs_style', ['type' => Controls_Manager::DIVIDER]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_tab_typography', 'label' => __('Typography', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li a']);
+        $this->add_control('rvx_tab_border_radius', ['label' => __('Border Radius', 'reviewx'), 'type' => Controls_Manager::SLIDER, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li' => 'border-radius: {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} 0 0']]);
+        $this->end_controls_section();
+        $this->start_controls_section('rvx_section_product_panel_style', ['label' => __('Panel', 'reviewx'), 'tab' => Controls_Manager::TAB_STYLE]);
+        $this->add_control('rvx_text_color', ['label' => __('Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel' => 'color: {{VALUE}}']]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_content_typography', 'label' => __('Typography', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel']);
+        $this->add_control('rvx_heading_panel_heading_style', ['type' => Controls_Manager::HEADING, 'label' => __('Heading', 'reviewx'), 'separator' => 'before']);
+        $this->add_control('rvx_heading_color', ['label' => __('Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel h2' => 'color: {{VALUE}}']]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_content_heading_typography', 'label' => __('Typography', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel h2']);
+        $this->add_control('rvx_separator_panel_style', ['type' => Controls_Manager::DIVIDER]);
+        $this->add_control('rvx_panel_border_width', ['label' => __('Border Width', 'reviewx'), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; margin-top: -{{TOP}}{{UNIT}}']]);
+        $this->add_control('rvx_panel_border_radius', ['label' => __('Border Radius', 'reviewx'), 'type' => Controls_Manager::DIMENSIONS, 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}', '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs' => 'margin-left: {{TOP}}{{UNIT}}; margin-right: {{RIGHT}}{{UNIT}}']]);
+        $this->add_group_control(Group_Control_Box_Shadow::get_type(), ['name' => 'rvx_panel_box_shadow', 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel']);
+        $this->end_controls_section();
+        $this->graph();
+        $this->reviewCard();
+        $this->reviewForm();
+        //        $this->frontSize();
+        $this->filterOptions();
     }
-
-    /**
-     * Template One Style
-     * @return void
-     */
-	protected function template_one_style()
+    public function graph()
     {
-        $styles = '';
-		$this->start_controls_section(
-			'rx_template_one_section_filter',
-			[
-				'label' => __( 'Filtering Bar', 'reviewx' ),
-				'condition' => [
-					'rx_template_type' => [ 'template_style_one' ],
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'template_one_filter' );
-
-		$this->add_control(
-			'rx_template_one_filter_text_color',
-			[
-				'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#676767',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx_filter_header h4, 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx-short-by h4' => 'color: {{VALUE}}',										
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_filter_text_typography',
-				'label' => __( 'Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx_filter_header h4,
-							   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx-short-by h4',
-			]
-		);
-
-		$this->add_control(
-			'rx_template_one_dropdown_bg_color',
-			[
-				'label' => __( 'Dropdown Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx_review_shorting_2 .box select' => 'background-color: {{VALUE}} !important',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_one_dropdown_text_color',
-			[
-				'label' => __( 'Dropdown Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#373747',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx_review_shorting_2 .box select' => 'color: {{VALUE}} !important',					
-				],
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_one_dropdown_icon_color',
-			[
-				'label' => __( 'Dropdown Selector Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx_review_shorting_2 .box .rx-selection-arrow b' => 'border-color: {{VALUE}} transparent transparent transparent !important',					
-				],
-			]
-		);			
-		
-		$this->add_control(
-			'rx_template_one_filter_bar_color',
-			[
-				'label' => __( 'Dropdown Bar Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar .rx_review_shorting_2 .box .rx-selection-arrow' => 'background-color: {{VALUE}} !important',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_one_filter_bg_color',
-			[
-				'label' => __( 'Filter Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#ececec',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar' => 'background-color: {{VALUE}}',					
-				],
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_one_filter_box_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Section Design', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_template_one_filter_box_shadow',
-				'selector' => '{{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar',
-			]
-		);
-
-
-		$this->end_controls_tabs();
-
-		$this->end_controls_section();
-
-		/*=======================
-		* End Filter Style
-		* Start Review Style
-		=========================*/	
-
-		$this->start_controls_section(
-			'rx_template_one_section_review_style',
-			[
-				'label' => __( 'Review Item', 'reviewx' ),
-				'condition' => [
-					'rx_template_type' => [ 'template_style_one' ],
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'template_one_review_style' );
-
-		$this->add_control(
-			'rx_template_one_author_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Reviewer Information', 'reviewx' ),
-				'separator' => 'after',
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_template_one_author_box_shadow',
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_thumb',
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_one_author_border_style',
-			[
-				'label' => __( 'Avatar Border Style', 'reviewx' ),
-				'type' => Controls_Manager::SELECT,
-				'groups' => array_values( $this->get_options_by_groups( $styles ) ),
-				'render_type' => 'template',
-				'default' => 'solid',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_thumb' => 'border-style: {{VALUE}}',
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_one_author_border_color',
-			[
-				'label' => __( 'Avatar Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_thumb' => 'border-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_template_one_author_border_weight',
-			[
-				'label' => __( 'Avatar Border Weight', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'min' => 1,
-						'max' => 10,
-						'step' => 0.1,
-					],
-				],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_thumb' => 'border-width: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_one_author_color',
-			[
-				'label' => __( 'Reviewer Name Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#373747',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_author_info .rx_author_name h4' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_author_typography',
-				'label' => __( 'Reviewer Name Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_author_info .rx_author_name h4',
-			]
-		);
-		
-		/********************************* 
-		* 	Author End
-		* *********************************/
-		
-		$this->add_control(
-			'rx_template_one_main_content_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Main Content', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);		
-
-
-		$this->add_control(
-			'rx_template_one_rating_color',
-			[
-				'label' => __( 'Rating Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#FFAF22',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_review_sort_list .rx_listing_container .rx_listing .rx_avg_star_color' => 'fill: {{VALUE}} !important',					
-				],
-			]
-		);	
-		
-		$this->add_control(
-			'rx_template_one_rating_size',
-			[
-				'label' => __( 'Star Rating Size', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'unit' => 'px',
-					'size' => 14,
-				],
-				'selectors' => [					
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .review_rating svg' => 'width: {{SIZE}}{{UNIT}} !important; height: {{SIZE}}{{UNIT}} !important;',					
-				],
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_one_title_color',
-			[
-				'label' => __( 'Review Title Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#373747',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .review_title' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_title_typography',
-				'label' => __( 'Review Title Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .review_title',
-			]
-		);
-
-		$this->add_control(
-			'rx_template_one_text_color',
-			[
-				'label' => __( 'Review Comments Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#9B9B9B',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body p' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_text_typography',
-				'label' => __( 'Review Comments Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body p',
-			]
-		);		
-
-		/********************************* 
-		* 	Review Comments End
-		* *********************************/			
-		
-		$this->add_control(
-			'rx_template_one_text_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Meta Information', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);	
-
-		$this->add_control(
-			'rx_template_one_date_icon_color',
-			[
-				'label' => __( 'Reviewed Date Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#707070',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_review_calender svg .st0' => 'fill: {{VALUE}} !important',
-				],
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_one_date_color',
-			[
-				'label' => __( 'Reviewed Date Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#6d6d6d',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_review_calender' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_date_typography',
-				'label' => __( 'Reviewed Date Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_review_calender',
-			]
-		);
-
-		$this->add_control(
-			'rx_template_one_verified_icon_color',
-			[
-				'label' => __( 'Verified Badge Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#12D585',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_varified .rx_varified_user svg .st0' => 'fill: {{VALUE}}',
-				],
-			]
-		);					
-		
-		$this->add_control(
-			'rx_template_one_verified_color',
-			[
-				'label' => __( 'Verified Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#12D585',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_varified .rx_varified_user span' => 'color: {{VALUE}}',
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_verified_typography',
-				'label' => __( 'Verified Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_varified .rx_varified_user span',
-
-			]
-		);		
-
-		if( $this->is_pro() ) {
-		
-			$this->add_control(
-				'rx_template_one_helpful_color',
-				[
-					'label' => __( 'Helpful Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_meta .rx_review_vote_icon p' => 'color: {{VALUE}}',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_helpful_typography',
-					'label' => __( 'Helpful Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_meta .rx_review_vote_icon p',
-				]
-			);
-
-			$this->add_control(
-				'rx_template_one_helpful_bg_color',
-				[
-					'label' => __( 'Helpful Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#eaeaea',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_vote_icon .like' => 'background-color: {{VALUE}}',					
-					],
-				]
-			);				
-
-			$this->add_control(
-				'rx_template_one_helpful_icon_color',
-				[
-					'label' => __( 'Helpful Thumbs-up Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#A4A4A4',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_helpful_style_1_svg svg' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_one_helpful_count_color',
-				[
-					'label' => __( 'Helpful Thumbs-up Count Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#696969',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_vote_icon .like .rx_helpful_count_val' => 'color: {{VALUE}} !important',				
-					],
-				]
-			);			
-			
-			$this->add_control(
-				'rx_template_one_share_color',
-				[
-					'label' => __( 'Share Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_meta .rx_share p' => 'color: {{VALUE}}',					
-					],
-				]
-			);
-
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_share_typography',
-					'label' => __( 'Share Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_meta .rx_share p',
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_share_icon_color',
-				[
-					'label' => __( 'Share Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#000',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .social-links .wc_rx_btns ul li:nth-child(1) svg' => 'fill: {{VALUE}} ! important',
-					],
-				]
-			);		
-
-			$this->add_control(
-				'rx_template_one_facebook_color',
-				[
-					'label' => __( 'Facebook Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#B7B7B8',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .social-links .wc_rx_btns ul li:nth-child(2) a svg .st0' => 'fill: {{VALUE}}',					
-					],
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_one_twitter_color',
-				[
-					'label' => __( 'Twitter Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#B7B7B8',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .social-links .wc_rx_btns ul li:nth-child(3) a svg .st0' => 'fill: {{VALUE}}',					
-					],
-				]
-			);			
-
-			$this->add_control(
-				'rx_template_one_top_border_color',
-				[
-					'label' => __( 'Review Top border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#ececec',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block + .rx_review_block' => 'border-top: 2px solid {{VALUE}}',					
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_highlight_color',
-				[
-					'label' => __( 'Highlight Border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#ececec',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .reviewx_highlight_comment' => 'border-color: {{VALUE}} !important',					
-					],
-				]
-			);
-		
-		}
-		
-		$this->add_control(
-			'rx_template_one_attachement_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Review Attachment', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);	
-		
-		$this->add_responsive_control(
-			'rx_template_one_attachement_position',
-			[
-				'label' => __( 'Select Attachment Position', 'reviewx' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Left', 'reviewx' ),
-						'icon' => 'eicon-text-align-left',
-					],
-					'flex-end' => [
-						'title' => __( 'Right', 'reviewx' ),
-						'icon' => 'eicon-text-align-right',
-					],
-				],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx_photos' => 'justify-content: {{VALUE}} !important;',
-				],
-			]
-		);	
-		
-		$this->add_control(
-			'rx_template_one_background_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Review Background', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_control(
-			'rx_template_one_review_bg_color',
-			[
-				'label' => __( 'Review Container Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container' => 'background-color: {{VALUE}}',					
-				],
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_one_review_border_color',
-			[
-				'label' => __( 'Review Container Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#ececec',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container' => 'border-color: {{VALUE}}',					
-				],
-			]
-		);
-
-		$this->end_controls_tabs();
-
-		$this->end_controls_section();
-
-		/********************************* 
-		* 	Review Meta Info End (Date, Verified, Helpful)
-		* *********************************/
-		
-		if( $this->is_pro() ) {
-
-			$this->start_controls_section(
-				'rx_template_one_section_reply_style',
-				[
-					'label' => __( 'Store Reply', 'reviewx' ),
-					'condition' => [
-						'rx_template_type' => [ 'template_style_one' ],
-					],
-				]
-			);
-	
-			$this->start_controls_tabs( 'template_one_reply_style' );	
-			
-			$this->add_control(
-				'rx_template_one_reply_block_style',
-				[
-					'type' => Controls_Manager::HEADING,
-					'label' => __( 'Reply Item', 'reviewx' ),
-					'separator' => 'after',
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_one_reply_icon_color',
-				[
-					'label' => __( 'Store Logo Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#2f4fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .rx_thumb svg .st0' => 'fill: {{VALUE}} !important',															
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_reply_icon_bdcolor',
-				[
-					'label' => __( 'Store Logo Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .rx_thumb' => 'background-color: {{VALUE}}',
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_reply_icon_border',
-				[
-					'label' => __( 'Store Logo Border Radius', 'reviewx' ),
-					'type' => Controls_Manager::DIMENSIONS,
-					'size_units' => [ 'px', '%' ],
-					'default' => [
-						'unit' => 'px',
-						'size' => 15,
-					],	
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .rx_thumb' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_one_reply_title_color',
-				[
-					'label' => __( 'Store Name Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .review_title' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_title_typography',
-					'label' => __( 'Store Name Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .review_title',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_one_reply_back_icon_color',
-				[
-					'label' => __( 'Reply Back Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#707070',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .owner_arrow svg .st0' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_one_reply_text_color',
-				[
-					'label' => __( 'Reply Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#707070',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .comment-content p' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_text_typography',
-					'label' => __( 'Reply Text Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .comment-content p',
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_one_reply_date_color',
-				[
-					'label' => __( 'Date Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .rx_review_calender' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);		
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_date_typography',
-					'label' => __( 'Date Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .rx_review_calender',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_one_reply_date_icon_color',
-				[
-					'label' => __( 'Date Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .children .rx_body .rx_review_calender svg .st0' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-	
-			$this->add_control(
-				'rx_template_one_reply_edit_icon_color',
-				[
-					'label' => __( 'Reply Edit Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#000',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .admin-reply-edit-icon svg' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_reply_delete_icon_color',
-				[
-					'label' => __( 'Reply Delete Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#000',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .admin-reply-delete-icon svg' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-			
-	
-			$this->add_control(
-				'rx_template_one_reply_button_text_color',
-				[
-					'label' => __( 'Reply Button Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_meta .rx-admin-reply' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);		
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_button_text_typography',
-					'label' => __( 'Reply Button Text Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_meta .rx-admin-reply',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_one_reply_button_color',
-				[
-					'label' => __( 'Reply Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#097afa',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_meta .rx-admin-reply' => 'background-color: {{VALUE}} !important'										
-					],
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_one_reply_button_border_color',
-				[
-					'label' => __( 'Reply Button Border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#097afa',
-					'selectors' => [					
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_meta .rx-admin-reply' => 'border-color: {{VALUE}} !important',										
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_one_reply_bgcolor',
-				[
-					'label' => __( 'Reply Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .children' => 'background-color: {{VALUE}}',					
-					],
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_one_reply_form_block_style',
-				[
-					'type' => Controls_Manager::HEADING,
-					'label' => __( 'Reply Form', 'reviewx' ),
-					'separator' => 'after',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_one_reply_form_bgcolor',
-				[
-					'label' => __( 'Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_reply_form_border_color',
-				[
-					'label' => __( 'Border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#f7f7f7',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area' => 'border-color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_reply_form_border_radius',
-				[
-					'label' => __( 'Border Radius', 'reviewx' ),
-					'type' => Controls_Manager::SLIDER,
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel  .rx-admin-reply-area' => 'border-radius: {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}}',
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_one_reply_form_title_color',
-				[
-					'label' => __( 'Title Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#f7f7f7',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_review_block .rx_body .admin-reply-form-title,
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx-admin-edit-reply-area .admin-reply-form-title
-						' => 'color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_form_title_typography',
-					'label' => __( 'Title Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .admin-reply-form-title,
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx-admin-edit-reply-area .admin-reply-form-title',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_one_reply_form_field',
-				[
-					'label' => __( 'Text Area Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#EBEBF3',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing .rx_review_block .rx_body .rx-admin-reply-area .comment-form-comment textarea, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .comment-form-comment textarea' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);
-	
-			/*========================
-			*	Reply Submit Button
-			*========================*/
-			$this->add_control(
-				'rx_template_one_reply_submit_button',
-				[
-					'label' => __( 'Submit Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#2f4fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .form-submit .admin-review-edit-reply, 
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area .form-submit .admin-review-reply' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_one_reply_submit_color',
-				[
-					'label' => __( 'Submit Button Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .form-submit .admin-review-edit-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area .form-submit .admin-review-reply' => 'color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_submit_typography',
-					'label' => __( 'Submit Button Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .form-submit, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area .form-submit',
-				]
-			);
-		
-			/*========================
-			*	Reply Cancel Button
-			*========================*/
-			$this->add_control(
-				'rx_template_one_reply_cancel_button',
-				[
-					'label' => __( 'Cancel Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#eeeeee',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .form-submit .cancel-admin-edit-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area .form-submit .cancel-admin-reply
-						' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);				
-			
-			$this->add_control(
-				'rx_template_one_reply_cancel_color',
-				[
-					'label' => __( 'Cancel Button Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .form-submit .cancel-admin-edit-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area .form-submit .cancel-admin-reply' => 'color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_one_reply_cancel_typography',
-					'label' => __( 'Cancel Button Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-edit-reply-area .form-submit .cancel-admin-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-admin-reply-area .form-submit .cancel-admin-reply',
-				]
-			);		
-	
-			$this->end_controls_tabs();
-	
-			$this->end_controls_section();
-			
-			/********************************* 
-			* 	Review Reply & Reply Form End
-			* *********************************/
-
-		}        
-		
-        $this->start_controls_section(
-            'rx_template_one_section_pagination_style',
-            [
-                'label' => __( 'Pagination', 'reviewx' ),
-                'condition' => [
-                    'rx_template_type' => [ 'template_style_one' ],
-                ],
-            ]
-        );
-
-        $this->start_controls_tabs( 'template_one_pagination_style' );
-
-        $this->add_control(
-            'rx_template_one_pagination_text_color',
-            [
-                'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#6f7484',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination a' => 'color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'rx_template_one_pagination_text_typography',
-                'label' => __( 'Text Typography', 'reviewx' ),
-                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination a',
-            ]
-        );		
-
-        $this->add_control(
-            'rx_template_one_pagination_bg_color',
-            [
-                'label' => __( 'Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#F3F3F7',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination a' => 'background-color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_one_pagination_text_active_color',
-            [
-                'label' => __( 'Active Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination .rx-page.active a' => 'color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_one_pagination_bg_active_color',
-            [
-                'label' => __( 'Active Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination .rx-page.active a' => 'background-color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_one_pagination_text_hover_color',
-            [
-                'label' => __( 'Hover Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#23527c',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination a:hover' => 'color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_one_pagination_bg_hover_color',
-            [
-                'label' => __( 'Hover Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_1 .rx_pagination a:hover' => 'background-color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
+        $this->start_controls_section('rvx_section_summary_style', ['label' => __('Review Summary', 'reviewx')]);
+        $this->start_controls_tabs('graph_style');
+        $this->add_control('rvx_template_average_rating_color', ['label' => __('Average Rating Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['{{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-average-rating' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_max_rating_color', ['label' => __('Max Rating Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#BDBDBD', 'selectors' => ['{{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-max-rating' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_badge_color', ['label' => __('Badge Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#4CAF50', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-rating-badge' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_budge_text_color', ['label' => __('Badge Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FFFFFF', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-rating-badge__text' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_average_rating_star_active_color', ['label' => __('Average Rating Star Active Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FCCE08', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-review-form__star-active' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-review__aggregation__summary__star-active-half-star' => 'stop-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_average_rating_star_inactive_color', ['label' => __('Average Rating Star inactive Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => 'gray', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-review-form__star-inactive' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-review__aggregation__summary__star-inactive-half-star' => 'stop-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_total_review_count_color', ['label' => __('Total Review Count Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#BDBDBD', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-total-review' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_summary_star_color', ['label' => __('Summary Star Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FCCE08', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-aggregation__row .rvx-aggregation__rating-icon path' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_summary_progress_bar_active_color', ['label' => __('Summary Progress Bar Active Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => 'rgb(0, 67, 221)', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-aggregation__row .rvx-aggregation__progressbar .rvx-aggregation__progressbar-active' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_summary_progress_bar_inactive_color', ['label' => __('Summary Progress Bar Inactive Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#D9D9D9', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-aggregation__row .rvx-aggregation__progressbar .rvx-aggregation__progressbar-inactive' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_multi_criteria_title_color', ['label' => __('Multi Criteria Title Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#D9D9D9', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-aggregation-multicriteria .rvx-aggregation-multicriteria__name span' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_multi_criteria_progressbar_active_color', ['label' => __('Multi Criteria Progress Bar Active Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => 'rgb(0, 67, 221)', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-aggregation-multicriteria .rvx-aggregation__progressbar .rvx-aggregation__progressbar-active' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_multi_criteria_progressbar_inactive_color', ['label' => __('Multi Criteria Progress Bar Inactive Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#D9D9D9', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-aggregation-multicriteria .rvx-aggregation__progressbar .rvx-aggregation__progressbar-inactive' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_multi_criteria_star_color', ['label' => __('Multi Criteria Star Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FCCE08', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-aggregation-multicriteria .rvx-aggregation-multicriteria__total .rvx-aggregation__rating-icon path' => 'fill: {{VALUE}} !important']]);
         $this->end_controls_tabs();
-
         $this->end_controls_section();
-
-        /*********************************
-         * 	Pagination End
-         * *********************************/
-        $this->start_controls_section(
-            'rx_template_one_section_form_style',
-            [
-                'label' => __( 'Review Form', 'reviewx' ),
-                'condition' => [
-                    'rx_template_type' => [ 'template_style_one' ],
-                ],
-            ]
-        );
-
-		$this->start_controls_tabs( 'template_one_form_style' );
-
-		if( $this->is_pro() ) {
-
-			$this->add_control(
-				'rx_template_one_form_rating_type',
-				[
-					'label' => __( 'Select Rating Style', 'reviewx' ),
-					'type' => Controls_Manager::SELECT,
-					'default' => 'rating_style_one',
-					'options' => [
-						'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-						'rating_style_one' => __( 'Star Rting', 'reviewx' ),
-						'rating_style_two' => __( 'Thumbs Rating', 'reviewx' ),
-						'rating_style_three' => __( 'Faces Rating', 'reviewx' ),
-					],
-				]
-			);			
-
-		} else {
-
-			$this->add_control(
-				'rx_template_one_form_rating_type',
-				[
-					'label' => __( 'Select Rating Style', 'reviewx' ),
-					'type' => Controls_Manager::SELECT,
-					'default' => 'rating_style_one',
-					'options' => [
-						'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-						'rating_style_one' => __( 'Star Rating', 'reviewx' ),
-					],
-				]
-			);
-
-		}
-
-		$this->add_control(
-			'rx_template_one_form_criteria_color',
-			[
-				'label' => __( 'Criteria Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#1a1a1a',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 .rx-criteria-table td' => 'color: {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 .rx-criteria-table td' => 'color: {{VALUE}}',			
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_form_criteria_typography',
-				'label' => __( 'Criteria Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 .rx-criteria-table td,
-							   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 .rx-criteria-table td',
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_one_form_separator_one',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_one_form_rating_color',
-			[
-				'label' => __( 'Rating Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#FFAF22',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .rx-review-form-area-style-1 .rx_star_rating > input:checked ~ label .icon-star,
-					.woocommerce {{WRAPPER}} .rx-review-form-area-style-1 .reviewx-thumbs-rating input[type="radio"]:checked + label svg, .rx-review-form-area-style-1 .reviewx-thumbs-rating input[type="radio"]:checked + label svg #rx_dislike path,
-					.rx-review-form-area-style-1 .reviewx-face-rating fieldset input[type="radio"]:checked + label .happy_st0, .rx-review-form-area-style-1 .reviewx-face-rating fieldset input[type="radio"]:checked + label .st1' => 'fill: {{VALUE}} !important',
-					'.woocommerce {{WRAPPER}} .rx-review-form-area-style-1 .rx_star_rating .icon-star,
-					.woocommerce {{WRAPPER}} .rx-review-form-area-style-1 .rx_star_rating:not(:checked) > label:hover .icon-star, .rx_star_rating:not(:checked) > label:hover ~ label .icon-star
-					' => 'stroke: {{VALUE}} !important',
-					'.woocommerce {{WRAPPER}} .rx-review-form-area-style-1 .rx_star_rating:not(:checked)>label:hover .icon-star, .woocommerce {{WRAPPER}} .rx-review-form-area-style-1 .rx_star_rating:not(:checked)>label:hover~label .icon-star' => 'fill: {{VALUE}} !important',					
-				],
-			]
-		);
-
-        $this->add_control(
-            'rx_template_one_form_recommendation_icon_active_color',
-            [
-                'label' => __( 'Recommendation Icon Active Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#3797FF',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 .reviewx_recommended_list .reviewx_radio input[type="radio"]:checked + .radio-label svg .rx_happy, .rx-review-form-area-style-1 .reviewx_recommended_list .reviewx_radio input[type="radio"]:checked + .radio-label svg .st1 ' => 'fill: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-		$this->add_control(
-			'rx_template_one_form_separator_two',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);	
-		
-		$this->add_control(
-            'rx_template_one_form_external_video_link_color',
-            [
-                'label' => __( 'External Example Video Link Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#6d6d6d',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form .rx-note-video' => 'color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_one_form_external_video_link_typography',
-				'label' => __( 'External Example Video Link Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form .rx-note-video',
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_one_form_separator_three',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);		
-
-        $this->add_control(
-            'rx_template_one_form_submit_button_text_color',
-            [
-                'label' => __( 'Submit Button Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-                'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"], 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"]:focus ' => 'color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'rx_template_one_form_submit_button_text_typography',
-                'label' => __( 'Submit Button Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"], 
-				.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"]:focus',
-            ]
-        );		
-
-        $this->add_control(
-            'rx_template_one_form_submit_button_bg_color',
-            [
-                'label' => __( 'Submit Button Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-                'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"], 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"]:focus ' => 'background-color: {{VALUE}} !important',
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"], 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #review_form input[type="submit"]:focus ' => 'border-color: {{VALUE}} !important',
-                ],
-            ]
-		);
-	
-		$this->add_control(
-			'rx_template_one_form_submit_button_border_radius',
-			[
-				'label' => __( 'Submit Button Border Radius', 'reviewx' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 #respond input#submit' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
-				],
-			]
-		);		
-
-        $this->end_controls_tabs();
-
-        $this->end_controls_section();
-        /*********************************
-         * 	Review Form End
-         * *********************************/
-	}
-
-    /**
-     * Template Two Style
-     * @return void
-     */
-	protected function template_two_style()
+    }
+    public function reviewCard()
     {
-        $styles = '';
-		$this->start_controls_section(
-			'rx_template_two_section_filter',
-			[
-				'label' => __( 'Filtering Bar', 'reviewx' ),
-				'condition' => [
-					'rx_template_type' => [ 'template_style_two' ],
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'template_two_filter' );
-
-		$this->add_control(
-			'rx_template_two_filter_text_color',
-			[
-				'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#676767',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx_filter_header h4, 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx-short-by h4' => 'color: {{VALUE}}',		
-				],
-			]
-		);		
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_filter_text_typography',
-				'label' => __( 'Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx_filter_header h4, 
-							   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx-short-by h4',
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_dropdown_bg_color',
-			[
-				'label' => __( 'Dropdown Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx_review_shorting_2 .box select' => 'background-color: {{VALUE}} !important',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_dropdown_text_color',
-			[
-				'label' => __( 'Dropdown Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#333',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx_review_shorting_2 .box select' => 'color: {{VALUE}} !important',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_dropdown_icon_color',
-			[
-				'label' => __( 'Dropdown Selector Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx_review_shorting_2 .box .rx-selection-arrow b' => 'border-color: {{VALUE}} transparent transparent transparent !important',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_filter_bar_color',
-			[
-				'label' => __( 'Dropdown Bar Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2 .rx_review_shorting_2 .box .rx-selection-arrow' => 'background-color: {{VALUE}} !important',					
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_template_two_filter_bg_color',
-			[
-				'label' => __( 'Filter Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#f5f6f9',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2' => 'background-color: {{VALUE}}',					
-				],
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_two_filter_box_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Section Design', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_template_two_filter_box_shadow',
-				'selector' => '{{WRAPPER}} .woocommerce-Tabs-panel .rx-filter-bar-style-2',
-			]
-		);		
-
-		$this->end_controls_tabs();
-
-		$this->end_controls_section();
-
-		/*=======================
-		* End Filter Style
-		* Start Review Style
-		=========================*/		
-
-		$this->start_controls_section(
-			'rx_template_two_section_review_style',
-			[
-				'label' => __( 'Review Item', 'reviewx' ),
-				'condition' => [
-					'rx_template_type' => [ 'template_style_two' ],
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'template_two_review_style' );		
-
-		$this->add_control(
-			'rx_template_two_author_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Reviewer Information', 'reviewx' ),
-				'separator' => 'after',
-			]
-		);
-
-		$this->add_group_control(
-			Group_Control_Box_Shadow::get_type(),
-			[
-				'name' => 'rx_template_two_author_box_shadow',
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_thumb',
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_author_border_style',
-			[
-				'label' => __( 'Avatar Border Style', 'reviewx' ),
-				'type' => Controls_Manager::SELECT,
-				'groups' => array_values( $this->get_options_by_groups( $styles ) ),
-				'render_type' => 'template',
-				'default' => 'solid',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_thumb' => 'border-style: {{VALUE}}',
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_author_border_color',
-			[
-				'label' => __( 'Avatar Border Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#000',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_thumb' => 'border-color: {{VALUE}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_template_two_author_border_weight',
-			[
-				'label' => __( 'Avatar Border Weight', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'size' => 1,
-				],
-				'range' => [
-					'px' => [
-						'min' => 1,
-						'max' => 10,
-						'step' => 0.1,
-					],
-				],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_thumb' => 'border-width: {{SIZE}}{{UNIT}}',
-				],
-			]
-		);
-
-		$this->add_control(
-			'rx_template_two_author_color',
-			[
-				'label' => __( 'Reviewer Name Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#373747',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_author_info .rx_author_name h4' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_author_typography',
-				'label' => __( 'Reviewer Name Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_author_info .rx_author_name h4',
-			]
-		);
-		
-		/********************************* 
-		* 	Author End
-		* *********************************/	
-		
-		$this->add_control(
-			'rx_template_two_main_content_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Main Content', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);	
-
-		$this->add_control(
-			'rx_template_two_rating_color',
-			[
-				'label' => __( 'Rating Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#FFAF22',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_review_sort_list .rx_listing_container_style_2 .rx_listing_style_2 .rx_avg_star_color' => 'fill: {{VALUE}} !important',					
-				],
-			]
-		);	
-		
-		$this->add_control(
-			'rx_template_two_rating_size',
-			[
-				'label' => __( 'Star Rating Size', 'reviewx' ),
-				'type' => Controls_Manager::SLIDER,
-				'default' => [
-					'unit' => 'px',
-					'size' => 14,
-				],
-				'selectors' => [					
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .review_rating svg' => 'width: {{SIZE}}{{UNIT}} !important; height: {{SIZE}}{{UNIT}} !important;',					
-				],
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_two_title_color',
-			[
-				'label' => __( 'Review Title Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#373747',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .review_title' => 'color: {{VALUE}}',	
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_title_typography',
-				'label' => __( 'Review Title Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .review_title',
-			]
-		);
-
-		$this->add_control(
-			'rx_template_two_text_color',
-			[
-				'label' => __( 'Review Comments Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#9B9B9B',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body p' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_text_typography',
-				'label' => __( 'Review Comments Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body p',
-			]
-		);	
-		
-		$this->add_control(
-			'rx_template_two_review_bg_color',
-			[
-				'label' => __( 'Review Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#F5F6F9',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block' => 'background-color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_reply_bg_color',
-			[
-				'label' => __( 'Reply Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2.rx_listing_filter_style_2 .children, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .children .rx_review_block' => 'background-color: {{VALUE}}',					
-				],
-			]
-		);		
-
-		/********************************* 
-		* 	Review Comments End
-		* *********************************/			
-		
-		$this->add_control(
-			'rx_template_two_text_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Meta Information', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_two_date_icon_color',
-			[
-				'label' => __( 'Reviewed Date Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#707070',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_review_calender svg .st0' => 'fill: {{VALUE}}',
-				],
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_two_date_color',
-			[
-				'label' => __( 'Reviewed Date Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#707070',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_review_calender' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_date_typography',
-				'label' => __( 'Reviewed Date Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_review_calender',
-			]
-		);
-		
-		$this->add_control(
-			'rx_template_two_verified_icon_color',
-			[
-				'label' => __( 'Verified Badge Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#12D585',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_varified .rx_varified_user svg .st0' => 'fill: {{VALUE}}',
-				],
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_two_verified_color',
-			[
-				'label' => __( 'Verified Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#12D585',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_varified .rx_varified_user' => 'color: {{VALUE}}',					
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_verified_typography',
-				'label' => __( 'Verified Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_varified .rx_varified_user',
-			]
-		);
-		
-		if( $this->is_pro() ) {
-	
-			$this->add_control(
-				'rx_template_two_helpful_color',
-				[
-					'label' => __( 'Helpful Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx_review_vote_icon p' => 'color: {{VALUE}}',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_helpful_typography',
-					'label' => __( 'Helpful Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx_review_vote_icon p',
-				]
-			);
-
-			$this->add_control(
-				'rx_template_two_helpful_bg_color',
-				[
-					'label' => __( 'Helpful Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#eaeaea',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_vote_icon .like' => 'background-color: {{VALUE}}',					
-					],
-				]
-			);		
-
-			$this->add_control(
-				'rx_template_two_helpful_icon_color',
-				[
-					'label' => __( 'Helpful Thumbs-up Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#A4A4A4',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_helpful_style_2_svg svg' => 'fill: {{VALUE}}',					
-					],
-				]
-			);	
-
-			$this->add_control(
-				'rx_template_two_helpful_count_color',
-				[
-					'label' => __( 'Helpful Thumbs-up Count Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#696969',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_vote_icon .like .rx_helpful_count_val' => 'color: {{VALUE}} !important',				
-					],
-				]
-			);		
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_share_typography',
-					'label' => __( 'Share Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx_share p',
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_two_share_color',
-				[
-					'label' => __( 'Share Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx_share p' => 'color: {{VALUE}}',					
-					],
-				]
-			);
-
-			$this->add_control(
-				'rx_template_two_share_icon_color',
-				[
-					'label' => __( 'Share Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#000',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .social-links .wc_rx_btns ul li:nth-child(1) svg' => 'fill: {{VALUE}}',
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_two_facebook_color',
-				[
-					'label' => __( 'Facebook Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#B7B7B8',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .social-links .wc_rx_btns ul li:nth-child(2) a svg .st0' => 'fill: {{VALUE}}'	
-					],
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_two_twitter_color',
-				[
-					'label' => __( 'Twitter Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#B7B7B8',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .social-links .wc_rx_btns ul li:nth-child(3) a svg .st0' => 'fill: {{VALUE}}',					
-					],
-				]
-			);
-
-			$this->add_control(
-				'rx_template_two_highlighter_color',
-				[
-					'label' => __( 'Highlight Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#2f4fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_admin_heighlights span svg' => 'fill: {{VALUE}} !important',		
-					],
-				]
-			);
-
-			$this->add_control(
-				'rx_template_two_hightlight_bgcolor',
-				[
-					'label' => __( 'Review Highlight Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff4df',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .rx_listing_style_2 .reviewx_highlight_comment' => 'background-color: {{VALUE}} !important',					
-					],
-				]
-			);				
-
-			$this->add_control(
-				'rx_template_two_reply_hightlight_bgcolor',
-				[
-					'label' => __( 'Reply Highlight Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#FFE3AF',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2.rx_listing_filter_style_2 .reviewx_highlight_comment .children, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .reviewx_highlight_comment .children .rx_review_block' => 'background-color: {{VALUE}} !important',					
-					],
-				]
-			);
-
-		}
-		
-		$this->add_control(
-			'rx_template_two_attachement_block_style',
-			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Review Attachment', 'reviewx' ),
-				'separator' => 'before',
-			]
-		);	
-		
-		$this->add_responsive_control(
-			'rx_template_two_attachement_position',
-			[
-				'label' => __( 'Select Attachment Position', 'reviewx' ),
-				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Left', 'reviewx' ),
-						'icon' => 'eicon-text-align-left',
-					],
-					'flex-end' => [
-						'title' => __( 'Right', 'reviewx' ),
-						'icon' => 'eicon-text-align-right',
-					],
-				],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_photos' => 'justify-content: {{VALUE}} !important;',
-				],
-			]
-		);		
-
-		$this->end_controls_tabs();
-
-		$this->end_controls_section();		
-
-		/********************************* 
-		* 	Review Meta Info End (Date, Verified, Helpful)
-		* *********************************/
-
-		if( $this->is_pro() ) {
-
-			$this->start_controls_section(
-				'rx_template_two_section_reply_style',
-				[
-					'label' => __( 'Store Reply', 'reviewx' ),
-					'condition' => [
-						'rx_template_type' => [ 'template_style_two' ],
-					],
-				]
-			);
-	
-			$this->start_controls_tabs( 'template_two_reply_style' );
-	
-			$this->add_control(
-				'rx_template_two_reply_block_style',
-				[
-					'type' => Controls_Manager::HEADING,
-					'label' => __( 'Reply Item', 'reviewx' ),
-					'separator' => 'after',
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_icon_color',
-				[
-					'label' => __( 'Store Logo Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#2f4fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .rx_thumb svg .st0' => 'fill: {{VALUE}} !important',															
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_icon_bdcolor',
-				[
-					'label' => __( 'Store Logo Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .rx_thumb' => 'background-color: {{VALUE}}',
-					],
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_two_reply_icon_border',
-				[
-					'label' => __( 'Store Logo Border Radius', 'reviewx' ),
-					'type' => Controls_Manager::DIMENSIONS,
-					'size_units' => [ 'px', '%' ],
-					'default' => [
-						'unit' => 'px',
-						'size' => 15,
-					],				
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .rx_thumb' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_two_reply_title_color',
-				[
-					'label' => __( 'Store Name Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .review_title' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_title_typography',
-					'label' => __( 'Store Name Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .review_title',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_two_reply_back_icon_color',
-				[
-					'label' => __( 'Reply Back Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#707070',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .owner_arrow svg .st0' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_two_reply_text_color',
-				[
-					'label' => __( 'Reply Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#707070',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .comment-content p' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_text_typography',
-					'label' => __( 'Reply Text Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .comment-content p',
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_two_reply_date_color',
-				[
-					'label' => __( 'Date Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .rx_review_calender' => 'color: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_date_typography',
-					'label' => __( 'Date Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .children .rx_review_calender',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_two_reply_date_icon_color',
-				[
-					'label' => __( 'Date Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_review_calender svg .st0' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-	
-			$this->add_control(
-				'rx_template_two_reply_edit_icon_color',
-				[
-					'label' => __( 'Reply Edit Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#000',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .admin-reply-edit-icon svg' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_delete_icon_color',
-				[
-					'label' => __( 'Reply Delete Icon Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#000',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .admin-reply-delete-icon svg' => 'fill: {{VALUE}} !important',					
-					],
-				]
-			);		
-	
-			$this->add_control(
-				'rx_template_two_reply_button_text_color',
-				[
-					'label' => __( 'Reply Button Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx-admin-reply' => 'color: {{VALUE}} !important',
-					],
-				]
-			);		
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_button_text_typography',
-					'label' => __( 'Reply Button Text Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx-admin-reply',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_two_reply_button_color',
-				[
-					'label' => __( 'Reply Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#097afa',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx-admin-reply' => 'background-color: {{VALUE}} !important',					
-					],
-				]
-			);	
-			
-	
-			$this->add_control(
-				'rx_template_two_reply_button_border_color',
-				[
-					'label' => __( 'Reply Button Border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#097afa',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_style_2 .rx_review_block .rx_body .rx_meta .rx-admin-reply' => 'border-color: {{VALUE}} !important',				
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_form_block_style',
-				[
-					'type' => Controls_Manager::HEADING,
-					'label' => __( 'Reply Form', 'reviewx' ),
-					'separator' => 'after',
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_form_bgcolor',
-				[
-					'label' => __( 'Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area, 
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_form_border_color',
-				[
-					'label' => __( 'Border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#f7f7f7',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2.rx-admin-edit-reply-area, 
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area' => 'border-color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_form_border_radius',
-				[
-					'label' => __( 'Border Radius', 'reviewx' ),
-					'type' => Controls_Manager::SLIDER,
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-reply-area,
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-edit-reply-area' => 'border-radius: {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} {{SIZE}}{{UNIT}} !important',
-					],
-				]
-			);
-			
-			$this->add_control(
-				'rx_template_two_reply_form_title_color',
-				[
-					'label' => __( 'Title Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#373747',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .admin-reply-form-title,
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .admin-reply-form-title
-						' => 'color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_form_title_typography',
-					'label' => __( 'Title Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .admin-reply-form-title,
-								   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .admin-reply-form-title',
-				]
-			);
-	
-			$this->add_control(
-				'rx_template_two_reply_form_field',
-				[
-					'label' => __( 'Text Area Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#EBEBF3',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .comment-form-comment .rx-admin-reply-text, 
-						 .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .comment-form-comment .rx-admin-reply-text' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);
-	
-			/*========================
-			*	Reply Submit Button
-			*========================*/
-			$this->add_control(
-				'rx_template_two_reply_submit_button',
-				[
-					'label' => __( 'Submit Button Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#2f4fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .admin-review-edit-reply, 
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .form-submit .admin-review-reply' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_two_reply_submit_color',
-				[
-					'label' => __( 'Submit Button Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#fff',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .admin-review-reply, 
-						.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .form-submit .admin-review-reply' => 'color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_submit_typography',
-					'label' => __( 'Submit Button Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .admin-review-reply, 
-								.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .form-submit .admin-review-reply',
-				]
-			);
-		
-			/*========================
-			*	Reply Cancel Button
-			*=========================*/
-			$this->add_control(
-				'rx_template_two_reply_cancel_button',
-				[
-					'label' => __( 'Cancel Button Background Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#eeeeee',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .cancel-admin-edit-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_review_block .rx_body .rx-admin-reply-area .form-submit .cancel-admin-reply' => 'background-color: {{VALUE}} !important',										
-					],
-				]
-			);	
-			
-			$this->add_control(
-				'rx_template_two_reply_cancel_border_color',
-				[
-					'label' => __( 'Cancel Button Border Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .cancel-admin-edit-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_review_block .rx_body .rx-admin-reply-area .form-submit .cancel-admin-reply' => 'border-color: {{VALUE}} !important',										
-					],
-				]
-			);		
-			
-			$this->add_control(
-				'rx_template_two_reply_cancel_color',
-				[
-					'label' => __( 'Cancel Button Text Color', 'reviewx' ),
-					'type' => Controls_Manager::COLOR,
-					'default' => '#333',
-					'selectors' => [
-						'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .cancel-admin-edit-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_review_block .rx_body .rx-admin-reply-area .form-submit .cancel-admin-reply' => 'color: {{VALUE}} !important',										
-					],
-				]
-			);
-			
-			$this->add_group_control(
-				Group_Control_Typography::get_type(),
-				[
-					'name' => 'rx_template_two_reply_cancel_typography',
-					'label' => __( 'Cancel Button Typography', 'reviewx' ),
-					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx-admin-edit-reply-area .form-submit .cancel-admin-reply, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_review_block .rx_body .rx-admin-reply-area .form-submit .cancel-admin-reply',
-				]
-			);		
-	
-			$this->end_controls_tabs();
-	
-			$this->end_controls_section();
-			
-			/********************************* 
-			* 	Review Reply & Reply Form End
-			* *********************************/	
-
-		}
-
-		$this->start_controls_section(
-			'rx_template_two_section_pagination_style',
-			[
-				'label' => __( 'Pagination', 'reviewx' ),
-				'condition' => [
-					'rx_template_type' => [ 'template_style_two' ],
-				],
-			]
-		);
-
-		$this->start_controls_tabs( 'template_two_pagination_style' );
-
-        $this->add_control(
-            'rx_template_two_pagination_text_color',
-            [
-                'label' => __( 'Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#6f7484',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a' => 'color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'rx_template_two_pagination_text_typography',
-                'label' => __( 'Text Typography', 'reviewx' ),
-                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a',
-            ]
-        );		
-
-        $this->add_control(
-            'rx_template_two_pagination_bg_color',
-            [
-                'label' => __( 'Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#F3F3F7',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a' => 'background-color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_two_pagination_text_active_color',
-            [
-                'label' => __( 'Active Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a.current' => 'color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_two_pagination_bg_active_color',
-            [
-                'label' => __( 'Active Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a.current' => 'background-color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_two_pagination_text_hover_color',
-            [
-                'label' => __( 'Hover Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#23527c',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a:hover' => 'color: {{VALUE}} !important',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'rx_template_two_pagination_bg_hover_color',
-            [
-                'label' => __( 'Hover Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx_listing_container_style_2 .rx_pagination a:hover' => 'background-color: {{VALUE}} !important',
-                ],
-            ]
-        );
-			
-		$this->end_controls_tabs();
-
-		$this->end_controls_section();	
-
-		/********************************* 
-		* 	Pagination End
-		* *********************************/
-
-        $this->start_controls_section(
-            'rx_template_two_section_form_style',
-            [
-                'label' => __( 'Review Form', 'reviewx' ),
-                'condition' => [
-                    'rx_template_type' => [ 'template_style_two' ],
-                ],
-            ]
-        );
-
-		$this->start_controls_tabs( 'template_two_form_style' );
-
-		if( $this->is_pro() ) {
-
-			$this->add_control(
-				'rx_template_two_form_rating_type',
-				[
-					'label' => __( 'Select Rating Style', 'reviewx' ),
-					'type' => Controls_Manager::SELECT,
-					'default' => 'rating_style_one',
-					'options' => [
-						'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-						'rating_style_one' => __( 'Star Rating', 'reviewx' ),
-						'rating_style_two' => __( 'Thumbs Rating', 'reviewx' ),
-						'rating_style_three' => __( 'Faces Rating', 'reviewx' ),
-					],
-				]
-			);
-
-		} else {
-			
-			$this->add_control(
-				'rx_template_two_form_rating_type',
-				[
-					'label' => __( 'Select Rating Style', 'reviewx' ),
-					'type' => Controls_Manager::SELECT,
-					'default' => 'rating_style_one',
-					'options' => [
-						'' => '— ' . __( 'Select', 'reviewx' ) . ' —',
-						'rating_style_one' => __( 'Star Rating', 'reviewx' ),
-					],
-				]
-			);
-
-		}
-
-		$this->add_control(
-			'rx_template_two_form_criteria_color',
-			[
-				'label' => __( 'Criteria Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#1a1a1a',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 .rx-criteria-table td' => 'color: {{VALUE}}',
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 .rx-criteria-table td' => 'color: {{VALUE}}',		
-				],
-			]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_form_criteria_typography',
-				'label' => __( 'Criteria Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-1 .rx-criteria-table td,
-							   .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 .rx-criteria-table td',
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_two_form_separator_one',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);		
-
-		$this->add_control(
-			'rx_template_two_form_rating_color',
-			[
-				'label' => __( 'Rating Icon Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#FFAF22',
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .rx-review-form-area-style-2 .rx_star_rating > input:checked ~ label .icon-star,
-					.rx-review-form-area-style-2 .reviewx-thumbs-rating input[type="radio"]:checked + label svg, .rx-review-form-area-style-2 .reviewx-thumbs-rating input[type="radio"]:checked + label svg #rx_dislike path,
-					.rx-review-form-area-style-2 .reviewx-face-rating fieldset input[type="radio"]:checked + label .happy_st0, .rx-review-form-area-style-2 .reviewx-face-rating fieldset input[type="radio"]:checked + label .st1' => 'fill: {{VALUE}} !important',
-					'.woocommerce {{WRAPPER}} .rx-review-form-area-style-2 .rx_star_rating .icon-star,
-					.woocommerce {{WRAPPER}} .rx-review-form-area-style-2 .rx_star_rating:not(:checked) > label:hover .icon-star, .rx_star_rating:not(:checked) > label:hover ~ label .icon-star
-					' => 'stroke: {{VALUE}} !important',
-					'.woocommerce {{WRAPPER}} .rx-review-form-area-style-2 .rx_star_rating:not(:checked)>label:hover .icon-star, .woocommerce {{WRAPPER}} .rx-review-form-area-style-2 .rx_star_rating:not(:checked)>label:hover~label .icon-star' => 'fill: {{VALUE}} !important',	
-				],
-			]
-		);
-
-        $this->add_control(
-            'rx_template_two_form_recommendation_icon_active_color',
-            [
-                'label' => __( 'Recommendation Icon Active Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#3797FF',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 .reviewx_recommended_list .reviewx_radio input[type="radio"]:checked + .radio-label svg .rx_happy, .rx-review-form-area-style-2 .reviewx_recommended_list .reviewx_radio input[type="radio"]:checked + .radio-label svg .st1 ' => 'fill: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-		$this->add_control(
-			'rx_template_two_form_separator_two',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);
-		
-		$this->add_control(
-            'rx_template_two_form_external_video_link_color',
-            [
-                'label' => __( 'External Example Video Link Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#6d6d6d',
-                'selectors' => [
-                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form .rx-note-video' => 'color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
-			[
-				'name' => 'rx_template_two_form_external_video_link_typography',
-				'label' => __( 'External Example Video Link Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form .rx-note-video',
-			]
-		);		
-		
-		$this->add_control(
-			'rx_template_two_form_separator_three',
-			[
-				'type' => Controls_Manager::DIVIDER,
-			]
-		);
-
-        $this->add_control(
-            'rx_template_two_form_submit_button_text_color',
-            [
-                'label' => __( 'Submit Button Text Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#fff',
-                'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"], 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"]:focus' => 'color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'rx_template_two_form_submit_button_text_typography',
-                'label' => __( 'Submit Button Text Typography', 'reviewx' ),
-				'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"], 
-						       .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"]:focus',
-            ]
-        );		
-
-        $this->add_control(
-            'rx_template_two_form_submit_button_bg_color',
-            [
-                'label' => __( 'Submit Button Background Color', 'reviewx' ),
-				'type' => Controls_Manager::COLOR,
-				'default' => '#2f4fff',
-                'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"], 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"]:focus' => 'background-color: {{VALUE}} !important',
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"], 
-					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #review_form input[type="submit"]:focus' => 'border-color: {{VALUE}} !important',
-                ],
-            ]
-		);
-		
-		$this->add_control(
-			'rx_template_two_form_submit_button_border_radius',
-			[
-				'label' => __( 'Submit Button Border Radius', 'reviewx' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors' => [
-					'.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rx-review-form-area-style-2 #respond input#submit' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
-				],
-			]
-		);		
-
-        $this->end_controls_tabs();
-
-        $this->end_controls_section();
+        $this->start_controls_section('rvx_template_section_review_card_style', ['label' => __('Review Card', 'reviewx')]);
+        $this->start_controls_tabs('rvx_template_tabs_review_card_style');
+        $this->add_control('rvx_template_one_author_block_style', ['type' => Controls_Manager::HEADING, 'label' => __('Reviewer Information', 'reviewx'), 'separator' => 'after']);
+        $this->add_control('rvx_template_reviewer_info_author_avatar_size', ['label' => __('Avatar Size', 'reviewx'), 'show_label' => \true, 'type' => Controls_Manager::IMAGE_DIMENSIONS, 'default' => ['width' => '50', 'height' => '50', 'unit' => 'px'], 'size_units' => ['px', 'em', '%'], 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-user__avatar' => 'width: {{WIDTH}}{{UNIT}} !important; height: {{HEIGHT}}{{UNIT}} !important;', '
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-user__avatar' => 'width: {{WIDTH}}{{UNIT}} !important; height: {{HEIGHT}}{{UNIT}} !important;']]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_template_reviewer_info_author_avatar_fallback_typography', 'label' => __('Avatar Fallback Typography', 'reviewx'), 'selector' => '
+                .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-user__avatar .rvx-review-user__avatar-fallback span,
+                .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-user__avatar .rvx-review-user__avatar-fallback span
+                ', 'fields_options' => ['font_size' => ['default' => ['unit' => 'px', 'size' => 16]]]]);
+        $this->add_control('rvx_template_reviewer_info_author_avatar_text_color', ['label' => __('Avatar Fallback Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#BDBDBD', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-user__avatar .rvx-review-user__avatar-fallback span' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-user__avatar .rvx-review-user__avatar-fallback span' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_reviewer_card_background_color_for_review', ['label' => __('Review Card Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#F5F5F5', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-review-wrapper .rvx-review-card' => 'background-color: {{VALUE}} !important;']]);
+        $this->add_control('rvx_template_reviewer_info_author_name_text_color', ['label' => __('Name Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#373747', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-user .rvx-review-user__name' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-user .rvx-review-user__name' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_reviewer_info_rating_star_active_color', ['label' => __('Rating Star Active Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#ECBD3F', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-reviewer__star-active' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-reviewer__star-half.rvx-reviewer__star-active-half-star' => 'stop-color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-reviewer__star-active' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-reviewer__star-half.rvx-reviewer__star-active-half-star' => 'stop-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_reviewer_info_rating_star_inactive_color', ['label' => __('Rating Star Inactive Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#ECBD3F', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-reviewer__star-inactive' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-reviewer__star-half.rvx-reviewer__star-inactive-half-star' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details__body .rvx-reviewer__star-inactive' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details__body .rvx-reviewer__star-half.rvx-reviewer__star-inactive-half-star' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_main_content_block_style', ['type' => Controls_Manager::HEADING, 'label' => __('Main Content', 'reviewx'), 'separator' => 'before']);
+        $this->add_control('rvx_template_main_content_title_color', ['label' => __('Review Title Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#373747', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-info .rvx-review-info__title' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-info .rvx-review-info__title' => 'color: {{VALUE}} !important']]);
+        //        $this->add_group_control(
+        //            Group_Control_Typography::get_type(),
+        //            [
+        //                'name' => 'rvx_template_main_content_review_title_typography',
+        //                'label' => __('Review Title Typography', 'reviewx'),
+        //                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-review-card .rvx-review-card__body .rvx-review-info .rvx-review-info__title, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-details .rvx-review-info .rvx-review-info__title',
+        //            ]
+        //        );
+        $this->add_control('rvx_template_main_content_review_description_text_color', ['label' => __('Review Description Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#9B9B9B', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-info .rvx-review-info__feedback' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-info .rvx-review-info__feedback' => 'color: {{VALUE}} !important']]);
+        //        $this->add_group_control(
+        //            Group_Control_Typography::get_type(),
+        //            [
+        //                'name' => 'rvx_template_main_content_review_description_text_typography',
+        //                'label' => __('Review Description Typography', 'reviewx'),
+        //                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-info .rvx-review-info__feedback,.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-info .rvx-review-info__feedback',
+        //            ]
+        //        );
+        $this->add_control('rvx_template_main_content_review_description_review_date', ['label' => __('Review Date Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#757575', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-info .rvx-review-info__date' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-info .rvx-review-info__date' => 'color: {{VALUE}} !important']]);
+        //        $this->add_group_control(
+        //            Group_Control_Typography::get_type(),
+        //            [
+        //                'name' => 'rvx_template_main_content_review_description_review_date_typography',
+        //                'label' => __('Review Date Typography', 'reviewx'),
+        //                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-card .rvx-review-card__body .rvx-review-info .rvx-review-info__date, .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-details .rvx-review-info .rvx-review-info__date',
+        //            ]
+        //        );
+        $this->add_control('rvx_template_main_content_footer_action_helpful_message_text_color', ['label' => __('Was This Helpful Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#333', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-review-card .rvx-review-footer .rvx-review-footer__text' => 'color: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-details .rvx-review-footer .rvx-review-footer__text' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_main_content_footer_like', ['label' => __('Review Like Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#E0E0E0', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-review-card .rvx-review-footer__thumbs--like-icon path' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-details .rvx-review-footer__thumbs--like-icon path' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_main_content_footer_dislike', ['label' => __('Review Dislike', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#E0E0E0', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-review-card .rvx-review-footer__thumbs--dislike-icon path' => 'fill: {{VALUE}} !important', '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-details .rvx-review-footer__thumbs--dislike-icon path' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_card_load_more', ['label' => __('Load More Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FFFFFF', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget button' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_card_load_more_text_color', ['label' => __('Load More Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget button' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_card_load_more_background_hover_color', ['label' => __('Load More Hover Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#D5D5D5', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget button:hover' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_card_load_more_hover_text_color', ['label' => __('Load More Text Hover Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget button:hover' => 'color: {{VALUE}} !important']]);
         /*********************************
-         * 	Review Form End
+         *    Review Description End
          * *********************************/
-	}
-
+        $this->end_controls_tabs();
+        $this->end_controls_section();
+    }
+    public function filterOptions()
+    {
+        $this->start_controls_section('rvx_template_filter_section', ['label' => __('Filter Options', 'reviewx')]);
+        $this->add_control('rvx_template_write_review_action_bg_color', ['label' => __('Write Review Action Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#387CF7', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-write__button' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_write_review_action_text_color', ['label' => __('Write Review Action Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-write__button' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_text_color', ['label' => __('Filter Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__button' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_text_button_background_color', ['label' => __('Filter Button Background color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#F5F5F5', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__button' => 'background: {{VALUE}} !important']]);
+        //        $this->add_group_control(
+        //            Group_Control_Typography::get_type(),
+        //            [
+        //                'name' => 'rvx_filter_button_font_size',
+        //                'label' => __('Filter Button Font Size', 'reviewx'),
+        //                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget .rvx-review-filter__button',
+        //                'fields_options' => [
+        //                    'font_size' => [
+        //                        'default' => [
+        //                            'unit' => 'px',
+        //                            'size' => 16, // Default font size set to 16px
+        //                        ],
+        //                    ],
+        //                ],
+        //            ]
+        //        );
+        $this->add_control('rvx_filter_dropdown_background_color', ['label' => __('Filter Dropdown Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FFFFFF', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper,
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper .rvx-review-filter__wrapper-inner,
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer
+                    ' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_by_text_color', ['label' => __('Dropdown Filter By Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#6B707A', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__title' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_options_text_color', ['label' => __('Dropdown Filter Options Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#6B707A', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer .rvx-review-filter-wrapper__rating .rvx-review-filter-wrapper__rating--text,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer .rvx-review-filter-wrapper__rating .rvx-review-filter-wrapper__rating-wrapper .rvx-review-filter-wrapper__rating-inner .rvx-review-filter__wrapper__rating--radio-group__option-label,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer .rvx-review-filter-wrapper__attachment .rvx-review-filter-wrapper__attachment--text,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer .rvx-review-filter-wrapper__attachment .rvx-review-filter-wrapper__attachment-wrapper .rvx-review-filter-wrapper__attachment-inner .rvx-review-filter__wrapper__attachment--radio-group__option-label
+                    
+                    ' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_options_icon_color', ['label' => __('Dropdown Filter Option Icon Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#6B707A', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer .rvx-review-filter-wrapper__rating .rvx-review-filter-wrapper__rating-inner--icon,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter__wrapper-inner .rvx-review-filter-wrapper__outer .rvx-review-filter-wrapper__attachment .rvx-review-filter-wrapper__attachment-inner--icon
+                    ' => 'color: {{VALUE}} !important']]);
+        //        $this->add_group_control(
+        //            Group_Control_Typography::get_type(),
+        //            [
+        //                'name' => 'rvx_filter_by_font_size',
+        //                'label' => __('Dropdown Filter By Font Size', 'reviewx'),
+        //                'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper__title',
+        //                'fields_options' => [
+        //                    'font_size' => [
+        //                        'default' => [
+        //                            'unit' => 'px',
+        //                            'size' => 16, // Default font size set to 16px
+        //                        ],
+        //                    ],
+        //                ],
+        //            ]
+        //        );
+        $this->add_control('rvx_template_filter_reset_button_text_color', ['label' => __('Filter Reset Button Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#383239', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper__footer button' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_reset_button_background_color', ['label' => __('Filter Reset Button Background', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#F5F5F5', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper__footer button' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_filter_reset_button_border_radius', ['label' => __('Filter Reset Button Border Radius', 'reviewx'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-filter-wrapper__footer button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;']]);
+        $this->add_control('rvx_template_sort_by_button_text_color', ['label' => __('Sort By Button Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-sort__button' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_sort_by_button_bg_color', ['label' => __('Sort By Button Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-sort__button' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_sort_by_dropdown_text_color', ['label' => __('Sort By Dropdown Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-sort-wrapper .rvx-review-sort-wrapper__outer .rvx-review-sort-wrapper__inner .rvx-review-sort__wrapper--radio-group__option-label' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_sort_by_dropdown_bg_color', ['label' => __('Sort By Dropdown Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-filter .rvx-review-sort-wrapper' => 'background: {{VALUE}} !important']]);
+        $this->end_controls_tabs();
+        $this->end_controls_section();
+    }
+    public function reviewForm()
+    {
+        $this->start_controls_section('rvx_template_review_form_section_style', ['label' => __('Review Form', 'reviewx')]);
+        // Form Text: Write a Review
+        $this->add_control('rvx_template_review_form_text_write_a_review', ['label' => __('Write a Review', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Write a Review', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title' => 'textContent: {{VALUE}};']]);
+        // Form Text: Rating Title (Text)
+        $this->add_control('rvx_template_review_form_text_rating_star_title', ['label' => __('Rating (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Rating', 'selectors' => ['{{WRAPPER}} .rvx-review-form__rating--name' => 'textContent: {{VALUE}};']]);
+        // Form Text: Review Title (Text)
+        $this->add_control('rvx_template_review_form_text_review_title', ['label' => __('Review Title (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Review Title', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title--name' => 'textContent: {{VALUE}};']]);
+        // Form Text: Review Title (Placeholder)
+        $this->add_control('rvx_template_review_form_placeholder_review_title', ['label' => __('Review Title (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Write Review Title', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title--input' => 'textContent: {{VALUE}};']]);
+        // Form Text: Review Description (Text)
+        $this->add_control('rvx_template_review_form_text_review_description', ['label' => __('Description (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Description', 'selectors' => ['{{WRAPPER}} .rvx-review-form__description--title' => 'textContent: {{VALUE}};']]);
+        // Form Text: Review Description (Placeholder)
+        $this->add_control('rvx_template_review_form_placeholder_review_description', ['label' => __('Description (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Write your description here', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title--textarea' => 'textContent: {{VALUE}};']]);
+        // Form Text: Full Name (Text)
+        $this->add_control('rvx_template_review_form_text_full_name', ['label' => __('Full Name (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Full Name', 'selectors' => ['{{WRAPPER}} .rvx-review-form__description--title' => 'textContent: {{VALUE}};']]);
+        // Form Text: Full Name (Placeholder)
+        $this->add_control('rvx_template_review_form_placeholder_full_name', ['label' => __('Full Name (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Full Name', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title--textarea' => 'textContent: {{VALUE}};']]);
+        // Form Text: Email Address (Text)
+        $this->add_control('rvx_template_review_form_text_email_name', ['label' => __('Email Address (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Email Address', 'selectors' => ['{{WRAPPER}} .rvx-review-form__description--title' => 'textContent: {{VALUE}};']]);
+        // Form Text: Email Address (Placeholder)
+        $this->add_control('rvx_template_review_form_placeholder_email_name', ['label' => __('Email Address (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Email Address', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title--textarea' => 'textContent: {{VALUE}};']]);
+        // Form Text: Attachment (Text)
+        $this->add_control('rvx_template_review_form_text_attachment_title', ['label' => __('Attachment (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Attachment', 'selectors' => ['{{WRAPPER}} .rvx-review-form__attachment--name' => 'textContent: {{VALUE}};']]);
+        // Form Text: Upload Photo/Video (Placeholder)
+        $this->add_control('rvx_template_review_form_placeholder_upload_photo', ['label' => __('Upload Photo/Video (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Upload Photo/Video', 'selectors' => ['{{WRAPPER}} .rvx-review-form__attachment--upload--text' => 'textContent: {{VALUE}};']]);
+        // Form Text: Mark as Anonymous (Text)
+        $this->add_control('rvx_template_review_form_text_mark_as_anonymous', ['label' => __('Mark as Anonymous (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Mark as Anonymous', 'selectors' => ['{{WRAPPER}} .rvx-review-form__mark-anonymous' => 'textContent: {{VALUE}};']]);
+        // Form Text: Recommended? (Text)
+        $this->add_control('rvx_template_review_form_text_recommended_title', ['label' => __('Recommended? (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Recommendation?', 'selectors' => ['{{WRAPPER}} .rvx-review-form__recommended--name' => 'textContent: {{VALUE}};']]);
+        $this->add_control('rvx_template_review_form_background_color', ['label' => __('Form Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#F5F5F5', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-storefront-widget #rvx-review-form__wrapper' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_title_color', ['label' => __('Form Title Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__title[]' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_border_color', ['label' => __('Form Border Line Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#E0E0E0', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__line' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_product_image_size', ['label' => __('Product Image Size', 'reviewx'), 'type' => Controls_Manager::IMAGE_DIMENSIONS, 'show_label' => \true, 'default' => ['width' => '64', 'height' => '64', 'unit' => 'px'], 'size_units' => ['px', 'em', '%'], 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__product .rvx-review-form__product--image' => 'width: {{WIDTH}}{{UNIT}} !important; height: {{HEIGHT}}{{UNIT}} !important;']]);
+        //        $this->add_control(
+        //            'rvx_hide_product_image',
+        //            [
+        //                'label' => __('Hide Product Image', 'reviewx'),
+        //                'type' => Controls_Manager::HIDDEN,
+        //                'default' => 'block',
+        //                'selectors' => [
+        //                    '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__inner .rvx-review-form__product .rvx-review-form__product' => 'display: {{VALUE}} !important',
+        //                ],
+        //            ]
+        //        );
+        //
+        $this->add_control('rvx_template_review_form_product_title_color', ['label' => __('Product Title Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__product .rvx-review-form__product--title' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_rating_star_active_color', ['label' => __('Rating Active Star Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FCCE08', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__rating .rvx-review-form__star-active' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_rating_star_inactive_color', ['label' => __('Rating Inactive Star Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FCCE08', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__rating .rvx-review-form__star-inactive' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_multi_criteria_star_active_color', ['label' => __('Multi Criteria Active Star Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#FCCE08', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__multicriteria .rvx-review-form__star-active' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_multi_criteria_star_inactive_color', ['label' => __('Multi Criteria Inactive Star Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#757575', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__multicriteria .rvx-review-form__star-inactive' => 'fill: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_label_color', ['label' => __('Review Form Label Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#424242', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__title .rvx-review-form__title--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__description .rvx-review-form__description--title,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__rating .rvx-review-form__rating--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__multicriteria .rvx-review-form__multicriteria--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__user .rvx-review-form__user--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__email .rvx-review-form__email--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__attachment .rvx-review-form__attachment--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__attachment--inner .rvx-review-form__mark-anonymous,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__recommended .rvx-review-form__recommended--name,
+                    
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form .rvx-review-form__inner .rvx-review-form__recommended label
+                    ' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_review_title_input_placeholder_color', ['label' => __('Review Form Input Placeholder Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#BDBDBD', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper input::placeholder,
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper textarea::placeholder
+                    ' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_input_background_color', ['label' => __('Review Form Input Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper input,
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper textarea
+                    ' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form__attachments_icon_color', ['label' => __('Review Attachment Icon Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#9E9E9E', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__attachment .rvx-review-form__attachment--inner .rvx-review-form__attachment--upload--icon' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form__attachments_text_color', ['label' => __('Review Attachment Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#9E9E9E', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__attachment .rvx-review-form__attachment--inner .rvx-review-form__attachment--upload--count,
+                    .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__attachment .rvx-review-form__attachment--inner .rvx-review-form__attachment--upload--text' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form__attachments_background_color', ['label' => __('Review Attachment Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#EEEEEE', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__attachment .rvx-review-form__attachment--inner .rvx-review-form__attachment--upload' => 'background: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_submit_button_bg_color', ['label' => __('Submit Button Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#2f4fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"],
+					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"]:focus' => 'background-color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_submit_button_text_color', ['label' => __('Submit Button Text Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"],
+					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"]:focus' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_submit_button_hover_background_color', ['label' => __('Submit Button Hover Background Color', 'reviewx'), 'type' => Controls_Manager::COLOR, 'default' => '#fff', 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"],
+					.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"]:hover' => 'color: {{VALUE}} !important']]);
+        $this->add_control('rvx_template_review_form_submit_button_border_radius', ['label' => __('Submit Button Border Radius', 'reviewx'), 'type' => Controls_Manager::DIMENSIONS, 'size_units' => ['px', '%'], 'selectors' => ['.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__footer .rvx-review-form__submit--button[type="submit"]' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;']]);
+        $this->end_controls_tabs();
+        $this->end_controls_section();
+    }
+    public function frontSize()
+    {
+        $this->start_controls_section('rvx_template_font_section', ['label' => __('Font size', 'reviewx')]);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_template_front_size_text_typography', 'label' => __('Review Criteria Typography', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-form__multicriteria--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_criteria_label_typography', 'label' => __('Criteria Label Typography', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-form__multicriteria--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_criteria_value_typography', 'label' => __('Criteria Value Typography', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-aggregation-multicriteria__row-inner .rvx-review-form__multicriteria--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_title_lable_typography', 'label' => __('Title lable', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel #rvx-review-form__wrapper .rvx-review-form__title--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_title_value_typography', 'label' => __('Title Value', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-info .rvx-review-info__title']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_description_label_typography', 'label' => __('Description label', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-form__description .rvx-review-form__title--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_description_value_typography', 'label' => __('Description Value', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-info .rvx-review-info__feedback']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_attachments_typography', 'label' => __('Attachment', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-form__attachment--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_recommended_typography', 'label' => __('Recommended', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-form__recommended--name']);
+        $this->add_group_control(Group_Control_Typography::get_type(), ['name' => 'rvx_anonymous_typography', 'label' => __('Mark as Anonymous', 'reviewx'), 'selector' => '.woocommerce {{WRAPPER}} .woocommerce-Tabs-panel .rvx-review-form__mark-anonymous']);
+        $this->end_controls_tabs();
+        $this->end_controls_section();
+    }
     /**
      * Render
      * @return void
      */
     protected function render()
     {
-		global $product;
-
-        $product = wc_get_product();
-
-		if ( empty( $product ) ) {
-			echo '<h3>'.__('This widget only works for the product page. In order to achieve, follow the steps: this  Dashboard >  Template  > Theme Builder > Add New > Choose Template Type \'Single Product\' > Create Template', 'reviewx').'</h3>';
-			return;
-		}
-		
-		add_filter( 'rx_load_elementor_style_controller', function( $data ) {
-			return $this->get_settings_for_display();
-		});
-
-		$rx_template_type = $this->get_settings_for_display();
-		update_option('rx_template_type', $rx_template_type['rx_template_type'] );		
-	
-		setup_postdata( $product->get_id() );
-		wc_get_template( 'single-product/tabs/tabs.php' );
-
-		// On render widget from Editor - trigger the init manually.
-		if ( wp_doing_ajax() ) {
-			?>
-			<script>
-				jQuery( '.wc-tabs-wrapper, .woocommerce-tabs, #rating' ).trigger( 'init' );
-			</script>
-			<?php
-		}
-		
-	}
-
-    /**
-     *
-     */
-	public function render_plain_content() {}
+        global $builderElementorSetting;
+        $settings = $this->get_settings_for_display();
+        $builderElementorSetting = [];
+        // Define the keys to be added if they have a value
+        $keys = ['write_a_review' => 'rvx_template_review_form_text_write_a_review', 'text_rating_star_title' => 'rvx_template_review_form_text_rating_star_title', 'text_review_title' => 'rvx_template_review_form_text_review_title', 'placeholder_review_title' => 'rvx_template_review_form_placeholder_review_title', 'text_review_description' => 'rvx_template_review_form_text_review_description', 'placeholder_review_description' => 'rvx_template_review_form_placeholder_review_description', 'text_full_name' => 'rvx_template_review_form_text_full_name', 'placeholder_full_name' => 'rvx_template_review_form_placeholder_full_name', 'text_email_name' => 'rvx_template_review_form_text_email_name', 'placeholder_email_name' => 'rvx_template_review_form_placeholder_email_name', 'text_attachment_title' => 'rvx_template_review_form_text_attachment_title', 'placeholder_upload_photo' => 'rvx_template_review_form_placeholder_upload_photo', 'text_mark_as_anonymous' => 'rvx_template_review_form_text_mark_as_anonymous', 'text_recommended_title' => 'rvx_template_review_form_text_recommended_title'];
+        // Loop through each key and add it to the array only if it has a non-empty value
+        foreach ($keys as $key => $settingKey) {
+            if (!empty($settings[$settingKey])) {
+                $builderElementorSetting[$key] = $settings[$settingKey];
+            }
+        }
+        if (\class_exists('WooCommerce')) {
+            global $product;
+            $product = wc_get_product();
+            //$title = $settings['rvx_review_form__description_text'];
+            //var_dump($title);
+            if (empty($product)) {
+                echo '<h3>' . __('This widget only works for the product page. In order to achieve, follow the steps: this  Dashboard >  Template  > Theme Builder > Add New > Choose Template Type \'Single Product\' > Create Template', 'reviewx') . '</h3>';
+                return;
+            }
+            setup_postdata($product->get_id());
+            wc_get_template('single-product/tabs/tabs.php');
+        }
+        // On render widget from Editor - trigger the init manually.
+        if (wp_doing_ajax()) {
+            ?>
+            <script>
+                jQuery('.wc-tabs-wrapper, .woocommerce-tabs, #rating').trigger('init');
+            </script>
+            <?php 
+        }
+    }
+    public function render_plain_content()
+    {
+    }
 }

@@ -1,34 +1,28 @@
 <?php
 
-namespace ReviewX\Elementor\Classes;
+namespace Rvx\Elementor\Classes;
 
-use ReviewX\Elementor\Traits\Addons;
-use ReviewX\Elementor\Traits\Library;
-
-if (!defined('ABSPATH')) {
+use Rvx\Elementor\Traits\Addons;
+use Rvx\Elementor\Traits\Library;
+if (!\defined('ABSPATH')) {
     exit;
-} // Exit if accessed directly
-
+}
+// Exit if accessed directly
 /**
  * Class Starter
- * @package ReviewX\Elementor\Classes
+ * @package Rvx\Elementor\Classes
  */
 class Starter
 {
     use Addons, Library;
-
     // instance container
     private static $instance = null;
-
     // registered elements container
     public $registered_elements;
-
     // registered extensions container
     public $registered_extensions;
-
     // additional settings
     public $additional_settings;
-
     /**
      * Singleton instance
      *
@@ -37,12 +31,10 @@ class Starter
     public static function instance()
     {
         if (self::$instance == null) {
-            self::$instance = new self;
+            self::$instance = new self();
         }
-
         return self::$instance;
     }
-
     /**
      * Constructor of plugin class
      *
@@ -51,20 +43,15 @@ class Starter
     private function __construct()
     {
         // elements classmap
-        $this->registered_elements = apply_filters('rx/registered_elements', array_get(config('settings'), 'rxelements'));
-
+        $this->registered_elements = ['rxcall-to-review' => ['class' => 'Rvx\\Elementor\\Elements\\Data_Tabs'], 'rxcall-to-review-widget' => ['class' => 'Rvx\\Elementor\\Elements\\Review_Widget']];
         // extensions classmap
-        $this->registered_extensions = apply_filters('rx/registered_extensions', array_get(config('settings'), 'rxextensions'));
-
-        // additional settings
-        $this->additional_settings = apply_filters('rx/additional_settings', [
-            'quick_tools' => true,
-        ]);
-
+        //        $this->registered_extensions = apply_filters('rx/registered_extensions', Helper::arrayGet(config('settings'), 'rxextensions'));
+        //
+        //        // additional settings
+        $this->additional_settings = apply_filters('rx/additional_settings', ['quick_tools' => \true]);
         // register hooks
         $this->register_hooks();
     }
-
     /**
      * Register Hooks
      *
@@ -75,9 +62,6 @@ class Starter
         // Elements
         add_action('elementor/elements/categories_registered', array($this, 'register_widget_categories'));
         add_action('elementor/widgets/widgets_registered', array($this, 'register_elements'));
-
-        if(class_exists('ReviewXPro')){
-            add_action('elementor/widgets/register', array($this, 'cpt_register_element'));
-        }
+        add_action('elementor/widgets/register', array($this, 'cpt_register_element'));
     }
 }

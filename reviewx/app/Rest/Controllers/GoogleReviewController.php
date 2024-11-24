@@ -1,0 +1,73 @@
+<?php
+
+namespace Rvx\Rest\Controllers;
+
+use Rvx\Services\GoogleReviewService;
+use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\Response;
+use Rvx\Utilities\Helper;
+class GoogleReviewController implements InvokableContract
+{
+    protected $googleReviewService;
+    /**
+     * @param GoogleReviewService $googleReviewService
+     */
+    public function __construct(GoogleReviewService $googleReviewService)
+    {
+        $this->googleReviewService = $googleReviewService;
+    }
+    /**
+     * @return void
+     */
+    public function __invoke()
+    {
+    }
+    /**
+     * @return Response
+     */
+    public function googleReviewGet()
+    {
+        $resp = $this->googleReviewService->googleReviewGet();
+        return Helper::getApiResponse($resp);
+    }
+    /**
+     * @return Response
+     */
+    public function googleReviewPlaceApi()
+    {
+        $resp = $this->googleReviewService->googleReviewPlaceApi();
+        return Helper::getApiResponse($resp);
+    }
+    /**
+     * @return Response
+     */
+    public function googleRecaptchaVerify($request)
+    {
+        $resp = $this->googleReviewService->googleRecaptchaVerify($request->get_params());
+        return $resp;
+    }
+    /**
+     * @return Response
+     */
+    public function googleReviewKey($request)
+    {
+        try {
+            $response = $this->googleReviewService->googleReviewKey($request->get_params());
+            return Helper::saasResponse($response);
+        } catch (\Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
+        }
+    }
+    /**
+     * @return Response
+     */
+    public function googleReviewSetting($request)
+    {
+        try {
+            $response = $this->googleReviewService->googleReviewSetting($request->get_params());
+            return Helper::saasResponse($response);
+        } catch (\Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
+        }
+    }
+}

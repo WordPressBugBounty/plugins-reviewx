@@ -1,0 +1,1080 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "\"Very good\" badge will show on more than 4 star+ review"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Add a reviews"
+msgstr ""
+
+msgid "Add a title field to reviews, allowing customers to summarize their feedback in a few words for quick insights."
+msgstr ""
+
+msgid "Add another criteria"
+msgstr ""
+
+msgid "Add Multiple Review"
+msgstr ""
+
+msgid "Add new cpt"
+msgstr ""
+
+msgid "Add New Review"
+msgstr ""
+
+msgid "Admin email"
+msgstr ""
+
+msgid "Admin notification"
+msgstr ""
+
+msgid "After"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "All Product"
+msgstr ""
+
+msgid "All Rating"
+msgstr ""
+
+msgid "All remainder settings"
+msgstr ""
+
+msgid "All request emails"
+msgstr ""
+
+msgid "All Reviews"
+msgstr ""
+
+msgid "All reviews will be removed under this location"
+msgstr ""
+
+msgid "All time"
+msgstr ""
+
+msgid "Allow anonymous review"
+msgstr ""
+
+msgid "Allow consent checkbox"
+msgstr ""
+
+msgid "Allow customer to give review anonymously"
+msgstr ""
+
+msgid "Allow customer to share review to the social media"
+msgstr ""
+
+msgid "Allow customers to decide whether they want to receive the review reminder email or not"
+msgstr ""
+
+msgid "Allow customers to like or dislike individual reviews. This helps highlight helpful feedback and engage your audience."
+msgstr ""
+
+msgid "Allow customers to recommend the products"
+msgstr ""
+
+msgid "Allow customers to upload the image with review"
+msgstr ""
+
+msgid "Allow customers to upload video with review"
+msgstr ""
+
+msgid "Allow like & dislike"
+msgstr ""
+
+msgid "Allow only like"
+msgstr ""
+
+msgid "Allow Photo Review"
+msgstr ""
+
+msgid "Allow reviewers to add a recommendation (yes or no) for the product, giving future customers a clear sense of overall satisfaction."
+msgstr ""
+
+msgid "Allow reviews based on multiple criteria, such as quality, price, and ease of use. This gives customers a more comprehensive understanding of the product"
+msgstr ""
+
+msgid "Allow Video review"
+msgstr ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "API key here"
+msgstr ""
+
+msgid "Approve"
+msgstr ""
+
+msgid "Archive"
+msgstr ""
+
+msgid "Are you sure that you want to disconnect this location?"
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "Attachments"
+msgstr ""
+
+msgid "Auto publish"
+msgstr ""
+
+msgid "Available on Growth plan"
+msgstr ""
+
+msgid "Available on Pro plan"
+msgstr ""
+
+msgid "Available on the Growth plan and above"
+msgstr ""
+
+msgid "Available on the Pro plan and above"
+msgstr ""
+
+msgid "Badge"
+msgstr ""
+
+msgid "Banner"
+msgstr ""
+
+msgid "Both"
+msgstr ""
+
+msgid "Brand Color"
+msgstr ""
+
+msgid "Button text"
+msgstr ""
+
+msgid "Button Text Color"
+msgstr ""
+
+msgid "Buy more with [discount_amount] off for your review on [shop_name]!"
+msgstr ""
+
+msgid "By Attachments"
+msgstr ""
+
+msgid "By rating"
+msgstr ""
+
+msgid "By time"
+msgstr ""
+
+msgid "cancel"
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+msgid "Check this box if the coupon cannot be used with other coupons."
+msgstr ""
+
+msgid "Check this box if the coupon grants free shipping."
+msgstr ""
+
+msgid "Clicked"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Completed Payment"
+msgstr ""
+
+msgid "Configuration"
+msgstr ""
+
+msgid "Content"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "CPT Name"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Custom date"
+msgstr ""
+
+msgid "Custom Post Reviews"
+msgstr ""
+
+msgid "Custom Post Type"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Customer can add a title during add a review "
+msgstr ""
+
+msgid "Customer can allow you to use his review for promotional use"
+msgstr ""
+
+msgid "Customer can like or dislike any review"
+msgstr ""
+
+msgid "Customer can view review lists by applying filtered and short"
+msgstr ""
+
+msgid "Customer Reviews"
+msgstr ""
+
+msgid "Customers will receive an email with the discount codes upon submitting their reviews. In this section below, you can edit the content of the discount email."
+msgstr ""
+
+msgid "Dark Background"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid "Date Range"
+msgstr ""
+
+msgid "days"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Disable Default product schema"
+msgstr ""
+
+msgid "Disable product schema markup for reviews."
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Disconnect"
+msgstr ""
+
+msgid "Disconnect this Location?"
+msgstr ""
+
+msgid "Discount Code"
+msgstr ""
+
+msgid "Discount Email"
+msgstr ""
+
+msgid "Discount for First Review Request"
+msgstr ""
+
+msgid "Discount for Follow Up Review"
+msgstr ""
+
+msgid "Discount for On-store Review"
+msgstr ""
+
+msgid "Discount for Photo/Video Review Request"
+msgstr ""
+
+msgid "Discount for Review"
+msgstr ""
+
+msgid "Discount Message"
+msgstr ""
+
+msgid "Discount Message for Review Reminder Email"
+msgstr ""
+
+msgid "discount on your next purchase."
+msgstr ""
+
+msgid "Discount Type"
+msgstr ""
+
+msgid "Discount Value *"
+msgstr ""
+
+msgid "Display reviewer's country with review"
+msgstr ""
+
+msgid "Display reviewer's name"
+msgstr ""
+
+msgid "Display reviewer's name censor"
+msgstr ""
+
+msgid "Display the reviewer's country with their review. It adds more context and credibility to the feedback."
+msgstr ""
+
+msgid "Do you want to unsubscribe?"
+msgstr ""
+
+msgid "don't show"
+msgstr ""
+
+msgid "Download the sample csv template form here"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Drag & drop here. Or Browse .csv files only"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Edit condition"
+msgstr ""
+
+msgid "Edit review"
+msgstr ""
+
+msgid "Eligibility for send reviews"
+msgstr ""
+
+msgid "Email Address"
+msgstr ""
+
+msgid "Email content"
+msgstr ""
+
+msgid "Email subject"
+msgstr ""
+
+msgid "Enable anonymous reviews, allowing customers to provide feedback without revealing their identity, which may encourage more honest opinions."
+msgstr ""
+
+msgid "Enable customers to attach photos to their reviews, adding visual proof and enhancing the credibility of their feedback."
+msgstr ""
+
+msgid "Enable customers to submit video reviews, providing a more detailed and engaging way to showcase their experiences."
+msgstr ""
+
+msgid "Enable google reCAPTCHA"
+msgstr ""
+
+msgid "Enable Google reCAPTCHA to prevent spam and ensure that reviews are submitted by real users, enhancing the integrity of your customer reviews."
+msgstr ""
+
+msgid "Enable like/dislike"
+msgstr ""
+
+msgid "Enable sharing options for reviews, allowing customers to share them on social media or other platforms, increasing your product's visibility."
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Encourage customers to enhance their review by adding a photo or video. This follow-up request goes to those who haven’t included media with their review."
+msgstr ""
+
+msgid "entries"
+msgstr ""
+
+msgid "Expire in"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Export history"
+msgstr ""
+
+msgid "Export Reviews"
+msgstr ""
+
+msgid "Facebook"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "Filter & sort"
+msgstr ""
+
+msgid "Filter by"
+msgstr ""
+
+msgid "Filter options"
+msgstr ""
+
+msgid "First Review Request"
+msgstr ""
+
+msgid "Fixed cart discount"
+msgstr ""
+
+msgid "Follow up Review Request"
+msgstr ""
+
+msgid "for all rating"
+msgstr ""
+
+msgid "for customer's full name"
+msgstr ""
+
+msgid "for customer's order number"
+msgstr ""
+
+msgid "Full Name"
+msgstr ""
+
+msgid "General Settings"
+msgstr ""
+
+msgid "Get notification, when customer send reviews"
+msgstr ""
+
+msgid "Give customers a discount after they leave their first review from your review request email. This reward thanks them for their feedback."
+msgstr ""
+
+msgid "Google API Key"
+msgstr ""
+
+msgid "Google Place ID or URL"
+msgstr ""
+
+msgid "Google Review"
+msgstr ""
+
+msgid "Greater then"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "Help center"
+msgstr ""
+
+msgid "here"
+msgstr ""
+
+msgid "Here is a list of supported pre-set email placeholders:"
+msgstr ""
+
+msgid "Here is a little appreciation for your time."
+msgstr ""
+
+msgid "Hey "
+msgstr ""
+
+msgid "How do you feel about our service? Your feedback will be greatly appreciated :)"
+msgstr ""
+
+msgid "How The Reviews Should Look On Your Site?"
+msgstr ""
+
+msgid "How To Import Reviews From .csv File"
+msgstr ""
+
+msgid "How was your shopping experience? We appreciate your feedback."
+msgstr ""
+
+msgid "I want to get further product updates"
+msgstr ""
+
+msgid "If any user submit review in your product, it will appear here. Or you can import your existing reviews"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import / Export"
+msgstr ""
+
+msgid "Import history"
+msgstr ""
+
+msgid "Import now"
+msgstr ""
+
+msgid "Import reviews"
+msgstr ""
+
+msgid "In which order status your customer will be able to send reviews?"
+msgstr ""
+
+msgid "Input key here"
+msgstr ""
+
+msgid "It will impact on your public view site"
+msgstr ""
+
+msgid "Keep as Default"
+msgstr ""
+
+msgid "Last"
+msgstr ""
+
+msgid "Less then"
+msgstr ""
+
+msgid "Light Background"
+msgstr ""
+
+msgid "Light Border"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Mail Opened"
+msgstr ""
+
+msgid "Make sure your customers can unsubscribe from emails when you send them."
+msgstr ""
+
+msgid "Mark as Anonymous"
+msgstr ""
+
+msgid "Mark as Completed"
+msgstr ""
+
+msgid "Mark as verified"
+msgstr ""
+
+msgid "Masonry"
+msgstr ""
+
+msgid "Maximum Spend"
+msgstr ""
+
+msgid "Minimum Spend"
+msgstr ""
+
+msgid "Month"
+msgstr ""
+
+msgid "More Available on Growth plan"
+msgstr ""
+
+msgid "Move to archive"
+msgstr ""
+
+msgid "Move to spam"
+msgstr ""
+
+msgid "Move to trash"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Need help?"
+msgstr ""
+
+msgid "Newest first"
+msgstr ""
+
+msgid "No data found"
+msgstr ""
+
+msgid "No reviews found"
+msgstr ""
+
+msgid "Note: if you already have a csv file prepared, please ensure it is organized in the same format as our sample file before uploading."
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "of first review request"
+msgstr ""
+
+msgid "of review submit, without Photo/video"
+msgstr ""
+
+msgid "off your next purchase at"
+msgstr ""
+
+msgid "Offer a discount for customers who submit reviews directly from your store. Change email content here"
+msgstr ""
+
+msgid "Oldest first"
+msgstr ""
+
+msgid "On hold"
+msgstr ""
+
+msgid "One customer can send multiple reviews"
+msgstr ""
+
+msgid "Only for "
+msgstr ""
+
+msgid "Opened"
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "or  Read Documentation"
+msgstr ""
+
+msgid "Order ID"
+msgstr ""
+
+msgid "Organize your reviews in relative sections"
+msgstr ""
+
+msgid "out of"
+msgstr ""
+
+msgid "out of 5"
+msgstr ""
+
+msgid "Overview of Review Request Emails"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Pending payment"
+msgstr ""
+
+msgid "Percentage discount"
+msgstr ""
+
+msgid "Place ID or URL here"
+msgstr ""
+
+msgid "Please redeem the discount code to get a"
+msgstr ""
+
+msgid "Post Type Name"
+msgstr ""
+
+msgid "Preview Section"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Processing"
+msgstr ""
+
+msgid "Product Name & ID"
+msgstr ""
+
+msgid "Product/Post"
+msgstr ""
+
+msgid "Products"
+msgstr ""
+
+msgid "Publish"
+msgstr ""
+
+msgid "Published"
+msgstr ""
+
+msgid "Rating"
+msgstr ""
+
+msgid "Rating :all"
+msgstr ""
+
+msgid "Rating Ascending"
+msgstr ""
+
+msgid "Rating Descending"
+msgstr ""
+
+msgid "reCAPTCHA Secret key"
+msgstr ""
+
+msgid "reCAPTCHA Site key"
+msgstr ""
+
+msgid "Recipient"
+msgstr ""
+
+msgid "Recommendation?"
+msgstr ""
+
+msgid "Refunded"
+msgstr ""
+
+msgid "Request emails"
+msgstr ""
+
+msgid "Request for Photo/Video Review"
+msgstr ""
+
+msgid "Resend"
+msgstr ""
+
+msgid "Reset filters"
+msgstr ""
+
+msgid "Review"
+msgstr ""
+
+msgid "Review auto approval"
+msgstr ""
+
+msgid "Review for Discount"
+msgstr ""
+
+msgid "Review ID"
+msgstr ""
+
+msgid "Review layout"
+msgstr ""
+
+msgid "Review On Multi-criteria"
+msgstr ""
+
+msgid "Review Reminder"
+msgstr ""
+
+msgid "Review request email send permission"
+msgstr ""
+
+msgid "Review Settings"
+msgstr ""
+
+msgid "Review share"
+msgstr ""
+
+msgid "Review Title"
+msgstr ""
+
+msgid "Review title field"
+msgstr ""
+
+msgid "Review will be auto publish on your site after submission"
+msgstr ""
+
+msgid "Reviewer"
+msgstr ""
+
+msgid "reviews"
+msgstr ""
+
+msgid "Reviews can only be left by \"verified owners\""
+msgstr ""
+
+msgid "Reward customers with a discount when they add a photo or video to their review after receiving this request. This encourages them to share more detailed feedback."
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Scheduled"
+msgstr ""
+
+msgid "Search name, email & order id"
+msgstr ""
+
+msgid "Search name, product & more..."
+msgstr ""
+
+msgid "Search Product"
+msgstr ""
+
+msgid "Secondary text will place here, below the image"
+msgstr ""
+
+msgid "Section Preview"
+msgstr ""
+
+msgid "See all reviews"
+msgstr ""
+
+msgid "See where will get the key"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "Select a date range for export reviews"
+msgstr ""
+
+msgid "Select custom post type to enable review"
+msgstr ""
+
+msgid "Select date"
+msgstr ""
+
+msgid "Select dates"
+msgstr ""
+
+msgid "Select Style:"
+msgstr ""
+
+msgid "Select which site’s review you want to export"
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Send a discount to customers who submit a review after receiving a follow-up reminder. It’s a great way to encourage reviews from those who haven’t responded yet."
+msgstr ""
+
+msgid "Send a second request to customers who haven’t left a review yet. This helps remind them to share their feedback."
+msgstr ""
+
+msgid "Send a second request to customers who haven’t left a review yet. This helps remind them to share their feedback. Change email content."
+msgstr ""
+
+msgid "Send another email to ask customers to add a photo or video to their review if they haven't already. Change email content."
+msgstr ""
+
+msgid "Send Now"
+msgstr ""
+
+msgid "Send test mail"
+msgstr ""
+
+msgid "Sending date"
+msgstr ""
+
+msgid "Sending Status"
+msgstr ""
+
+msgid "Sent"
+msgstr ""
+
+msgid "Set a name for you post type"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Shop Icon"
+msgstr ""
+
+msgid "Shop Now"
+msgstr ""
+
+msgid "Shortcode:"
+msgstr ""
+
+msgid "Show \"Verified owner\" label on customer reviews"
+msgstr ""
+
+msgid "Show badge on review section"
+msgstr ""
+
+msgid "Show or hide the reviewer's name alongside their review. This helps build trust and authenticity for your product reviews."
+msgstr ""
+
+msgid "Showing"
+msgstr ""
+
+msgid "Single Code for All"
+msgstr ""
+
+msgid "Sort by"
+msgstr ""
+
+msgid "Sort options"
+msgstr ""
+
+msgid "Spam"
+msgstr ""
+
+msgid "Specific Product"
+msgstr ""
+
+msgid "Star"
+msgstr ""
+
+msgid "Star & above"
+msgstr ""
+
+msgid "Star Color"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Stuck with something? Get help from live chat or support ticket."
+msgstr ""
+
+msgid "Submit review"
+msgstr ""
+
+msgid "Submitted at"
+msgstr ""
+
+msgid "Success rate: Less > more"
+msgstr ""
+
+msgid "Success rate: More > less"
+msgstr ""
+
+msgid "Thank you."
+msgstr ""
+
+msgid "The review request email will include this discount message. Make sure the discount is enabled."
+msgstr ""
+
+msgid "This additional message will included in the review reminder emails to motivate the customer for leaving reviews."
+msgstr ""
+
+msgid "This is the first mail you send to ask a customer for a review. You can set it to send after a certain number of days from purchase, depending on the order status."
+msgstr ""
+
+msgid "This is the first mail you send to ask a customer for a review. You can set it to send after a certain number of days from purchase, depending on the order status. Change email content"
+msgstr ""
+
+msgid "to"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Total Clicked"
+msgstr ""
+
+msgid "Total Request Sent"
+msgstr ""
+
+msgid "Total Reviews Collected"
+msgstr ""
+
+msgid "Trash"
+msgstr ""
+
+msgid "Twitter"
+msgstr ""
+
+msgid "Unpublished"
+msgstr ""
+
+msgid "Unsubscribe"
+msgstr ""
+
+msgid "Unsubscribed"
+msgstr ""
+
+msgid "Unverified"
+msgstr ""
+
+msgid "Update Banner"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Upload a JPG, PNG, or GIF image that's up to 1200px wide and less than 5MB in size."
+msgstr ""
+
+msgid "Upload Icon"
+msgstr ""
+
+msgid "Upload Photo/Video"
+msgstr ""
+
+msgid "Upload the csv file below"
+msgstr ""
+
+msgid "Usage limit per coupon"
+msgstr ""
+
+msgid "Usage limit per user"
+msgstr ""
+
+msgid "usage Limits"
+msgstr ""
+
+msgid "Usage Restriction"
+msgstr ""
+
+msgid "User Name"
+msgstr ""
+
+msgid "Verified"
+msgstr ""
+
+msgid "Very Good"
+msgstr ""
+
+msgid "View details"
+msgstr ""
+
+msgid "Was this helpful"
+msgstr ""
+
+msgid "We are really grateful for your valuable feedback!"
+msgstr ""
+
+msgid "Week"
+msgstr ""
+
+msgid "When to notify?"
+msgstr ""
+
+msgid "Who can send reviews on your shop?"
+msgstr ""
+
+msgid "Widget Settings"
+msgstr ""
+
+msgid "With Attachment"
+msgstr ""
+
+msgid "Without Attachment"
+msgstr ""
+
+msgid "Write a Review"
+msgstr ""
+
+msgid "Write Review Title"
+msgstr ""
+
+msgid "Write your description here"
+msgstr ""
+
+msgid "Write your reply here"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "You can upload a maximum of 20 files at a time"
+msgstr ""
+
+msgid "You Don’t Have Any Cpts Added"
+msgstr ""
+
+msgid "You don't have any reviews"
+msgstr ""
+
+msgid "You have some unsaved changes"
+msgstr ""
+
+msgid "You may combine any of the options above."
+msgstr ""
+
+msgid "You will get"
+msgstr ""
+
+msgid "Your customers can sent there review on your product based on multiple criteria"
+msgstr ""

@@ -1,0 +1,34 @@
+<div class="p-6 bg-gray-100 rounded-lg shadow-md">
+    <h2 class="text-lg font-bold text-gray-800">{{ title }}</h2>
+    <div id="rollback-start-btn" class="mt-4">
+        <div class="p-4 bg-white rounded-lg shadow-md">
+            <h3 class="text-md font-semibold text-red-600 mb-2">Important: Before Proceeding</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                <li><strong>Backup Your Data:</strong> Ensure your site and database are fully backed up to avoid data loss during the rollback.</li>
+                <li><strong>Stable Internet Connection:</strong> Do not refresh or close this tab until the rollback is complete.</li>
+                <li><strong>Disclaimer:</strong> By proceeding, you accept that ReviewX is not liable for issues during or after the rollback.</li>
+            </ul>
+            <p class="mt-4 text-gray-600">
+                By clicking "Start Rollback," you confirm you’ve read and accepted the terms above.
+            </p>
+        </div>
+        <a 
+            href="{{ page_url }}&&rollback_start=1" 
+            class="button button-primary inline-block mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-md hover:bg-blue-700 transition"
+            onclick="this.remove();">
+            Start Rollback
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('rollback_start')) {
+            const rollbackBtn = document.getElementById('rollback-start-btn');
+            if (rollbackBtn) {
+                rollbackBtn.remove();
+            }
+        }
+    });
+</script>

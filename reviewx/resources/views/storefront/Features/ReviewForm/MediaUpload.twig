@@ -1,0 +1,42 @@
+<div x-data="__rvxMediaUploadComponent__()" @notify-review-added.window="clearAll" class="rvx-flex rvx-flex-wrap rvx-gap-space16">
+    <label for="add-review-upload-media"
+           class="rvx-block rvx-py-[11px] rvx-px-[9px] rvx-rounded-md rvx-cursor-pointer rvx-text-center rvx-box-border rvx-self-baseline rvx-review-form__attachment--upload rvx-border-2 rvx-border-solid rvx-border-transparent"
+           :class="`${isDragging ? 'rvx-bg-neutral-100 !rvx-border-neutral-600 rvx-border-dashed' : 'rvx-bg-neutral-200'}`"
+           @dragenter.prevent="dragEnterHandler"
+           @dragover.prevent="dragEnterHandler"
+           @dragleave.prevent="dragLeaveHandler"
+           @drop.prevent="dropHandler">
+        <input type="file" @change="onUpload" :multiple="multiple" :accept="accept"
+               :disabled="disabled"
+               id="add-review-upload-media" class="!rvx-hidden">
+        <span class="material-symbols-rounded rvx-block rvx-mb-space5 rvx-review-form__attachment--upload--icon">{{__('backup', 'reviewx')}}</span>
+        <template x-if="reviewSettingsData?.data?.setting.review_settings?.video_reviews_allowed">
+            <span class="!rvx-text-[12px] rvx-block rvx-review-form__attachment--upload--text ">
+            {{__('Upload Photo/Video', 'reviewx')}}
+        </span>
+        </template>
+        <template x-if="!reviewSettingsData?.data?.setting.review_settings?.video_reviews_allowed">
+            <span class="!rvx-text-[12px] rvx-block rvx-review-form__attachment--upload--text !rvx-font-nunito">
+            {{__('Upload Photo', 'reviewx')}}
+        </span>
+        </template>
+
+        <span class="!rvx-text-[12px] !rvx-font-nunito rvx-block rvx-review-form__attachment--upload--count">
+            <span x-text="files.urls.length"></span>/<span x-text="maxFileCount"></span>
+        </span>
+    </label>
+    <p x-show="maxFileCountError" class="rvx-text-[12px] rvx-text-danger !rvx-font-nunito" x-text="maxFileCountError"></p>
+    <p x-show="maxFileSizeError" class="rvx-text-[12px] rvx-text-danger !rvx-font-nunito" x-text="maxFileSizeError"></p>
+    <template x-for="(file, index) in files.urls">
+        <div class="rvx-relative">
+            <div x-show="file.type === 'image'">
+                <img class="!rvx-size-[80px] rvx-rounded-md rvx-object-cover rvx-object-top" :src="file.path ?? ''" alt="uploaded images"/>
+            </div>
+            <div x-show="file.type === 'video'">
+                <video :src="file.path" class="!rvx-size-[80px] rvx-rounded-md rvx-object-cover rvx-object-top"></video>
+<!--                <img  :src="file.path ?? ''" alt="uploaded images"/>-->
+            </div>
+            <span @click="remove(index)" class="material-symbols-rounded rvx-absolute rvx-top-0 rvx-right-0 rvx-cursor-pointer rvx-text-danger-700 rvx-bg-white hover:rvx-bg-danger-50 rvx-rounded-[4px] !rvx-text-[20px]"> {{__('delete', 'reviewx')}}</span>
+        </div>
+    </template>
+</div>

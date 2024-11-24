@@ -1,0 +1,97 @@
+
+<div x-data="__rvxReviewFilterComponent__" x-init="init()" class="rvx-flex rvx-items-center rvx-justify-between rvx-box-border rvx-gap-space12 rvx-mb-space16" id="rvx-review-filter">
+    <div class="rvx-flex rvx-gap-space12">
+        <div x-show="reviewSettingsData?.data?.setting?.widget_settings.filter_and_sort_options.filter_options.by_media || reviewSettingsData?.data.setting?.widget_settings.filter_and_sort_options.filter_options.by_rating" class="rvx-flex rvx-gap-space12">
+            <!--            Filter options-->
+            <div class="rvx-relative rvx-inline-block rvx-text-left">
+                <!-- Menu Button -->
+                <button @click="openFilterOptions = !openFilterOptions" class="rvx-outline-none focus:rvx-outline-none rvx-review-filter__button rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-bg-transparent hover:rvx-bg-transparent focus:rvx-bg-transparent disabled:!rvx-cursor-not-allowed rvx-flex rvx-justify-center rvx-items-center rvx-gap-space8 !rvx-border-neutral-600 rvx-text-neutral-800 hover:rvx-text-neutral-800 focus:rvx-text-neutral-800 rvx-font-semibold hover:rvx-border-neutral-600 !rvx-font-nunito">
+                    <span class="material-symbols-rounded rvx-review-filter__icon">{{__('filter_alt', 'reviewx')}}</span>  {{__('Filter', 'reviewx')}}
+                </button>
+                <div class="rvx-absolute rvx-size-[20px] rvx-bg-primary rvx-text-white rvx-rounded-full rvx-text-[12px] -rvx-top-[10px] rvx-right-0 rvx-grid rvx-place-items-center rvx-px-space8" x-show="selectFilterCount" x-text="selectFilterCount">{{__('10', 'reviewx')}}</div>
+                <!-- Menu Items -->
+                <div x-show="openFilterOptions" @click.outside="openFilterOptions = false"
+                     x-transition:enter="rvx-transition rvx-ease-out rvx-duration-100"
+                     x-transition:enter-start="rvx-transform rvx-scale-95 rvx-opacity-0"
+                     x-transition:enter-end="rvx-transform rvx-scale-100 rvx-opacity-100"
+                     x-transition:leave="rvx-transition rvx-ease-in rvx-duration-75"
+                     x-transition:leave-start="rvx-transform rvx-scale-100 rvx-opacity-100"
+                     x-transition:leave-end="rvx-transform rvx-scale-95 rvx-opacity-0"
+                     class="rvx-absolute rvx-z-10 rvx-mt-2 rvx-w-[250px] rvx-origin-top-right rvx-divide-y rvx-divide-gray-100 rvx-rounded-md rvx-bg-white rvx-shadow-lg rvx-ring-1 rvx-ring-black/5 focus:rvx-outline-none rvx-review-filter-wrapper">
+                    <div class="rvx-w-[272px] rvx-max-w-[272px] !rvx-p-space16 rvx-bg-white rvx-review-filter__wrapper-inner !rvx-border rvx-border-solid !rvx-border-[#d9d9d9]">
+                        <p class="rvx-font-semibold rvx-review-filter-wrapper__title !rvx-font-nunito">{{__('Filter by', 'reviewx')}}</p>
+                        <div class="rvx-space-y-space16 rvx-mt-[8px] rvx-review-filter-wrapper__outer">
+                            <div x-show="reviewSettingsData?.data?.setting?.widget_settings.filter_and_sort_options.filter_options.by_rating" class="rvx-review-filter-wrapper__rating">
+                                <p class="rvx-flex rvx-items-center rvx-gap-space8 rvx-review-filter-wrapper__rating--text !rvx-font-nunito">
+                                    <span class="material-symbols-rounded rvx-review-filter-wrapper__rating-inner--icon">{{__('star', 'reviewx')}}</span>
+                                    {{__('Rating', 'reviewx')}}
+                                </p>
+                                <div class="rvx-review-filter-wrapper__rating-wrapper rvx-space-y-space16 rvx-ml-space12">
+                                    <template x-for="rating in filterByRatingOptions">
+                                        <div class="rvx-review-filter-wrapper__rating-inner">
+                                            <input :id="`rating-${rating.value}`" type="radio" :value="rating.value" x-model="selectFilterByRating">
+                                            <label :for="`rating-${rating.value}`" x-text="rating.label" class="rvx-review-filter__wrapper__rating--radio-group__option-label !rvx-font-nunito !rvx-font-normal"></label>
+                                        </div>
+                                    </template>
+                                </div>
+
+                            </div>
+                            <div x-show="reviewSettingsData?.data.setting?.widget_settings.filter_and_sort_options.filter_options.by_media" class="rvx-review-filter-wrapper__attachment">
+                                <p class="rvx-flex rvx-items-center rvx-gap-space8 rvx-review-filter-wrapper__attachment--text !rvx-font-nunito">
+                                    <span class="material-symbols-rounded rvx-review-filter-wrapper__attachment-inner--icon">  {{__('attach_file', 'reviewx')}}</span>
+                                    {{__('Attachments', 'reviewx')}}
+                                </p>
+                                <div class="rvx-review-filter-wrapper__attachment-wrapper rvx-space-y-space16 rvx-ml-space12">
+                                    <template x-for="attachment in filterByAttachment" >
+                                        <div class="rvx-review-filter-wrapper__attachment-inner">
+                                            <input :id="`attachment-${attachment.value}`" type="radio" :value="attachment.value" x-model="selectFilterByAttachment">
+                                            <label :for="`attachment-${attachment.value}`" x-text="attachment.label" class="rvx-review-filter__wrapper__attachment--radio-group__option-label !rvx-font-nunito !rvx-font-normal"></label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rvx-flex rvx-items-center rvx-justify-between rvx-gap-space20 rvx-mt-space24 rvx-review-filter-wrapper__footer">
+                            <button
+                                    class="rvx-border-neutral-600 rvx-text-neutral-800 rvx-font-semibold hover:rvx-text-white hover:rvx-border-neutral-400 hover:!rvx-bg-neutral-400 rvx-text-[14px] rvx-rounded-lg rvx-p-[9px] rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito disabled:!rvx-cursor-not-allowed disabled:rvx-bg-neutral-400 rvx-review-filter-wrapper__footer-reset-button !rvx-font-nunito" @click="filterResetHandler">{{__('Reset filters', 'reviewx')}}
+                            </button>
+                            <button @click="applyFilterHandler" class="rvx-bg-primary rvx-rounded-lg rvx-p-[9px] rvx-leading-[22px] rvx-text-white rvx-cursor-pointer rvx-font-nunito rvx-border-none hover:rvx-bg-primary disabled:!rvx-cursor-not-allowed disabled:rvx-bg-neutral-400 rvx-font-semibold rvx-text-[14px] rvx-review-filter-wrapper__footer-save-button focus:rvx-outline-none focus:rvx-bg-primary !rvx-font-nunito">{{__('Apply', 'reviewx')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--            Sort Options-->
+            <div class="rvx-relative rvx-inline-block rvx-text-left">
+                <button @click="openSortOptions = !openSortOptions" class="rvx-outline-none focus:rvx-outline-none rvx-review-sort__button rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-bg-transparent hover:rvx-bg-transparent focus:rvx-bg-transparent disabled:!rvx-cursor-not-allowed rvx-flex rvx-justify-center rvx-items-center rvx-gap-space8 !rvx-border-neutral-600 rvx-text-neutral-800 focus:rvx-text-neutral-800 rvx-font-semibold hover:rvx-border-neutral-600 hover:rvx-text-neutral-600">
+                    <span class="material-symbols-rounded rvx-review-sort__icon">{{__('swap_vert', 'reviewx')}}</span>  {{__('Sort By', 'reviewx')}}
+                </button>
+                <div x-show="openSortOptions" @click.outside="openSortOptions = false"
+                     x-transition:enter="rvx-transition rvx-ease-out rvx-duration-100"
+                     x-transition:enter-start="rvx-transform rvx-scale-95 rvx-opacity-0"
+                     x-transition:enter-end="rvx-transform rvx-scale-100 rvx-opacity-100"
+                     x-transition:leave="rvx-transition rvx-ease-in rvx-duration-75"
+                     x-transition:leave-start="rvx-transform rvx-scale-100 rvx-opacity-100"
+                     x-transition:leave-end="rvx-transform rvx-scale-95 rvx-opacity-0"
+                     class="rvx-absolute rvx-z-10 rvx-mt-2 !rvx-w-[250px] rvx-origin-top-right rvx-divide-y rvx-divide-gray-100 rvx-rounded-md rvx-bg-white rvx-shadow-lg rvx-ring-1 rvx-ring-black/5 focus:rvx-outline-none rvx-review-sort-wrapper">
+                    <div class="rvx-space-y-space16 rvx-p-space12 rvx-review-sort-wrapper__outer !rvx-border rvx-border-solid !rvx-border-[#d9d9d9]">
+                        <div class="rvx-review-sort-wrapper__inner">
+                            <template x-for="sort in sortByOptions()" >
+                                <div class="rvx-pb-space16">
+                                    <input :id="`rating-${sort.value}`" type="radio" :value="sort.value" x-model="selectSortBy">
+                                    <label :for="`rating-${sort.value}`" x-text="sort.label" class="rvx-review-sort__wrapper--radio-group__option-label !rvx-font-nunito !rvx-font-normal"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template x-if="haveAddReviewAbility">
+        <a href="#rvx-review-form__wrapper" class="!rvx-no-underline" >
+            <button :style="`background: ${reviewSettingsData?.data?.setting?.widget_settings?.brand_color_code}; color: ${reviewSettingsData?.data?.setting?.widget_settings?.button_font_color_code};`" class="rvx-bg-primary rvx-text-white rvx-rounded-lg rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-border-none  disabled:!rvx-cursor-not-allowed disabled:rvx-bg-neutral-400 rvx-font-semibold rvx-review-write__button">{{__('Write a Review', 'reviewx')}}</button>
+        </a>
+    </template>
+</div>

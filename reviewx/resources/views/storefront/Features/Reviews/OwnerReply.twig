@@ -1,0 +1,16 @@
+<div x-show="review?.reply" class="rvx-mb-space20 rvx-mt-space16 rvx-review-owner-replay">
+    <div class="rvx-flex rvx-gap-space5">
+            <span class="material-symbols-rounded rvx-text-[20px] rvx-review-owner-replay__icon">
+                 {{__('reply', 'reviewx')}}
+              </span>
+        <p class="!rvx-text-[14px] rvx-font-semibold rvx-text-neutral-800 rvx-leading-[22px] rvx-review-owner-replay__owner-name">
+              {{__('Shop owner', 'reviewx')}}
+            <span class="rvx-font-normal rvx-leading-[22px] rvx-review-owner-replay__text">  {{__('replied', 'reviewx')}}
+                </span>
+            <span class="rvx-font-normal rvx-leading-[22px] rvx-ml-space5 rvx-review-owner-replay__date"
+                  x-text="review.replied_at"></span>
+        </p>
+    </div>
+    <p class="!rvx-text-[14px] rvx-leading-[22px] rvx-review-owner-replay__feedback"
+       x-text="truncateString(review?.reply, 300)"></p>
+</div>
