@@ -14,7 +14,6 @@ namespace Rvx\Twig\TokenParser;
 use Rvx\Twig\Error\SyntaxError;
 use Rvx\Twig\Node\IfNode;
 use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\Nodes;
 use Rvx\Twig\Token;
 /**
  * Tests a condition.
@@ -36,7 +35,10 @@ final class IfTokenParser extends AbstractTokenParser
         $lineno = $token->getLine();
         $expr = $this->parser->getExpressionParser()->parseExpression();
         $stream = $this->parser->getStream();
-        $stream->expect(Token::BLOCK_END_TYPE);
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
         $body = $this->parser->subparse([$this, 'decideIfFork']);
         $tests = [$expr, $body];
         $else = null;
@@ -44,12 +46,18 @@ final class IfTokenParser extends AbstractTokenParser
         while (!$end) {
             switch ($stream->next()->getValue()) {
                 case 'else':
-                    $stream->expect(Token::BLOCK_END_TYPE);
+                    $stream->expect(
+                        /* Token::BLOCK_END_TYPE */
+                        3
+                    );
                     $else = $this->parser->subparse([$this, 'decideIfEnd']);
                     break;
                 case 'elseif':
                     $expr = $this->parser->getExpressionParser()->parseExpression();
-                    $stream->expect(Token::BLOCK_END_TYPE);
+                    $stream->expect(
+                        /* Token::BLOCK_END_TYPE */
+                        3
+                    );
                     $body = $this->parser->subparse([$this, 'decideIfFork']);
                     $tests[] = $expr;
                     $tests[] = $body;
@@ -61,8 +69,11 @@ final class IfTokenParser extends AbstractTokenParser
                     throw new SyntaxError(\sprintf('Unexpected end of template. Twig was looking for the following tags "else", "elseif", or "endif" to close the "if" block started at line %d).', $lineno), $stream->getCurrent()->getLine(), $stream->getSourceContext());
             }
         }
-        $stream->expect(Token::BLOCK_END_TYPE);
-        return new IfNode(new Nodes($tests), $else, $lineno);
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
+        return new IfNode(new Node($tests), $else, $lineno, $this->getTag());
     }
     public function decideIfFork(Token $token) : bool
     {

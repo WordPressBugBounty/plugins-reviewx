@@ -14,10 +14,10 @@ class BaseApi extends AbstractApi
     public function getBaseUrl() : string
     {
         // For Local
-        return "https://api.reviewx.io";
-        //          return "https://extending-showtimes-respected-shoulder.trycloudflare.com";
+                return "https://api.reviewx.io";
+        //          return "https://forming-almost-tcp-seek.trycloudflare.com";
         //  For Staging server
-        //        return "http://13.214.84.12";
+        // return "http://13.214.84.12";
     }
     public function getIp() : string
     {
@@ -35,6 +35,6 @@ class BaseApi extends AbstractApi
      */
     public function getDefaultHeaders() : array
     {
-        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-version' => Helper::getWpVersion(), 'Accept' => 'application/json', 'X-domain' => Helper::getWpDomainNameOnly(), 'X-theme' => Helper::getActiveTheme(), 'X-url' => site_url(), 'X-site-locale' => get_locale()];
+        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-Version' => Helper::getWpVersion(), 'Accept' => 'application/json', 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => Helper::getActiveTheme(), 'X-Url' => site_url(), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . site_url())];
     }
 }

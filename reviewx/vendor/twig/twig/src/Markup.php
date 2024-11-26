@@ -15,10 +15,10 @@ namespace Rvx\Twig;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Markup implements \Countable, \JsonSerializable, \Stringable
+class Markup implements \Countable, \JsonSerializable
 {
     private $content;
-    private ?string $charset;
+    private $charset;
     public function __construct($content, $charset)
     {
         $this->content = (string) $content;
@@ -27,10 +27,6 @@ class Markup implements \Countable, \JsonSerializable, \Stringable
     public function __toString()
     {
         return $this->content;
-    }
-    public function getCharset() : string
-    {
-        return $this->charset;
     }
     /**
      * @return int

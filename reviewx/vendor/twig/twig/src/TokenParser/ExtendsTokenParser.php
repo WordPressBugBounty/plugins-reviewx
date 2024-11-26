@@ -12,7 +12,6 @@
 namespace Rvx\Twig\TokenParser;
 
 use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Node\EmptyNode;
 use Rvx\Twig\Node\Node;
 use Rvx\Twig\Token;
 /**
@@ -32,9 +31,15 @@ final class ExtendsTokenParser extends AbstractTokenParser
         } elseif (!$this->parser->isMainScope()) {
             throw new SyntaxError('Cannot use "extend" in a macro.', $token->getLine(), $stream->getSourceContext());
         }
+        if (null !== $this->parser->getParent()) {
+            throw new SyntaxError('Multiple extends tags are forbidden.', $token->getLine(), $stream->getSourceContext());
+        }
         $this->parser->setParent($this->parser->getExpressionParser()->parseExpression());
-        $stream->expect(Token::BLOCK_END_TYPE);
-        return new EmptyNode($token->getLine());
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
+        return new Node();
     }
     public function getTag() : string
     {

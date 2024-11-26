@@ -2,7 +2,6 @@
 
 namespace Rvx;
 
-use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\WPDrill\Facades\Route;
 use Rvx\Rest\Middleware\AuthMiddleware;
 use Rvx\Rest\Controllers\UserController;
@@ -23,8 +22,10 @@ use Rvx\Rest\Controllers\EmailTemplateController;
 use Rvx\Rest\Controllers\Products\ProductController;
 use Rvx\Rest\Controllers\StoreFrontReviewController;
 use Rvx\Rest\Controllers\TestController;
+use Rvx\Rest\Middleware\DevMiddleware;
+use Rvx\Rest\Controllers\AccessController;
+use Rvx\Rest\Controllers\DataSyncController;
 Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
-    Route::post('test', [TestController::class, 'test']);
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/login/key', [LoginController::class, 'license_key']);
     Route::post('/forget/password', [LoginController::class, 'forgetPassword']);
@@ -34,6 +35,13 @@ Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManage
     Route::get('/migration/prompt', [RegisterController::class, 'migrationPrompt']);
     Route::post('/user/plan/access', [SettingController::class, 'userSettingsAccess']);
     Route::get('/user/current/plan', [SettingController::class, 'userCurrentPlan']);
+});
+Route::group(['prefix' => '/api/v1', 'middleware' => DevMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+    Route::post('test', [TestController::class, 'test']);
+    Route::get('developer', [TestController::class, 'developer']);
+});
+Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+    Route::post('/admin/access/control', [AccessController::class, 'adminAccess']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     /**

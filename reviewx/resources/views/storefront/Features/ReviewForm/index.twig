@@ -59,8 +59,8 @@
                             :src="`${reviewAggregationData?.data?.product?.image ?? 'https://revews-bucket.s3.ap-southeast-1.amazonaws.com/reviewx/product_placeholder.jpg'}`"
                             :alt="`${reviewAggregationData?.data?.product?.title ?? ''}`" />
                     </div>
-                    <h2 x-text="reviewAggregationData?.data?.product.title"
-                        class="!rvx-text-[24px] rvx-font-nunito rvx-text-neutral-800 !rvx-m-0 rvx-font-semibold rvx-leading-[38px] rvx-review-form__product--title">
+                    <h2 x-text="truncateString(reviewAggregationData?.data?.product.title ?? '', 20)"
+                        class="first:!rvx-block !rvx-block !rvx-text-[24px] rvx-font-nunito rvx-text-neutral-800 !rvx-m-0 rvx-font-semibold rvx-leading-[38px] rvx-review-form__product--title">
                     </h2>
                 </div>
 

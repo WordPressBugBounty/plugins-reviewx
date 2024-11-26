@@ -10,7 +10,6 @@
  */
 namespace Rvx\Twig\Util;
 
-use Rvx\Twig\TwigCallableInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
@@ -19,11 +18,10 @@ use Rvx\Twig\TwigCallableInterface;
 final class ReflectionCallable
 {
     private $reflector;
-    private $callable;
+    private $callable = null;
     private $name;
-    public function __construct(TwigCallableInterface $twigCallable)
+    public function __construct($callable, string $debugType = 'unknown', string $debugName = 'unknown')
     {
-        $callable = $twigCallable->getCallable();
         if (\is_string($callable) && \false !== ($pos = \strpos($callable, '::'))) {
             $callable = [\substr($callable, 0, $pos), \substr($callable, 2 + $pos)];
         }
@@ -37,7 +35,7 @@ final class ReflectionCallable
         try {
             $closure = \Closure::fromCallable($callable);
         } catch (\TypeError $e) {
-            throw new \LogicException(\sprintf('Callback for %s "%s" is not callable in the current scope.', $twigCallable->getType(), $twigCallable->getName()), 0, $e);
+            throw new \LogicException(\sprintf('Callback for %s "%s" is not callable in the current scope.', $debugType, $debugName), 0, $e);
         }
         $this->reflector = $r = new \ReflectionFunction($closure);
         if (\str_contains($r->name, '{closure')) {

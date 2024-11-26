@@ -10,9 +10,7 @@
  */
 namespace Rvx\Twig\TokenParser;
 
-use Rvx\Twig\Node\Expression\Variable\AssignContextVariable;
-use Rvx\Twig\Node\Expression\Variable\AssignTemplateVariable;
-use Rvx\Twig\Node\Expression\Variable\TemplateVariable;
+use Rvx\Twig\Node\Expression\AssignNameExpression;
 use Rvx\Twig\Node\ImportNode;
 use Rvx\Twig\Node\Node;
 use Rvx\Twig\Token;
@@ -29,25 +27,41 @@ final class FromTokenParser extends AbstractTokenParser
     {
         $macro = $this->parser->getExpressionParser()->parseExpression();
         $stream = $this->parser->getStream();
-        $stream->expect(Token::NAME_TYPE, 'import');
+        $stream->expect(
+            /* Token::NAME_TYPE */
+            5,
+            'import'
+        );
         $targets = [];
         while (\true) {
-            $name = $stream->expect(Token::NAME_TYPE)->getValue();
+            $name = $stream->expect(
+                /* Token::NAME_TYPE */
+                5
+            )->getValue();
+            $alias = $name;
             if ($stream->nextIf('as')) {
-                $alias = new AssignContextVariable($stream->expect(Token::NAME_TYPE)->getValue(), $token->getLine());
-            } else {
-                $alias = new AssignContextVariable($name, $token->getLine());
+                $alias = $stream->expect(
+                    /* Token::NAME_TYPE */
+                    5
+                )->getValue();
             }
             $targets[$name] = $alias;
-            if (!$stream->nextIf(Token::PUNCTUATION_TYPE, ',')) {
+            if (!$stream->nextIf(
+                /* Token::PUNCTUATION_TYPE */
+                9,
+                ','
+            )) {
                 break;
             }
         }
-        $stream->expect(Token::BLOCK_END_TYPE);
-        $internalRef = new AssignTemplateVariable(new TemplateVariable(null, $token->getLine()), $this->parser->isMainScope());
-        $node = new ImportNode($macro, $internalRef, $token->getLine());
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
+        $var = new AssignNameExpression($this->parser->getVarName(), $token->getLine());
+        $node = new ImportNode($macro, $var, $token->getLine(), $this->getTag(), $this->parser->isMainScope());
         foreach ($targets as $name => $alias) {
-            $this->parser->addImportedSymbol('function', $alias->getAttribute('name'), 'macro_' . $name, $internalRef);
+            $this->parser->addImportedSymbol('function', $alias, 'macro_' . $name, $var);
         }
         return $node;
     }

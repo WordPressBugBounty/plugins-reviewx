@@ -10,9 +10,8 @@
  */
 namespace Rvx\Twig\TokenParser;
 
-use Rvx\Twig\Node\Expression\Variable\LocalVariable;
+use Rvx\Twig\Node\Expression\TempNameExpression;
 use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\Nodes;
 use Rvx\Twig\Node\PrintNode;
 use Rvx\Twig\Node\SetNode;
 use Rvx\Twig\Token;
@@ -30,12 +29,14 @@ final class ApplyTokenParser extends AbstractTokenParser
     public function parse(Token $token) : Node
     {
         $lineno = $token->getLine();
-        $ref = new LocalVariable(null, $lineno);
-        $filter = $this->parser->getExpressionParser()->parseFilterExpressionRaw($ref);
+        $name = $this->parser->getVarName();
+        $ref = new TempNameExpression($name, $lineno);
+        $ref->setAttribute('always_defined', \true);
+        $filter = $this->parser->getExpressionParser()->parseFilterExpressionRaw($ref, $this->getTag());
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse([$this, 'decideApplyEnd'], \true);
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
-        return new Nodes([new SetNode(\true, $ref, $body, $lineno), new PrintNode($filter, $lineno)], $lineno);
+        return new Node([new SetNode(\true, $ref, $body, $lineno, $this->getTag()), new PrintNode($filter, $lineno, $this->getTag())]);
     }
     public function decideApplyEnd(Token $token) : bool
     {

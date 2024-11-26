@@ -12,15 +12,11 @@
 namespace Rvx\Twig\Node\Expression;
 
 use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Expression\Variable\ContextVariable;
 class NameExpression extends AbstractExpression
 {
     private $specialVars = ['_self' => '$this->getTemplateName()', '_context' => '$context', '_charset' => '$this->env->getCharset()'];
     public function __construct(string $name, int $lineno)
     {
-        if (self::class === static::class) {
-            trigger_deprecation('twig/twig', '3.15', 'The "%s" class is deprecated, use "%s" instead.', self::class, ContextVariable::class);
-        }
         parent::__construct([], ['name' => $name, 'is_defined_test' => \false, 'ignore_strict_check' => \false, 'always_defined' => \false], $lineno);
     }
     public function compile(Compiler $compiler) : void

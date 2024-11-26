@@ -73,7 +73,7 @@ class ReviewService extends \Rvx\Services\Service
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : [];
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
-                add_comment_meta($commentId, 'reviewx_title', sanitize_text_field(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
+                add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
                 add_comment_meta($commentId, 'is_recommended', \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
                 add_comment_meta($commentId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
@@ -95,7 +95,7 @@ class ReviewService extends \Rvx\Services\Service
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : [];
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
-                add_comment_meta($commentId, 'reviewx_title', sanitize_text_field(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
+                add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
                 add_comment_meta($commentId, 'is_recommended', \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
                 add_comment_meta($commentId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
@@ -115,7 +115,7 @@ class ReviewService extends \Rvx\Services\Service
         $data = $this->getReviewStatus();
         $auto_approve_reviews = $data['setting']['review_settings']['reviews']['auto_approve_reviews'];
         $review_type = get_post_type($request['wp_post_id']) === 'product' ? 'review' : 'comment';
-        return ['comment_post_ID' => absint($request['wp_post_id']), 'comment_content' => sanitize_text_field(\trim($request['feedback'], '"') ?? null), 'comment_author' => sanitize_text_field($request['reviewer_name']), 'comment_author_email' => sanitize_text_field($request['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => sanitize_text_field($request['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
+        return ['comment_post_ID' => absint($request['wp_post_id']), 'comment_content' => \strip_tags(\trim($request['feedback'], '"') ?? null), 'comment_author' => sanitize_text_field($request['reviewer_name']), 'comment_author_email' => sanitize_text_field($request['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => sanitize_text_field($request['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
     }
     public function getReviewStatus()
     {
@@ -132,7 +132,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         $isVerified = isset($payloadData['verified']) == 1 ? \true : \false;
         $autoPublish = isset($payloadData['auto_publish']) == 1 ? \true : \false;
-        $data = ['wp_id' => $commentId, 'product_wp_unique_id' => Client::getUid() . '-' . $payloadData['wp_post_id'] ?? null, 'wp_post_id' => $payloadData['wp_post_id'] ?? null, 'reviewer_email' => sanitize_text_field($payloadData['reviewer_email'] ?? null), 'reviewer_name' => sanitize_text_field($payloadData['reviewer_name'] ?? null), 'rating' => (int) sanitize_text_field($payloadData['rating'] ?? 0), 'feedback' => sanitize_text_field($payloadData['feedback'] ?? null), 'is_verified' => $isVerified, 'auto_publish' => $autoPublish, 'created_at' => current_time('mysql', \true), 'title' => sanitize_text_field($payloadData['title'] ?? null), 'attachments' => isset($payloadData['attachments']) ? $payloadData['attachments'] : []];
+        $data = ['wp_id' => $commentId, 'product_wp_unique_id' => Client::getUid() . '-' . $payloadData['wp_post_id'] ?? null, 'wp_post_id' => $payloadData['wp_post_id'] ?? null, 'reviewer_email' => sanitize_text_field($payloadData['reviewer_email'] ?? null), 'reviewer_name' => sanitize_text_field($payloadData['reviewer_name'] ?? null), 'rating' => (int) sanitize_text_field($payloadData['rating'] ?? 0), 'feedback' => \strip_tags($payloadData['feedback'] ?? null), 'is_verified' => $isVerified, 'auto_publish' => $autoPublish, 'created_at' => current_time('mysql', \true), 'title' => \strip_tags($payloadData['title'] ?? null), 'attachments' => isset($payloadData['attachments']) ? $payloadData['attachments'] : []];
         $data = \array_merge($data, $payloadData);
         $criterias = Helper::arrayGet($data, 'criterias');
         if ($criterias) {
@@ -383,12 +383,11 @@ class ReviewService extends \Rvx\Services\Service
             $wpCommentData = $this->prepareUpdateWpComment($request, $existingReview);
             $appReviewData = $this->prepareUpdateAppReview($request->get_params(), $request->get_file_params());
             $reviewApi = new ReviewsApi();
-            \error_log("image issue" . \print_r($appReviewData, \true));
             $res = $reviewApi->updateReviewData($appReviewData, $wpUniqueId);
             if ($res->getStatusCode() !== Response::HTTP_OK) {
                 return ['error' => $res->getStatusCode()];
             }
-            wp_update_comment(['comment_ID' => $reviewId, 'comment_content' => $wpCommentData['comment_content'], 'comment_approved' => $wpCommentData['comment_approved'], 'comment_author_email' => $wpCommentData['comment_author_email'], 'comment_author' => $wpCommentData['comment_author']]);
+            wp_update_comment(['comment_ID' => $reviewId, 'comment_content' => \strip_tags($wpCommentData['comment_content']), 'comment_approved' => sanitize_text_field($wpCommentData['comment_approved']), 'comment_author_email' => sanitize_text_field($wpCommentData['comment_author_email']), 'comment_author' => sanitize_text_field($wpCommentData['comment_author'])]);
             $this->updateReviewMeta($reviewId, $request);
             return $res;
         } catch (\Exception $e) {
@@ -416,7 +415,7 @@ class ReviewService extends \Rvx\Services\Service
      */
     public function prepareUpdateWpComment($request, $existingReview)
     {
-        return ['comment_content' => sanitize_text_field($request['feedback'] ?? $existingReview->comment_content), 'comment_approved' => sanitize_text_field($request['status'] ?? $existingReview->comment_approved), 'comment_author_email' => sanitize_text_field($request['reviewer_email'] ?? $existingReview->comment_author_email), 'comment_author' => sanitize_text_field($request['reviewer_name'] ?? $existingReview->comment_author)];
+        return ['comment_content' => \strip_tags($request['feedback'] ?? $existingReview->comment_content), 'comment_approved' => sanitize_text_field($request['status'] ?? $existingReview->comment_approved), 'comment_author_email' => sanitize_text_field($request['reviewer_email'] ?? $existingReview->comment_author_email), 'comment_author' => sanitize_text_field($request['reviewer_name'] ?? $existingReview->comment_author)];
     }
     public function prepareUpdateAppReview(array $payloadData, array $files)
     {
@@ -428,8 +427,8 @@ class ReviewService extends \Rvx\Services\Service
         $payloadData['rating'] = $rating ? (int) $rating : null;
         $data = [
             // 'rating' => (int)$payloadData['rating'],
-            'feedback' => sanitize_text_field($payloadData['feedback']),
-            'title' => sanitize_text_field($payloadData['title']),
+            'feedback' => \strip_tags($payloadData['feedback']),
+            'title' => \strip_tags($payloadData['title']),
             'reviewer_name' => sanitize_text_field($payloadData['reviewer_name']),
             'reviewer_email' => sanitize_text_field($payloadData['reviewer_email']),
             'date' => current_time('mysql', \true),
@@ -580,6 +579,8 @@ class ReviewService extends \Rvx\Services\Service
         $siteUid = Client::getUid();
         $productWpUniqueId = $siteUid . '-' . $productId;
         $data = \array_merge($request->get_params(), ["wp_id" => $commentId, "site_uid" => $siteUid, "product_wp_unique_id" => $productWpUniqueId, "is_anonymous" => $request['is_anonymous'] == "true" ? \true : \false, "is_verified" => $request['verified'] == "true" ? \true : \false, "is_customer_verified" => $request['is_customer_verified'] == "true" ? \true : \false, "attachments" => $attachments, 'created_at' => current_time('mysql', \true), 'is_recommended' => $request['is_recommended'] == "true" ? \true : \false]);
+        $data['feedback'] = \strip_tags($request['feedback']);
+        $data['title'] = \strip_tags($request['title']);
         $criterias = Helper::arrayGet($data, 'criterias');
         if ($criterias) {
             $data['criterias'] = \array_map('intval', $criterias);
@@ -744,5 +745,9 @@ class ReviewService extends \Rvx\Services\Service
         // Encode reviews as JSON and update post meta
         $reviews_json = \json_encode($existing_reviews, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
         update_post_meta($product_id, 'rvx_latest_reviews', $reviews_json);
+    }
+    public function postMetaReviewInsert($id, $latest_reviews)
+    {
+        update_post_meta($id, "_rvx_latest_reviews", wp_slash($latest_reviews));
     }
 }

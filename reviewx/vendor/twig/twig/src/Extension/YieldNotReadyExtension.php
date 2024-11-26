@@ -16,8 +16,10 @@ use Rvx\Twig\NodeVisitor\YieldNotReadyNodeVisitor;
  */
 final class YieldNotReadyExtension extends AbstractExtension
 {
-    public function __construct(private bool $useYield)
+    private $useYield;
+    public function __construct(bool $useYield)
     {
+        $this->useYield = $useYield;
     }
     public function getNodeVisitors() : array
     {

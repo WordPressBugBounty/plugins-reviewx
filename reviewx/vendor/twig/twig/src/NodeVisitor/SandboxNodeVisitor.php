@@ -24,7 +24,6 @@ use Rvx\Twig\Node\Expression\NameExpression;
 use Rvx\Twig\Node\Expression\Unary\SpreadUnary;
 use Rvx\Twig\Node\ModuleNode;
 use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\Nodes;
 use Rvx\Twig\Node\PrintNode;
 use Rvx\Twig\Node\SetNode;
 /**
@@ -56,8 +55,8 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
                 $this->tags[$node->getNodeTag()] = $node->getTemplateLine();
             }
             // look for filters
-            if ($node instanceof FilterExpression && !isset($this->filters[$node->getAttribute('name')])) {
-                $this->filters[$node->getAttribute('name')] = $node->getTemplateLine();
+            if ($node instanceof FilterExpression && !isset($this->filters[$node->getNode('filter')->getAttribute('value')])) {
+                $this->filters[$node->getNode('filter')->getAttribute('value')] = $node->getTemplateLine();
             }
             // look for functions
             if ($node instanceof FunctionExpression && !isset($this->functions[$node->getAttribute('name')])) {
@@ -95,8 +94,8 @@ final class SandboxNodeVisitor implements NodeVisitorInterface
     {
         if ($node instanceof ModuleNode) {
             $this->inAModule = \false;
-            $node->setNode('constructor_end', new Nodes([new CheckSecurityCallNode(), $node->getNode('constructor_end')]));
-            $node->setNode('class_end', new Nodes([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('class_end')]));
+            $node->setNode('constructor_end', new Node([new CheckSecurityCallNode(), $node->getNode('constructor_end')]));
+            $node->setNode('class_end', new Node([new CheckSecurityNode($this->filters, $this->tags, $this->functions), $node->getNode('class_end')]));
         } elseif ($this->inAModule) {
             if ($node instanceof PrintNode || $node instanceof SetNode) {
                 $this->needsToStringWrap = \false;

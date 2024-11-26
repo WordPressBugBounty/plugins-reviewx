@@ -13,7 +13,6 @@ namespace Rvx\Twig\Extension;
 use Rvx\Twig\ExpressionParser;
 use Rvx\Twig\Node\Expression\AbstractExpression;
 use Rvx\Twig\NodeVisitor\NodeVisitorInterface;
-use Rvx\Twig\OperatorPrecedenceChange;
 use Rvx\Twig\TokenParser\TokenParserInterface;
 use Rvx\Twig\TwigFilter;
 use Rvx\Twig\TwigFunction;
@@ -61,8 +60,8 @@ interface ExtensionInterface
      * @return array<array> First array of unary operators, second array of binary operators
      *
      * @psalm-return array{
-     *     array<string, array{precedence: int, precedence_change?: OperatorPrecedenceChange, class: class-string<AbstractExpression>}>,
-     *     array<string, array{precedence: int, precedence_change?: OperatorPrecedenceChange, class?: class-string<AbstractExpression>, associativity: ExpressionParser::OPERATOR_*}>
+     *     array<string, array{precedence: int, class: class-string<AbstractExpression>}>,
+     *     array<string, array{precedence: int, class?: class-string<AbstractExpression>, associativity: ExpressionParser::OPERATOR_*}>
      * }
      */
     public function getOperators();

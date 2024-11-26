@@ -70,26 +70,32 @@ class DataSyncService extends \Rvx\Services\Service
         if ($file) {
             foreach ($categories as $category) {
                 $category_data = $this->formatCategoryData($category);
-                \fwrite($file, \json_encode($category_data) . \PHP_EOL);
+                \fwrite($file, wp_json_encode($category_data, \JSON_UNESCAPED_UNICODE) . \PHP_EOL);
             }
             foreach ($allPostWithOutProduct as $post) {
                 $post = $this->formaPostData($post);
-                \fwrite($file, \json_encode($post) . \PHP_EOL);
+                \fwrite($file, wp_json_encode($post, \JSON_UNESCAPED_UNICODE) . \PHP_EOL);
             }
             if (\class_exists('WooCommerce')) {
                 foreach ($products as $product) {
                     $product_data = $this->formatProductData($product);
-                    \fwrite($file, \json_encode($product_data) . \PHP_EOL);
+                    if (isset($product_data['url'])) {
+                        $product_data['url'] = \urldecode($product_data['url']);
+                    }
+                    if (isset($product_data['slug'])) {
+                        $product_data['slug'] = \urldecode($product_data['slug']);
+                    }
+                    \fwrite($file, wp_json_encode($product_data, \JSON_UNESCAPED_UNICODE) . \PHP_EOL);
                 }
                 foreach ($this->getAllFormattedOrders() as $order) {
-                    \fwrite($file, \json_encode($order) . \PHP_EOL);
+                    \fwrite($file, wp_json_encode($order, \JSON_UNESCAPED_UNICODE) . \PHP_EOL);
                 }
             }
             foreach ($this->getAllFormattedUsers() as $user) {
-                \fwrite($file, \json_encode($user) . \PHP_EOL);
+                \fwrite($file, wp_json_encode($user, \JSON_UNESCAPED_UNICODE) . \PHP_EOL);
             }
             foreach ($this->getAllFormattedComments() as $review) {
-                \fwrite($file, \json_encode($review) . \PHP_EOL);
+                \fwrite($file, wp_json_encode($review, \JSON_UNESCAPED_UNICODE) . \PHP_EOL);
             }
             \fclose($file);
             return \true;
@@ -107,7 +113,7 @@ class DataSyncService extends \Rvx\Services\Service
     public function formatProductData($product)
     {
         $image_url = $product->get_image_id() ? wp_get_attachment_url($product->get_image_id()) : null;
-        return ['rid' => 'rid://Product/' . $product->get_id(), "wp_id" => $product->get_id(), "title" => $product->get_name(), "url" => $product->get_permalink(), "description" => $product->get_short_description(), "price" => (float) $product->get_regular_price(), "discounted_price" => (float) $product->get_sale_price(), "slug" => $product->get_slug(), "image" => $image_url ?? null, "status" => $this->productStatus($product->get_status()), "post_type" => get_post_type($product->get_id()), "total_reviews" => (int) $product->get_review_count() ?? 0, "avg_rating" => (float) $product->get_average_rating() ?? 0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "modified_date" => $product->post_modified ?? null, "category_ids" => $this->productCategory($product)];
+        return ['rid' => 'rid://Product/' . $product->get_id(), "wp_id" => $product->get_id(), "title" => $product->get_name(), "url" => $product->get_permalink(), "description" => \strip_tags($product->get_short_description()), "price" => (float) $product->get_regular_price(), "discounted_price" => (float) $product->get_sale_price(), "slug" => $product->get_slug(), "image" => $image_url ?? null, "status" => $this->productStatus($product->get_status()), "post_type" => get_post_type($product->get_id()), "total_reviews" => (int) $product->get_review_count() ?? 0, "avg_rating" => (float) $product->get_average_rating() ?? 0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "modified_date" => $product->post_modified ?? null, "category_ids" => $this->productCategory($product)];
     }
     public function formaPostData($post)
     {

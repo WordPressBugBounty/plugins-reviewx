@@ -5,10 +5,6 @@ namespace Rvx\Handlers\MigrationRollback;
 use Rvx\Handlers\MigrationRollback\SharedMethods;
 class MigrationPrompt
 {
-    public function __construct()
-    {
-        // Constructor code if needed
-    }
     public function rvx_retrieve_old_plugin_options_data()
     {
         $data = [];

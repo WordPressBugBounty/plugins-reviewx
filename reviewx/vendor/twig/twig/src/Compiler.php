@@ -20,14 +20,16 @@ class Compiler
     private $lastLine;
     private $source;
     private $indentation;
+    private $env;
     private $debugInfo = [];
     private $sourceOffset;
     private $sourceLine;
     private $varNameSalt = 0;
     private $didUseEcho = \false;
     private $didUseEchoStack = [];
-    public function __construct(private Environment $env)
+    public function __construct(Environment $env)
     {
+        $this->env = $env;
     }
     public function getEnvironment() : Environment
     {
@@ -63,7 +65,7 @@ class Compiler
             $this->didUseEcho = \false;
             $node->compile($this);
             if ($this->didUseEcho) {
-                trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[\\Twig\\Attribute\\YieldReady].', $this->didUseEcho, \get_class($node));
+                trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[YieldReady].', $this->didUseEcho, \get_class($node));
             }
             return $this;
         } finally {
@@ -83,7 +85,7 @@ class Compiler
             $this->didUseEcho = \false;
             $node->compile($this);
             if ($this->didUseEcho) {
-                trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[\\Twig\\Attribute\\YieldReady].', $this->didUseEcho, \get_class($node));
+                trigger_deprecation('twig/twig', '3.9', 'Using "%s" is deprecated, use "yield" instead in "%s", then flag the class with #[YieldReady].', $this->didUseEcho, \get_class($node));
             }
             return $this;
         } finally {
@@ -204,7 +206,7 @@ class Compiler
     }
     public function getVarName() : string
     {
-        return \sprintf('_v%d', $this->varNameSalt++);
+        return \sprintf('__internal_compile_%d', $this->varNameSalt++);
     }
     private function checkForEcho(string $string) : void
     {

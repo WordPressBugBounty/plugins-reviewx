@@ -3,6 +3,7 @@
 namespace Rvx\Rest\Controllers;
 
 use Rvx\PHPUnit\Util\Exception;
+use Rvx\Services\Api\LoginService;
 use Rvx\WPDrill\Response;
 use Rvx\WPDrill\Facades\Request;
 use Rvx\Utilities\Auth\Client;
@@ -18,6 +19,7 @@ class StoreFrontReviewController implements InvokableContract
     protected ReviewService $reviewService;
     protected ReviewService $wpReviewService;
     protected SettingService $settingService;
+    protected LoginService $loginService;
     /**
      *
      */
@@ -26,6 +28,7 @@ class StoreFrontReviewController implements InvokableContract
         $this->reviewService = new ReviewService();
         $this->wpReviewService = new ReviewService();
         $this->settingService = new SettingService();
+        $this->loginService = new LoginService();
     }
     /**
      * @return void
@@ -45,15 +48,6 @@ class StoreFrontReviewController implements InvokableContract
     public function datagetInWp($data)
     {
         return $data;
-    }
-    public function datagetInSaas($request)
-    {
-        $response = $this->reviewService->getWidgetReviewsForProduct($request);
-        $latestReview = $response->getApiData();
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            return Helper::rvxApi(["error" => "Fails"])->fails("failed");
-        }
-        update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews", \json_encode($latestReview));
     }
     public function settingMeta($request) : Response
     {
@@ -80,26 +74,43 @@ class StoreFrontReviewController implements InvokableContract
                 $response = $this->reviewService->getWidgetReviewsForProduct($request);
                 return Helper::saasResponse($response);
             } else {
-                $reviews = \json_decode($postMata, \true);
-                $response = ["reviews" => $reviews["reviews"], "meta" => $reviews["meta"]];
-                if ($response) {
-                    return Helper::rest($response)->success("Success");
+                if ($this->is_valid_data($postMata)) {
+                    //valid
+                    $response = ["reviews" => $postMata["reviews"], "meta" => $postMata["meta"]];
+                    if ($response) {
+                        return Helper::rest($response)->success("Success");
+                    } else {
+                        return Helper::rest()->fails("Fails");
+                    }
                 } else {
-                    return Helper::rest()->fails("Fails");
+                    //invalid
+                    $this->loginService->resetProductWisePostMeta($request["product_id"]);
+                    return $this->dataGetFormSaas($request);
                 }
-                // wp_send_json($response);
             }
         } else {
-            $latestReview = $this->dataGetFromSaas($request);
-            if (!$latestReview) {
-                return Helper::rvxApi(["error" => "Fails"])->fails("failed");
-            }
-            $reviews = Helper::arrayGet($latestReview, "reviews");
-            if (\count($reviews) > 0) {
-                update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews", \json_encode($latestReview));
-            }
-            return ["data" => $latestReview];
+            return $this->dataGetFormSaas($request);
         }
+    }
+    public function dataGetFormSaas($request)
+    {
+        $latestReview = $this->dataGetFromSaas($request);
+        if (!$latestReview) {
+            return Helper::rvxApi(["error" => "Fails"])->fails("failed");
+        }
+        $reviews = Helper::arrayGet($latestReview, "reviews");
+        \error_log("print serilize " . \print_r(maybe_serialize($latestReview), \true));
+        if (\count($reviews) > 0) {
+            $this->reviewService->postMetaReviewInsert($request->get_param("product_id"), $latestReview);
+        }
+        return ["data" => $latestReview];
+    }
+    public function is_valid_data($postMata)
+    {
+        if (\is_array($postMata)) {
+            return \true;
+        }
+        return \false;
     }
     public function prepareReviewExtraData($comment)
     {
@@ -182,6 +193,7 @@ class StoreFrontReviewController implements InvokableContract
             } else {
                 // Fetch the latest aggregation data
                 $latestAggregation = $this->insightDataGetInSaas($request);
+                $latestAggregation['product']['description'] = \strip_tags($latestAggregation['product']['description']);
                 // Check if the data retrieval fails
                 if (!$latestAggregation) {
                     return Helper::rvxApi(["error" => "Fails"])->fails("failed");
@@ -191,7 +203,7 @@ class StoreFrontReviewController implements InvokableContract
                 // No need to decode since it's always an array, just assign back
                 $latestAggregation["criteria_stats"] = $criteriaStat;
                 // Store the data in post meta as a JSON string
-                update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation));
+                update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
                 return ["data" => $latestAggregation];
             }
         } catch (\Throwable $e) {
@@ -247,13 +259,14 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function storeReviewMeta($productId, $payload)
     {
+        \error_log("10 >>" . \print_r($payload, \true));
         $reviewAndMeta = ["reviews" => Helper::arrayGet($payload, "reviews"), "meta" => Helper::arrayGet($payload, "meta")];
-        $latest_ten_review = \json_encode($reviewAndMeta, \true);
-        update_post_meta($productId, "_rvx_latest_reviews", $latest_ten_review);
+        \error_log("12 >>" . \print_r($reviewAndMeta, \true));
+        $this->reviewService->postMetaReviewInsert($productId, $reviewAndMeta);
     }
     public function storeAggregationMeta($productId, $payload)
     {
-        $aggregation_data = \json_encode(Helper::arrayGet($payload, "meta"), \true);
+        $aggregation_data = \json_encode(Helper::arrayGet($payload, "meta"), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
         update_post_meta($productId, "_rvx_latest_reviews_insight", $aggregation_data);
     }
     public function reviewRequestStoreItem($request)

@@ -5,140 +5,122 @@ namespace Rvx\Handlers\MigrationRollback;
 use Rvx\Handlers\MigrationRollback\SharedMethods;
 class RollbackPrompt
 {
+    // Constructor
     public function __construct()
     {
-        // Constructor code if needed
     }
+    // Entry point for the rollback process
     public function rvx_retrieve_sass_plugin_reviews_meta_updater()
     {
-        // Convert Retrieved v1 Muli Criteria data to v1 format
-        echo '<h3>Rollback started.</h3>' . '';
+        echo '<h3>Rollback started.</h3>';
+        // Rollback options data
         $this->rvx_retrieve_saas_plugin_options_data();
-        echo 'Options data rollback completed.' . '<br>';
-        $reviews_data = $this->rvx_retrieve_sass_plugin_criterias_reviews_converter();
-        echo 'Multi criteria data rollback completed.' . '<br>';
+        echo 'Options data rollback completed.<br>';
+        // Rollback multi-criteria reviews
+        $reviews_data = $this->rvx_retrieve_saas_plugin_criterias_reviews_converter();
+        echo 'Multi-criteria data rollback completed.<br>';
+        // Rollback attachments for reviews
         $this->rvx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data);
-        echo 'Reviews attachments data rollback completed.' . '<br>';
-        echo '<h3>Rollback done.</h3>' . '<br>';
+        echo 'Reviews attachments data rollback completed.<br>';
+        echo '<h3>Rollback done.</h3><br>';
     }
+    // Handles the rollback of plugin options data
     public function rvx_retrieve_saas_plugin_options_data()
     {
-        // Retrieve the existing new data (JSON) from 'rvx_review_settings'
         $option_key = 'rvx_review_settings';
         $existing_data = get_option($option_key);
-        $existing_data = \json_decode($existing_data, \true);
-        //dd($existing_data);
-        // Return false if JSON data is invalid or not found
-        /*
-        if (!$existing_data || !is_array($existing_data)) {
-            return false;
-        }
-        */
-        // Retrieve additional data from '_rvx_settings_data' (serialized data)
+        // Decode options data if it is a string
+        $existing_data = \is_string($existing_data) ? \json_decode($existing_data, \true) : null;
         $serialized_data = get_option('_rvx_settings_data');
-        $settings_data = maybe_unserialize($serialized_data);
-        if ($settings_data && \is_array($settings_data)) {
+        $settings_data = \is_string($serialized_data) ? maybe_unserialize($serialized_data) : [];
+        // If settings data is an array, extract and update widget/review settings
+        if (\is_array($settings_data)) {
             $widget_settings = $settings_data['setting']['widget_settings'] ?? [];
             $review_settings = $settings_data['setting']['review_settings']['reviews'] ?? [];
-            // Update old keys in wp_options based on the available data
-            if (isset($widget_settings['brand_color_code'])) {
-                update_option('_rx_option_color_theme', $widget_settings['brand_color_code']);
-            }
-            if (isset($widget_settings['star_color_code'])) {
-                update_option('_rx_option_star_color', $widget_settings['star_color_code']);
-            }
-            if (isset($widget_settings['button_font_color_code'])) {
-                update_option('_rx_option_button_font_color', $widget_settings['button_font_color_code']);
-            }
-            if (isset($review_settings['enable_likes_dislikes']['enabled'])) {
-                update_option('_rx_option_allow_like_dislike', $review_settings['enable_likes_dislikes']['enabled']);
-            }
-            if (isset($review_settings['photo_reviews_allowed'])) {
-                update_option('_rx_option_allow_img', $review_settings['photo_reviews_allowed']);
-            }
-            if (isset($review_settings['video_reviews_allowed'])) {
-                update_option('_rx_option_allow_video', $review_settings['video_reviews_allowed']);
-            }
-            if (isset($review_settings['anonymous_reviews_allowed'])) {
-                update_option('_rx_option_allow_anonymouse', $review_settings['anonymous_reviews_allowed']);
-            }
-            if (isset($review_settings['auto_approve_reviews'])) {
-                update_option('_rx_option_disable_auto_approval', !$review_settings['auto_approve_reviews']);
-                // Reversed logic
-            }
-            if (isset($review_settings['product_schema'])) {
-                update_option('_rx_option_disable_richschema', !$review_settings['product_schema']);
-                // Reversed logic
-            }
-            if (isset($review_settings['allow_multiple_reviews'])) {
-                update_option('_rx_option_allow_multiple_review', $review_settings['allow_multiple_reviews']);
-            }
+            $this->update_widget_settings($widget_settings);
+            $this->update_review_settings($review_settings);
         }
-        // Also handle specific cases from existing JSON data
         $sharedMethods = new SharedMethods();
+        // Convert multi-criteria data if available
         if (isset($existing_data['reviews']['multicriteria'])) {
             $oldCriteriaData = $sharedMethods->rvxRollbackReverseReviewCriteriaConverter($existing_data['reviews']['multicriteria']);
             if ($sharedMethods->key_exists('_rx_option_review_criteria')) {
-                //update_option('_rx_option_review_criteria', $oldCriteriaData['_rx_option_review_criteria']);
                 update_option('_rx_option_allow_multi_criteria', $oldCriteriaData['_rx_option_allow_multi_criteria']);
+                update_option('_rx_option_review_criteria', $oldCriteriaData['_rx_option_review_criteria']);
             }
             return $oldCriteriaData;
         }
         return \true;
-        // Return true to indicate the process was successful
     }
-    public function rvx_retrieve_sass_plugin_criterias_reviews_converter()
+    // Updates widget-related settings
+    private function update_widget_settings($widget_settings)
     {
-        // Step 1: Fetch all reviews with rvx_review_version = 'v2'
+        if (isset($widget_settings['brand_color_code'])) {
+            update_option('_rx_option_color_theme', $widget_settings['brand_color_code']);
+        }
+        if (isset($widget_settings['star_color_code'])) {
+            update_option('_rx_option_star_color', $widget_settings['star_color_code']);
+        }
+        if (isset($widget_settings['button_font_color_code'])) {
+            update_option('_rx_option_button_font_color', $widget_settings['button_font_color_code']);
+        }
+    }
+    // Updates review-related settings
+    private function update_review_settings($review_settings)
+    {
+        $map = ['enable_likes_dislikes' => '_rx_option_allow_like_dislike', 'photo_reviews_allowed' => '_rx_option_allow_img', 'video_reviews_allowed' => '_rx_option_allow_video', 'anonymous_reviews_allowed' => '_rx_option_allow_anonymouse', 'allow_multiple_reviews' => '_rx_option_allow_multiple_review'];
+        // Update each mapped setting
+        foreach ($map as $key => $option) {
+            if (isset($review_settings[$key])) {
+                update_option($option, $review_settings[$key]);
+            }
+        }
+        // Handle boolean values for auto-approve and schema settings
+        if (isset($review_settings['auto_approve_reviews'])) {
+            update_option('_rx_option_disable_auto_approval', !$review_settings['auto_approve_reviews']);
+        }
+        if (isset($review_settings['product_schema'])) {
+            update_option('_rx_option_disable_richschema', !$review_settings['product_schema']);
+        }
+    }
+    // Handles rollback for multi-criteria reviews
+    public function rvx_retrieve_saas_plugin_criterias_reviews_converter()
+    {
         $reviews_with_meta = $this->rvx_retrieve_saas_plugin_reviews_data();
         if (empty($reviews_with_meta)) {
-            return;
-            // No reviews to process
+            return [];
         }
-        // Step 2: Fetch _rx_option_review_criteria for matching keys
         $existingOldData = get_option('_rx_option_review_criteria');
-        $oldCriteria = [];
-        if ($existingOldData) {
-            $oldCriteria = maybe_unserialize($existingOldData);
-        }
+        $oldCriteria = \is_string($existingOldData) ? maybe_unserialize($existingOldData) : [];
         if (empty($oldCriteria)) {
-            return;
-            // No criteria mapping available
+            return [];
         }
-        // Step 3: Map and update rvx_criterias for each review
+        // Process and convert each review's criteria
         foreach ($reviews_with_meta as $comment_id => $review_data) {
-            if (isset($review_data['meta_data']['rvx_criterias']) && \is_array($review_data['meta_data']['rvx_criterias'])) {
-                $criterias = $review_data['meta_data']['rvx_criterias'];
+            $criterias = $review_data['meta_data']['rvx_criterias'] ?? null;
+            if (\is_array($criterias)) {
                 $converted_criterias = $this->rvx_convert_criterias_to_serialized_format($criterias, $oldCriteria);
-                // Update the new format back into the database
                 update_comment_meta($comment_id, 'rvx_criterias', $converted_criterias);
             }
         }
         return $reviews_with_meta;
     }
+    // Retrieves reviews with their metadata
     public function rvx_retrieve_saas_plugin_reviews_data()
     {
         global $wpdb;
-        // Define the meta key and value
         $meta_key = 'rvx_review_version';
         $meta_value = 'v2';
-        // Step 1: Retrieve comment IDs from wp_commentmeta
-        $query = $wpdb->prepare("SELECT comment_id \n             FROM {$wpdb->commentmeta} \n             WHERE meta_key = %s AND meta_value = %s", $meta_key, $meta_value);
+        $query = $wpdb->prepare("SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s", $meta_key, $meta_value);
         $comment_ids = $wpdb->get_col($query);
-        // Return empty array if no comment IDs found
         if (empty($comment_ids)) {
             return [];
         }
-        // Step 2: Retrieve all comments data for the retrieved comment IDs
         $placeholders = \implode(',', \array_fill(0, \count($comment_ids), '%d'));
-        // Create placeholders for IN clause
-        $query = $wpdb->prepare("SELECT * \n             FROM {$wpdb->comments} \n             WHERE comment_ID IN ({$placeholders})", $comment_ids);
+        $query = $wpdb->prepare("SELECT * FROM {$wpdb->comments} WHERE comment_ID IN ({$placeholders})", $comment_ids);
         $reviews_data = $wpdb->get_results($query, ARRAY_A);
-        // Fetch results as an associative array
-        // Step 3: Retrieve all meta data for the retrieved comment IDs
-        $query = $wpdb->prepare("SELECT comment_id, meta_key, meta_value \n             FROM {$wpdb->commentmeta} \n             WHERE comment_id IN ({$placeholders})", $comment_ids);
+        $query = $wpdb->prepare("SELECT comment_id, meta_key, meta_value FROM {$wpdb->commentmeta} WHERE comment_id IN ({$placeholders})", $comment_ids);
         $meta_data = $wpdb->get_results($query, ARRAY_A);
-        // Step 4: Arrange data as a multidimensional array
         $reviews_with_meta = [];
         foreach ($reviews_data as $review) {
             $comment_id = $review['comment_ID'];
@@ -152,49 +134,40 @@ class RollbackPrompt
         }
         return $reviews_with_meta;
     }
-    /**
-     * Map new criteria values to correct keys using old criteria.
-     *
-     * @param array $criterias New criteria values (e.g., ["a" => "4", "b" => "3"]).
-     * @param array $oldCriteria Old criteria mapping (e.g., ["ctr_h8S7" => "Quality"]).
-     * @return string Serialized criteria data.
-     */
-    private function rvx_convert_criterias_to_serialized_format($criterias)
+    // Converts criteria data into serialized format
+    private function rvx_convert_criterias_to_serialized_format($criterias, $oldCriteria)
     {
         $key_base = 'ctr_h8S';
         $serialized_array = [];
         $index = 7;
-        // Start index for serialized keys
         foreach ($criterias as $key => $value) {
             $serialized_key = $key_base . $index++;
             $serialized_array[$serialized_key] = (string) $value;
         }
         return maybe_serialize($serialized_array);
     }
+    // Converts review attachments to match the required rollback format
     public function rvx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data)
     {
-        if (!empty($reviews_data) && \is_array($reviews_data)) {
-            foreach ($reviews_data as $review_data) {
-                $comment_id = $review_data['review_data']['comment_ID'];
-                $attachments = $review_data['meta_data']['reviewx_attachments'];
-                if (!empty($attachments) && \is_array($attachments)) {
-                    $attachment_data_ids = '';
-                    $attachment_data = [];
-                    foreach ($attachments as $attachment_url) {
+        if (!\is_array($reviews_data)) {
+            return;
+        }
+        foreach ($reviews_data as $review_data) {
+            $comment_id = $review_data['review_data']['comment_ID'] ?? null;
+            $attachments = $review_data['meta_data']['reviewx_attachments'] ?? null;
+            if (\is_array($attachments)) {
+                $attachment_data = [];
+                foreach ($attachments as $attachment_url) {
+                    if (\is_string($attachment_url)) {
                         $attachment_id = attachment_url_to_postid($attachment_url);
-                        if (!empty($attachment_id)) {
-                            // Prepare the string data in the desired format
-                            $attachment_data_ids .= $attachment_id . ', ';
+                        if ($attachment_id) {
                             $attachment_data[] = $attachment_id;
                         }
                     }
-                    if (!empty($attachment_data) && \is_array($attachment_data)) {
-                        // Prepare the serialized data in the desired format
-                        $attachment_data_collection = ['images' => $attachment_data];
-                        // Update the wp_commentmeta table with the new format
-                        update_comment_meta($comment_id, 'reviewx_attachments', $attachment_data_collection);
-                        //echo "Comment id: $comment_id => Attachment id: $attachment_data_ids id's updated:";
-                    }
+                }
+                if (!empty($attachment_data)) {
+                    $attachment_data_collection = ['images' => $attachment_data];
+                    update_comment_meta($comment_id, 'reviewx_attachments', $attachment_data_collection);
                 }
             }
         }

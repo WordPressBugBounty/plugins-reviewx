@@ -13,8 +13,10 @@ namespace Rvx\Twig\Extension;
 use Rvx\Twig\NodeVisitor\OptimizerNodeVisitor;
 final class OptimizerExtension extends AbstractExtension
 {
-    public function __construct(private int $optimizers = -1)
+    private $optimizers;
+    public function __construct(int $optimizers = -1)
     {
+        $this->optimizers = $optimizers;
     }
     public function getNodeVisitors() : array
     {

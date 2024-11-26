@@ -2,6 +2,7 @@
 
 namespace Rvx\Providers;
 
+use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\WPDrill\Plugin;
 use Rvx\Models\Site;
 use Rvx\WPDrill\ServiceProvider;
@@ -66,6 +67,7 @@ class PluginServiceProvider extends ServiceProvider
         add_action('init', new LoadTextDomainHandler(), 10);
         add_action('activated_plugin', new RedirectReviewxHandler(), 15, 1);
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
+        add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);

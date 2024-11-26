@@ -19,9 +19,12 @@ use Rvx\Twig\Error\SyntaxError;
  */
 final class TokenStream
 {
+    private $tokens;
     private $current = 0;
-    public function __construct(private array $tokens, private ?Source $source = null)
+    private $source;
+    public function __construct(array $tokens, ?Source $source = null)
     {
+        $this->tokens = $tokens;
         $this->source = $source ?: new Source('', '');
     }
     public function __toString()
@@ -86,7 +89,7 @@ final class TokenStream
      */
     public function isEOF() : bool
     {
-        return Token::EOF_TYPE === $this->tokens[$this->current]->getType();
+        return -1 === $this->tokens[$this->current]->getType();
     }
     public function getCurrent() : Token
     {

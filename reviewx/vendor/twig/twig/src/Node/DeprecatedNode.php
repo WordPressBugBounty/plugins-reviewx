@@ -22,9 +22,9 @@ use Rvx\Twig\Node\Expression\ConstantExpression;
 #[YieldReady]
 class DeprecatedNode extends Node
 {
-    public function __construct(AbstractExpression $expr, int $lineno)
+    public function __construct(AbstractExpression $expr, int $lineno, ?string $tag = null)
     {
-        parent::__construct(['expr' => $expr], [], $lineno);
+        parent::__construct(['expr' => $expr], [], $lineno, $tag);
     }
     public function compile(Compiler $compiler) : void
     {
@@ -52,6 +52,6 @@ class DeprecatedNode extends Node
         } else {
             $compiler->write(\sprintf('$%s', $varName));
         }
-        $compiler->raw('.')->string(\sprintf(' in "%s" at line %d.', $this->getTemplateName(), $this->getTemplateLine()))->raw(");\n");
+        $compiler->raw(".")->string(\sprintf(' in "%s" at line %d.', $this->getTemplateName(), $this->getTemplateLine()))->raw(");\n");
     }
 }

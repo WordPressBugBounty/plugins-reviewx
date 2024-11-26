@@ -1506,6 +1506,10 @@
   color: rgb(189 189 189 / var(--tw-text-opacity))
 }
 
+.first\:\!rvx-block:first-child {
+  display: block !important
+}
+
 .hover\:rvx-rounded:hover {
   border-radius: 0.25rem
 }

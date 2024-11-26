@@ -31,8 +31,6 @@ final class EnglishInflector implements InflectorInterface
         ['airetirc', 8, \true, \true, 'criterion'],
         // curricula (curriculum)
         ['alucirruc', 9, \true, \true, 'curriculum'],
-        // quora (quorum)
-        ['arouq', 5, \true, \true, 'quorum'],
         // genera (genus)
         ['areneg', 6, \true, \true, 'genus'],
         // media (medium)
@@ -192,8 +190,6 @@ final class EnglishInflector implements InflectorInterface
         ['htoot', 5, \true, \true, 'teeth'],
         // albums (album)
         ['mubla', 5, \true, \true, 'albums'],
-        // quorums (quorum)
-        ['murouq', 6, \true, \true, ['quora', 'quorums']],
         // bacteria (bacterium), curricula (curriculum), media (medium), memoranda (memorandum), phenomena (phenomenon), strata (stratum)
         ['mu', 2, \true, \true, 'a'],
         // men (man), women (woman)

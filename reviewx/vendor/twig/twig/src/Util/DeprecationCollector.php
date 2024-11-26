@@ -18,8 +18,10 @@ use Rvx\Twig\Source;
  */
 final class DeprecationCollector
 {
-    public function __construct(private Environment $twig)
+    private $twig;
+    public function __construct(Environment $twig)
     {
+        $this->twig = $twig;
     }
     /**
      * Returns deprecations for templates contained in a directory.

@@ -16,17 +16,11 @@ use Rvx\Twig\Extension\SandboxExtension;
 use Rvx\Twig\Template;
 class GetAttrExpression extends AbstractExpression
 {
-    /**
-     * @param ArrayExpression|NameExpression|null $arguments
-     */
     public function __construct(AbstractExpression $node, AbstractExpression $attribute, ?AbstractExpression $arguments, string $type, int $lineno)
     {
         $nodes = ['node' => $node, 'attribute' => $attribute];
         if (null !== $arguments) {
             $nodes['arguments'] = $arguments;
-        }
-        if ($arguments && !$arguments instanceof ArrayExpression && !$arguments instanceof NameExpression) {
-            trigger_deprecation('twig/twig', '3.15', \sprintf('Not passing a "%s" instance as the "arguments" argument of the "%s" constructor is deprecated ("%s" given).', ArrayExpression::class, static::class, $arguments::class));
         }
         parent::__construct($nodes, ['type' => $type, 'is_defined_test' => \false, 'ignore_strict_check' => \false, 'optimizable' => \true], $lineno);
     }
@@ -43,7 +37,7 @@ class GetAttrExpression extends AbstractExpression
                 return;
             }
             $arrayAccessSandbox = \true;
-            $compiler->raw(') || ')->raw($var)->raw(' instanceof ArrayAccess && in_array(')->raw($var . '::class')->raw(', CoreExtension::ARRAY_LIKE_CLASSES, true) ? (')->raw($var)->raw('[')->subcompile($this->getNode('attribute'))->raw('] ?? null) : ');
+            $compiler->raw(') || ')->raw($var)->raw(' instanceof ArrayAccess && in_array(')->raw('get_class(' . $var . ')')->raw(', CoreExtension::ARRAY_LIKE_CLASSES, true) ? (')->raw($var)->raw('[')->subcompile($this->getNode('attribute'))->raw('] ?? null) : ');
         }
         $compiler->raw('CoreExtension::getAttribute($this->env, $this->source, ');
         if ($this->getAttribute('ignore_strict_check')) {

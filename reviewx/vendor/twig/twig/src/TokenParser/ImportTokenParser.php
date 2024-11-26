@@ -10,8 +10,7 @@
  */
 namespace Rvx\Twig\TokenParser;
 
-use Rvx\Twig\Node\Expression\Variable\AssignTemplateVariable;
-use Rvx\Twig\Node\Expression\Variable\TemplateVariable;
+use Rvx\Twig\Node\Expression\AssignNameExpression;
 use Rvx\Twig\Node\ImportNode;
 use Rvx\Twig\Node\Node;
 use Rvx\Twig\Token;
@@ -27,12 +26,21 @@ final class ImportTokenParser extends AbstractTokenParser
     public function parse(Token $token) : Node
     {
         $macro = $this->parser->getExpressionParser()->parseExpression();
-        $this->parser->getStream()->expect(Token::NAME_TYPE, 'as');
-        $name = $this->parser->getStream()->expect(Token::NAME_TYPE)->getValue();
-        $var = new AssignTemplateVariable(new TemplateVariable($name, $token->getLine()), $this->parser->isMainScope());
-        $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
-        $this->parser->addImportedSymbol('template', $name);
-        return new ImportNode($macro, $var, $token->getLine());
+        $this->parser->getStream()->expect(
+            /* Token::NAME_TYPE */
+            5,
+            'as'
+        );
+        $var = new AssignNameExpression($this->parser->getStream()->expect(
+            /* Token::NAME_TYPE */
+            5
+        )->getValue(), $token->getLine());
+        $this->parser->getStream()->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
+        $this->parser->addImportedSymbol('template', $var->getAttribute('name'));
+        return new ImportNode($macro, $var, $token->getLine(), $this->getTag(), $this->parser->isMainScope());
     }
     public function getTag() : string
     {

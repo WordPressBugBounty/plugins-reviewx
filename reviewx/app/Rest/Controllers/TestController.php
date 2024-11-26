@@ -6,15 +6,33 @@ use Rvx\Models\Post;
 use Rvx\Api\ProductApi;
 use Rvx\Models\Category;
 use Rvx\Handlers\CustomOrderUpdate;
+use Rvx\Services\Api\LoginService;
+use Rvx\Services\DataSyncService;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 class TestController
 {
     public function test($request)
     {
-        $rvx_user_access_script = get_option('__user_setting_access');
-        $s = \unserialize($rvx_user_access_script);
-        dd($s);
+        /*$arr = [
+                    "description" => 'После вебинара я практиковала с Узником Смерти. Давала ему задание на разрушение ситуации. У меня в один день было 2-е ситуации, одну из которых мне нужно было разрушить - перенести на 1 день. Я, конечно, хотела, что бы разрушилась (перенеслась на 1 день) первая ситуация, но она была связана с энергиями 13 аркана. Произошло всё наилучшим образом - неожиданно перенеслась 2-я ситуация - "сбой по техническим причинам". Моей радости не было предела. Место, где я прикрепила Узника Смерти обнесли забором, охраняют))). Благодарю.',
+                    "wp_unique_id" => 'si-U4BO-vTo6aSHW-LBR7-1331'
+        
+                ];
+        
+                update_post_meta(
+                    1200,
+                    "_json",
+                    $arr
+                );*/
+        $jsonArr = get_post_meta(1200, '_json');
+        dd(\json_encode(maybe_unserialize("kasldfjklasjfkl"), \JSON_UNESCAPED_UNICODE));
+    }
+    public function developer($request)
+    {
+        $ls = new LoginService();
+        $ls->resetPostMeta();
+        echo 'Post meta Cleared';
     }
     public function prepareData($currentProduct)
     {

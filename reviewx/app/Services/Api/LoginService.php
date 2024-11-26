@@ -31,6 +31,18 @@ class LoginService extends Service
             $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE (meta_key = %s OR meta_key = %s) AND post_id IN ({$post_ids_placeholders})", \array_merge([$insight_key, $review_key], $post_ids)));
         }
     }
+    public function resetProductWisePostMeta($product_id)
+    {
+        global $wpdb;
+        $review_key = '_rvx_latest_reviews';
+        // Validate the product ID
+        if (empty($product_id) || !\is_numeric($product_id)) {
+            return;
+            // Exit if the product ID is invalid
+        }
+        // Prepare and execute the deletion query
+        $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s AND post_id = %d", $review_key, $product_id));
+    }
     /**
      * @param $settings_data
      * @return void

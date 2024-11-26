@@ -19,8 +19,7 @@ class RollbackMenuHandler implements InvokableContract
         if (isset($_GET['rollback_start'])) {
             $is_pro_active = $sharedMethods->rvx_is_old_pro_plugin_active();
             if ($is_pro_active === \false) {
-                $sharedMethods->rvx_activate_old_pro_plugin();
-                // Activate v1 Pro
+                //$sharedMethods->rvx_activate_old_pro_plugin(); // Activate v1 Pro
             }
             $rollbackPrompt->rvx_retrieve_sass_plugin_reviews_meta_updater();
             // Start data rollback
@@ -32,7 +31,7 @@ class RollbackMenuHandler implements InvokableContract
     <h3 class="text-md font-semibold text-gray-800 mt-4">Next Steps:</h3>
     <ul class="list-disc list-inside text-gray-600">
         <li><strong>Must do:</strong> Please make sure to <b>delete ReviewX v2</b> and and <b>reinstall ReviewX v1</b> plugin.</li>
-        <li><strong>Pro user:</strong> If you use the Pro version, ensure it is reactivated to access premium features.</li>
+        <li><strong>Pro user:</strong> If you used the Pro version, please it activate it to access the premium features.</li>
         <li><strong>Download:</strong> ReviewX v1 plugin is available here, <a target="_blank" href="https://downloads.wordpress.org/plugin/reviewx.1.6.30.zip" class="text-blue-600 hover:underline">Download v1</a>.</li>
     </ul>
 

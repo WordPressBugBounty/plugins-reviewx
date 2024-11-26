@@ -44,10 +44,11 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
     public const OPTIMIZE_TEXT_NODES = 8;
     private $loops = [];
     private $loopsTargets = [];
+    private $optimizers;
     /**
      * @param int $optimizers The optimizer mode
      */
-    public function __construct(private int $optimizers = -1)
+    public function __construct(int $optimizers = -1)
     {
         if ($optimizers > (self::OPTIMIZE_FOR | self::OPTIMIZE_RAW_FILTER | self::OPTIMIZE_TEXT_NODES)) {
             throw new \InvalidArgumentException(\sprintf('Optimizer mode "%s" is not valid.', $optimizers));
@@ -55,9 +56,7 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
         if (-1 !== $optimizers && self::OPTIMIZE_RAW_FILTER === (self::OPTIMIZE_RAW_FILTER & $optimizers)) {
             trigger_deprecation('twig/twig', '3.11', 'The "Twig\\NodeVisitor\\OptimizerNodeVisitor::OPTIMIZE_RAW_FILTER" option is deprecated and does nothing.');
         }
-        if (-1 !== $optimizers && self::OPTIMIZE_TEXT_NODES === (self::OPTIMIZE_TEXT_NODES & $optimizers)) {
-            trigger_deprecation('twig/twig', '3.12', 'The "Twig\\NodeVisitor\\OptimizerNodeVisitor::OPTIMIZE_TEXT_NODES" option is deprecated and does nothing.');
-        }
+        $this->optimizers = $optimizers;
     }
     public function enterNode(Node $node, Environment $env) : Node
     {
@@ -72,6 +71,35 @@ final class OptimizerNodeVisitor implements NodeVisitorInterface
             $this->leaveOptimizeFor($node);
         }
         $node = $this->optimizePrintNode($node);
+        if (self::OPTIMIZE_TEXT_NODES === (self::OPTIMIZE_TEXT_NODES & $this->optimizers)) {
+            $node = $this->mergeTextNodeCalls($node);
+        }
+        return $node;
+    }
+    private function mergeTextNodeCalls(Node $node) : Node
+    {
+        $text = '';
+        $names = [];
+        foreach ($node as $k => $n) {
+            if (!$n instanceof TextNode) {
+                return $node;
+            }
+            $text .= $n->getAttribute('data');
+            $names[] = $k;
+        }
+        if (!$text) {
+            return $node;
+        }
+        if (Node::class === \get_class($node)) {
+            return new TextNode($text, $node->getTemplateLine());
+        }
+        foreach ($names as $i => $name) {
+            if (0 === $i) {
+                $node->setNode($name, new TextNode($text, $node->getTemplateLine()));
+            } else {
+                $node->removeNode($name);
+            }
+        }
         return $node;
     }
     /**

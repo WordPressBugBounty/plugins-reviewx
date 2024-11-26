@@ -11,10 +11,8 @@
 namespace Rvx\Twig\TokenParser;
 
 use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Node\EmptyNode;
 use Rvx\Twig\Node\Expression\ConstantExpression;
 use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\Nodes;
 use Rvx\Twig\Token;
 /**
  * Imports blocks defined in another template into the current template.
@@ -42,20 +40,33 @@ final class UseTokenParser extends AbstractTokenParser
         $targets = [];
         if ($stream->nextIf('with')) {
             while (\true) {
-                $name = $stream->expect(Token::NAME_TYPE)->getValue();
+                $name = $stream->expect(
+                    /* Token::NAME_TYPE */
+                    5
+                )->getValue();
                 $alias = $name;
                 if ($stream->nextIf('as')) {
-                    $alias = $stream->expect(Token::NAME_TYPE)->getValue();
+                    $alias = $stream->expect(
+                        /* Token::NAME_TYPE */
+                        5
+                    )->getValue();
                 }
                 $targets[$name] = new ConstantExpression($alias, -1);
-                if (!$stream->nextIf(Token::PUNCTUATION_TYPE, ',')) {
+                if (!$stream->nextIf(
+                    /* Token::PUNCTUATION_TYPE */
+                    9,
+                    ','
+                )) {
                     break;
                 }
             }
         }
-        $stream->expect(Token::BLOCK_END_TYPE);
-        $this->parser->addTrait(new Nodes(['template' => $template, 'targets' => new Nodes($targets)]));
-        return new EmptyNode($token->getLine());
+        $stream->expect(
+            /* Token::BLOCK_END_TYPE */
+            3
+        );
+        $this->parser->addTrait(new Node(['template' => $template, 'targets' => new Node($targets)]));
+        return new Node();
     }
     public function getTag() : string
     {

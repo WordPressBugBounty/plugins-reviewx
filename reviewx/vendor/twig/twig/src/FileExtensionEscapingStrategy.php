@@ -42,7 +42,6 @@ class FileExtensionEscapingStrategy
         $extension = \pathinfo($name, \PATHINFO_EXTENSION);
         switch ($extension) {
             case 'js':
-            case 'json':
                 return 'js';
             case 'css':
                 return 'css';

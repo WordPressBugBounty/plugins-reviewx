@@ -11,31 +11,19 @@
 namespace Rvx\Twig\Node\Expression;
 
 use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\EmptyNode;
 use Rvx\Twig\Node\Expression\Binary\AndBinary;
 use Rvx\Twig\Node\Expression\Test\DefinedTest;
 use Rvx\Twig\Node\Expression\Test\NullTest;
 use Rvx\Twig\Node\Expression\Unary\NotUnary;
 use Rvx\Twig\Node\Node;
-use Rvx\Twig\TwigTest;
 class NullCoalesceExpression extends ConditionalExpression
 {
-    /**
-     * @param AbstractExpression $left
-     * @param AbstractExpression $right
-     */
     public function __construct(Node $left, Node $right, int $lineno)
     {
-        if (!$left instanceof AbstractExpression) {
-            trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance to the "left" argument of "%s" is deprecated ("%s" given).', AbstractExpression::class, static::class, \get_class($left));
-        }
-        if (!$right instanceof AbstractExpression) {
-            trigger_deprecation('twig/twig', '3.15', 'Not passing a "%s" instance to the "right" argument of "%s" is deprecated ("%s" given).', AbstractExpression::class, static::class, \get_class($right));
-        }
-        $test = new DefinedTest(clone $left, new TwigTest('defined'), new EmptyNode(), $left->getTemplateLine());
+        $test = new DefinedTest(clone $left, 'defined', new Node(), $left->getTemplateLine());
         // for "block()", we don't need the null test as the return value is always a string
         if (!$left instanceof BlockReferenceExpression) {
-            $test = new AndBinary($test, new NotUnary(new NullTest($left, new TwigTest('null'), new EmptyNode(), $left->getTemplateLine()), $left->getTemplateLine()), $left->getTemplateLine());
+            $test = new AndBinary($test, new NotUnary(new NullTest($left, 'null', new Node(), $left->getTemplateLine()), $left->getTemplateLine()), $left->getTemplateLine());
         }
         parent::__construct($test, $left, $right, $lineno);
     }

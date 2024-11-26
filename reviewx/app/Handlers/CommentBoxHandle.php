@@ -2,6 +2,7 @@
 
 namespace Rvx\Handlers;
 
+use Rvx\Utilities\Auth\Client;
 use Rvx\WPDrill\Facades\Config;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Facades\DB;
@@ -11,7 +12,7 @@ class CommentBoxHandle
 {
     public function __invoke() : void
     {
-        if (\class_exists('WooCommerce') && !is_account_page()) {
+        if (\class_exists('WooCommerce') && !is_account_page() && Client::getSync()) {
             $attributes = $this->setRvxAttributes();
             $formData = $this->builderCustomizedFormTextsData();
             $this->commentBoxDefaultStyleForCustomPostType();
