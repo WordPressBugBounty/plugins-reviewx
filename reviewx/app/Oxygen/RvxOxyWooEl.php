@@ -2,7 +2,7 @@
 
 namespace Rvx\Oxygen;
 
-class RvxOxyWooEl extends \Rvx\OxyEl
+class RvxOxyWooEl extends \OxyEl
 {
     function init()
     {

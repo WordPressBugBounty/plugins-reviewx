@@ -2,7 +2,7 @@
 
 namespace Rvx\RvxDivi\includes;
 
-class RvxReviews extends \Rvx\DiviExtension
+class RvxReviews extends \DiviExtension
 {
     /**
      * The gettext domain for the extension's translations.

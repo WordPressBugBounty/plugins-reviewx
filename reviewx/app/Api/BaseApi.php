@@ -14,10 +14,10 @@ class BaseApi extends AbstractApi
     public function getBaseUrl() : string
     {
         // For Local
-                return "https://api.reviewx.io";
+        return "https://api.reviewx.io";
         //          return "https://forming-almost-tcp-seek.trycloudflare.com";
         //  For Staging server
-        // return "http://13.214.84.12";
+        //        return "http://13.214.84.12";
     }
     public function getIp() : string
     {

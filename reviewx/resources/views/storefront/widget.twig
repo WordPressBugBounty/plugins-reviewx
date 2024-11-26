@@ -12,7 +12,6 @@
      x-init="await initialize({data: '{{ data }}', formLevelData: '{{ formLevelData }}'})"
      @notify-attachment="notifyAttachmentAdded($event.detail.reviewAttachFiles)"
      @notify-close-success-modal="showReviewSuccessModal = false"
-     @notify-close-review-details-modal="showReviewDetailsModal = false"
      @notify-like-dislike="await fetchReviews({productId: rvxAttributes.product.id})">
 
     <div x-show="fetchReviewsSettingsIsLoading" class="rvx-grid rvx-place-content-center rvx-h-[186px]">

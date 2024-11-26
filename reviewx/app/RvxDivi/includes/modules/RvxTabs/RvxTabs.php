@@ -1,8 +1,7 @@
 <?php
 
-namespace Rvx;
 
-class RVX_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs
+class RVX_Builder_Module_Woocommerce_Tabs extends \ET_Builder_Module_Tabs
 {
     use \Rvx\RvxDivi\includes\modules\RvxTabs\DiviDesignTrait;
     /**
@@ -61,7 +60,7 @@ class RVX_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs
         // Save existing $post and $product global.
         $original_post = $post;
         $original_product = $product;
-        $post_id = 'product' === $this->get_post_type() ? ET_Builder_Element::get_current_post_id() : ET_Builder_Module_Helper_Woocommerce_Modules::get_product_id('latest');
+        $post_id = 'product' === $this->get_post_type() ? ET_Builder_Element::get_current_post_id() : \ET_Builder_Module_Helper_Woocommerce_Modules::get_product_id('latest');
         // Overwriting global $post is necessary as WooCommerce relies on it.
         $post = get_post($post_id);
         $product = wc_get_product($post_id);
@@ -70,7 +69,7 @@ class RVX_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs
          * for adding / removing product tabs data via filter hoook callback, hence the
          * need to overwrite the global for determining product tabs data
          */
-        $tabs = \is_object($product) ? apply_filters('woocommerce_product_tabs', array()) : ET_Builder_Module_Helper_Woocommerce_Modules::get_default_product_tabs();
+        $tabs = \is_object($product) ? apply_filters('woocommerce_product_tabs', array()) : \ET_Builder_Module_Helper_Woocommerce_Modules::get_default_product_tabs();
         // Reset $post and $product global.
         $post = $original_post;
         $product = $original_product;
@@ -119,8 +118,8 @@ class RVX_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs
     public function get_fields()
     {
         return \array_merge(parent::get_fields(), [
-            'product' => ET_Builder_Module_Helper_Woocommerce_Modules::get_field('product', array('default' => ET_Builder_Module_Helper_Woocommerce_Modules::get_product_default(), 'computed_affects' => array('__tabs', 'include_tabs'))),
-            'include_tabs' => array('label' => esc_html__('Include Tabs', 'et_builder'), 'type' => 'checkboxes_advanced_woocommerce', 'option_category' => 'configuration', 'default' => ET_Builder_Module_Helper_Woocommerce_Modules::get_woo_default_tabs(), 'description' => esc_html__('Here you can select the tabs that you would like to display.', 'et_builder'), 'toggle_slug' => 'main_content', 'mobile_options' => \true, 'hover' => 'tabs', 'computed_depends_on' => array('product')),
+            'product' => \ET_Builder_Module_Helper_Woocommerce_Modules::get_field('product', array('default' => \ET_Builder_Module_Helper_Woocommerce_Modules::get_product_default(), 'computed_affects' => array('__tabs', 'include_tabs'))),
+            'include_tabs' => array('label' => esc_html__('Include Tabs', 'et_builder'), 'type' => 'checkboxes_advanced_woocommerce', 'option_category' => 'configuration', 'default' => \ET_Builder_Module_Helper_Woocommerce_Modules::get_woo_default_tabs(), 'description' => esc_html__('Here you can select the tabs that you would like to display.', 'et_builder'), 'toggle_slug' => 'main_content', 'mobile_options' => \true, 'hover' => 'tabs', 'computed_depends_on' => array('product')),
             '__tabs' => array('type' => 'computed', 'computed_callback' => array('RVX_Builder_Module_Woocommerce_Tabs', 'get_tabs'), 'computed_depends_on' => array('product'), 'computed_minimum' => array('product')),
             //Subsections
             //Graph
@@ -293,7 +292,7 @@ class RVX_Builder_Module_Woocommerce_Tabs extends ET_Builder_Module_Tabs
         $args['product'] = 'current';
         $args = wp_parse_args($args, $defaults);
         // Get actual product id based on given `product` attribute.
-        $product_id = ET_Builder_Module_Helper_Woocommerce_Modules::get_product_id($args['product']);
+        $product_id = \ET_Builder_Module_Helper_Woocommerce_Modules::get_product_id($args['product']);
         add_filter('rx_product_id_for_divi', function ($args) {
             global $product;
             if ($product) {

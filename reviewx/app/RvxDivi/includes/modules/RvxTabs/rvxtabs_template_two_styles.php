@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+
 
 $rvx_template_two_filter_background_color = $this->props['rvx_template_two_filter_background_color'];
 $rvx_template_two_filtering_bar_color = $this->props['rvx_template_two_filtering_bar_color'];

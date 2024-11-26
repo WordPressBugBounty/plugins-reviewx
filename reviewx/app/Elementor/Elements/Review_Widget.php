@@ -6,13 +6,13 @@ namespace Rvx\Elementor\Elements;
 if (!\defined('ABSPATH')) {
     exit;
 }
-use Rvx\Elementor\Controls_Manager;
-use Rvx\Elementor\Plugin;
-use Rvx\Elementor\Group_Control_Border;
-use Rvx\Elementor\Group_Control_Box_Shadow;
-use Rvx\Elementor\Group_Control_Typography;
-use Rvx\Elementor\Utils;
-use Rvx\Elementor\Widget_Base;
+use Elementor\Controls_Manager;
+use Elementor\Plugin;
+use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Typography;
+use Elementor\Utils;
+use Elementor\Widget_Base;
 /**
  * Class Review
  * @package ReviewX\Elementor\Elements

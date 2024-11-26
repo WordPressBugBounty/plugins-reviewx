@@ -12724,7 +12724,7 @@ const gw = /* @__PURE__ */ se({
                               {
                                 ref: "contentRef",
                                 id: "rvx-sideDrawer-contentRef",
-                                class: "rvx-p-5 rvx-flex-grow"
+                                class: "rvx-p-5 rvx-pt-0 rvx-flex-grow"
                               },
                               {
                                 default: ee(() => [
@@ -29940,7 +29940,8 @@ const aN = /* @__PURE__ */ Ce(nN, [["render", iN], ["__file", "/var/www/html/wp-
                 _: 1
                 /* STABLE */
               }),
-              $(aN)
+              $(aN),
+              xe('        <img src="../../../assets/images/gif/processing_animation.gif" alt="processing image">')
             ]),
             _: 1
             /* STABLE */

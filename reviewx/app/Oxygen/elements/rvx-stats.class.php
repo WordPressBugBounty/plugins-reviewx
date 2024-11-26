@@ -7,7 +7,7 @@ namespace Rvx;
  * 
  * @since 2.0
  */
-class RVX_Oxygen_Stats extends CT_Component
+class RVX_Oxygen_Stats extends \CT_Component
 {
     public $param_array;
     public $css_util;

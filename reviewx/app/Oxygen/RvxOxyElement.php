@@ -2,7 +2,7 @@
 
 namespace Rvx\Oxygen;
 
-if (\class_exists('Rvx\\RvxOxyElement')) {
+if (\class_exists('RvxOxyElement')) {
     return;
 }
 class RvxOxyElement

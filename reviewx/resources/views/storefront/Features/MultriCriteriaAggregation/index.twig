@@ -1,27 +1,29 @@
-<div class="rvx-grid rvx-grid-cols-12 rvx-w-full rvx-gap-space16 rvx-mb-space16 rvx-aggregation-multicriteria">
-    <template x-for="criteria in formatMultiCriteriaAggregations">
-        <div class="rvx-col-span-4 rvx-flex rvx-gap-space16 rvx-w-full rvx-aggregation-multicriteria__row-outer">
-            <div class="rvx-grid rvx-grid-cols-12 rvx-gap-space8 rvx-w-full rvx-aggregation-multicriteria__row-inner">
-                <div class="rvx-col-span-8 rvx-w-full rvx-pb-[6px] rvx-aggregation-multicriteria__name">
-                    <span x-text="criteria?.name"></span>
+<template x-if="reviewSettingsData?.data?.setting?.review_settings?.reviews?.multicriteria?.enable">
+    <div class="rvx-grid rvx-grid-cols-12 rvx-w-full rvx-gap-space16 rvx-mb-space16 rvx-aggregation-multicriteria">
+        <template x-for="criteria in formatMultiCriteriaAggregations">
+            <div class="rvx-col-span-4 rvx-flex rvx-gap-space16 rvx-w-full rvx-aggregation-multicriteria__row-outer">
+                <div class="rvx-grid rvx-grid-cols-12 rvx-gap-space8 rvx-w-full rvx-aggregation-multicriteria__row-inner">
+                    <div class="rvx-col-span-8 rvx-w-full rvx-pb-[6px] rvx-aggregation-multicriteria__name">
+                        <span x-text="criteria?.name"></span>
 
-                    <div class="rvx-w-full rvx-relative rvx-aggregation__progressbar">
-                        <div class="rvx-bg-[#D9D9D9] rvx-rounded-full rvx-aggregation__progressbar-inactive"
-                             :style="{height: `6px`}"></div>
-                        <div class="rvx-bg-primary rvx-rounded-full rvx-absolute rvx-top-0 rvx-left-0 rvx-aggregation__progressbar-active"
-                             :style="{width: `${criteria?.percent}%`, height: `6px`, background: `${reviewSettingsData?.data?.setting?.widget_settings.brand_color_code}`}">
+                        <div class="rvx-w-full rvx-relative rvx-aggregation__progressbar">
+                            <div class="rvx-bg-[#D9D9D9] rvx-rounded-full rvx-aggregation__progressbar-inactive"
+                                 :style="{height: `6px`}"></div>
+                            <div class="rvx-bg-primary rvx-rounded-full rvx-absolute rvx-top-0 rvx-left-0 rvx-aggregation__progressbar-active"
+                                 :style="{width: `${criteria?.percent}%`, height: `6px`, background: `${reviewSettingsData?.data?.setting?.widget_settings.brand_color_code}`}">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="rvx-col-span-4 rvx-flex rvx-justify-center rvx-items-center rvx-gap-space5 rvx-self-end rvx-aggregation-multicriteria__total">
-                    <span x-text="criteria.total"></span>
-                    <svg class="rvx-aggregation__rating-icon" width="16" height="14" viewBox="0 0 24 21" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.9998 17.5001L6.53314 20.7667C6.2887 20.9001 6.04981 20.9556 5.81648 20.9334C5.58314 20.9112 5.37759 20.8334 5.19981 20.7001C5.02203 20.5667 4.8887 20.3834 4.79981 20.1501C4.71092 19.9167 4.69981 19.6778 4.76648 19.4334L6.19981 13.3334L1.36648 9.23339C1.16648 9.05561 1.04426 8.85005 0.999811 8.61672C0.955367 8.38339 0.966478 8.15561 1.03314 7.93339C1.09981 7.71116 1.22203 7.52783 1.39981 7.38339C1.57759 7.23894 1.79981 7.15561 2.06648 7.13339L8.39981 6.56672L10.8998 0.76672C11.0109 0.522275 11.1665 0.338942 11.3665 0.21672C11.5665 0.0944973 11.7776 0.0333862 11.9998 0.0333862C12.222 0.0333862 12.4331 0.0944973 12.6331 0.21672C12.8331 0.338942 12.9887 0.522275 13.0998 0.76672L15.5998 6.60005L21.9331 7.13339C22.1998 7.15561 22.422 7.2445 22.5998 7.40005C22.7776 7.55561 22.8998 7.7445 22.9665 7.96672C23.0331 8.18894 23.0387 8.41116 22.9831 8.63339C22.9276 8.85561 22.7998 9.05561 22.5998 9.23339L17.7998 13.3334L19.2331 19.4334C19.2998 19.6778 19.2887 19.9167 19.1998 20.1501C19.1109 20.3834 18.9776 20.5667 18.7998 20.7001C18.622 20.8334 18.4165 20.9112 18.1831 20.9334C17.9498 20.9556 17.7109 20.9001 17.4665 20.7667L11.9998 17.5001Z"
-                              :fill="`${reviewSettingsData?.data?.setting?.widget_settings.star_color_code}`"/>
-                    </svg>
+                    <div class="rvx-col-span-4 rvx-flex rvx-justify-center rvx-items-center rvx-gap-space5 rvx-self-end rvx-aggregation-multicriteria__total">
+                        <span x-text="criteria.total"></span>
+                        <svg class="rvx-aggregation__rating-icon" width="16" height="14" viewBox="0 0 24 21" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.9998 17.5001L6.53314 20.7667C6.2887 20.9001 6.04981 20.9556 5.81648 20.9334C5.58314 20.9112 5.37759 20.8334 5.19981 20.7001C5.02203 20.5667 4.8887 20.3834 4.79981 20.1501C4.71092 19.9167 4.69981 19.6778 4.76648 19.4334L6.19981 13.3334L1.36648 9.23339C1.16648 9.05561 1.04426 8.85005 0.999811 8.61672C0.955367 8.38339 0.966478 8.15561 1.03314 7.93339C1.09981 7.71116 1.22203 7.52783 1.39981 7.38339C1.57759 7.23894 1.79981 7.15561 2.06648 7.13339L8.39981 6.56672L10.8998 0.76672C11.0109 0.522275 11.1665 0.338942 11.3665 0.21672C11.5665 0.0944973 11.7776 0.0333862 11.9998 0.0333862C12.222 0.0333862 12.4331 0.0944973 12.6331 0.21672C12.8331 0.338942 12.9887 0.522275 13.0998 0.76672L15.5998 6.60005L21.9331 7.13339C22.1998 7.15561 22.422 7.2445 22.5998 7.40005C22.7776 7.55561 22.8998 7.7445 22.9665 7.96672C23.0331 8.18894 23.0387 8.41116 22.9831 8.63339C22.9276 8.85561 22.7998 9.05561 22.5998 9.23339L17.7998 13.3334L19.2331 19.4334C19.2998 19.6778 19.2887 19.9167 19.1998 20.1501C19.1109 20.3834 18.9776 20.5667 18.7998 20.7001C18.622 20.8334 18.4165 20.9112 18.1831 20.9334C17.9498 20.9556 17.7109 20.9001 17.4665 20.7667L11.9998 17.5001Z"
+                                  :fill="`${reviewSettingsData?.data?.setting?.widget_settings.star_color_code}`"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
-        </div>
-    </template>
-</div>
+        </template>
+    </div>
+</template>

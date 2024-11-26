@@ -18,13 +18,19 @@
                  class="rvx-relative  rvx-rounded-lg rvx-w-[300px] md:rvx-w-[871px] rvx-h-[557px] rvx-max-h-[557px] rvx-shadow-xl">
                 <div class="rvx-w-full rvx-h-full rvx-relative">
                     <div class="rvx-grid rvx-grid-cols-12 rvx-rounded-lg rvx-h-full">
-                        <div class="rvx-col-span-12 md:rvx-col-span-5 rvx-bg-[#EFEFEF] rvx-grid rvx-place-items-center rvx-rounded-t-lg sm:rvx-rounded-t-none md:rvx-rounded-l-lg">
-                            <img x-show="currentPreviewImage && getFileType(currentPreviewImage).isImage" :src="currentPreviewImage" alt="test" class="rvx-w-full rvx-h-[150px] sm:rvx-h-auto rvx-object-cover " />
-                            <video x-show="currentPreviewImage && getFileType(currentPreviewImage).isVideo" width="100%" height="200" controls class="rvx-h-[150px] sm:rvx-h-auto">
-                                <source :src="currentPreviewImage">
-                            </video>
-                            <span x-show="!selectedReviewDetails?.attachments.length" class="material-symbols-rounded !rvx-text-[150px] rvx-text-neutral-700 rvx-pointer-events-none"> {{__('gallery_thumbnail', 'reviewx')}}</span>
-                        </div>
+                            <div class="rvx-col-span-12 md:rvx-col-span-5 rvx-bg-[#EFEFEF] rvx-grid rvx-place-items-center rvx-rounded-t-lg sm:rvx-rounded-t-none md:rvx-rounded-l-lg">
+                                <template x-if="currentPreviewImage">
+                                    <span>
+                                        <img x-show="currentPreviewImage && getFileType(currentPreviewImage).isImage" :src="currentPreviewImage" alt="test" class="rvx-w-full rvx-h-[150px] sm:rvx-h-auto rvx-object-cover " />
+                                        <video x-show="currentPreviewImage && getFileType(currentPreviewImage).isVideo" width="100%" height="200" controls class="rvx-h-[150px] sm:rvx-h-auto">
+                                            <source :src="currentPreviewImage">
+                                        </video>
+                                    </span>
+                                </template>
+
+                                <span x-show="!selectedReviewDetails?.attachments.length" class="material-symbols-rounded !rvx-text-[150px] rvx-text-neutral-700 rvx-pointer-events-none"> {{__('gallery_thumbnail', 'reviewx')}}</span>
+                            </div>
+
                         <div class="rvx-col-span-12 md:rvx-col-span-7 rvx-flex rvx-flex-col rvx-bg-white rvx-px-space16 rvx-py-space8 sm:rvx-py-space24 rvx-relative md:rvx-rounded-r-lg">
                             <!-- Reviewer info -->
                             <div class="sm:rvx-py-space12">
@@ -361,7 +367,8 @@
             selectedReviewDetails,
             currentPreviewImage: selectedReviewDetails?.attachments[0] || null,
             close() {
-                this.$dispatch('notify-close-review-details-modal');
+                this.showReviewDetailsModal= false
+                // this.$dispatch('notify-close-review-details-modal');
             },
             previewImageHandler(url) {
                 this.currentPreviewImage = url;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+
 
 /********** Review Summary ***********/
 $rvx_review_section_title_color = $this->props['rvx_review_section_title_color'];

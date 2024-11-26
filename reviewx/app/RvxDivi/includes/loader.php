@@ -1,8 +1,7 @@
 <?php
 
-namespace Rvx;
 
-if (!\class_exists('Rvx\\ET_Builder_Module_Tabs')) {
+if (!\class_exists('ET_Builder_Module_Tabs')) {
     return;
 }
 $module_files = \glob(__DIR__ . '/modules/*/*.php');
@@ -15,9 +14,9 @@ foreach ((array) $module_files as $module_file) {
 add_filter('et_fb_current_page_params', 'rvx_fb_current_page_params');
 function rvx_fb_current_page_params($data)
 {
-    $exclude_woo = wp_doing_ajax() || !et_is_woocommerce_plugin_active() || 'latest' === ET_Builder_Module_Helper_Woocommerce_Modules::get_product_default();
+    $exclude_woo = wp_doing_ajax() || !et_is_woocommerce_plugin_active() || 'latest' === \ET_Builder_Module_Helper_Woocommerce_Modules::get_product_default();
     $data['woocommerceComponents'] = $exclude_woo ? array() : rvx_fb_current_page_woocommerce_components();
-    $data['woocommerceTabs'] = et_builder_tb_enabled() && et_is_woocommerce_plugin_active() ? \Rvx\ET_Builder_Module_Helper_Woocommerce_Modules::get_default_tab_options() : et_fb_woocommerce_tabs();
+    $data['woocommerceTabs'] = et_builder_tb_enabled() && et_is_woocommerce_plugin_active() ? \ET_Builder_Module_Helper_Woocommerce_Modules::get_default_tab_options() : et_fb_woocommerce_tabs();
     $data['woocommerce'] = array('inactive_module_notice' => esc_html__('Preview Unavailable. After saving the settings, please check the frontend to see the changes.', 'reviewx'));
     return $data;
 }

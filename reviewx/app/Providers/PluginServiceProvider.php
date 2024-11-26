@@ -50,6 +50,7 @@ use Rvx\Handlers\Customize\WidgetCustomizeOutputCSSHandler;
 use Rvx\Handlers\WcTemplates\WcSendEmailPermissionHandler;
 use Rvx\Handlers\WooCommerceReviewEditForm;
 use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
+use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
 class PluginServiceProvider extends ServiceProvider
 {
     public function register() : void
@@ -69,6 +70,7 @@ class PluginServiceProvider extends ServiceProvider
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
         add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
+        add_action('admin_notices', new ReviewxAdminNoticeHandler());
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);
         add_action('woocommerce_thankyou', new OrderCreateHandler());

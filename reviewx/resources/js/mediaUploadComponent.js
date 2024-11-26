@@ -17,7 +17,8 @@ function __rvxMediaUploadComponent__(){
 
         init() {
             // video_reviews_allowed
-            if(this.reviewSettingsData?.data?.setting.review_settings?.video_reviews_allowed){
+            console.log('this.reviewSettingsData?.data?.setting.review_settings?.video_reviews_allowed', this.reviewSettingsData?.data?.setting.review_settings.reviews?.video_reviews_allowed)
+            if(this.reviewSettingsData?.data?.setting.review_settings.reviews?.video_reviews_allowed){
                 this.accept = 'image/*,video/*'
             }
             this.clearAll();  // Clear files on init

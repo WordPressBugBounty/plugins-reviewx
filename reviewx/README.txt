@@ -3,11 +3,11 @@ Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujans
 Donate link: https://reviewx.io
 Tags: Woocommerce Reviews, Product Reviews, Customer Reviews, Review Reminder, Review Plugin
 Requires at least: 5.0
-Tested up to: 6.7.0
+Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,7 +213,11 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
-= 2.0.1 - 11-25-2024 =
+= 2.0.2 - 11-26-2024 =
+- Fix: Divi builder issue
+- Fix: Elementor issue
+
+= 2.0.1 - 11-26-2024 =
 - Multilanguage issue fix.
 - PHP version compatiblity
 

@@ -130,6 +130,14 @@ return [
                 'ver' => false,
                 'media' => 'all',
                 'in_footer' => false
+            ],
+            [
+                'handle' => 'reviewx-admin-css',
+                'src' => 'resources/assets/store-front.css',
+                'deps' => [],
+                'ver' => false,
+                'media' => 'all',
+                'in_footer' => false
             ]
         ]
     ],

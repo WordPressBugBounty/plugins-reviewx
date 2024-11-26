@@ -7,7 +7,7 @@ class OxygenLoad
 {
     public function rvx_oxygen_woocommerce_init()
     {
-        if (!\class_exists('Rvx\\OxygenElement')) {
+        if (!\class_exists('OxygenElement')) {
             return;
         }
         $this->loadRequiredFiles();

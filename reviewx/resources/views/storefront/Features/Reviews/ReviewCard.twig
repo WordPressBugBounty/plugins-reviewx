@@ -29,7 +29,7 @@
             </template>
         </div>
     </template>
-    <div :class="`${(layoutView === 'masonry' || layoutView === 'grid') && 'rvx-p-space12'} rvx-review-card__body`">
+    <div :class="`${(layoutView === 'masonry' || layoutView === 'grid') && 'rvx-p-space12'} rvx-review-card__body !rvx-break-words`">
 
         {% include 'storefront/Features/Reviews/ReviewerInfo.twig' %}
 
