@@ -1,19 +1,58 @@
-<div class="notice is-dismissible  rvx-border-4 !rvx-border-l-primary rvx-border-solid">
- <div class="rvx-flex rvx-gap-space16 rvx-items-center">
-  <div class="rvx-p-space8">
-   <img src="https://cdn.reviewx.io/assets/reviewx-icon.png" alt="brand logo" height="50" width="50">
-  </div>
-  <div class="rvx-my-space16">
-   <h2 class="!rvx-m-0">Biggest Discount on ReviewX - Save 40% Now! 🔥</h2>
-   <p>Enhance reviews and boost conversions with ReviewX. Get flat 40% off now - offer ends soon!</p>
-   <div class="rvx-flex rvx-gap-space16 ">
-    <a href="https://reviewx.io/pricing" target="_blank" role="button" class="!rvx-py-space8 rvx-px-space16 rvx-bg-primary rvx-text-white rvx-rounded-md rvx-cursor-pointer rvx-no-underline rvx-font-medium hover:rvx-bg-primary-100 hover:rvx-text-white">
-     Grab The Deal 🎁
-    </a>
-    <a href="https://reviewx.io" target="_blank" role="button" class="!rvx-py-space8 rvx-px-space16 rvx-border rvx-border-primary rvx-border-solid rvx-rounded-md rvx-cursor-pointer rvx-no-underline rvx-font-medium rvx-text-neutral-700 ">
-     Learn More
-    </a>
-   </div>
-  </div>
- </div>
+<div class="notice is-dismissible rvx-border-4 !rvx-border-l-primary rvx-border-solid rvx-admin-notice" style="position: relative; z-index: 9999;">
+    <div class="rvx-flex rvx-gap-space16 rvx-items-center">
+        <div class="rvx-p-space8">
+            <img src="https://cdn.reviewx.io/assets/reviewx-icon.png" alt="brand logo" height="50" width="50">
+        </div>
+        <div class="rvx-my-space16">
+            <h2 class="!rvx-m-0">Biggest Discount on ReviewX - Save 40% Now! 🔥</h2>
+            <p>Enhance reviews and boost conversions with ReviewX. Get flat 40% off now - offer ends soon!</p>
+            <div class="rvx-flex rvx-gap-space16">
+                <a href="https://reviewx.io/wp-special-bfcm-deal" target="_blank" role="button"
+                   class="!rvx-py-space8 rvx-px-space16 rvx-bg-primary rvx-text-white rvx-rounded-md rvx-cursor-pointer rvx-no-underline rvx-font-medium hover:rvx-bg-primary-100 hover:rvx-text-white">
+                    Grab The Deal 🎁
+                </a>
+                <a href="#" role="button" data-action="dismiss" data-duration="1"
+                   class="!rvx-py-space8 rvx-px-space16 rvx-border rvx-border-primary rvx-border-solid rvx-rounded-md rvx-cursor-pointer rvx-no-underline rvx-font-medium rvx-text-neutral-700 js-dismiss-notice">
+                    Remind me Later
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            const noticeElement = document.querySelector('.rvx-admin-notice');
+            const dismissButtons = document.querySelectorAll('.js-dismiss-notice');
+            const nonce = "{{ nonce }}"; // Use the nonce passed from PHP
+            
+            dismissButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const action = button.getAttribute('data-action');
+                    const duration = button.getAttribute('data-duration'); // 'permanent' or days
+
+                    // Perform AJAX request
+                    fetch(ajaxurl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            action: 'rvx_dismiss_notice',
+                            duration: duration,
+                            nonce: nonce
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                noticeElement.style.display = 'none';
+                            } else {
+                                alert(data.data.message || 'Failed to dismiss the notice.');
+                            }
+                        })
+                        .catch(() => alert('An error occurred. Please try again.'));
+                });
+            });
+        })();
+    </script>
 </div>
