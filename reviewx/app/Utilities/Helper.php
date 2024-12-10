@@ -241,4 +241,17 @@ class Helper
         }
         return $result;
     }
+    public static function rvxGetOrderStatus($orderStatus) : ?string
+    {
+        $parts = \explode('-', $orderStatus);
+        return $parts[1] ?? null;
+    }
+    public static function appendToJsonl($file, $data, $jsonOptions = \JSON_UNESCAPED_UNICODE)
+    {
+        $json = wp_json_encode($data, $jsonOptions);
+        if ($json === \false) {
+            return \false;
+        }
+        return \fwrite($file, $json . \PHP_EOL);
+    }
 }

@@ -10235,7 +10235,8 @@ const Hb = ["width", "height"], Yb = /* @__PURE__ */ se({
   __name: "UIDisclosureToggle",
   props: /* @__PURE__ */ lr({
     id: { type: String, required: !0 },
-    haveAccess: { type: Boolean, required: !1, default: !0 }
+    haveAccess: { type: Boolean, required: !1, default: !0 },
+    disclosureButtonClass: { type: String, required: !1 }
   }, {
     modelValue: { type: Boolean },
     modelModifiers: {}
@@ -10250,7 +10251,7 @@ const Hb = ["width", "height"], Yb = /* @__PURE__ */ se({
       default: ee(({ open: i }) => [
         $(X(Fv), {
           id: n.id,
-          class: "rvx-flex rvx-w-full rvx-justify-between rvx-rounded-lg rvx-text-left rvx-font-semibold focus:rvx-outline-none rvx-text-[16px] rvx-bg-white rvx-p-[0] rvx-cursor-pointer"
+          class: Ae(["rvx-flex rvx-w-full rvx-justify-between rvx-rounded-lg rvx-text-left rvx-font-semibold focus:rvx-outline-none rvx-text-[16px] rvx-bg-white rvx-p-[0] rvx-cursor-pointer", n.disclosureButtonClass])
         }, {
           default: ee(() => [
             He(n.$slots, "label"),
@@ -10294,7 +10295,7 @@ const Hb = ["width", "height"], Yb = /* @__PURE__ */ se({
           ]),
           _: 2
           /* DYNAMIC */
-        }, 1032, ["id"]),
+        }, 1032, ["id", "class"]),
         $(xn, {
           "enter-active-class": "rvx-transition rvx-duration-100 rvx-ease-out",
           "enter-from-class": "rvx-transform rvx-scale-95 rvx-opacity-0",
@@ -12724,7 +12725,7 @@ const gw = /* @__PURE__ */ se({
                               {
                                 ref: "contentRef",
                                 id: "rvx-sideDrawer-contentRef",
-                                class: "rvx-p-5 rvx-pt-0 rvx-flex-grow"
+                                class: "rvx-p-5 rvx-pt-0 rvx-flex-grow rvx-scrollbar"
                               },
                               {
                                 default: ee(() => [
@@ -12743,14 +12744,14 @@ const gw = /* @__PURE__ */ se({
                               },
                               512
                               /* NEED_PATCH */
-                            )
-                          ]),
-                          _: 3
-                          /* FORWARDED */
-                        }),
-                        $(we, { class: "rvx-p-5 rvx-flex rvx-justify-end rvx-gap-space8" }, {
-                          default: ee(() => [
-                            He(a.$slots, "footer")
+                            ),
+                            $(we, { class: "rvx-p-5 rvx-flex rvx-justify-end rvx-gap-space8" }, {
+                              default: ee(() => [
+                                He(a.$slots, "footer")
+                              ]),
+                              _: 3
+                              /* FORWARDED */
+                            })
                           ]),
                           _: 3
                           /* FORWARDED */

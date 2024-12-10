@@ -1,0 +1,18 @@
+<style>
+    .rvx-masonry-layout {
+        columns: 4 325px;
+        column-gap: 16px;
+    }
+</style>
+<div x-data="__reviewXState__()"
+     x-init="await initializeReviewWithReviewIdsShortCodes({data: '{{ data }}'})"
+     @notify-like-dislike="await fetchReviewListWithIdsShortCodes()">
+
+    <div :class="`${layoutView === 'masonry' || layoutView === 'grid' ? 'rvx-masonry-layout' : '' } rvx-review-wrapper`">
+        <template x-for="review in reviewWithReviewIdsShortCodeData?.data?.reviews">
+            <div class="rvx-rounded-md rvx-shadow-100 rvx-bg-neutral-100 rvx-columns-box rvx-review-card" :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-py-space16 rvx-pl-space16 rvx-pr-[47px]'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
+                {% include 'storefront/widget/Features/Reviews/ReviewCard.twig' %}
+            </div>
+        </template>
+    </div>
+</div>

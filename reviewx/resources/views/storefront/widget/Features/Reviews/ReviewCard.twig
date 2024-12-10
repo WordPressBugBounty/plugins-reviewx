@@ -1,0 +1,80 @@
+<style>
+    .rvx-review-card{
+        margin-bottom: 16px;
+    }
+    .rvx-review-wrapper .rvx-review-card:last-child {
+        margin-bottom: 0;
+    }
+    .rvx-columns-box {
+        -moz-column-break-inside: avoid;
+        break-inside: avoid;
+    }
+</style>
+
+<div @click="selectedReviewDetailsHandler(review)" class="rvx-cursor-pointer rvx-review-inner">
+    <template x-if="layoutView === 'masonry' && review?.attachments?.length">
+        <div class="rvx-relative">
+            <img x-show="getFileType(review.attachments[0]).isImage" :src="review.attachments[0]" alt="test" class="!rvx-w-full !rvx-max-h-[166px] !rvx-h-[166px] rvx-object-cover !rvx-rounded-t-lg rvx-rounded-none" />
+            <video x-show="getFileType(review.attachments[0]).isVideo" width="100%" height="200">
+                <source :src="review.attachments[0]">
+            </video>
+            <template x-if="isHaveMultipleAttachment(review.attachments.length, 1)">
+                <div class="rvx-flex rvx-items-center rvx-gap-space5 rvx-bg-[#212121B2] rvx-rounded-md rvx-p-space5 rvx-absolute rvx-top-[10px] rvx-right-[10px] rvx-text-white rvx-cursor-pointer">
+                    <span class="!rvx-text-[10px]">
+                        +
+                        <span x-text="review.attachments.length - 1 "></span>
+                    </span>
+                    <span class="material-symbols-rounded rvx-text-[16px]">photo_library</span>
+                </div>
+            </template>
+        </div>
+    </template>
+    <div :class="`${(layoutView === 'masonry' || layoutView === 'grid') && 'rvx-p-space12'} rvx-review-card__body !rvx-break-words`">
+
+        {% include 'storefront/widget/Features/Reviews/ReviewerInfo.twig' %}
+
+
+        <div class="rvx-font-nunito rvx-review-info">
+            <!-- Review Info -->
+            <div class="rvx-justify-between rvx-items-center" :class="`${layoutView === 'list' ? 'rvx-flex' : 'rvx-mb-space8'}`">
+                <p x-show="(layoutView === 'masonry' ||  layoutView === 'grid')"
+                   class="!rvx-text-[12px] rvx-text-neutral-500 rvx-review-info__date" x-text="review.created_at">
+                </p>
+                <p x-show="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_titles"
+                   class="!rvx-text-[16px] rvx-text-neutral-900 rvx-font-semibold rvx-leading-[24px] rvx-review-info__title" x-text="review.title">
+                </p>
+
+                <p x-show="layoutView === 'list'" class="!rvx-text-[12px] rvx-text-neutral-600 rvx-review-info__date" x-text="review.created_at">
+                </p>
+            </div>
+
+            <!-- feedback -->
+            <p class="!rvx-text-[14px] rvx-leading-[22px] rvx-text-neutral-700 rvx-font-normal rvx-review-info__feedback" x-text="layoutView === 'list' ? review.feedback : truncateString(review.feedback, 300)"></p>
+
+            <!-- feedback images -->
+            <div x-show="layoutView !== 'masonry'"
+                 class="rvx-flex rvx-gap-space16 rvx-mt-space12 rvx-flex-wrap rvx-review-info__images">
+                <div class="rvx-flex rvx-gap-space16 rvx-flex-wrap rvx-review-info__images">
+                    <template x-for="file in review.attachments">
+                        <div>
+                            <img x-show="getFileType(file).isImage" :src="file" alt="test" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`" />
+                            <video x-show="getFileType(file).isVideo" width="80" height="80" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`">
+                                <source :src="file">
+                            </video>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <!-- owner replied -->
+            {% include 'storefront/widget/Features/Reviews/OwnerReply.twig' %}
+
+        </div>
+    </div>
+</div>
+<!-- Help info -->
+{% include 'storefront/widget/Features/Reviews/ReviewHelpInfo.twig' %}
+
+
+
+
+

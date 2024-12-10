@@ -16,7 +16,7 @@ class WCUserDashboardAddReview
     {
         $attributes = self::setRvxAttributes();
         $formData = $this->formDefaultTextsData();
-        View::output('my-account/review-form', ['data' => $attributes, 'formLevelData' => $formData]);
+        View::output('storefront/my-account/review-form', ['data' => $attributes, 'formLevelData' => $formData]);
         return '';
     }
     public function setRvxAttributes()

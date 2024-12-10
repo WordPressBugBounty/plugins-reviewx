@@ -19,6 +19,6 @@ class GoogleReviewLIst implements ShortcodeContract
     {
         $attrs = shortcode_atts(['title' => null, 'product_id' => null], $attrs);
         $reviews = $this->review();
-        return View::render('shortcode/googleReviewList', ['content' => $reviews]);
+        return View::render('storefront/shortcode/googleReviewList', ['content' => $reviews]);
     }
 }

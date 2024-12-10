@@ -3,6 +3,7 @@
 namespace Rvx\Api;
 
 use Rvx\Apiz\AbstractApi;
+use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 class BaseApi extends AbstractApi
 {
@@ -13,11 +14,13 @@ class BaseApi extends AbstractApi
      */
     public function getBaseUrl() : string
     {
-        // For Local
+        // For Production
         return "https://api.reviewx.io";
-        //          return "https://forming-almost-tcp-seek.trycloudflare.com";
+        // For Local
+        //         return "https://api.reviewx.io";
+        //          return "https://toolbar-ceremony-shared-pubmed.trycloudflare.com";
         //  For Staging server
-        //        return "http://13.214.84.12";
+        //        return "http://3.1.193.218:82";
     }
     public function getIp() : string
     {
@@ -35,6 +38,6 @@ class BaseApi extends AbstractApi
      */
     public function getDefaultHeaders() : array
     {
-        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-Version' => Helper::getWpVersion(), 'Accept' => 'application/json', 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => Helper::getActiveTheme(), 'X-Url' => site_url(), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . site_url())];
+        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-Version' => Helper::getWpVersion(), 'Accept' => 'application/json', 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => Helper::getActiveTheme(), 'X-Url' => site_url(), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Reviewx-Version' => RVX_VERSION];
     }
 }

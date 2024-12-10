@@ -55,7 +55,7 @@ class ImportExportServices extends \Rvx\Services\Service
     }
     public function insertReview($reviews_id, $review_data)
     {
-        $comment_data = ['comment_post_ID' => $reviews_id, 'comment_author' => $review_data['Reviewer_Name'], 'comment_author_email' => $review_data['Email'], 'comment_content' => $review_data['Review_Description'], 'comment_date' => \date('Y-m-d H:i:s', \strtotime($review_data['Date (YYYY-MM-DD H:M)'])), 'comment_approved' => 1, 'comment_type' => 'review', 'comment_meta' => ['rating' => $review_data['Rating'], 'media' => $review_data['Media']]];
+        $comment_data = ['comment_post_ID' => $reviews_id, 'comment_author' => $review_data['Reviewer_Name'], 'comment_author_email' => $review_data['Email'], 'comment_content' => $review_data['Review_Description'], 'comment_date' => \wp_date('Y-m-d H:i:s', \strtotime($review_data['Date (YYYY-MM-DD H:M)'])), 'comment_approved' => 1, 'comment_type' => 'review', 'comment_meta' => ['rating' => $review_data['Rating'], 'media' => $review_data['Media']]];
         $comment_id = wp_insert_comment($comment_data);
         if ($comment_id) {
             add_comment_meta($comment_id, 'rating', $review_data['Rating']);

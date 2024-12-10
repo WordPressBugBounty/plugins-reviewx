@@ -18,7 +18,7 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
             // Send multiple product IDs to the JavaScript variable
             $attributes = $this->reviewsWiseReviewShow($productIdArray);
             // Return the view (empty or simplified, as no review data is required)
-            return View::render('shortcode/reviewShowWIthIds', ['title' => $attrs['title'], 'data' => $attributes]);
+            return View::render('storefront/shortcode/reviewShowWIthIds', ['title' => $attrs['title'], 'data' => $attributes]);
         }
         return '';
     }

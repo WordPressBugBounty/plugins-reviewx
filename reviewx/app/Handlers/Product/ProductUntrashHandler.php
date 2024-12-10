@@ -34,7 +34,7 @@ class ProductUntrashHandler
     //         "status" => $this->productStatus($product->get_status()),
     //         "post_type" => 'product', // Hardcoded due to import issue
     //         "total_reviews" => (int) $product->get_review_count(),
-    //         "avg_rating" => $product->get_average_rating(),
+    //         "avg_rating" =>(float) $product->get_average_rating(),
     //         "stars" => [
     //             "one" => 0,
     //             "two" => 0,
@@ -92,7 +92,7 @@ class ProductUntrashHandler
     //         "status" => $this->productStatus($post->post_status),
     //         "post_type" => get_post_type($post->ID),
     //         "total_reviews" => (int) get_comments_number($post->ID) ?? 0,
-    //         "avg_rating" => 0,
+    //         "avg_rating" => 0.0,
     //         "stars" => [
     //             "one" => 0,
     //             "two" => 0,

@@ -54,9 +54,18 @@ class ReviewController implements InvokableContract
     public function store($request)
     {
         try {
+            // Temporarily disable comment notification emails
+            remove_action('comment_post', 'wp_notify_postauthor');
+            add_filter('comments_notify', '__return_false');
             $resp = $this->reviewService->createReview($request);
+            // Re-enable the comment notification emails
+            add_action('comment_post', 'wp_notify_postauthor');
+            remove_filter('comments_notify', '__return_false');
             return Helper::getApiResponse($resp);
         } catch (\Exception $e) {
+            // Re-enable the comment notification emails in case of error
+            add_action('comment_post', 'wp_notify_postauthor');
+            remove_filter('comments_notify', '__return_false');
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Not Create', $e->getCode());
         }
     }
@@ -184,9 +193,18 @@ class ReviewController implements InvokableContract
     public function aiReview($request)
     {
         try {
+            // Temporarily disable comment notification emails
+            remove_action('comment_post', 'wp_notify_postauthor');
+            add_filter('comments_notify', '__return_false');
             $resp = $this->reviewService->aiReview($request);
+            // Re-enable the comment notification emails
+            add_action('comment_post', 'wp_notify_postauthor');
+            remove_filter('comments_notify', '__return_false');
             return Helper::getApiResponse($resp);
         } catch (\Throwable $e) {
+            // Re-enable the comment notification emails in case of error
+            add_action('comment_post', 'wp_notify_postauthor');
+            remove_filter('comments_notify', '__return_false');
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
         }
     }

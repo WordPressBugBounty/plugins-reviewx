@@ -1,0 +1,11 @@
+<div x-data="__reviewXState__()"
+     x-init="await initializeMyAccountReviewForm({data: '{{ data }}', formLevelData: '{{ formLevelData }}'})"
+    @notify-close-success-modal="()=>{
+        showReviewSuccessModal = false;
+        document.getElementById('reviewxForm')?.classList.add('hidden');
+        document.getElementById('isShowTable')?.classList.remove('hidden');
+    }">
+
+    {% include "storefront/widget/Features/ReviewForm/index.twig" %}
+    {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
+</div>

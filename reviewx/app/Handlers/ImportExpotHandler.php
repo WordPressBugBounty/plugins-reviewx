@@ -8,6 +8,6 @@ class ImportExpotHandler implements InvokableContract
 {
     public function __invoke()
     {
-        View::output('import-export', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
+        View::output('storeadmin/import-export', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
     }
 }

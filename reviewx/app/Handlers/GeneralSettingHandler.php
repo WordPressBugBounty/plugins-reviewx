@@ -10,6 +10,6 @@ class GeneralSettingHandler implements InvokableContract
 {
     public function __invoke()
     {
-        View::output('settings', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
+        View::output('storeadmin/settings', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
     }
 }

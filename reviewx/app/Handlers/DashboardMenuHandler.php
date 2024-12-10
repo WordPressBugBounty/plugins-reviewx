@@ -10,6 +10,6 @@ class DashboardMenuHandler implements InvokableContract
 {
     public function __invoke()
     {
-        View::output('dashboard', ['title' => 'Welcome Deshboard', 'content' => 'A WordPress Plugin development framework for humans']);
+        View::output('storeadmin/dashboard', ['title' => 'Welcome Deshboard', 'content' => 'A WordPress Plugin development framework for humans']);
     }
 }

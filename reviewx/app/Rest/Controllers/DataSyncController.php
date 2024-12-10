@@ -2,7 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\Apiz\Http\Response;
+use Rvx\Models\Site;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\Services\DataSyncService;
 use Rvx\Utilities\Helper;
@@ -35,8 +35,8 @@ class DataSyncController implements InvokableContract
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
         }
     }
-    public function dataSynComplete($request)
+    public function dataSynComplete()
     {
-        $this->dataSyncService->dataSynComplete($request->get_params());
+        return Site::where("is_saas_sync", 0)->update(['is_saas_sync' => 1]);
     }
 }

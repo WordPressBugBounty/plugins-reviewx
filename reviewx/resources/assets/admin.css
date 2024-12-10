@@ -1,0 +1,126 @@
+/*@tailwind base;*/
+
+.\!rvx-m-0 {
+  margin: 0px !important
+}
+
+.rvx-my-space16 {
+  margin-top: 16px;
+  margin-bottom: 16px
+}
+
+.rvx-flex {
+  display: flex
+}
+
+.rvx-cursor-pointer {
+  cursor: pointer
+}
+
+.rvx-items-center {
+  align-items: center
+}
+
+.rvx-gap-space16 {
+  gap: 16px
+}
+
+.rvx-rounded-md {
+  border-radius: 0.375rem
+}
+
+.rvx-border {
+  border-width: 1px
+}
+
+.rvx-border-4 {
+  border-width: 4px
+}
+
+.rvx-border-solid {
+  border-style: solid
+}
+
+.rvx-border-primary {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 67 221 / var(--tw-border-opacity, 1))
+}
+
+.\!rvx-border-l-primary {
+  --tw-border-opacity: 1 !important;
+  border-left-color: rgb(0 67 221 / var(--tw-border-opacity, 1)) !important
+}
+
+.rvx-bg-primary {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 67 221 / var(--tw-bg-opacity, 1))
+}
+
+.rvx-p-space8 {
+  padding: 8px
+}
+
+.\!rvx-py-space8 {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important
+}
+
+.rvx-px-space16 {
+  padding-left: 16px;
+  padding-right: 16px
+}
+
+.rvx-font-medium {
+  font-weight: 500
+}
+
+.rvx-text-neutral-700 {
+  --tw-text-opacity: 1;
+  color: rgb(97 97 97 / var(--tw-text-opacity, 1))
+}
+
+.rvx-text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
+
+.rvx-no-underline {
+  text-decoration-line: none
+}
+
+/* Custom Scrollbar */
+
+.rvx-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  /* Width of the scrollbar */
+  height: 8px;
+  /* Height of the scrollbar (for horizontal scrolling) */
+}
+
+.rvx-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  /* Track background color */
+}
+
+.rvx-scrollbar::-webkit-scrollbar-thumb {
+  background: #acabab;
+  /* Thumb color */
+  border-radius: 4px;
+  /* Rounded corners */
+}
+
+.rvx-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #857e7e;
+  /* Hover color */
+}
+
+.hover\:rvx-bg-primary-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 57 187 / var(--tw-bg-opacity, 1))
+}
+
+.hover\:rvx-text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+}
+

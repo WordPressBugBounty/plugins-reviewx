@@ -4,6 +4,9 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
         type: import('vue').PropType<string>;
         required: true;
     };
+    disclosureButtonClass: {
+        type: import('vue').PropType<string>;
+    };
     haveAccess: {
         type: import('vue').PropType<boolean>;
         default: boolean;
@@ -13,6 +16,9 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     id: {
         type: import('vue').PropType<string>;
         required: true;
+    };
+    disclosureButtonClass: {
+        type: import('vue').PropType<string>;
     };
     haveAccess: {
         type: import('vue').PropType<boolean>;

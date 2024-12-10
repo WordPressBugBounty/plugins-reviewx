@@ -24,6 +24,6 @@ class OnboardMenuHandler implements InvokableContract
                 exit;
             }
         }
-        View::output('onboard', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
+        View::output('storeadmin/onboard', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
     }
 }

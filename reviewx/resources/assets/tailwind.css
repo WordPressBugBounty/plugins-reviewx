@@ -1,3 +1,23 @@
 /*@tailwind base;*/
 @tailwind components;
 @tailwind utilities;
+
+/* Custom Scrollbar */
+.rvx-scrollbar::-webkit-scrollbar {
+    width: 6px; /* Width of the scrollbar */
+    height: 8px; /* Height of the scrollbar (for horizontal scrolling) */
+}
+
+.rvx-scrollbar::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Track background color */
+}
+
+.rvx-scrollbar::-webkit-scrollbar-thumb {
+    background: #acabab; /* Thumb color */
+    border-radius: 4px; /* Rounded corners */
+}
+
+.rvx-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #857e7e; /* Hover color */
+}
+

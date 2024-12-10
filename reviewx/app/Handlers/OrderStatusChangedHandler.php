@@ -20,8 +20,11 @@ class OrderStatusChangedHandler
     public function prepareData($order, $new_status) : array
     {
         $orderStatusToTimestampKey = $this->orderStatusToTimestampKey($new_status);
-        $orderStatusData = ["status" => $new_status, $orderStatusToTimestampKey => \date('Y-m-d H:i:s')];
-        $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), 'created_at' => $order->get_date_created()->date('Y-m-d H:i:s'), 'updated_at' => \date('Y-m-d H:i:s')];
+        $current_time = \wp_date('Y-m-d H:i:s');
+        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', $order->get_date_created()->getTimestamp()) : null;
+        $updated_at = \wp_date('Y-m-d H:i:s', $order->get_date_modified()->getTimestamp()) ?? \wp_date('Y-m-d H:i:s');
+        $orderStatusData = ["status" => $new_status, $orderStatusToTimestampKey => $current_time];
+        $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), 'created_at' => $created_at, 'updated_at' => $updated_at];
         $modifiedOrder = \array_merge($orderData, $orderStatusData);
         return ['order' => $modifiedOrder, 'order_items' => $this->orderItems($order, $orderStatusToTimestampKey, $orderStatusData)];
     }

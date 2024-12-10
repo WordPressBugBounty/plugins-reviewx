@@ -65,7 +65,7 @@ class LoginService extends Service
     }
     public function prepareData($site) : array
     {
-        return ['site_id' => $site['id'], 'uid' => $site['uid'], 'name' => $site['name'], 'domain' => $site['domain'], 'url' => $site['url'], 'locale' => $site['locale'], 'email' => $site['email'], 'secret' => $site['key'], 'created_at' => \date('Y-m-d H:i:s', \time()), 'updated_at' => \date('Y-m-d H:i:s', \time())];
+        return ['site_id' => $site['id'], 'uid' => $site['uid'], 'name' => $site['name'], 'domain' => $site['domain'], 'url' => $site['url'], 'locale' => $site['locale'], 'email' => $site['email'], 'secret' => $site['key'], 'created_at' => \wp_date('Y-m-d H:i:s'), 'updated_at' => \wp_date('Y-m-d H:i:s')];
     }
     public function forgetPassword($data)
     {

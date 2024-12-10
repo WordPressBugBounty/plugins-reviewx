@@ -37,7 +37,6 @@ use Rvx\Handlers\WoocommerceSettingsSaveHandler;
 use Rvx\Handlers\WoocommerceCommentUntrashHandler;
 use Rvx\Handlers\RvxInit\PermalinkStructureHandler;
 use Rvx\Handlers\WcTemplates\WcAccountDetailsError;
-use Rvx\Handlers\RvxInit\LoadReviewxCreateSiteTable;
 use Rvx\Handlers\WoocommerceCommentMoveToTrashHandler;
 use Rvx\Handlers\RichSchma\WoocommerceRichSchmaHandler;
 use Rvx\Handlers\WoocommerceCommentStatusChangeHandler;
@@ -70,13 +69,12 @@ class PluginServiceProvider extends ServiceProvider
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
         add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
-        add_action('admin_notices', new ReviewxAdminNoticeHandler());
+        //        add_action('admin_notices', new ReviewxAdminNoticeHandler());
         add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);
         add_action('woocommerce_thankyou', new OrderCreateHandler());
         add_action('woocommerce_order_status_changed', new OrderStatusChangedHandler(), 10, 4);
-        add_action('plugins_loaded', new LoadReviewxCreateSiteTable(), 10);
         add_action('woocommerce_delete_order', new OrderDeleteHandler());
         /**
          * Category Hook
@@ -129,7 +127,7 @@ class PluginServiceProvider extends ServiceProvider
          */
         add_filter('woocommerce_locate_template', new WoocommerceLocateTemplateHandler(), 10, 3);
         // add_filter('comments_template', new CommentDefaultTemplateHandler(), 10);
-        add_filter('comments_template', new CommentBoxHandle(), 99);
+        //add_filter('comments_template', new CommentBoxHandle(), 99);
         //Woocommerce Avater
         add_action('woocommerce_edit_account_form', new WcEditAccountForm(), 10);
         add_action('woocommerce_save_account_details_errors', new WcAccountDetailsError(), 10, 1);

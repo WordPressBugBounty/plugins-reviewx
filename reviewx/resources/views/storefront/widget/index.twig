@@ -1,0 +1,72 @@
+<style>
+    #rvx-storefront-widget p {
+        margin: 0;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+<div id="rvx-storefront-widget"
+     x-data="__reviewXState__()"
+     x-init="await initialize({data: '{{ data }}', formLevelData: '{{ formLevelData }}'})"
+     @notify-attachment="notifyAttachmentAdded($event.detail.reviewAttachFiles)"
+     @notify-close-success-modal="showReviewSuccessModal = false"
+     @notify-like-dislike="await fetchReviews({productId: rvxAttributes.product.id})">
+
+    <div x-show="fetchReviewsSettingsIsLoading" class="rvx-grid rvx-place-content-center rvx-h-[186px]">
+        {% include "storefront/widget/Components/Spinner.twig" %}
+    </div>
+    <template x-if="!fetchReviewsSettingsIsLoading" x-cloak>
+        <div>
+            {% include "storefront/widget/Features/Aggregations/index.twig" %}
+
+            {% include "storefront/widget/Components/RecommendedBanner.twig" %}
+
+            {% include "storefront/widget/Features/MultriCriteriaAggregation/index.twig" %}
+        </div>
+    </template>
+
+    <template x-if="haveReviews || isFiltering">
+        <div>
+            {% include 'storefront/widget/Features/Reviews/Filter/ReviewFilter.twig' %}
+        </div>
+    </template>
+
+    <template x-if="fetchReviewsIsLoading">
+        <div class="rvx-grid rvx-place-content-center rvx-h-[186px]">
+            {% include "storefront/widget/Components/Spinner.twig" %}
+        </div>
+    </template>
+
+
+
+
+
+    <template x-if="haveReviews && !fetchReviewsIsLoading && !fetchReviewsSettingsIsLoading" x-cloak>
+        <div>
+            {% include "storefront/widget/Features/Reviews/ReviewsLayout.twig" %}
+
+            {% include "storefront/widget/Features/Reviews/Modals/ReviewDetailModal.twig" %}
+        </div>
+    </template>
+
+
+    {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
+
+
+    <template x-if="(!haveReviews || isFiltering) && !fetchReviewsIsLoading" x-cloak>
+        <div class="rvx-bg-neutral-100 rvx-py-[64px] rvx-px-space24 rvx-rounded-md rvx-text-center">
+            {% include "storefront/widget/Components/EmptyPlaceholder.twig" %}
+        </div>
+    </template>
+
+
+    <div x-show="!fetchReviewsIsLoading || !fetchReviewsSettingsIsLoading" x-cloak>
+
+        {% include "storefront/widget/Components/UnVerifyUserPlaceholder.twig" %}
+
+        {% include "storefront/widget/Features/ReviewForm/index.twig" %}
+    </div>
+
+</div>

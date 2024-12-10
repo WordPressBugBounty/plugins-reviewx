@@ -8,6 +8,6 @@ class CptReviewsHandler implements InvokableContract
 {
     public function __invoke()
     {
-        View::output('cpt', ['cpt' => "cpt"]);
+        View::output('storeadmin/cpt', ['cpt' => "cpt"]);
     }
 }

@@ -7,13 +7,15 @@ use Rvx\Utilities\Auth\Client;
 class DataSyncApi extends \Rvx\Api\BaseApi
 {
     /**
-     * @param array $data
+     * @param array $files
+     * @param string $from
+     * @param int $object_count
      * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
-    public function dataSync(array $files, $from) : Response
+    public function dataSync(array $files, string $from = 'register', int $object_count = 0) : Response
     {
         $fileName = $files['tmp_name'];
-        return $this->withFile('file', $fileName, $files['full_path'])->post('sync?from=' . $from);
+        return $this->withFile('file', $fileName, $files['full_path'])->post('sync?from=' . $from . '&total_lines=' . $object_count);
     }
 }

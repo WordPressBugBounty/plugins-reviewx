@@ -15,7 +15,7 @@ class ReviewxAdminNoticeHandler
         // Generate nonce for AJAX
         $nonce = wp_create_nonce('rvx_dismiss_notice_nonce');
         // Render the notice
-        View::output('notice/notice', ['nonce' => $nonce]);
+        View::output('storeadmin/notice/notice', ['nonce' => $nonce]);
     }
     public function rvx_admin_deal_notice_until()
     {

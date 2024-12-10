@@ -49,7 +49,7 @@ class ProductHandler
             "post_type" => 'product',
             //get_post_type() code not use because import product issue
             "total_reviews" => (int) $currentProduct->get_review_count(),
-            "avg_rating" => $currentProduct->get_average_rating(),
+            "avg_rating" => (float) $currentProduct->get_average_rating(),
             "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0],
             "one_stars" => 0,
             "two_stars" => 0,
@@ -89,7 +89,7 @@ class ProductHandler
     public function customPost($post)
     {
         $image_url = get_the_post_thumbnail_url($post->ID, 'full');
-        $data = ["wp_id" => $post->ID, "title" => $post->post_title, "url" => get_permalink($post->ID), "description" => \strip_tags($post->post_excerpt), "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => '', "status" => $this->productStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => 0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => [\Rvx\Utilities\Auth\Client::getUid() . '-' . 0]];
+        $data = ["wp_id" => $post->ID, "title" => $post->post_title, "url" => get_permalink($post->ID), "description" => \strip_tags($post->post_excerpt), "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => '', "status" => $this->productStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => 0.0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => [\Rvx\Utilities\Auth\Client::getUid() . '-' . 0]];
         return $data;
     }
     public function getPostCategoryIds($post_ids)

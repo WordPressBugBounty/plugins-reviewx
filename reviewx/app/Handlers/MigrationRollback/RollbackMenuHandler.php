@@ -15,7 +15,7 @@ class RollbackMenuHandler implements InvokableContract
         $sharedMethods = new SharedMethods();
         $rollbackPrompt = new RollbackPrompt();
         echo '<div class="wrap p-6 bg-gray-100 rounded-lg shadow-md">';
-        View::output('rollback', ['title' => 'Rollback to ReviewX v1', 'content' => 'Revert to the previous version with ease and restore functionality seamlessly.', 'page_url' => $_SERVER['REQUEST_URI']]);
+        View::output('storeadmin/rollback', ['title' => 'Rollback to ReviewX v1', 'content' => 'Revert to the previous version with ease and restore functionality seamlessly.', 'page_url' => $_SERVER['REQUEST_URI']]);
         if (isset($_GET['rollback_start'])) {
             $is_pro_active = $sharedMethods->rvx_is_old_pro_plugin_active();
             if ($is_pro_active === \false) {

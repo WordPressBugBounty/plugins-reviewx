@@ -11,7 +11,7 @@ class ReviewGraphShortcode implements ShortcodeContract
         $attrs = shortcode_atts(['title' => null, 'product_id' => null], $attrs);
         $productId = $attrs['product_id'];
         $attributes = $this->productWiseReviewShow($productId);
-        return View::render('shortcode/reviewGraph', ['title' => $attrs['title'], 'data' => $attributes]);
+        return View::render('storefront/shortcode/reviewGraph', ['title' => $attrs['title'], 'data' => $attributes]);
     }
     public function productWiseReviewShow($productId)
     {

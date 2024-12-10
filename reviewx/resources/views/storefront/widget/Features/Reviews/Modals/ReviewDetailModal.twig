@@ -1,0 +1,384 @@
+    <template x-if="showReviewDetailsModal">
+        <div x-data="reviewDetailsModal({ selectedReviewDetails })" x-show="showReviewDetailsModal" id="rvx-review-details" class="rvx-fixed rvx-top-0 rvx-left-0 rvx-z-[99] rvx-flex rvx-items-center rvx-justify-center rvx-w-screen rvx-h-screen" x-cloak>
+            <div x-show="showReviewDetailsModal"
+                 x-transition:enter="rvx-ease-out rvx-duration-300"
+                 x-transition:enter-start="rvx-opacity-0"
+                 x-transition:enter-end="rvx-opacity-100"
+                 x-transition:leave="rvx-ease-in rvx-duration-300"
+                 x-transition:leave-start="rvx-opacity-100"
+                 x-transition:leave-end="rvx-opacity-0"
+                 @click="showReviewDetailsModal=false" class="rvx-absolute rvx-inset-0 rvx-w-full rvx-h-full rvx-bg-black rvx-bg-opacity-40"></div>
+            <div x-show="showReviewDetailsModal"
+                 x-transition:enter="rvx-ease-out rvx-duration-300"
+                 x-transition:enter-start="rvx-opacity-0 rvx-translate-y-4 sm:rvx-translate-y-0 sm:rvx-scale-95"
+                 x-transition:enter-end="rvx-opacity-100 rvx-translate-y-0 sm:rvx-scale-100"
+                 x-transition:leave="rvx-ease-in rvx-duration-200"
+                 x-transition:leave-start="rvx-opacity-100 rvx-translate-y-0 sm:rvx-scale-100"
+                 x-transition:leave-end="rvx-opacity-0 rvx-translate-y-4 sm:rvx-translate-y-0 sm:rvx-scale-95"
+                 class="rvx-relative  rvx-rounded-lg rvx-w-[300px] md:rvx-w-[871px] rvx-h-[557px] rvx-max-h-[557px] rvx-shadow-xl">
+                <div class="rvx-w-full rvx-h-full rvx-relative">
+                    <div class="rvx-grid rvx-grid-cols-12 rvx-rounded-lg rvx-h-full">
+                            <div class="rvx-col-span-12 md:rvx-col-span-5 rvx-bg-[#EFEFEF] rvx-grid rvx-place-items-center rvx-rounded-t-lg sm:rvx-rounded-t-none md:rvx-rounded-l-lg">
+                                <template x-if="currentPreviewImage">
+                                    <span>
+                                        <img x-show="currentPreviewImage && getFileType(currentPreviewImage).isImage" :src="currentPreviewImage" alt="test" class="rvx-w-full rvx-h-[150px] sm:rvx-h-auto rvx-object-cover " />
+                                        <video x-show="currentPreviewImage && getFileType(currentPreviewImage).isVideo" width="100%" height="200" controls class="rvx-h-[150px] sm:rvx-h-auto">
+                                            <source :src="currentPreviewImage">
+                                        </video>
+                                    </span>
+                                </template>
+
+                                <span x-show="!selectedReviewDetails?.attachments.length" class="material-symbols-rounded !rvx-text-[150px] rvx-text-neutral-700 rvx-pointer-events-none"> {{__('gallery_thumbnail', 'reviewx')}}</span>
+                            </div>
+
+                        <div class="rvx-col-span-12 md:rvx-col-span-7 rvx-flex rvx-flex-col rvx-bg-white rvx-px-space16 rvx-py-space8 sm:rvx-py-space24 rvx-relative md:rvx-rounded-r-lg">
+                            <!-- Reviewer info -->
+                            <div class="sm:rvx-py-space12">
+                                <div class="rvx-flex rvx-gap-space8 rvx-review-user">
+                                    <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                                        <div x-data="avatarComponent({src: '', alt: selectedReviewDetails.reviewer_name})" x-show="!selectedReviewDetails.is_anonymous"
+                                             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] sm:rvx-size-[56px] rvx-text-[32px] rvx-bg-white rvx-border rvx-border-solid rvx-border-neutral-400 rvx-rounded-full rvx-review-user__avatar">
+                                            <template x-if="showImage()">
+                                                <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
+                                            </template>
+                                            <template x-if="!showImage()">
+                                                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
+                                                    <span x-text="alt.charAt(0).toUpperCase()"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div x-data="avatarComponent({src: '', alt: 'Anonymous'})" x-show="selectedReviewDetails.is_anonymous"
+                                             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] sm:rvx-size-[56px] rvx-text-[32px] rvx-bg-white rvx-border rvx-border-solid rvx-border-neutral-400  rvx-rounded-full rvx-review-user__avatar">
+                                            <template x-if="showImage()">
+                                                <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
+                                            </template>
+                                            <template x-if="!showImage()">
+                                                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
+                                                    <span x-text="alt.charAt(0).toUpperCase()"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="rvx-flex rvx-items-center rvx-gap-space12">
+                                            <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+
+                                                <p x-show="!selectedReviewDetails.is_anonymous"
+                                                   x-text="censorReviewerName({isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name, str: selectedReviewDetails.reviewer_name})"
+                                                   class="!rvx-text-[16px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-900 rvx-review-user__name">
+                                                </p>
+                                                <p x-show="selectedReviewDetails.is_anonymous"
+                                                   class="!rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-900 rvx-review-user__name">
+                                                    {{__('Anonymous', 'reviewx')}}
+                                                </p>
+
+{#                                                <p x-show="!selectedReviewDetails.is_anonymous"#}
+{#                                                   x-text="selectedReviewDetails.reviewer_name"#}
+{#                                                   class="!rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-800 rvx-review-user__name">#}
+{#                                                </p>#}
+{#                                                <p x-show="selectedReviewDetails.is_anonymous"#}
+{#                                                   class="!rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-800 rvx-review-user__name">#}
+{#                                                    {{__('Anonymous', 'reviewx')}}#}
+{#                                                </p>#}
+                                            </div>
+
+                                            <div x-show="!reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                                                <p class="rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-review-user__name">
+                                                    {{__('Shopper', 'reviewx')}}
+                                                </p>
+                                            </div>
+
+                                            <p x-show="reviewSettingsData?.data.setting?.review_settings.reviews.show_verified_badge && selectedReviewDetails?.is_verified"
+                                               class="rvx-flex rvx-items-center rvx-text-success rvx-gap-space5 !rvx-text-[14px] rvx-review-user__name">
+                                                <span class="material-symbols-rounded rvx-text-[16px]">{{__('check_circle', 'reviewx')}}</span>
+                                                {{__('Verified', 'reviewx')}}
+                                            </p>
+                                            <template x-if="reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country && selectedReviewDetails?.reviewer_flag">
+                                                <div x-data="__rvxTooltipComponent__()" x-init="initial()" class="rvx-relative">
+                                                    <div x-ref="tooltip" x-show="tooltipVisible"
+                                                         :class="{
+                        'rvx-top-[-15px] left-1/2 -rvx-translate-x-1/2 -rvx-mt-0.5 -rvx-translate-y-full' : tooltipPosition === 'top',
+                        'rvx-top-1/2 -rvx-translate-y-1/2 -rvx-ml-0.5 rvx-left-0 -rvx-translate-x-full' : tooltipPosition === 'left',
+                        'rvx-bottom-[-20px]  -rvx-translate-x-1/2 -rvx-mb-0.5 rvx-translate-y-full' : tooltipPosition === 'bottom',
+                        'rvx-top-1/2 -rvx-translate-y-1/2 -rvx-mr-0.5 rvx-right-0 rvx-translate-x-full' : tooltipPosition === 'right'
+                        }"
+                                                         class="rvx-absolute rvx-w-auto rvx-text-sm" x-cloak>
+
+                                                        <div x-show="tooltipVisible" x-transition class="rvx-relative rvx-px-2 rvx-py-1 rvx-text-white rvx-bg-black rvx-rounded rvx-bg-opacity-90">
+                                                            <p x-text="selectedReviewDetails?.reviewer_country_short_name" class="rvx-flex-shrink-0 rvx-block rvx-text-xs rvx-whitespace-nowrap"></p>
+                                                            <div x-ref="tooltipArrow" x-show="tooltipArrow"
+                                                                 :class="{
+                                                                 'rvx-bottom-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 rvx-translate-y-full' : tooltipPosition == 'top', 'rvx-right-0 -rvx-translate-y-1/2 rvx-top-1/2 h-2.5 -rvx-mt-px rvx-translate-x-full' : tooltipPosition == 'left',
+                                                                 'rvx-top-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 -rvx-translate-y-full' : tooltipPosition == 'bottom',
+                                                                 'rvx-left-0 -rvx-translate-y-1/2 rvx-top-1/2 rvx-h-2.5 -rvx-mt-px -rvx-translate-x-full' : tooltipPosition == 'right' }"
+                                                                 class="rvx-absolute rvx-inline-flex rvx-items-center rvx-justify-center rvx-overflow-hidden">
+
+                                                                <div :class="{ 'rvx-origin-top-left -rvx-rotate-45' : tooltipPosition == 'top', 'rvx-origin-top-left rvx-rotate-45' : tooltipPosition == 'left', 'rvx-origin-bottom-left rvx-rotate-45' : tooltipPosition == 'bottom', 'rvx-origin-top-right -rvx-rotate-45' : tooltipPosition == 'right' }" class="rvx-w-1.5 rvx-h-1.5 rvx-transform rvx-bg-black rvx-bg-opacity-90"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div x-ref="content">
+                                                        <img :src="selectedReviewDetails?.reviewer_flag" alt="flag" width="22" height="26">
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <template x-if="Number(selectedReviewDetails.rating)">
+                                            <div x-data="{
+                                            reviewAverage: Number(selectedReviewDetails.rating),
+                                            totalRating: 5
+                                        }" class="review rvx-flex rvx-gap-2 rvx-mb-2">
+                                                <template x-for="star in totalRating" :key="star">
+                                                    <div>
+                                                        <!-- Full star -->
+                                                        <template x-if="isFullStar(star, reviewAverage)">
+                                                            <svg class="rvx-review-form__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                            </svg>
+                                                        </template>
+
+                                                        <!-- Half star -->
+                                                        <template x-if="isHalfStar(star, reviewAverage)">
+                                                            <svg class="rvx-review-form__star-active-half" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+                                                                <defs>
+                                                                    <linearGradient id="grad">
+                                                                        <stop offset="50%" :stop-color="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" />
+                                                                        <stop offset="50%" stop-color="grey" />
+                                                                    </linearGradient>
+                                                                </defs>
+                                                                <path fill="url(#grad)" d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                            </svg>
+                                                        </template>
+
+                                                        <!-- Empty star -->
+                                                        <template x-if="isFullEmptyStar(star, reviewAverage)">
+                                                            <svg class="rvx-review-form__star-inactive" fill="none" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                            </svg>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <!-- Multi-Criteria -->
+                                <template x-if="reviewSettingsData?.data.setting?.review_settings.reviews.multicriteria.enable">
+                                    <div class="rvx-space-y-space12 rvx-gap-space16">
+                                        <template x-for="(rating, star) in createMultiCriteriaRatingObject({
+                                        criterias: reviewSettingsData?.data.setting.review_settings.reviews.multicriteria.criterias,
+                                        criteriaStats: selectedReviewDetails.criterias,
+                                         existingRating: Number(selectedReviewDetails.rating)
+                                        }
+                                        )" :key="rating.key">
+                                            <div class="rvx-grid rvx-grid-cols-12 rvx-gap-[26px]">
+                                                <div class="rvx-col-span-3 rvx-space-y-[20px]">
+                                                    <p x-text="rating.name" class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__multicriteria--name"></p>
+                                                </div>
+                                                <div class="rvx-col-span-9 rvx-flex rvx-gap-space5 rvx-items-center">
+                                                    <template x-for="star in 5" :key="star">
+                                                        <div>
+                                                            <!-- Full star -->
+                                                            <template x-if="isFullStar(star, rating.rating)">
+                                                                <svg class="rvx-review-form__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                                </svg>
+                                                            </template>
+
+                                                            <!-- Half star -->
+                                                            <template x-if="isHalfStar(star, rating.rating)">
+                                                                <svg class="rvx-review-form__star-active-half" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+                                                                    <defs>
+                                                                        <linearGradient id="grad">
+                                                                            <stop offset="50%" :stop-color="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" />
+                                                                            <stop offset="50%" stop-color="grey" />
+                                                                        </linearGradient>
+                                                                    </defs>
+                                                                    <path fill="url(#grad)" d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                                </svg>
+                                                            </template>
+
+                                                            <!-- Empty star -->
+                                                            <template x-if="isFullEmptyStar(star, rating.rating)">
+                                                                <svg class="rvx-review-form__star-inactive" fill="none" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                                </svg>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                            <!-- Review info -->
+                            <div class="rvx-font-nunito rvx-h-[270px] rvx-overflow-y-auto">
+                                <!-- Product Info -->
+                                <div class="rvx-flex rvx-justify-between rvx-items-center rvx-gap-space12">
+                                    <p class="!rvx-text-[20px] rvx-text-neutral-800 rvx-font-semibold rvx-leading-[32px]"
+                                       x-text="selectedReviewDetails.title">
+                                    </p>
+
+                                    <p class="!rvx-text-[12px] rvx-text-neutral-600" x-text="selectedReviewDetails.created_at">
+                                    </p>
+                                </div>
+
+                                <!-- feedback -->
+                                <p class="!rvx-text-[14px] rvx-leading-[22px] rvx-font-normal"
+                                   x-text="selectedReviewDetails.feedback">
+                                </p>
+
+                                <!-- feedback images -->
+                                <div x-show="selectedReviewDetails?.attachments?.length" class="rvx-flex rvx-gap-space12 rvx-mt-space24 rvx-mb-space16">
+                                    <template x-for="file in selectedReviewDetails?.attachments">
+                                        <div class="rvx-size-[80px]">
+                                            <img @click="previewImageHandler(file)" x-show="getFileType(file).isImage" :src="file" alt="test" class="!rvx-size-[80px] rvx-cursor-pointer rvx-object-cover !rvx-rounded-md" />
+                                            <video @click="previewImageHandler(file)" x-show="getFileType(file).isVideo" width="80" height="80" class="!rvx-size-[80px] rvx-cursor-pointer rvx-object-cover !rvx-rounded-md">
+                                                <source :src="file">
+                                            </video>
+                                        </div>
+
+                                    </template>
+                                </div>
+                                <!--                        owner reply-->
+                                <div x-show="selectedReviewDetails?.reply" class="rvx-mb-space20 rvx-mt-space16 rvx-review-owner-replay">
+                                    <div class="rvx-flex rvx-gap-space5">
+                                <span class="material-symbols-rounded rvx-text-[20px] rvx-review-owner-replay__icon">
+                                   {{__('reply', 'reviewx')}}
+                                  </span>
+                                        <p class="!rvx-text-[14px] rvx-font-semibold rvx-text-neutral-800 rvx-leading-[22px] rvx-review-owner-replay__owner-name">
+                                            {{__('Shop owner', 'reviewx')}}
+                                            <span class="rvx-font-normal rvx-leading-[22px] rvx-review-owner-replay__text"> {{__('replied', 'reviewx')}}</span>
+                                            <span class="rvx-font-normal rvx-leading-[22px] rvx-ml-space5 rvx-review-owner-replay__date"
+                                                  x-text="selectedReviewDetails.replied_at"></span>
+                                        </p>
+                                    </div>
+                                    <p class="!rvx-text-[14px] rvx-leading-[22px] rvx-review-owner-replay__feedback"
+                                       x-text="truncateString(selectedReviewDetails?.reply, 300)"></p>
+                                </div>
+                            </div>
+                            <!-- Help info -->
+                            <div class="rvx-font-nunito rvx-flex rvx-justify-between rvx-items-center rvx-gap-space8 rvx-absolute rvx-bottom-0">
+                                <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled">
+                                    <div x-data="reviewHelpInfoComponent()"
+                                         class="rvx-flex rvx-justify-end rvx-gap-space8 rvx-items-center rvx-pr-space16 rvx-pb-space16 rvx-review-footer">
+                                        <p class="!rvx-text-[14px] !rvx-text-neutral-700 rvx-review-footer__text">{{__('Was this helpful', 'reviewx')}}</p>
+                                        <!--    @click="storeFrontStore.likeDislikeHandler({ uid: review.wp_unique_id, preference: LIKE_DISLIKE_PREFERENCE.LIKES })"-->
+                                        <p class="!rvx-text-[14px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
+                                            <svg @click="likeDislikeHandler({ uid: selectedReviewDetails.wp_unique_id, preference: 1 })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
+                                                    <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />
+                                                </mask>
+                                                <g mask="url(#mask0_420_27618)">
+                                                    <path
+                                                            d="M17.5 7.9482C17.875 7.9482 18.2188 8.10098 18.5312 8.40654C18.8438 8.71209 19 9.05931 19 9.4482V10.6357C19 10.7468 18.9896 10.8475 18.9688 10.9378C18.9479 11.0281 18.9167 11.1218 18.875 11.219L16.3958 17.0315C16.2847 17.3093 16.1042 17.5315 15.8542 17.6982C15.6042 17.8649 15.3194 17.9482 15 17.9482H7C6.58333 17.9482 6.22917 17.8058 5.9375 17.5211C5.64583 17.2364 5.5 16.8788 5.5 16.4482V8.5732C5.5 8.36487 5.54167 8.16695 5.625 7.97945C5.70833 7.79195 5.81944 7.62876 5.95833 7.48987L10.1458 3.30237C10.3958 3.05237 10.7014 2.89265 11.0625 2.8232C11.4236 2.75376 11.7292 2.79542 11.9792 2.9482C12.2986 3.12876 12.5035 3.39265 12.5938 3.73987C12.684 4.08709 12.6944 4.42737 12.625 4.7607L12 7.9482H17.5ZM2.5 17.9482C2.09722 17.9482 1.74653 17.7989 1.44792 17.5003C1.14931 17.2017 1 16.851 1 16.4482V9.4482C1 9.04542 1.14931 8.69473 1.44792 8.39612C1.74653 8.09751 2.09722 7.9482 2.5 7.9482C2.90278 7.9482 3.25347 8.09751 3.55208 8.39612C3.85069 8.69473 4 9.04542 4 9.4482V16.4482C4 16.851 3.85069 17.2017 3.55208 17.5003C3.25347 17.7989 2.90278 17.9482 2.5 17.9482Z"
+                                                            :fill="selectedReviewDetails.preference?.preference === 1 ? '#757575' : '#E0E0E0'" />
+                                                </g>
+                                            </svg>
+                                            <span x-text="selectedReviewDetails.likes"></span>
+                                        </p>
+                                        <!--    @click="storeFrontStore.likeDislikeHandler({ uid: review.wp_unique_id, preference: LIKE_DISLIKE_PREFERENCE.DISLIKES })"-->
+                                        <p class="!rvx-text-[14px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-review-footer__thumbs">
+                                            <svg @click="likeDislikeHandler({ uid: selectedReviewDetails.wp_unique_id, preference: 2 })" class="rvx-cursor-pointer rvx-rotate-thumbs-down hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mt-[3px] rvx-review-footer__thumbs--dislike-icon" width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
+                                                    <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />
+                                                </mask>
+                                                <g mask="url(#mask0_420_27618)">
+                                                    <path
+                                                            d="M17.5 7.9482C17.875 7.9482 18.2188 8.10098 18.5312 8.40654C18.8438 8.71209 19 9.05931 19 9.4482V10.6357C19 10.7468 18.9896 10.8475 18.9688 10.9378C18.9479 11.0281 18.9167 11.1218 18.875 11.219L16.3958 17.0315C16.2847 17.3093 16.1042 17.5315 15.8542 17.6982C15.6042 17.8649 15.3194 17.9482 15 17.9482H7C6.58333 17.9482 6.22917 17.8058 5.9375 17.5211C5.64583 17.2364 5.5 16.8788 5.5 16.4482V8.5732C5.5 8.36487 5.54167 8.16695 5.625 7.97945C5.70833 7.79195 5.81944 7.62876 5.95833 7.48987L10.1458 3.30237C10.3958 3.05237 10.7014 2.89265 11.0625 2.8232C11.4236 2.75376 11.7292 2.79542 11.9792 2.9482C12.2986 3.12876 12.5035 3.39265 12.5938 3.73987C12.684 4.08709 12.6944 4.42737 12.625 4.7607L12 7.9482H17.5ZM2.5 17.9482C2.09722 17.9482 1.74653 17.7989 1.44792 17.5003C1.14931 17.2017 1 16.851 1 16.4482V9.4482C1 9.04542 1.14931 8.69473 1.44792 8.39612C1.74653 8.09751 2.09722 7.9482 2.5 7.9482C2.90278 7.9482 3.25347 8.09751 3.55208 8.39612C3.85069 8.69473 4 9.04542 4 9.4482V16.4482C4 16.851 3.85069 17.2017 3.55208 17.5003C3.25347 17.7989 2.90278 17.9482 2.5 17.9482Z"
+                                                            :fill="selectedReviewDetails.preference?.preference === 2 ? '#757575' : '#E0E0E0'" />
+                                                </g>
+                                            </svg>
+                                            <span x-text="selectedReviewDetails.dislikes"></span>
+                                        </p>
+                                    </div>
+                                </template>
+                                <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_sharing">
+                                    <div x-data="{dropdownOpen: false}" class="rvx-relative">
+                                        <span @click="dropdownOpen=true" class="material-symbols-rounded rvx-cursor-pointer !rvx-text-[20px] !rvx-text-neutral-700 hover:rvx-bg-neutral-200 hover:rvx-rounded">share</span>
+
+                                        <div x-show="dropdownOpen"
+                                             @click.away="dropdownOpen=false"
+                                             x-transition:enter="rvx-ease-out rvx-duration-200"
+                                             x-transition:enter-start="-rvx-translate-y-2"
+                                             x-transition:enter-end="rvx-translate-y-0"
+                                             class="rvx-absolute rvx-top-0 rvx-z-50 rvx-w-56 rvx-mt-space16 -rvx-right-[50px]"
+                                             x-cloak>
+                                            <div class="rvx-p-1 rvx-mt-1 rvx-text-sm rvx-bg-white rvx-border rvx-rounded-md rvx-shadow-md rvx-border-neutral-200/70 rvx-text-neutral-700">
+                                                <a :href="selectedReviewDetails.socials.facebook" class="rvx-flex rvx-items-center rvx-gap-space5 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M23 12C23 5.92485 18.0751 1 12 1C5.92485 1 1 5.92485 1 12C1 17.4904 5.02253 22.0411 10.2812 22.8663V15.1797H7.48827V12H10.2812V9.57654C10.2812 6.81967 11.9234 5.29687 14.4361 5.29687C15.6396 5.29687 16.8984 5.51171 16.8984 5.51171V8.21873H15.5113C14.1449 8.21873 13.7187 9.06666 13.7187 9.93656V12H16.7695L16.2818 15.1797H13.7187V22.8663C18.9774 22.0411 23 17.4904 23 12Z" fill="#424242"/>
+                                                        <path d="M16.2818 15.1797L16.7695 12H13.7187V9.93656C13.7187 9.06666 14.1449 8.21873 15.5113 8.21873H16.8984V5.51171C16.8984 5.51171 15.6396 5.29687 14.4361 5.29687C11.9234 5.29687 10.2812 6.81967 10.2812 9.57654V12H7.48827V15.1797H10.2812V22.8663C10.8413 22.9542 11.4153 23 12 23C12.5847 23 13.1587 22.9542 13.7187 22.8663V15.1797H16.2818Z" fill="white"/>
+                                                    </svg>
+                                                    <p>{{__('Facebook', 'reviewx')}}</p>
+                                                </a>
+
+                                                <a :href="selectedReviewDetails.socials.twitter" class="rvx-flex rvx-items-center rvx-gap-space5 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M18.3173 2.06018H21.6747L14.3414 10.4979L23 21.9397H16.1968L10.8956 15.004L4.7992 21.9397H1.44177L9.30522 12.9277L1 2.06018H7.97992L12.7952 8.42163L18.3173 2.06018ZM17.1245 19.9076H18.9799L6.96386 3.95978H4.93173L17.1245 19.9076Z" fill="#424242"/>
+                                                    </svg>
+                                                    <p>{{__('X (Twitter)', 'reviewx')}}</p>
+                                                </a>
+
+                                                <a :href="selectedReviewDetails.socials.linkedin" class="rvx-flex rvx-items-center rvx-gap-space5 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M19.745 19.6689H16.4853V14.6143C16.4853 13.409 16.4636 11.8574 14.7899 11.8574C13.0922 11.8574 12.8324 13.1706 12.8324 14.5266V19.6685H9.57269V9.2743H12.702V10.6948H12.7458C13.059 10.1646 13.5115 9.72844 14.0553 9.43276C14.599 9.13709 15.2135 8.99297 15.8334 9.01575C19.1373 9.01575 19.7464 11.1675 19.7464 13.9668L19.745 19.6689ZM5.89466 7.85348C5.52052 7.85354 5.15476 7.74376 4.84365 7.538C4.53253 7.33225 4.29003 7.03976 4.1468 6.69754C4.00356 6.35531 3.96602 5.97872 4.03895 5.61538C4.11187 5.25203 4.29198 4.91826 4.55648 4.65627C4.82099 4.39427 5.15802 4.21582 5.52495 4.14349C5.89188 4.07115 6.27223 4.10818 6.61791 4.24988C6.96359 4.39158 7.25907 4.6316 7.46698 4.93958C7.67489 5.24756 7.78591 5.60967 7.78597 5.98012C7.78602 6.22609 7.73713 6.46966 7.6421 6.69692C7.54708 6.92418 7.40779 7.13069 7.23217 7.30464C7.05654 7.4786 6.84802 7.6166 6.61853 7.71077C6.38904 7.80494 6.14307 7.85343 5.89466 7.85348ZM7.52451 19.6689H4.26141V9.2743H7.52451V19.6689ZM21.3701 1.11013H2.62341C2.19791 1.10537 1.78789 1.26808 1.48349 1.56249C1.17908 1.85689 1.00519 2.25892 1 2.68022V21.3193C1.00502 21.7408 1.1788 22.1431 1.4832 22.4379C1.78759 22.7326 2.1977 22.8956 2.62341 22.8911H21.3701C21.7967 22.8964 22.208 22.7339 22.5135 22.4391C22.8191 22.1444 22.9941 21.7417 23 21.3193V2.67888C22.9939 2.25674 22.8188 1.85426 22.5132 1.55985C22.2076 1.26545 21.7965 1.10321 21.3701 1.10878" fill="#424242"/>
+                                                        <path d="M19.745 19.6689H16.4853V14.6143C16.4853 13.409 16.4636 11.8574 14.7899 11.8574C13.0922 11.8574 12.8324 13.1706 12.8324 14.5266V19.6685H9.57269V9.2743H12.702V10.6948H12.7458C13.059 10.1646 13.5115 9.72844 14.0553 9.43276C14.599 9.13709 15.2135 8.99297 15.8334 9.01575C19.1373 9.01575 19.7464 11.1675 19.7464 13.9668L19.745 19.6689Z" fill="white"/>
+                                                        <path d="M5.89466 7.85348C5.52052 7.85354 5.15476 7.74376 4.84365 7.538C4.53253 7.33225 4.29003 7.03976 4.1468 6.69754C4.00356 6.35531 3.96602 5.97872 4.03895 5.61538C4.11187 5.25203 4.29198 4.91826 4.55648 4.65627C4.82099 4.39427 5.15802 4.21582 5.52495 4.14349C5.89188 4.07115 6.27223 4.10818 6.61791 4.24988C6.96359 4.39158 7.25907 4.6316 7.46698 4.93958C7.67489 5.24756 7.78591 5.60967 7.78597 5.98012C7.78602 6.22609 7.73713 6.46966 7.6421 6.69692C7.54708 6.92418 7.40779 7.13069 7.23217 7.30464C7.05654 7.4786 6.84802 7.6166 6.61853 7.71077C6.38904 7.80494 6.14307 7.85343 5.89466 7.85348Z" fill="white"/>
+                                                        <path d="M7.52451 19.6689H4.26141V9.2743H7.52451V19.6689Z" fill="white"/>
+                                                    </svg>
+                                                    <p> {{__('LinkedIn', 'reviewx')}}</p>
+                                                </a>
+
+                                                <a :href="selectedReviewDetails.socials.reddit" class="rvx-flex rvx-items-center rvx-gap-space5 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M12 1C5.92508 1 1 5.92508 1 12C1 15.0379 2.23148 17.7879 4.2218 19.7782L2.12664 21.8734C1.7107 22.2893 2.00547 23 2.59328 23H12C18.0749 23 23 18.0749 23 12C23 5.92508 18.0749 1 12 1Z" fill="#424242"/>
+                                                        <path d="M14.2378 6.18719C14.4286 6.99586 15.1548 7.59828 16.0219 7.59828C17.0342 7.59828 17.8549 6.77758 17.8549 5.76523C17.8549 4.75289 17.0342 3.93219 16.0219 3.93219C15.1367 3.93219 14.3985 4.55953 14.2266 5.39398C12.7442 5.55297 11.5866 6.81023 11.5866 8.33391C11.5866 8.33734 11.5866 8.33992 11.5866 8.34336C9.97445 8.41125 8.50234 8.87016 7.33359 9.59461C6.89961 9.25859 6.35477 9.05836 5.76352 9.05836C4.34469 9.05836 3.19484 10.2082 3.19484 11.627C3.19484 12.6566 3.79984 13.5434 4.67383 13.9534C4.75891 16.9354 8.0082 19.3339 12.0052 19.3339C16.0021 19.3339 19.2557 16.9328 19.3365 13.9482C20.2036 13.5357 20.8034 12.6514 20.8034 11.6279C20.8034 10.2091 19.6536 9.05922 18.2348 9.05922C17.6461 9.05922 17.1038 9.25773 16.6707 9.59117C15.4916 8.86156 14.0032 8.40266 12.3747 8.34164C12.3747 8.33906 12.3747 8.33734 12.3747 8.33476C12.3747 7.24336 13.1859 6.33758 14.2378 6.18891V6.18719ZM7.23047 13.2573C7.27344 12.3257 7.89219 11.6107 8.61148 11.6107C9.33078 11.6107 9.88078 12.3661 9.83781 13.2977C9.79484 14.2292 9.25773 14.5678 8.53758 14.5678C7.81742 14.5678 7.1875 14.1888 7.23047 13.2573ZM15.3997 11.6107C16.1198 11.6107 16.7386 12.3257 16.7807 13.2573C16.8237 14.1888 16.1929 14.5678 15.4736 14.5678C14.7543 14.5678 14.2163 14.2301 14.1734 13.2977C14.1304 12.3661 14.6795 11.6107 15.3997 11.6107ZM14.5437 15.4126C14.6787 15.4263 14.7646 15.5664 14.7122 15.6919C14.2696 16.7498 13.2246 17.4931 12.0052 17.4931C10.7857 17.4931 9.74156 16.7498 9.29812 15.6919C9.2457 15.5664 9.33164 15.4263 9.46656 15.4126C10.2572 15.3327 11.1123 15.2888 12.0052 15.2888C12.898 15.2888 13.7523 15.3327 14.5437 15.4126Z" fill="white"/>
+                                                    </svg>
+                                                    <p>{{__('Reddit', 'reviewx')}}</p>
+                                                </a>
+
+                                                <a :href="selectedReviewDetails.socials.copylink" class="rvx-flex rvx-items-center rvx-gap-space5 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M9 18C8.45 18 7.97917 17.8042 7.5875 17.4125C7.19583 17.0208 7 16.55 7 16V4C7 3.45 7.19583 2.97917 7.5875 2.5875C7.97917 2.19583 8.45 2 9 2H18C18.55 2 19.0208 2.19583 19.4125 2.5875C19.8042 2.97917 20 3.45 20 4V16C20 16.55 19.8042 17.0208 19.4125 17.4125C19.0208 17.8042 18.55 18 18 18H9ZM9 16H18V4H9V16ZM5 22C4.45 22 3.97917 21.8042 3.5875 21.4125C3.19583 21.0208 3 20.55 3 20V6H5V20H16V22H5Z" fill="#424242"/>
+                                                    </svg>
+                                                    <p>{{__('Copy Link', 'reviewx')}}</p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div @click="close()"
+                         class="rvx-absolute rvx-top-[10px] rvx-right-[-23px] rvx-size-space24 rvx-bg-neutral-300 rvx-rounded-sm rvx-cursor-pointer rvx-flex rvx-justify-center rvx-items-center hover:rvx-bg-neutral-200 rvx-transform">
+                        <span class="material-symbols-rounded rvx-text-[20px] rvx-text-center rvx-w-full">{{__('close', 'reviewx')}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+<script>
+    function reviewDetailsModal({ selectedReviewDetails }) {
+        console.log('selectedReviewDetails', selectedReviewDetails)
+        return {
+            selectedReviewDetails,
+            currentPreviewImage: selectedReviewDetails?.attachments[0] || null,
+            close() {
+                this.showReviewDetailsModal= false
+                // this.$dispatch('notify-close-review-details-modal');
+            },
+            previewImageHandler(url) {
+                this.currentPreviewImage = url;
+            },
+        };
+    }
+</script>
+
+<style>
+    .rvx-rotate-thumbs-down {
+        transform: rotate(180deg);
+    }
+</style>

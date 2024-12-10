@@ -36,7 +36,7 @@ class ImportProductHandler
     }
     public function prepareImportedData($product)
     {
-        $data = ['rid' => 'rid://Product/' . $product->ID, 'wp_id' => $product->get_id(), 'title' => $product->get_name(), 'url' => get_permalink($product->get_id()), 'description' => $product->get_short_description(), 'slug' => $product->get_slug(), 'image' => wp_get_attachment_url($product->get_image_id()), 'status' => $this->productStatus($product->get_status()), 'post_type' => 'product', 'total_reviews' => 0, 'price' => $product->get_price() ?? 0, 'avg_rating' => 0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => $this->getProductCategories($product)];
+        $data = ['rid' => 'rid://Product/' . $product->ID, 'wp_id' => $product->get_id(), 'title' => $product->get_name(), 'url' => get_permalink($product->get_id()), 'description' => $product->get_short_description(), 'slug' => $product->get_slug(), 'image' => wp_get_attachment_url($product->get_image_id()), 'status' => $this->productStatus($product->get_status()), 'post_type' => 'product', 'total_reviews' => 0, 'price' => $product->get_price() ?? 0, 'avg_rating' => 0.0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => $this->getProductCategories($product)];
         return $data;
     }
     public function productPrepareForSync($product)

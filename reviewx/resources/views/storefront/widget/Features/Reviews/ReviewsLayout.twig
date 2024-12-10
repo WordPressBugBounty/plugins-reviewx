@@ -1,0 +1,26 @@
+
+<style>
+    .rvx-masonry-layout {
+        columns: 4 220px;
+        column-gap: 16px;
+    }
+
+</style>
+
+
+
+<div :class="`${layoutView === 'masonry' || layoutView === 'grid' ? 'rvx-masonry-layout' : '' } rvx-review-wrapper`">
+    <template x-for="review in reviewsData?.data?.reviews">
+        <div class="rvx-rounded-md rvx-shadow-100 rvx-bg-neutral-200 rvx-columns-box rvx-review-card" :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-p-space24'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
+
+        {% include 'storefront/widget/Features/Reviews/ReviewCard.twig' %}
+
+        </div>
+    </template>
+</div>
+
+
+<!--v-if="hasNextPage"-->
+<div x-show="reviewsData?.data?.meta.next_cursor" class="rvx-grid rvx-place-content-center rvx-mt-space20">
+    <button class="rvx-border-neutral-600 rvx-text-neutral-800 hover:rvx-border-neutral-600 hover:rvx-text-neutral-600 rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-font-semibold focus:rvx-bg-transparent rvx-bg-transparent disabled:!rvx-cursor-not-allowed" @click="loadMoreReviewHandler" :loader="fetchReviewsIsLoading" :disabled="fetchReviewsIsLoading"> {{__('Load More Reviews', 'reviewx')}}</button>
+</div>

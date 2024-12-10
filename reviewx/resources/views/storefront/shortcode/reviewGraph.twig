@@ -1,0 +1,15 @@
+<div x-data="__reviewXState__()"
+      x-init="await initializeReviewGraphShortCodes({data: '{{ data }}' })">
+      <style>
+        .rvx-review-form__star-active{
+            fill: #ecbb09;
+        }
+        .rvx-review-form__star-inactive{
+            fill: gray;
+        }
+    </style>
+    <div
+         class="rvx-flex rvx-justify-between rvx-items-center">
+        {% include "storefront/widget/Features/Aggregations/aggregations.twig" %}
+    </div>
+</div>

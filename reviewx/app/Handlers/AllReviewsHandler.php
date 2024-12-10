@@ -8,6 +8,6 @@ class AllReviewsHandler implements InvokableContract
 {
     public function __invoke()
     {
-        View::output('index', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
+        View::output('storeadmin/index', ['title' => 'Welcome to WPDrill', 'content' => 'A WordPress Plugin development framework for humans']);
     }
 }
