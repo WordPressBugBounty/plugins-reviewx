@@ -2,7 +2,7 @@
 
 namespace Rvx;
 
-use Rvx\Rest\Controllers\TestController;
+use Rvx\Rest\Middleware\AdminMiddleware;
 use Rvx\WPDrill\Facades\Route;
 use Rvx\Rest\Middleware\AuthMiddleware;
 use Rvx\Rest\Controllers\UserController;
@@ -25,9 +25,9 @@ use Rvx\Rest\Controllers\StoreFrontReviewController;
 use Rvx\Rest\Middleware\DevMiddleware;
 use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
+use Rvx\Rest\Controllers\LogController;
 Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     Route::post('/login', [LoginController::class, 'login']);
-    Route::post('/facker', [TestController::class, 'fakeData']);
     Route::post('/login/key', [LoginController::class, 'license_key']);
     Route::post('/forget/password', [LoginController::class, 'forgetPassword']);
     Route::post('/reset/password', [LoginController::class, 'resetPassword']);
@@ -214,6 +214,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
      * Sync
      */
     Route::get('/data/sync', [DataSyncController::class, 'dataSync']);
+    Route::get('/sync/status', [DataSyncController::class, 'syncStatus']);
     Route::get('/backend/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [ReviewController::class, 'getSingleProductAllReviews']);
 });
 Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
@@ -236,4 +237,8 @@ Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManage
     Route::post('/storefront/widgets/short/code/reviews', [StoreFrontReviewController::class, 'getSpecificReviewItem']);
     //wp setting get form db
     Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
+});
+Route::group(['prefix' => '/api/v1', 'middleware' => AdminMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+    Route::get('/rvx/error/log/', [LogController::class, 'rvxRecentLog']);
+    Route::get('/append/json/', [LogController::class, 'appendJsonSync']);
 });

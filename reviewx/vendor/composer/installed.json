@@ -405,17 +405,17 @@
         },
         {
             "name": "hassankhan\/config",
-            "version": "3.1.0",
-            "version_normalized": "3.1.0.0",
+            "version": "3.2.0",
+            "version_normalized": "3.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/hassankhan\/config.git",
-                "reference": "8e1c07f4fdc2b986b8a781f0dcba155af2a579b6"
+                "reference": "cf63da451c4d226df983017932b9cef1b6d49db5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/hassankhan\/config\/zipball\/8e1c07f4fdc2b986b8a781f0dcba155af2a579b6",
-                "reference": "8e1c07f4fdc2b986b8a781f0dcba155af2a579b6",
+                "url": "https:\/\/api.github.com\/repos\/hassankhan\/config\/zipball\/cf63da451c4d226df983017932b9cef1b6d49db5",
+                "reference": "cf63da451c4d226df983017932b9cef1b6d49db5",
                 "shasum": ""
             },
             "require": {
@@ -430,7 +430,7 @@
             "suggest": {
                 "symfony\/yaml": "^5.4"
             },
-            "time": "2022-12-20T19:48:37+00:00",
+            "time": "2024-12-09T16:20:44+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -464,7 +464,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/hassankhan\/config\/issues",
-                "source": "https:\/\/github.com\/hassankhan\/config\/tree\/3.1.0"
+                "source": "https:\/\/github.com\/hassankhan\/config\/tree\/3.2.0"
             },
             "install-path": "..\/hassankhan\/config"
         },
@@ -661,29 +661,29 @@
         },
         {
             "name": "nahid\/qarray",
-            "version": "v2.0.1",
-            "version_normalized": "2.0.1.0",
+            "version": "2.x-dev",
+            "version_normalized": "2.9999999.9999999.9999999-dev",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nahid\/qarray.git",
-                "reference": "02c33687d5981ab9720368b11a06d98d43e373d0"
+                "reference": "ea60481379cac51f345ac0377531cfc227e1740e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nahid\/qarray\/zipball\/02c33687d5981ab9720368b11a06d98d43e373d0",
-                "reference": "02c33687d5981ab9720368b11a06d98d43e373d0",
+                "url": "https:\/\/api.github.com\/repos\/nahid\/qarray\/zipball\/ea60481379cac51f345ac0377531cfc227e1740e",
+                "reference": "ea60481379cac51f345ac0377531cfc227e1740e",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "myclabs\/deep-copy": "^1.8",
-                "php": ">=5.6"
+                "php": ">=7.4"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^5.0 || ^6.0",
-                "symfony\/var-dumper": "^3.4"
+                "phpunit\/phpunit": "^5.0 || ^6.0 || ^7.1",
+                "symfony\/var-dumper": "^6.3"
             },
-            "time": "2024-11-03T05:05:32+00:00",
+            "time": "2024-11-03T03:17:23+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -713,7 +713,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nahid\/qarray\/issues",
-                "source": "https:\/\/github.com\/nahid\/qarray\/tree\/v2.0.1"
+                "source": "https:\/\/github.com\/nahid\/qarray\/tree\/master"
             },
             "install-path": "..\/nahid\/qarray"
         },

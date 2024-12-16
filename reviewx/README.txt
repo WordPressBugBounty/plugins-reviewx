@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,10 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.0.5 - 12-12-2024 =
+- Fix: SQL query optimize.
+- Fix: Custom post types (CPT).
+
 = 2.0.4 - 12-10-2024 =
 - Fix: Corrected data synchronization errors during onboarding.
 - Fix: Fixed issues related to reviews for custom post types (CPT).

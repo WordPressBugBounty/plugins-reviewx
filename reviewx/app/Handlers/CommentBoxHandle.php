@@ -2,10 +2,6 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Facades\Config;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Facades\DB;
 use Rvx\WPDrill\Facades\View;
 use Rvx\Utilities\Helper;
 class CommentBoxHandle
@@ -20,26 +16,14 @@ class CommentBoxHandle
     public function setRvxAttributes()
     {
         $user_id = get_current_user_id();
-        $user_name = Helper::loggedInUserFullName() ?: Helper::loggedInUserDisplayName();
-        $attributes = ['product' => ['id' => get_the_ID()], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => Helper::verifiedCustomer($user_id)]];
-        return \json_encode($attributes);
-        /** 
-        if(is_admin()){
-            echo '<script>
-                window.parent.__rvx_attributes__ = {
-                    ...window.parent.__rvx_attributes__,
-                    singleProduct:' . $attributesJson . '
-                }
-            </script>';
-        } else{
-            echo '<script>
-                window.__rvx_attributes__ = {
-                    ...window.__rvx_attributes__,
-                    singleProduct:' . $attributesJson . '
-                }
-            </script>';
+        if (\class_exists('WooCommerce') && is_singular() && 'product' === get_post_type()) {
+            $is_verified_customer = Helper::verifiedCustomer($user_id);
+        } else {
+            $is_verified_customer = 0;
         }
-        */
+        $user_name = Helper::loggedInUserFullName() ?: Helper::loggedInUserDisplayName();
+        $attributes = ['product' => ['id' => get_the_ID()], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => $is_verified_customer]];
+        return \json_encode($attributes);
     }
     public function commentBoxDefaultStyleForCustomPostType() : void
     {

@@ -41,6 +41,7 @@ humbug_phpscoper_expose_class('Flatted', 'Rvx\Flatted');
 humbug_phpscoper_expose_class('__TwigTemplate_dc885e6e534b617a5f93bfabd0b95889', 'Rvx\__TwigTemplate_dc885e6e534b617a5f93bfabd0b95889');
 humbug_phpscoper_expose_class('__TwigTemplate_2ebf23787b3af3e063e82fdc1d611027', 'Rvx\__TwigTemplate_2ebf23787b3af3e063e82fdc1d611027');
 humbug_phpscoper_expose_class('__TwigTemplate_6b31d68451843525135a5c97ca426d51', 'Rvx\__TwigTemplate_6b31d68451843525135a5c97ca426d51');
+humbug_phpscoper_expose_class('__TwigTemplate_f4027ad1d6114c344d6efb41022102b8', 'Rvx\__TwigTemplate_f4027ad1d6114c344d6efb41022102b8');
 humbug_phpscoper_expose_class('__TwigTemplate_c0976ddfb63e2ad6664af6d11344ef5b', 'Rvx\__TwigTemplate_c0976ddfb63e2ad6664af6d11344ef5b');
 humbug_phpscoper_expose_class('__TwigTemplate_9d829c521e8456cd23011e1609addde4', 'Rvx\__TwigTemplate_9d829c521e8456cd23011e1609addde4');
 humbug_phpscoper_expose_class('__TwigTemplate_0fea0b4dde4346d49ff636000dbf06f3', 'Rvx\__TwigTemplate_0fea0b4dde4346d49ff636000dbf06f3');

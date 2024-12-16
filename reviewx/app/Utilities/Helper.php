@@ -244,7 +244,7 @@ class Helper
     public static function rvxGetOrderStatus($orderStatus) : ?string
     {
         $parts = \explode('-', $orderStatus);
-        return $parts[1] ?? null;
+        return $parts[1];
     }
     public static function appendToJsonl($file, $data, $jsonOptions = \JSON_UNESCAPED_UNICODE)
     {
@@ -253,5 +253,15 @@ class Helper
             return \false;
         }
         return \fwrite($file, $json . \PHP_EOL);
+    }
+    public static function rvxLog($message, $context = 'debug')
+    {
+        $log_folder = RVX_DIR_PATH . 'log/';
+        if (!\is_dir($log_folder)) {
+            return;
+        }
+        $log_file = $log_folder . 'log-' . \wp_date('Y-m-d') . '.log';
+        $formatted_message = \sprintf("[%s] [%s]: %s\n", \wp_date('Y-m-d H:i:s'), \strtoupper($context), \print_r($message, \true));
+        \file_put_contents($log_file, $formatted_message, \FILE_APPEND);
     }
 }

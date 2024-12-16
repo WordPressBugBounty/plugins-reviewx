@@ -14,13 +14,8 @@ class BaseApi extends AbstractApi
      */
     public function getBaseUrl() : string
     {
-        // For Production
         return "https://api.reviewx.io";
-        // For Local
-        //         return "https://api.reviewx.io";
-        //          return "https://toolbar-ceremony-shared-pubmed.trycloudflare.com";
-        //  For Staging server
-        //        return "http://3.1.193.218:82";
+        //       return "http://3.1.193.218:82";
     }
     public function getIp() : string
     {

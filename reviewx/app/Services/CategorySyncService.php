@@ -26,11 +26,13 @@ class CategorySyncService extends \Rvx\Services\Service
                 if (\in_array((int) $term->term_id, $this->selectedTerms, \true)) {
                     $formatedTerm = $this->formatCategoryData($term);
                     $this->setSyncCategories($formatedTerm);
+                    Helper::rvxLog($formatedTerm);
                     Helper::appendToJsonl($file, $formatedTerm);
                     $catCount++;
                 }
             }
         });
+        Helper::rvxLog($catCount, "Category Done");
         return $catCount;
     }
     public function getPostTermRelation()
@@ -72,6 +74,6 @@ class CategorySyncService extends \Rvx\Services\Service
     }
     private function formatCategoryData($category) : array
     {
-        return ['rid' => 'rid://Category/' . $category->term_id, 'wp_id' => (int) $category->term_id, 'title' => $category->name, 'slug' => $category->slug, 'taxonomy' => $this->taxonomyRelation[$category->term_id], 'description' => $this->descriptionRelation[$category->term_id], 'parent_wp_unique_id' => Client::getUid() . '-' . $this->parentRelation[$category->term_id]];
+        return ['rid' => 'rid://Category/' . (int) $category->term_id, 'wp_id' => (int) $category->term_id, 'title' => $category->name ?? null, 'slug' => $category->slug ?? '', 'taxonomy' => $this->taxonomyRelation[$category->term_id] ?? '', 'description' => $this->descriptionRelation[$category->term_id] ?? '', 'parent_wp_unique_id' => isset($this->parentRelation[$category->term_id]) ? Client::getUid() . '-' . $this->parentRelation[$category->term_id] : ''];
     }
 }

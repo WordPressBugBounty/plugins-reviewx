@@ -39,4 +39,9 @@ class DataSyncController implements InvokableContract
     {
         return Site::where("is_saas_sync", 0)->update(['is_saas_sync' => 1]);
     }
+    public function syncStatus()
+    {
+        $response = $this->dataSyncService->syncStatus();
+        return Helper::saasResponse($response);
+    }
 }

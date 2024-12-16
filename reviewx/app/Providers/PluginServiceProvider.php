@@ -2,6 +2,7 @@
 
 namespace Rvx\Providers;
 
+use Rvx\Handlers\RvxInit\DeleteLastSevenDaysLog;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\WPDrill\Plugin;
 use Rvx\Models\Site;

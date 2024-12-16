@@ -18,4 +18,8 @@ class DataSyncApi extends \Rvx\Api\BaseApi
         $fileName = $files['tmp_name'];
         return $this->withFile('file', $fileName, $files['full_path'])->post('sync?from=' . $from . '&total_lines=' . $object_count);
     }
+    public function syncStatus() : Response
+    {
+        return $this->get('/get/sync/status');
+    }
 }

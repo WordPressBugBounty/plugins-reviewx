@@ -60,7 +60,7 @@ class Clause
      * map all conditions with methods
      * @var array
      */
-    protected static $_conditionsMap = ['=' => 'equal', 'eq' => 'equal', '==' => 'strictEqual', 'seq' => 'strictEqual', '!=' => 'notEqual', 'neq' => 'notEqual', '!==' => 'strictNotEqual', 'sneq' => 'strictNotEqual', '>' => 'greaterThan', 'gt' => 'greaterThan', '<' => 'lessThan', 'lt' => 'lessThan', '>=' => 'greaterThanOrEqual', 'gte' => 'greaterThanOrEqual', '<=' => 'lessThanOrEqual', 'lte' => 'lessThanOrEqual', 'in' => 'in', 'notin' => 'notIn', 'inarray' => 'inArray', 'notinarray' => 'notInArray', 'null' => 'isNull', 'notnull' => 'isNotNull', 'exists' => 'exists', 'notexists' => 'notExists', 'startswith' => 'startWith', 'endswith' => 'endWith', 'match' => 'match', 'contains' => 'contains', 'dates' => 'dateEqual', 'instance' => 'instance', 'any' => 'any'];
+    protected static $_conditionsMap = ['=' => 'equal', 'eq' => 'equal', '==' => 'strictEqual', 'seq' => 'strictEqual', '!=' => 'notEqual', 'neq' => 'notEqual', '<>' => 'notEqual', '!==' => 'strictNotEqual', 'sneq' => 'strictNotEqual', '>' => 'greaterThan', 'gt' => 'greaterThan', '<' => 'lessThan', 'lt' => 'lessThan', '>=' => 'greaterThanOrEqual', 'gte' => 'greaterThanOrEqual', '<=' => 'lessThanOrEqual', 'lte' => 'lessThanOrEqual', 'in' => 'in', 'notin' => 'notIn', 'inarray' => 'inArray', 'notinarray' => 'notInArray', 'null' => 'isNull', 'notnull' => 'isNotNull', 'exists' => 'exists', 'notexists' => 'notExists', 'startswith' => 'startWith', 'endswith' => 'endWith', 'match' => 'match', 'contains' => 'contains', 'dates' => 'dateEqual', 'instance' => 'instance', 'type' => 'type', 'any' => 'any'];
     /**
      * @param array $props
      * @return $this
@@ -596,6 +596,18 @@ class Clause
     public function whereIn($key = null, $value = [])
     {
         $this->where($key, 'in', $value);
+        return $this;
+    }
+    /**
+     * make WHERE DATA TYPE clause
+     *
+     * @param null $key
+     * @param $value
+     * @return $this
+     */
+    public function whereDataType($key, $value)
+    {
+        $this->where($key, 'type', $value);
         return $this;
     }
     /**

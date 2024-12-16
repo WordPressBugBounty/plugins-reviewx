@@ -3,6 +3,7 @@
 namespace Rvx\Services;
 
 use Rvx\Api\DataSyncApi;
+use Exception;
 class DataSyncService extends \Rvx\Services\Service
 {
     protected \Rvx\Services\OrderService $orderService;
@@ -15,17 +16,18 @@ class DataSyncService extends \Rvx\Services\Service
         try {
             $file_path = RVX_DIR_PATH . 'sync.jsonl';
             $file = \fopen($file_path, 'w');
+            $totalLines = 0;
             $syncedCaterories = new \Rvx\Services\CategorySyncService();
-            $catCount = $syncedCaterories->syncCategory($file);
-            $userCount = (new \Rvx\Services\UserSyncService())->syncUser($file);
-            $totalLines = $catCount + $userCount;
+            $totalLines += $syncedCaterories->syncCategory($file);
+            $totalLines += (new \Rvx\Services\UserSyncService())->syncUser($file);
+            $processProduct = new \Rvx\Services\ProductSyncService($syncedCaterories);
+            $productsCount = $processProduct->processProductForSync($file);
+            $totalLines += $productsCount;
+            $totalLines += (new \Rvx\Services\ReviewSyncService($processProduct))->processReviewForSync($file);
             if (\class_exists('WooCommerce')) {
-                $processProduct = new \Rvx\Services\ProductSyncService($syncedCaterories);
-                $productCount = $processProduct->processProductForSync($file);
-                $orderCount = (new \Rvx\Services\OrderItemSyncService())->syncOrder($file);
-                $orderItemCount = (new \Rvx\Services\OrderItemSyncService())->syncOrderItem($file);
-                $reviewCount = (new \Rvx\Services\ReviewSyncService($processProduct))->processReviewForSync($file);
-                $totalLines += $productCount + $orderCount + $orderItemCount + $reviewCount;
+                $order = new \Rvx\Services\OrderItemSyncService();
+                $totalLines += $order->syncOrder($file);
+                $totalLines += $order->syncOrderItem($file);
             }
             $file_info = $this->prepareFileInfo($file_path);
             $file = $_FILES['file'] = $file_info;
@@ -34,12 +36,16 @@ class DataSyncService extends \Rvx\Services\Service
                 \unlink($file_path);
             }
             return $fileUpload;
-        } catch (\Exception $e) {
-            throw new \Rvx\Services\Exception("An error occurred");
+        } catch (Exception $e) {
+            throw new Exception("An error occurred");
         }
     }
     private function prepareFileInfo($file_path)
     {
         return ['name' => \basename($file_path), 'full_path' => \realpath($file_path), 'type' => "application/json", 'tmp_name' => $file_path, 'error' => 0, 'size' => \filesize($file_path)];
+    }
+    public function syncStatus()
+    {
+        return (new DataSyncApi())->syncStatus();
     }
 }

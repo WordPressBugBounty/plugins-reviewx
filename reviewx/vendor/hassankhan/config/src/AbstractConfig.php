@@ -108,7 +108,7 @@ abstract class AbstractConfig implements ArrayAccess, ConfigInterface, Iterator
         $root = $this->data;
         // nested case
         foreach ($segments as $segment) {
-            if (\array_key_exists($segment, $root)) {
+            if (\is_array($root) && \array_key_exists($segment, $root)) {
                 $root = $root[$segment];
                 continue;
             } else {

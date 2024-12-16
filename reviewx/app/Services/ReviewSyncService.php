@@ -55,27 +55,29 @@ class ReviewSyncService extends \Rvx\Services\Service
                 $reviewCount++;
             }
         });
+        Helper::rvxLog($reviewCount, "Review Done");
         return $reviewCount;
     }
     public function processReview($comment) : array
     {
         $reply = null;
-        if ($this->commentReplyRelation[$comment->comment_ID] && \count($this->commentReplyRelation[$comment->comment_ID]) > 0) {
-            $reply = \reset($this->commentReplyRelation[$comment->comment_ID][0]);
+        if (!empty($this->commentReplyRelation[$comment->comment_ID]) && \is_array($this->commentReplyRelation[$comment->comment_ID])) {
+            $replyData = $this->commentReplyRelation[$comment->comment_ID][0] ?? null;
+            $reply = $replyData ? \reset($replyData) : null;
         }
         $trashed_at = null;
         if ($comment->comment_approved === 'trash') {
-            $status = $this->reviewTrashStatus[$comment->comment_ID] === 0 ? 'pending' : 'published';
-            $metaTrashTime = $this->reviewTrashTime[$comment->comment_ID];
-            $trashed_at = $metaTrashTime ? \date('Y-m-d H:i:s', $metaTrashTime) : null;
+            $status = !empty($this->reviewTrashStatus[$comment->comment_ID]) && $this->reviewTrashStatus[$comment->comment_ID] === 0 ? 'pending' : 'published';
+            $metaTrashTime = $this->reviewTrashTime[$comment->comment_ID] ?? null;
+            $trashed_at = $metaTrashTime ? \wp_date('Y-m-d H:i:s', $metaTrashTime) : null;
         } else {
             $status = $this->getCommentStatus($comment);
         }
-        return ['rid' => 'rid://Review/' . $comment->comment_ID, 'product_id' => $comment->comment_post_ID, 'wp_id' => $comment->comment_ID, 'wp_post_id' => $comment->comment_post_ID, 'rating' => $this->reviewMetaRating[$comment->comment_ID], 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'title' => \trim($this->reviewMetaTitle[$comment->comment_ID], '"') ?? null, 'feedback' => \strip_tags($comment->comment_content, '"') ?? null, 'verified' => $this->reviewMetaVerified[$comment->comment_ID] ?? \false, 'attachments' => $this->reviewMetaAttachments[$comment->comment_ID] ?? [], 'is_recommended' => $this->reviewMetaRecommended[$comment->comment_ID] ?? \false, 'is_anonymous' => $this->reviewMetaAnonymous[$comment->comment_ID] ?? \false, 'status' => $status, 'reply' => $reply, 'trashed_at' => $trashed_at, 'created_at' => $comment->comment_date, 'customer_id' => $comment->user_id, 'ip' => $comment->comment_author_IP, 'criterias' => $this->reviewMulticritriya[$comment->comment_ID]];
+        return ['rid' => 'rid://Review/' . (int) $comment->comment_ID, 'product_id' => (int) $comment->comment_post_ID, 'wp_id' => (int) $comment->comment_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'rating' => (int) $this->reviewMetaRating[$comment->comment_ID] ?? null, 'reviewer_email' => $comment->comment_author_email ?? null, 'reviewer_name' => $comment->comment_author ?? null, 'title' => $this->reviewMetaTitle[$comment->comment_ID] ?? null, 'feedback' => $comment->comment_content ?? null, 'verified' => !empty($this->reviewMetaVerified[$comment->comment_ID]), 'attachments' => $this->reviewMetaAttachments[$comment->comment_ID] ?? [], 'is_recommended' => !empty($this->reviewMetaRecommended[$comment->comment_ID]), 'is_anonymous' => !empty($this->reviewMetaAnonymous[$comment->comment_ID]), 'status' => $status, 'reply' => $reply, 'trashed_at' => $trashed_at, 'created_at' => \wp_date('Y-m-d H:i:s', \strtotime($comment->comment_date)) ?? null, 'customer_id' => $comment->user_id ?? null, 'ip' => $comment->comment_author_IP ?? null, 'criterias' => $this->reviewMulticritriya[$comment->comment_ID] ?? []];
     }
     public function syncReviewMata() : void
     {
-        DB::table('commentmeta')->chunk(100, function ($allCommentMeta) {
+        DB::table('commentmeta')->whereIn('meta_key', ['reviewx_title', 'rating', 'verified', 'reviewx_attachments', 'is_recommended', 'is_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time'])->chunk(100, function ($allCommentMeta) {
             foreach ($allCommentMeta as $commentMetas) {
                 if ($commentMetas->meta_key === 'reviewx_title') {
                     $this->reviewMetaTitle[$commentMetas->comment_id] = $commentMetas->meta_value;

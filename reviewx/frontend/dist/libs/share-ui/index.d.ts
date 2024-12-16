@@ -59,7 +59,7 @@ import { default as UIBrandLogo } from './components/BrandIcons/UIBrandLogo.vue'
 import { default as UIHelpBanner } from './components/Banner/UIHelpBanner.vue';
 import { default as UIBadge } from './components/Badge/UIBadge.vue';
 import { default as UIAvatar } from './components/Avatar/UIAvatar.vue';
-import { default as UIProgressBar } from './components/Aggregations/UIProgressBar.vue';
+import { default as UIProgressBar } from './components/ProgressBar/UIProgressBar.vue';
 import { default as UIAggregations } from './components/Aggregations/UIAggregations.vue';
 
 export { UIButton, UIAggregations, UIProgressBar, UIBadge, UIAvatar, UIHelpBanner, UIBrandLogo, UIBrandLogoWithText, UIDropdown, UIDropdownAction, UIDropdownSearch, UICard, UIColorPickerGroup, UIButtonOutline, UIDisclosure, UIDisclosureToggle, UIDivider, UITextarea, UISkeletonWrap, UIReviewViewMode, UISearchWithIcon, UIModuleSettingActions, UIInput, UISideDrawer, UIModal, UILine, UIPopover, UIProIcon, UIIcon, UISpinner, UITiptapEditor, UIErrorMessage, UIRadioGroup, UIInputFieldFloat, UIInputFloat, UIInputField, UICheckbox, UISwitch, UITypography, IDropdownOption, IReviewViewMode, ISearchProductOptions, IActionDropdown, IRadioGroupOptions, Aggregations, UIAdminMediaUpload, UICarousel, UIImagePreviewModal, UIStarIcon, UIDatePicker, UIDatePickerSelectedDate, CollapseExpAnimation, UIMediaUpload, UIMenu, UIMultiCriteriaAggregations, UIThumbsUpIcon, UIBulkCheckSearch, UISyncOverlay, MultiCriterias, MultiCriteriaStats, UITableSkeletonLoader, UISweetAlert, UISingleDatePicker, UIGrowthPlan, UIProLockIcon, UIToolTip };
