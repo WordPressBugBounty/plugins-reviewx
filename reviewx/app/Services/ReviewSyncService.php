@@ -77,34 +77,34 @@ class ReviewSyncService extends \Rvx\Services\Service
     }
     public function syncReviewMata() : void
     {
-        DB::table('commentmeta')->whereIn('meta_key', ['reviewx_title', 'rating', 'verified', 'reviewx_attachments', 'is_recommended', 'is_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time'])->chunk(100, function ($allCommentMeta) {
-            foreach ($allCommentMeta as $commentMetas) {
-                if ($commentMetas->meta_key === 'reviewx_title') {
-                    $this->reviewMetaTitle[$commentMetas->comment_id] = $commentMetas->meta_value;
+        DB::table('commentmeta')->whereIn('meta_key', ['reviewx_title', 'rating', 'verified', 'reviewx_attachments', 'is_recommended', 'is_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time', 'rvx_review_version'])->chunk(100, function ($allCommentMeta) {
+            foreach ($allCommentMeta as $commentMeta) {
+                $commentId = $commentMeta->comment_id;
+                // Process each meta_key
+                if ($commentMeta->meta_key === 'reviewx_title') {
+                    $this->reviewMetaTitle[$commentId] = $commentMeta->meta_value;
                 }
-                if ($commentMetas->meta_key === 'rating') {
-                    $this->reviewMetaRating[$commentMetas->comment_id] = $commentMetas->meta_value;
+                if ($commentMeta->meta_key === 'rating') {
+                    $this->reviewMetaRating[$commentId] = $commentMeta->meta_value;
+                    $this->reviewMulticritriya[$commentId] = $this->criteriaMapping($commentMeta->meta_value);
                 }
-                if ($commentMetas->meta_key === 'verified') {
-                    $this->reviewMetaVerified[$commentMetas->comment_id] = !\in_array($commentMetas->meta_value, ['', '0', 'false', 0, \false], \true);
+                if ($commentMeta->meta_key === 'verified') {
+                    $this->reviewMetaVerified[$commentId] = !\in_array($commentMeta->meta_value, ['', '0', 'false', 0, \false], \true);
                 }
-                if ($commentMetas->meta_key === 'reviewx_attachments') {
-                    $this->reviewMetaAttachments[$commentMetas->comment_id] = $this->attachments($commentMetas->meta_value);
+                if ($commentMeta->meta_key === 'reviewx_attachments') {
+                    $this->reviewMetaAttachments[$commentId] = $this->attachments($commentMeta->meta_value);
                 }
-                if ($commentMetas->meta_key === 'is_recommended') {
-                    $this->reviewMetaRecommended[$commentMetas->comment_id] = !\in_array($commentMetas->meta_value, ['', '0', 'false', 0, \false], \true);
+                if ($commentMeta->meta_key === 'is_recommended') {
+                    $this->reviewMetaRecommended[$commentId] = !\in_array($commentMeta->meta_value, ['', '0', 'false', 0, \false], \true);
                 }
-                if ($commentMetas->meta_key === 'is_anonymous') {
-                    $this->reviewMetaAnonymous[$commentMetas->comment_id] = !\in_array($commentMetas->meta_value, ['', '0', 'false', 0, \false], \true);
+                if ($commentMeta->meta_key === 'is_anonymous') {
+                    $this->reviewMetaAnonymous[$commentId] = !\in_array($commentMeta->meta_value, ['', '0', 'false', 0, \false], \true);
                 }
-                if ($commentMetas->meta_key === 'rating') {
-                    $this->reviewMulticritriya[$commentMetas->comment_id] = $this->criteriaMapping($commentMetas->meta_value);
+                if ($commentMeta->meta_key === '_wp_trash_meta_status') {
+                    $this->reviewTrashStatus[$commentId] = $commentMeta->meta_value;
                 }
-                if ($commentMetas->meta_key === '_wp_trash_meta_status') {
-                    $this->reviewTrashStatus[$commentMetas->comment_id] = $commentMetas->meta_value;
-                }
-                if ($commentMetas->meta_key === '_wp_trash_meta_time') {
-                    $this->reviewTrashTime[$commentMetas->comment_id] = $commentMetas->meta_value;
+                if ($commentMeta->meta_key === '_wp_trash_meta_time') {
+                    $this->reviewTrashTime[$commentId] = $commentMeta->meta_value;
                 }
             }
         });
@@ -151,16 +151,21 @@ class ReviewSyncService extends \Rvx\Services\Service
     }
     private function attachments($attachments)
     {
-        $imageUrls = $this->datasyncProductProcess->getProductAttachementRalation();
-        $data = \is_string($attachments) ? \unserialize($attachments) : '';
+        //        $imageUrls = $this->datasyncProductProcess->getProductAttachementRalation();
+        $data = \is_string($attachments) ? maybe_unserialize($attachments) : [];
         $links = [];
-        if ($data !== \false && isset($data['images'])) {
+        if (\is_array($data) && isset($data['images'])) {
             foreach ($data['images'] as $image_id) {
-                if (isset($imageUrls[$image_id])) {
-                    $links[] = $imageUrls[$image_id];
+                $image_url = wp_get_attachment_url($image_id);
+                if ($image_url) {
+                    $links[] = $image_url;
                 }
             }
             return $links;
         }
+        if (\is_array($data) && !isset($data['images'])) {
+            return $data;
+        }
+        return [];
     }
 }

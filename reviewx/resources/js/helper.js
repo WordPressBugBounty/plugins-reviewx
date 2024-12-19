@@ -78,8 +78,6 @@ function isHaveMultipleAttachment(attachmentLength, maxAttachment) {
     return attachmentLength > maxAttachment
 }
 
-
-
 function getFileExtension(url) {
     try {
         const parsedUrl = new URL(url);

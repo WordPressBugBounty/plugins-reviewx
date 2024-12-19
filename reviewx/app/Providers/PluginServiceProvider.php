@@ -2,8 +2,6 @@
 
 namespace Rvx\Providers;
 
-use Rvx\Handlers\RvxInit\DeleteLastSevenDaysLog;
-use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\WPDrill\Plugin;
 use Rvx\Models\Site;
 use Rvx\WPDrill\ServiceProvider;
@@ -51,6 +49,8 @@ use Rvx\Handlers\WcTemplates\WcSendEmailPermissionHandler;
 use Rvx\Handlers\WooCommerceReviewEditForm;
 use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
 use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
+use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
+use Rvx\Handlers\WChooks\StorefrontReviewLinkClickScroll;
 class PluginServiceProvider extends ServiceProvider
 {
     public function register() : void
@@ -98,6 +98,10 @@ class PluginServiceProvider extends ServiceProvider
          * Importd product
          */
         add_action('woocommerce_product_import_inserted_product_object', new ProductImportHandler(), 20, 2);
+        /**
+         * Woocommerce Hooks
+         */
+        add_action('wp_footer', [new StorefrontReviewLinkClickScroll(), 'addScrollScript'], 10);
         /**
          * Woocommerce review table sync with saas
          */

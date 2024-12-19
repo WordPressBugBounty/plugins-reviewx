@@ -21,8 +21,8 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit\/phpunit": "^5.0 || ^6.0 || ^7.1",
-        "symfony\/var-dumper": "^6.3"
+        "phpunit\/phpunit": "^5.0 || ^6.0",
+        "symfony\/var-dumper": "^3.4"
     },
     "autoload": {
         "psr-4": {
@@ -37,6 +37,6 @@
             "Rvx\\Nahid\\JsonQ\\Tests\\": "tests\/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

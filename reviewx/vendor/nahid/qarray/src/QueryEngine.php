@@ -11,9 +11,9 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
     /**
      * this constructor read data from file and parse the data for query
      *
-     * @param ?string $data
+     * @param string $data
      */
-    public function __construct(?string $data = null)
+    public function __construct($data = null)
     {
         if (\is_file($data) && \file_exists($data) || \filter_var($data, \FILTER_VALIDATE_URL)) {
             $this->collect($this->readPath($data));
@@ -27,7 +27,7 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
      * @return string
      * @throws ConditionNotAllowedException
      */
-    public function __toString() : string
+    public function __toString()
     {
         return $this->toJson();
     }
@@ -35,18 +35,18 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
      * @param string $path
      * @return array
      */
-    public abstract function readPath(string $path);
+    public abstract function readPath($path);
     /**
      * @param string $data
      * @return array
      */
-    public abstract function parseData(string $data);
+    public abstract function parseData($data);
     /**
-     * @param mixed $key
+     * @param $key
      * @return mixed
      * @throws KeyNotPresentException
      */
-    public function __get(mixed $key) : mixed
+    public function __get($key)
     {
         if (isset($this->_data[$key]) or \is_null($this->_data[$key])) {
             return $this->_data[$key];
@@ -56,81 +56,81 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
     /**
      * Property override for current object
      *
-     * @param mixed $key
-     * @param mixed $val
+     * @param $key
+     * @param $val
      */
-    public function __set(mixed $key, mixed $val) : void
+    public function __set($key, $val)
     {
         if (\is_array($this->_data)) {
             $this->_data[$key] = $val;
         }
     }
     /**
-     * @return array
+     * @return mixed
      * @throws ConditionNotAllowedException
      */
-    public function __invoke() : array
+    public function __invoke()
     {
         return $this->toArray();
     }
     /**
      * Implementation of ArrayAccess : check existence of the target offset
      *
-     * @param mixed $offset
+     * @param mixed $key
      * @return bool
      */
-    public function offsetExists(mixed $offset) : bool
+    public function offsetExists($key)
     {
-        return isset($this->_data[$offset]);
+        return isset($this->_data[$key]);
     }
     /**
      * Implementation of ArrayAccess : Get the target offset
      *
-     * @param mixed $offset
+     * @param mixed $key
      * @return mixed|KeyNotExists
      */
-    public function offsetGet(mixed $offset) : mixed
+    public function offsetGet($key)
     {
-        if ($this->offsetExists($offset)) {
-            return $this->_data[$offset];
+        if ($this->offsetExists($key)) {
+            return $this->_data[$key];
         }
         return new KeyNotExists();
     }
     /**
      * Implementation of ArrayAccess : Set the target offset
      *
-     * @param mixed $offset
+     * @param mixed $key
      * @param mixed $value
      */
-    public function offsetSet(mixed $offset, mixed $value) : void
+    public function offsetSet($key, $value)
     {
-        $this->_data[$offset] = $value;
+        $this->_data[$key] = $value;
     }
     /**
      * Implementation of ArrayAccess : Unset the target offset
      *
-     * @param mixed $offset
+     * @param mixed $key
      */
-    public function offsetUnset(mixed $offset) : void
+    public function offsetUnset($key)
     {
-        if ($this->offsetExists($offset)) {
-            unset($this->_data[$offset]);
+        if ($this->offsetExists($key)) {
+            unset($this->_data[$key]);
         }
     }
     /**
      * Implementation of Iterator : Rewind the Iterator to the first element
      *
-     * @return void
+     * @return mixed|void
      */
-    public function rewind() : void
+    public function rewind()
     {
-        \reset($this->_data);
+        return \reset($this->_data);
     }
     /**
      * Implementation of Iterator : Return the current element
      * @return mixed
      */
-    public function current() : mixed
+    public function current()
     {
         $data = \current($this->_data);
         if (!\is_array($data)) {
@@ -142,27 +142,27 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
     /**
      * Implementation of Iterator : Return the key of the current element
      *
-     * @return mixed
+     * @return int|mixed|null|string
      */
-    public function key() : mixed
+    public function key()
     {
         return \key($this->_data);
     }
     /**
      * Implementation of Iterator : Move forward to next element
      *
-     * @return |void
+     * @return mixed|void
      */
-    public function next() : void
+    public function next()
     {
-        \next($this->_data);
+        return \next($this->_data);
     }
     /**
      * Implementation of Iterator : Checks if current position is valid
      *
      * @return bool
      */
-    public function valid() : bool
+    public function valid()
     {
         return \key($this->_data) !== null;
     }
@@ -276,8 +276,9 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
      *
      * @param $column
      * @return $this
+     * @throws ConditionNotAllowedException
      */
-    public function countGroupBy($column) : self
+    public function countGroupBy($column)
     {
         $this->prepare();
         $data = [];
@@ -319,8 +320,9 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
      * count prepared data
      *
      * @return int
+     * @throws ConditionNotAllowedException
      */
-    public function count() : int
+    public function count()
     {
         $this->prepare();
         return \count($this->_data);
@@ -331,7 +333,7 @@ abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \C
      * @return int
      * @throws ConditionNotAllowedException
      */
-    public function size() : int
+    public function size()
     {
         return $this->count();
     }

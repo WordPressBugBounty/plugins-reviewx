@@ -10553,7 +10553,7 @@ const Hb = ["width", "height"], Yb = /* @__PURE__ */ se({
   },
   setup(e, { emit: t }) {
     const r = t, n = ({ haveAccess: o, eventName: i }) => {
-      console.log("haveAccess", o), o && r(i);
+      o && r(i);
     };
     return (o, i) => (Z(), ge($b, {
       "pop-over-panel-class": `rvx-absolute rvx-w-[163px] rvx-z-10 rvx-right-[-20px] rvx-shadow ${o.popOverClass}`
@@ -12035,7 +12035,7 @@ const l3 = ["placeholder"], s3 = /* @__PURE__ */ se({
           $(X(du), {
             as: "div",
             onClose: r[1] || (r[1] = (n) => t.$emit("close")),
-            class: "rvx-relative z-10"
+            class: "rvx-relative rvx-z-10"
           }, {
             default: ee(() => [
               $(X(Un), {
@@ -29862,7 +29862,7 @@ const oN = /* @__PURE__ */ Se(tN, [["render", nN], ["__file", "/var/www/html/wp-
         const d = await Rm({
           name: "data-sync-status"
         });
-        r.value = (s = (l = d == null ? void 0 : d.data) == null ? void 0 : l.data) == null ? void 0 : s.progress_status_percentage, ((f = (u = d == null ? void 0 : d.data) == null ? void 0 : u.data) == null ? void 0 : f.progress_status_percentage) === 100 && (clearInterval(n), t.value = !1, r.value = 0, localStorage.setItem("isAlreadySyncSuccess", JSON.stringify(d.data.sync)), location.reload());
+        r.value = (s = (l = d == null ? void 0 : d.data) == null ? void 0 : l.data) == null ? void 0 : s.progress_status_percentage, ((f = (u = d == null ? void 0 : d.data) == null ? void 0 : u.data) == null ? void 0 : f.progress_status_percentage) === 100 && (clearInterval(n), t.value = !1, r.value = 0, localStorage.setItem("isAlreadySyncSuccess", JSON.stringify(!0)), location.reload());
       } catch (d) {
         console.log(d);
       }

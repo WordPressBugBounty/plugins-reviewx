@@ -42,7 +42,7 @@ class LogController implements InvokableContract
             $logPath = RVX_DIR_PATH . 'log/';
             $files = \glob($logPath . '*');
             if (empty($files)) {
-                return ['message' => 'No log files found'];
+                echo 'No log files found';
             }
             $recentFile = null;
             foreach ($files as $file) {
@@ -51,7 +51,7 @@ class LogController implements InvokableContract
                 }
             }
             if (!\file_exists($recentFile)) {
-                return ['message' => 'File not found'];
+                echo 'File not found';
             }
             \header('Content-Type: text/plain');
             \header('Content-Disposition: attachment; filename="' . \basename($recentFile) . '"');
@@ -67,7 +67,7 @@ class LogController implements InvokableContract
         if ($data['action'] === 'remove') {
             $log_folder = RVX_DIR_PATH . 'log/';
             if (!\is_dir($log_folder)) {
-                return ['message' => 'Log folder does not exist'];
+                echo 'Log folder does not exist';
             }
             $files = \glob($log_folder . '/*');
             foreach ($files as $file) {
@@ -76,15 +76,16 @@ class LogController implements InvokableContract
                 }
             }
             if (\rmdir($log_folder)) {
-                return ['message' => 'Log folder and files deleted successfully'];
+                echo 'Log folder and files deleted successfully';
             } else {
-                return ['message' => 'Failed to delete the log folder'];
+                echo 'Failed to delete the log folder';
             }
         }
     }
     public function appendJsonSync($request)
     {
         $action = $request->get_param('action');
+        $from = $request->get_param('from');
         if ($action === 'create_jsonl') {
             $this->createJsonl();
         }
@@ -92,7 +93,7 @@ class LogController implements InvokableContract
             $this->downloadJsonl();
         }
         if ($action === 'manual_sync') {
-            $dataResponse = (new DataSyncService())->dataSync('register');
+            $dataResponse = (new DataSyncService())->dataSync($from);
             if ($dataResponse->getStatusCode() !== Response::HTTP_OK) {
                 return Helper::rvxApi(['error' => "Data Sync Failed"])->fails('Data Sync Failed', $dataResponse->getStatusCode());
             }

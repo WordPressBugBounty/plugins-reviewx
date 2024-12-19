@@ -15,7 +15,6 @@ class BaseApi extends AbstractApi
     public function getBaseUrl() : string
     {
         return "https://api.reviewx.io";
-        //       return "http://3.1.193.218:82";
     }
     public function getIp() : string
     {

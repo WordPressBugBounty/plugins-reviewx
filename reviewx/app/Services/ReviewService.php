@@ -716,36 +716,6 @@ class ReviewService extends \Rvx\Services\Service
     {
         return get_post_meta($data['product_id'], 'rvx_latest_reviews');
     }
-    public function insertProductPostMeta($data)
-    {
-        $product_wp_id = $data['product_wp_id'] ?? $data['wp_post_id'];
-        $review_data = ['wp_unique_id' => $data['wp_unique_id'], 'title' => $data['title'], 'feedback' => $data['feedback'], 'reviewer_name' => $data['reviewer_name'], 'reviewer_email' => $data['reviewer_email'], 'rating' => $data['rating'], 'created_at' => $data['created_at'], 'criterias' => $data['criterias'], 'attachments' => $data['attachments'] ?? [], 'is_verified' => $data['is_verified'] ?? \false, 'is_customer_verified' => $data['is_customer_verified'] ?? \false, 'is_anonymous' => $data['is_anonymous'] ?? \false, 'is_highlighted' => $data['is_highlighted'] ?? \false, 'product_title' => $data['product_title'] ?? '', 'product_wp_id' => $product_wp_id, 'status' => $data['status'], 'likes' => $data['likes'] ?? 0, 'dislikes' => $data['dislikes'] ?? 0, 'reply' => $data['reply'], 'replied_at' => $data['replied_at'], 'preference' => $data['preference'], 'customer' => $data['customer']];
-        if ($product_wp_id) {
-            $this->storeLatestReviews($product_wp_id, $review_data);
-        }
-    }
-    public function storeLatestReviews($product_id, $new_review)
-    {
-        $existing_reviews_json = get_post_meta($product_id, 'rvx_latest_reviews', \true);
-        $existing_reviews = $existing_reviews_json ? \json_decode($existing_reviews_json, \true) : ['data' => ['reviews' => []]];
-        $updated = \false;
-        foreach ($existing_reviews['data']['reviews'] as &$existing_review) {
-            if ($existing_review['wp_unique_id'] === $new_review['wp_unique_id']) {
-                $existing_review = \array_merge($existing_review, $new_review);
-                $updated = \true;
-                break;
-            }
-        }
-        if (!$updated) {
-            $existing_reviews['data']['reviews'][] = $new_review;
-        }
-        if (\count($existing_reviews['data']['reviews']) > 10) {
-            $existing_reviews['data']['reviews'] = \array_slice($existing_reviews['data']['reviews'], 0, 10);
-        }
-        // Encode reviews as JSON and update post meta
-        $reviews_json = \json_encode($existing_reviews, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
-        update_post_meta($product_id, 'rvx_latest_reviews', $reviews_json);
-    }
     public function postMetaReviewInsert($id, $latest_reviews)
     {
         update_post_meta($id, "_rvx_latest_reviews", wp_slash($latest_reviews));

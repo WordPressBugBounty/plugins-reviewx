@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,18 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.0.6 - 12-19-2024 =
+- Fix: Compatible with `SQL version 5.5.`
+- Fix: Review attachment missing issue.
+- Fix: Woocommerce review link smooth scroll on single product.
+- Fix: Showing wrong country flag.
+- Fix: Design issue in the bulk action menu.
+- Fix: Showing the wrong count in All reviews and review details modal.
+- Fix: Review images showing in the wrong format in review details modal.
+- Fix: Has a z-index issue with the review details modal and image preview modal
+- Fix: Spelling mistake `Mark as Span`  will be `Mark as Spam`
+- New: animated loader in data-sync overlay banner
+
 = 2.0.5 - 12-12-2024 =
 - Fix: SQL query optimize.
 - Fix: Custom post types (CPT).

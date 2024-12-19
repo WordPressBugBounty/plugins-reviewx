@@ -21,7 +21,7 @@ class create_sites_table extends Migration
             'is_saas_sync' => 'TINYINT(1) DEFAULT 0',
             // Corrected syntax
             'created_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-            'updated_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+            'updated_at' => 'DATETIME NULL',
         ]);
     }
     public function down() : Sql

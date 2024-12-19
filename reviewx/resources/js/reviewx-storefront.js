@@ -350,6 +350,17 @@ function __reviewXState__() {
         checkValidity(field) {
             this.storeFrontValidation[field] = !!this.newReview[field];
         },
+        async fetchUserIPAddress() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                console.log('Your IP address is:', data.ip);
+                return data.ip;
+            } catch (error) {
+                console.error('Error fetching IP address:', error);
+                return null; // Handle error as needed
+            }
+        },
         async reviewFormValidation() {
             let isValid = true;
             const allowReviewTitle = this.reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_titles
@@ -408,6 +419,7 @@ function __reviewXState__() {
         async reviewSubmitHandler() {
             const result = await this.reviewFormValidation()
             console.log('validate result ===========', result)
+            const userIP = await this.fetchUserIPAddress()
             if (!result) return
             this.isReviewSubmitting = true
 
@@ -421,6 +433,7 @@ function __reviewXState__() {
                 rating: this.newReview.rating,
                 is_anonymous: this.newReview.is_anonymous,
                 wp_post_id: this.reviewAggregationData?.data?.product?.wp_id,
+                ip: userIP ?? '0.0.0.0'
             }
             if (this.reviewSettingsData?.data?.setting?.review_settings.reviews.allow_recommendations) {
                 updatedReviewPayload.is_recommended = this.newReview.is_recommended;
@@ -607,7 +620,7 @@ function __reviewXState__() {
             console.log('parseFormLabels', parseFormLabels)
             const concatValue = {
                 ...parseAttData,
-                formLevelData:{
+                formLevelData: {
                     ...parseFormLabels
                 }
             }
@@ -632,7 +645,7 @@ function __reviewXState__() {
             console.log('parseFormLabels', parseFormLabels)
             const concatValue = {
                 ...parseAttData,
-                formLevelData:{
+                formLevelData: {
                     ...parseFormLabels
                 }
             }
