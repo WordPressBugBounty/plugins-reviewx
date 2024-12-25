@@ -14,9 +14,10 @@ function __reviewXState__() {
                 email: null,
                 isVerified: false,
             },
+            baseDomain: '',
             formLevelData: {}
         },
-        baseURL: `${location.origin}/wp-json/reviewx/api/v1/storefront`,
+        // baseURL: `${location.origin}/wp-json/reviewx/api/v1/storefront`,
         newReview: {
             rating: 5,
             reviewer_email: '',
@@ -60,8 +61,8 @@ function __reviewXState__() {
         rvxAttributesDataSetHandler(rvxAttributes) {
             this.rvxAttributes = {
                 ...this.rvxAttributes,
-                ...rvxAttributes
-
+                ...rvxAttributes,
+                baseDomain:`${rvxAttributes.domain.baseDomain}/wp-json/reviewx/api/v1/storefront`
             }
         },
         get isUserLoggedIn() {
@@ -105,7 +106,7 @@ function __reviewXState__() {
                 queryParams = this.generateQueryParams(newQuery)
             }
             try {
-                const url = `${this.baseURL}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
+                const url = `${this.rvxAttributes.baseDomain}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
                 const data = await fetch(url);
                 const res = await data.json();
                 if (loadMoreReview && this.reviewsData?.data?.reviews?.length) {
@@ -130,7 +131,7 @@ function __reviewXState__() {
             console.log('reviewListShortCodeIds', reviewListShortCodeIds)
             if (!reviewListShortCodeIds) return
             try {
-                const url = `${this.baseURL}/${reviewListShortCodeIds}/reviews`;
+                const url = `${this.rvxAttributes.baseDomain}/${reviewListShortCodeIds}/reviews`;
                 const data = await fetch(url);
                 const res = await data.json();
                 if (!res?.data?.reviews?.length) {
@@ -153,7 +154,7 @@ function __reviewXState__() {
                 review_ids: reviewsShortCodeIds
             }
             try {
-                const url = `${this.baseURL}/widgets/short/code/reviews`;
+                const url = `${this.rvxAttributes.baseDomain}/widgets/short/code/reviews`;
                 const data = await fetch(url, {
                     method: 'POST',
                     body: JSON.stringify(payload),
@@ -192,7 +193,7 @@ function __reviewXState__() {
             console.log('Fetching review settings');
             this.fetchReviewsSettingsIsLoading = true;
             try {
-                const data = await fetch(`${this.baseURL}/wp/settings`);
+                const data = await fetch(`${this.rvxAttributes.baseDomain}/wp/settings`);
                 const res = await data.json();
                 this.reviewSettingsData = res;
                 this.layoutView = res?.data.setting?.widget_settings?.outline?.layout_type
@@ -218,7 +219,7 @@ function __reviewXState__() {
             console.log('Fetching review Aggregation');
             this.fetchReviewsSettingsIsLoading = true;
             try {
-                const data = await fetch(`${this.baseURL}/${productId}/insight`);
+                const data = await fetch(`${this.rvxAttributes.baseDomain}/${productId}/insight`);
                 const res = await data.json();
                 if (res.data?.aggregation) {
                     this.formatAggregations = [
@@ -321,7 +322,7 @@ function __reviewXState__() {
                 if (!siteKey || !grecaptcha) {
                     return reject('Recaptcha or site key is not defined');
                 }
-                const baseAPIEndPoint = this.baseURL
+                const baseAPIEndPoint = this.rvxAttributes.baseDomain
                 grecaptcha.ready(function () {
                     grecaptcha.execute(siteKey, {action: 'submit'}).then(async function (token) {
                         try {
@@ -458,7 +459,7 @@ function __reviewXState__() {
             //     }
             // });
             try {
-                const data = await fetch(`${this.baseURL}/reviews`, {
+                const data = await fetch(`${this.rvxAttributes.baseDomain}/reviews`, {
                     method: 'post',
                     body: payload,
                 })
@@ -553,7 +554,7 @@ function __reviewXState__() {
                         preference,
                     };
                     try {
-                        const res = await fetch(`${this.baseURL}/reviews/${uid}/preference`, {
+                        const res = await fetch(`${this.rvxAttributes.baseDomain}/reviews/${uid}/preference`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -617,7 +618,6 @@ function __reviewXState__() {
         async initialize(data) {
             const parseAttData = JSON.parse(data.data)
             const parseFormLabels = JSON.parse(data.formLevelData)
-            console.log('parseFormLabels', parseFormLabels)
             const concatValue = {
                 ...parseAttData,
                 formLevelData: {

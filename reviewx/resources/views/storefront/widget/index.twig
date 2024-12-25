@@ -61,12 +61,29 @@
         </div>
     </template>
 
-
     <div x-show="!fetchReviewsIsLoading || !fetchReviewsSettingsIsLoading" x-cloak>
-
+        {% if not requireSignIn or (requireSignIn and user_is_logged_in) %}
+            {% include "storefront/widget/Features/ReviewForm/index.twig" %}
+        {% else %}
+            <div class="rvx-grid rvx-place-content-center rvx-rounded-md rvx-mt-space20 rvx-p-space6 rvx-bg-neutral-200 rvx-h-[186px]">
+                <p class="rvx-text-gray-600">
+                    Please 
+                    <a href="{{ login_url }}" class="rvx-text-blue-500 hover:rvx-text-blue-700 rvx-font-semibold rvx-underline">
+                        log in
+                    </a> 
+                    to submit a review.
+                </p>
+                {% if registration_enabled %}
+                    <p class="rvx-text-gray-600">
+                        Don't have an account? 
+                        <a href="{{ register_url }}" class="rvx-text-green-500 hover:rvx-text-green-700 rvx-font-semibold rvx-underline">
+                            Register here
+                        </a>.
+                    </p>
+                {% endif %}
+            </div>
+        {% endif %}
         {% include "storefront/widget/Components/UnVerifyUserPlaceholder.twig" %}
-
-        {% include "storefront/widget/Features/ReviewForm/index.twig" %}
     </div>
 
 </div>

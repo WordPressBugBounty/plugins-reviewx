@@ -264,4 +264,18 @@ class Helper
         $formatted_message = \sprintf("[%s] [%s]: %s\n", \wp_date('Y-m-d H:i:s'), \strtoupper($context), \print_r($message, \true));
         \file_put_contents($log_file, $formatted_message, \FILE_APPEND);
     }
+    public static function domainSupport()
+    {
+        // Get the full site URL including the subdomain and subdirectory (if present)
+        $site_url = get_site_url();
+        // Parse the URL to extract the components
+        $parsed_url = \parse_url($site_url);
+        // Rebuild the base URL (scheme + host + path)
+        $full_domain = $parsed_url['scheme'] . '://' . $parsed_url['host'];
+        // Add the path (subdirectory) if it exists
+        if (isset($parsed_url['path'])) {
+            $full_domain .= \rtrim($parsed_url['path'], '/');
+        }
+        return $full_domain;
+    }
 }

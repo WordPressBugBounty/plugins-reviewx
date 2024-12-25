@@ -10,8 +10,14 @@ class CommentBoxHandle
     {
         $attributes = $this->setRvxAttributes();
         $formData = $this->builderCustomizedFormTextsData();
+        $requireSignIn = get_option('comment_registration');
+        $userIsLoggedIn = is_user_logged_in();
+        $currentUrl = esc_url(add_query_arg([], wp_unslash($_SERVER['REQUEST_URI'])));
+        $loginUrl = wp_login_url($currentUrl);
+        $registerUrl = wp_registration_url();
+        $registrationEnabled = get_option('users_can_register');
         $this->commentBoxDefaultStyleForCustomPostType();
-        View::output('storefront/widget/index', ['data' => $attributes, 'formLevelData' => $formData]);
+        View::output('storefront/widget/index', ['data' => $attributes, 'formLevelData' => $formData, 'requireSignIn' => $requireSignIn, 'user_is_logged_in' => $userIsLoggedIn, 'login_url' => $loginUrl, 'register_url' => $registerUrl, 'registration_enabled' => $registrationEnabled]);
     }
     public function setRvxAttributes()
     {
@@ -22,7 +28,7 @@ class CommentBoxHandle
             $is_verified_customer = 0;
         }
         $user_name = Helper::loggedInUserFullName() ?: Helper::loggedInUserDisplayName();
-        $attributes = ['product' => ['id' => get_the_ID()], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => $is_verified_customer]];
+        $attributes = ['product' => ['id' => get_the_ID()], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($attributes);
     }
     public function commentBoxDefaultStyleForCustomPostType() : void

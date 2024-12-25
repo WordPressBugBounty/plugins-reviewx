@@ -2,6 +2,7 @@
 
 namespace Rvx\Shortcodes\Products;
 
+use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\View;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
 class ReviewListShortcode implements ShortcodeContract
@@ -23,8 +24,8 @@ class ReviewListShortcode implements ShortcodeContract
     }
     public function productWiseReviewShow($productIds)
     {
-        $productIdsJson = \json_encode($productIds);
-        return $productIdsJson;
+        $productIdsJson = [$productIds, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        return \json_encode($productIdsJson);
         /**
                 echo '<script>
                         window.__rvx_attributes__ = {

@@ -1,6 +1,5 @@
 <?php
 
-namespace Rvx;
 
 use Rvx\Handlers\Customize\WCUserDashboardAddReview;
 ?>

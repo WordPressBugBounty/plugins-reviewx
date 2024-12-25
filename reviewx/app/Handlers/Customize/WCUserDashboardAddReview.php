@@ -23,7 +23,7 @@ class WCUserDashboardAddReview
     {
         $user_id = get_current_user_id();
         $user_name = Helper::loggedInUserFullName() ?: Helper::loggedInUserDisplayName();
-        $attributes = ['userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => Helper::verifiedCustomer($user_id)]];
+        $attributes = ['userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => Helper::verifiedCustomer($user_id)], 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($attributes);
     }
     public function formDefaultTextsData()

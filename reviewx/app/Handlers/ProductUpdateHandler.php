@@ -24,7 +24,8 @@ class ProductUpdateHandler
     public function updateData($product)
     {
         $images = wp_get_attachment_image_src($product->image_id, 'full');
-        return ['wp_id' => $product->get_id(), 'title' => $product->get_name(), 'url' => get_permalink($product->get_id()), 'description' => \strip_tags($product->short_description), 'price' => (float) $product->regular_price, 'discounted_price' => (float) $product->price, 'slug' => $product->get_slug(), 'post_type' => get_post_type(), 'image' => $images[0] ?? null, 'status' => $this->productStatus($product->get_status()), "category_wp_unique_ids" => $this->productCategory($product)];
+        $title = $product->get_name();
+        return ['wp_id' => $product->get_id(), 'title' => isset($title) ? \htmlspecialchars($title, \ENT_QUOTES, 'UTF-8') : null, 'url' => get_permalink($product->get_id()), 'description' => isset($product->short_description) ? \htmlspecialchars($product->short_description, \ENT_QUOTES, 'UTF-8') : null, 'price' => (float) $product->regular_price, 'discounted_price' => (float) $product->price, 'slug' => $product->get_slug(), 'post_type' => get_post_type(), 'image' => $images[0] ?? null, 'status' => $this->productStatus($product->get_status()), "category_wp_unique_ids" => $this->productCategory($product)];
     }
     public function productCategory($product)
     {

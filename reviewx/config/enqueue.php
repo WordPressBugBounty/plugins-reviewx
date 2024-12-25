@@ -1,6 +1,7 @@
 <?php
 use Rvx\Utilities\Helper;
 $rvx_user_access_script = get_option('__user_setting_access') ?? '';
+
 return [
     'admin' => [
         'scripts' => [
@@ -110,7 +111,6 @@ return [
                         'type' => 'module',
                     ],
                 ],
-
         ],
    
        'localize_scripts' => [
@@ -119,6 +119,7 @@ return [
        ]],
        ['handle' => 'rvx_user_access_script', 'objectName' => 'rvx_locals', 'data' => [
         'rvx_localization_data_for_admin' => Helper::prepareLangArray(),
+           'rvx_full_domain_name' => Helper::domainSupport(),
     ]],
     ],
        

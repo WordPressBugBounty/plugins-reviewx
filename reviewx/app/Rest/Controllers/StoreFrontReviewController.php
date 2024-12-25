@@ -107,6 +107,13 @@ class StoreFrontReviewController implements InvokableContract
             $data = get_post_meta($request["product_id"], "_rvx_latest_reviews_insight", \true);
             if ($data) {
                 $aggregation = \json_decode($data, \true);
+                if (\is_array($aggregation)) {
+                    $aggregation['product']['title'] = \htmlspecialchars_decode($aggregation['product']['title'], \ENT_QUOTES);
+                }
+                if (!\is_array($aggregation)) {
+                    $modData = $this->productTitleAndDescriptionBackSlashRemove($data);
+                    $aggregation = \json_decode($modData, \true);
+                }
                 if ($aggregation) {
                     return Helper::rest($aggregation)->success("Success");
                 } else {
@@ -125,12 +132,17 @@ class StoreFrontReviewController implements InvokableContract
                 // No need to decode since it's always an array, just assign back
                 $latestAggregation["criteria_stats"] = $criteriaStat;
                 // Store the data in post meta as a JSON string
-                update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode(wp_slash($latestAggregation), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
+                update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
                 return ["data" => $latestAggregation];
             }
         } catch (\Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
+    }
+    public function productTitleAndDescriptionBackSlashRemove($data)
+    {
+        $dataModify = \preg_replace('/("title":")([^"\\\\]+)\\\\\'/', '$1$2\'', $data);
+        return \preg_replace('/("description":\\s*")([^"\\\\]|\\\\.)*"/', '$1Description"', $dataModify);
     }
     /**
      * @param $request

@@ -88,10 +88,10 @@ if ($has_orders) {
                 } elseif ('order-date' === $column_id) {
                     ?>
                                     <time datetime="<?php 
-                    echo $order->get_date_created() ? \Rvx\esc_attr($order->get_date_created()->date('c')) : '';
+                    echo $order->get_date_created() ? esc_attr($order->get_date_created()->date('c')) : '';
                     ?>">
                                         <?php 
-                    echo $order->get_date_created() ? \Rvx\esc_html(\Rvx\wc_format_datetime($order->get_date_created())) : 'N/A';
+                    echo $order->get_date_created() ? esc_html(wc_format_datetime($order->get_date_created())) : 'N/A';
                     ?>
                                     </time>
 
