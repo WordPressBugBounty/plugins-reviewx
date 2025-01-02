@@ -20,9 +20,6 @@ msgstr ""
 msgid "Add Multiple Review"
 msgstr ""
 
-msgid "Add new cpt"
-msgstr ""
-
 msgid "Add New Review"
 msgstr ""
 
@@ -38,16 +35,10 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-msgid "All Product"
-msgstr ""
-
 msgid "All Rating"
 msgstr ""
 
 msgid "All remainder settings"
-msgstr ""
-
-msgid "All request emails"
 msgstr ""
 
 msgid "All Reviews"
@@ -71,9 +62,6 @@ msgstr ""
 msgid "Allow customer to share review to the social media"
 msgstr ""
 
-msgid "Allow customers to decide whether they want to receive the review reminder email or not"
-msgstr ""
-
 msgid "Allow customers to like or dislike individual reviews. This helps highlight helpful feedback and engage your audience."
 msgstr ""
 
@@ -86,13 +74,7 @@ msgstr ""
 msgid "Allow customers to upload video with review"
 msgstr ""
 
-msgid "Allow like & dislike"
-msgstr ""
-
-msgid "Allow only like"
-msgstr ""
-
-msgid "Allow Photo Review"
+msgid "Allow photo review"
 msgstr ""
 
 msgid "Allow reviewers to add a recommendation (yes or no) for the product, giving future customers a clear sense of overall satisfaction."
@@ -134,9 +116,6 @@ msgstr ""
 msgid "Available on Pro plan"
 msgstr ""
 
-msgid "Available on the Growth plan and above"
-msgstr ""
-
 msgid "Available on the Pro plan and above"
 msgstr ""
 
@@ -150,6 +129,9 @@ msgid "Both"
 msgstr ""
 
 msgid "Brand Color"
+msgstr ""
+
+msgid "Browse"
 msgstr ""
 
 msgid "Button text"
@@ -170,7 +152,7 @@ msgstr ""
 msgid "By time"
 msgstr ""
 
-msgid "cancel"
+msgid "Cancel"
 msgstr ""
 
 msgid "Cancelled"
@@ -191,31 +173,19 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-msgid "Completed Payment"
+msgid "Connect"
 msgstr ""
 
-msgid "Configuration"
+msgid "Connected"
 msgstr ""
 
 msgid "Content"
 msgstr ""
 
-msgid "Continue"
-msgstr ""
-
-msgid "CPT Name"
-msgstr ""
-
 msgid "Create"
 msgstr ""
 
-msgid "Custom date"
-msgstr ""
-
-msgid "Custom Post Reviews"
-msgstr ""
-
-msgid "Custom Post Type"
+msgid "CSV files only"
 msgstr ""
 
 msgid "Customer"
@@ -254,9 +224,6 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-msgid "Delete"
-msgstr ""
-
 msgid "Description"
 msgstr ""
 
@@ -264,9 +231,6 @@ msgid "Disable Default product schema"
 msgstr ""
 
 msgid "Disable product schema markup for reviews."
-msgstr ""
-
-msgid "Disabled"
 msgstr ""
 
 msgid "Disconnect"
@@ -291,9 +255,6 @@ msgid "Discount for On-store Review"
 msgstr ""
 
 msgid "Discount for Photo/Video Review Request"
-msgstr ""
-
-msgid "Discount for Review"
 msgstr ""
 
 msgid "Discount Message"
@@ -323,22 +284,13 @@ msgstr ""
 msgid "Display the reviewer's country with their review. It adds more context and credibility to the feedback."
 msgstr ""
 
-msgid "Do you want to unsubscribe?"
-msgstr ""
-
-msgid "don't show"
-msgstr ""
-
-msgid "Download the sample csv template form here"
+msgid "Download the sample CSV template"
 msgstr ""
 
 msgid "Draft"
 msgstr ""
 
-msgid "Drag & drop here. Or Browse .csv files only"
-msgstr ""
-
-msgid "Edit"
+msgid "Drag & drop here."
 msgstr ""
 
 msgid "Edit condition"
@@ -380,9 +332,6 @@ msgstr ""
 msgid "Enable sharing options for reviews, allowing customers to share them on social media or other platforms, increasing your product's visibility."
 msgstr ""
 
-msgid "Enabled"
-msgstr ""
-
 msgid "Encourage customers to enhance their review by adding a photo or video. This follow-up request goes to those who haven’t included media with their review."
 msgstr ""
 
@@ -422,9 +371,6 @@ msgstr ""
 msgid "First Review Request"
 msgstr ""
 
-msgid "Fixed cart discount"
-msgstr ""
-
 msgid "Follow up Review Request"
 msgstr ""
 
@@ -435,6 +381,9 @@ msgid "for customer's full name"
 msgstr ""
 
 msgid "for customer's order number"
+msgstr ""
+
+msgid "form here"
 msgstr ""
 
 msgid "Full Name"
@@ -455,9 +404,6 @@ msgstr ""
 msgid "Google Place ID or URL"
 msgstr ""
 
-msgid "Google Review"
-msgstr ""
-
 msgid "Greater then"
 msgstr ""
 
@@ -476,31 +422,16 @@ msgstr ""
 msgid "Here is a little appreciation for your time."
 msgstr ""
 
-msgid "Hey "
+msgid "How the reviews should look on your site?"
 msgstr ""
 
-msgid "How do you feel about our service? Your feedback will be greatly appreciated :)"
-msgstr ""
-
-msgid "How The Reviews Should Look On Your Site?"
-msgstr ""
-
-msgid "How To Import Reviews From .csv File"
-msgstr ""
-
-msgid "How was your shopping experience? We appreciate your feedback."
-msgstr ""
-
-msgid "I want to get further product updates"
+msgid "How to import reviews from CSV file"
 msgstr ""
 
 msgid "If any user submit review in your product, it will appear here. Or you can import your existing reviews"
 msgstr ""
 
 msgid "Import"
-msgstr ""
-
-msgid "Import / Export"
 msgstr ""
 
 msgid "Import history"
@@ -522,9 +453,6 @@ msgid "It will impact on your public view site"
 msgstr ""
 
 msgid "Keep as Default"
-msgstr ""
-
-msgid "Last"
 msgstr ""
 
 msgid "Less then"
@@ -608,7 +536,7 @@ msgstr ""
 msgid "off your next purchase at"
 msgstr ""
 
-msgid "Offer a discount for customers who submit reviews directly from your store. Change email content here"
+msgid "Offer a discount for customers who submit reviews directly from your store"
 msgstr ""
 
 msgid "Oldest first"
@@ -620,6 +548,9 @@ msgstr ""
 msgid "One customer can send multiple reviews"
 msgstr ""
 
+msgid "One customer can send multiple reviews on the same product"
+msgstr ""
+
 msgid "Only for "
 msgstr ""
 
@@ -627,9 +558,6 @@ msgid "Opened"
 msgstr ""
 
 msgid "or"
-msgstr ""
-
-msgid "or  Read Documentation"
 msgstr ""
 
 msgid "Order ID"
@@ -653,22 +581,10 @@ msgstr ""
 msgid "Pending payment"
 msgstr ""
 
-msgid "Percentage discount"
-msgstr ""
-
 msgid "Place ID or URL here"
 msgstr ""
 
 msgid "Please redeem the discount code to get a"
-msgstr ""
-
-msgid "Post Type Name"
-msgstr ""
-
-msgid "Preview Section"
-msgstr ""
-
-msgid "Previous"
 msgstr ""
 
 msgid "Processing"
@@ -681,9 +597,6 @@ msgid "Product/Post"
 msgstr ""
 
 msgid "Products"
-msgstr ""
-
-msgid "Publish"
 msgstr ""
 
 msgid "Published"
@@ -701,6 +614,9 @@ msgstr ""
 msgid "Rating Descending"
 msgstr ""
 
+msgid "Read Documentation"
+msgstr ""
+
 msgid "reCAPTCHA Secret key"
 msgstr ""
 
@@ -716,7 +632,10 @@ msgstr ""
 msgid "Refunded"
 msgstr ""
 
-msgid "Request emails"
+msgid "Reminder Settings"
+msgstr ""
+
+msgid "Request Emails"
 msgstr ""
 
 msgid "Request for Photo/Video Review"
@@ -734,22 +653,16 @@ msgstr ""
 msgid "Review auto approval"
 msgstr ""
 
-msgid "Review for Discount"
-msgstr ""
-
 msgid "Review ID"
 msgstr ""
 
 msgid "Review layout"
 msgstr ""
 
-msgid "Review On Multi-criteria"
+msgid "Review on multi-criteria"
 msgstr ""
 
 msgid "Review Reminder"
-msgstr ""
-
-msgid "Review request email send permission"
 msgstr ""
 
 msgid "Review Settings"
@@ -773,16 +686,13 @@ msgstr ""
 msgid "reviews"
 msgstr ""
 
-msgid "Reviews can only be left by \"verified owners\""
-msgstr ""
-
 msgid "Reward customers with a discount when they add a photo or video to their review after receiving this request. This encourages them to share more detailed feedback."
 msgstr ""
 
 msgid "Save"
 msgstr ""
 
-msgid "Save changes"
+msgid "Save Changes"
 msgstr ""
 
 msgid "Scheduled"
@@ -815,9 +725,6 @@ msgstr ""
 msgid "Select a date range for export reviews"
 msgstr ""
 
-msgid "Select custom post type to enable review"
-msgstr ""
-
 msgid "Select date"
 msgstr ""
 
@@ -825,9 +732,6 @@ msgid "Select dates"
 msgstr ""
 
 msgid "Select Style:"
-msgstr ""
-
-msgid "Select which site’s review you want to export"
 msgstr ""
 
 msgid "Send"
@@ -842,7 +746,7 @@ msgstr ""
 msgid "Send a second request to customers who haven’t left a review yet. This helps remind them to share their feedback. Change email content."
 msgstr ""
 
-msgid "Send another email to ask customers to add a photo or video to their review if they haven't already. Change email content."
+msgid "Send another email to ask customers to add a photo or video to their review if they haven't already."
 msgstr ""
 
 msgid "Send Now"
@@ -858,9 +762,6 @@ msgid "Sending Status"
 msgstr ""
 
 msgid "Sent"
-msgstr ""
-
-msgid "Set a name for you post type"
 msgstr ""
 
 msgid "Settings"
@@ -899,9 +800,6 @@ msgstr ""
 msgid "Spam"
 msgstr ""
 
-msgid "Specific Product"
-msgstr ""
-
 msgid "Star"
 msgstr ""
 
@@ -921,15 +819,6 @@ msgid "Submit review"
 msgstr ""
 
 msgid "Submitted at"
-msgstr ""
-
-msgid "Success rate: Less > more"
-msgstr ""
-
-msgid "Success rate: More > less"
-msgstr ""
-
-msgid "Thank you."
 msgstr ""
 
 msgid "The review request email will include this discount message. Make sure the discount is enabled."
@@ -986,13 +875,16 @@ msgstr ""
 msgid "Upload a JPG, PNG, or GIF image that's up to 1200px wide and less than 5MB in size."
 msgstr ""
 
+msgid "Upload Banner"
+msgstr ""
+
 msgid "Upload Icon"
 msgstr ""
 
 msgid "Upload Photo/Video"
 msgstr ""
 
-msgid "Upload the csv file below"
+msgid "Upload the CSV file below"
 msgstr ""
 
 msgid "Usage limit per coupon"
@@ -1001,7 +893,7 @@ msgstr ""
 msgid "Usage limit per user"
 msgstr ""
 
-msgid "usage Limits"
+msgid "Usage Limits"
 msgstr ""
 
 msgid "Usage Restriction"
@@ -1043,7 +935,7 @@ msgstr ""
 msgid "Without Attachment"
 msgstr ""
 
-msgid "Write a Review"
+msgid "Write a review"
 msgstr ""
 
 msgid "Write Review Title"
@@ -1058,16 +950,10 @@ msgstr ""
 msgid "Year"
 msgstr ""
 
-msgid "You can upload a maximum of 20 files at a time"
-msgstr ""
-
-msgid "You Don’t Have Any Cpts Added"
+msgid "You can also export specific product reviews, if you want"
 msgstr ""
 
 msgid "You don't have any reviews"
-msgstr ""
-
-msgid "You have some unsaved changes"
 msgstr ""
 
 msgid "You may combine any of the options above."

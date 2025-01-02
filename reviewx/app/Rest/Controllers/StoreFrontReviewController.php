@@ -2,17 +2,17 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\PHPUnit\Util\Exception;
-use Rvx\Services\Api\LoginService;
+use Exception;
+use Throwable;
 use Rvx\WPDrill\Response;
+use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\Services\Api\LoginService;
 use Rvx\Services\ReviewService;
 use Rvx\Services\SettingService;
-use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\Utilities\Helper;
 class StoreFrontReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;
-    protected ReviewService $wpReviewService;
     protected SettingService $settingService;
     protected LoginService $loginService;
     /**
@@ -21,7 +21,6 @@ class StoreFrontReviewController implements InvokableContract
     public function __construct()
     {
         $this->reviewService = new ReviewService();
-        $this->wpReviewService = new ReviewService();
         $this->settingService = new SettingService();
         $this->loginService = new LoginService();
     }
@@ -122,7 +121,6 @@ class StoreFrontReviewController implements InvokableContract
             } else {
                 // Fetch the latest aggregation data
                 $latestAggregation = $this->insightDataGetInSaas($request);
-                $latestAggregation['product']['description'] = \strip_tags($latestAggregation['product']['description']);
                 // Check if the data retrieval fails
                 if (!$latestAggregation) {
                     return Helper::rvxApi(["error" => "Fails"])->fails("failed");
@@ -135,14 +133,13 @@ class StoreFrontReviewController implements InvokableContract
                 update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
                 return ["data" => $latestAggregation];
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
     public function productTitleAndDescriptionBackSlashRemove($data)
     {
-        $dataModify = \preg_replace('/("title":")([^"\\\\]+)\\\\\'/', '$1$2\'', $data);
-        return \preg_replace('/("description":\\s*")([^"\\\\]|\\\\.)*"/', '$1Description"', $dataModify);
+        return \preg_replace('/("title":")([^"\\\\]+)\\\\\'/', '$1$2\'', $data);
     }
     /**
      * @param $request
@@ -153,7 +150,7 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $response = $this->reviewService->saveWidgetReviewsForProduct($request);
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
@@ -166,7 +163,7 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $response = $this->reviewService->requestReviewEmailAttachment($request);
             return $response;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
@@ -179,7 +176,7 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $response = $this->reviewService->likeDIslikePreference($request->get_params());
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
@@ -207,7 +204,7 @@ class StoreFrontReviewController implements InvokableContract
             $review = $this->reviewService->reviewRequestStoreItem($request->get_params());
             return $review;
             //            return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
@@ -216,7 +213,7 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $response = $this->reviewService->thanksMessage($request);
             return $response;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
@@ -225,7 +222,7 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $response = $this->reviewService->getSpecificReviewItem($request);
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("Specific Review Item Fails", $e->getCode());
         }
     }

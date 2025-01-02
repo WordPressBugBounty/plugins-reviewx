@@ -28,8 +28,8 @@ class OrderCreateHandler
     }
     public function prepareData($order)
     {
-        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', $order->get_date_created()->getTimestamp()) : null;
-        $updated_at = \wp_date('Y-m-d H:i:s', $order->get_date_modified()->getTimestamp()) ?? \wp_date('Y-m-d H:i:s');
+        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_created()->getTimestamp())) : null;
+        $updated_at = \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_modified()->getTimestamp())) ?? \wp_date('Y-m-d H:i:s');
         return ['order' => ["wp_id" => (int) $order->get_id(), "customer_wp_unique_id" => Client::getUid() . '-' . (int) $order->get_customer_id(), "subtotal" => (double) $order->get_subtotal(), "tax" => (double) $order->get_total_tax(), "total" => (double) $order->get_total(), "status" => $order->get_status(), "delivered_at" => null, "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "created_at" => $created_at, "updated_at" => $updated_at], 'order_items' => $this->orderItems($order)];
     }
     public function orderItems($order)

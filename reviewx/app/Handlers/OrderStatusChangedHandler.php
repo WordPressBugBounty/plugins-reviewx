@@ -21,8 +21,8 @@ class OrderStatusChangedHandler
     {
         $orderStatusToTimestampKey = $this->orderStatusToTimestampKey($new_status);
         $current_time = \wp_date('Y-m-d H:i:s');
-        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', $order->get_date_created()->getTimestamp()) : null;
-        $updated_at = \wp_date('Y-m-d H:i:s', $order->get_date_modified()->getTimestamp()) ?? \wp_date('Y-m-d H:i:s');
+        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_created()->getTimestamp())) : null;
+        $updated_at = \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_modified()->getTimestamp())) ?? \wp_date('Y-m-d H:i:s');
         $orderStatusData = ["status" => $new_status, $orderStatusToTimestampKey => $current_time];
         $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), 'created_at' => $created_at, 'updated_at' => $updated_at];
         $modifiedOrder = \array_merge($orderData, $orderStatusData);
@@ -34,11 +34,9 @@ class OrderStatusChangedHandler
         $order_id = $order->get_id();
         $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
         $wpWcOrderStats = $wpdb->get_row($query);
-        $data = ['fulfillment_status' => null, 'fulfilled_at' => null];
-        if ($wpWcOrderStats->date_completed) {
-            $data['fulfillment_status'] = $order->get_status();
-            $data['fulfilled_at'] = $wpWcOrderStats->date_completed;
-        }
+        $data = [];
+        $data['fulfillment_status'] = $order->get_status() ?? null;
+        $data['fulfilled_at'] = $wpWcOrderStats->date_completed ?? null;
         return $data;
     }
     public function orderItems($order, $orderStatusToTimestampKey, $orderStatusData) : array
@@ -50,7 +48,7 @@ class OrderStatusChangedHandler
             $product = $order_item->get_product();
             if ($product) {
                 if ('completed' == $orderStatusData['status']) {
-                    $item_data = ["wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), 'fulfillment_status' => $data['fulfillment_status'], 'fulfilled_at' => $data['fulfilled_at']];
+                    $item_data = ["wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), 'fulfillment_status' => $data['fulfillment_status'] ?? null, 'fulfilled_at' => $data['fulfilled_at'] ?? null];
                 } else {
                     $item_data = ["wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), 'fulfillment_status' => $orderStatusData['status'], 'fulfilled_at' => $orderStatusData[$orderStatusToTimestampKey]];
                 }

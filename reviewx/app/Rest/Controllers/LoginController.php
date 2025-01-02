@@ -2,15 +2,17 @@
 
 namespace Rvx\Rest\Controllers;
 
+use Exception;
+use Throwable;
 use Rvx\Api\AuthApi;
 use Rvx\Models\Site;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Response;
-use Exception;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Services\DataSyncService;
 use Rvx\Services\Api\LoginService;
 use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 class LoginController implements InvokableContract
 {
     protected LoginService $loginService;
@@ -34,10 +36,10 @@ class LoginController implements InvokableContract
     public function login($request)
     {
         $data = $request->get_params();
-        if ($this->option_exists('_rx_option_allow_multi_criteria')) {
+        if (ReviewXChecker::isReviewXExists() || ReviewXChecker::isReviewXSaasExists()) {
             $data['multicriteria'] = $this->existingPayload();
         }
-        $payload = \array_merge($data, $this->getRegisterDataApi());
+        $payload = \array_merge($data, $this->getLoginDataApi());
         try {
             $response = (new AuthApi())->login($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
@@ -66,10 +68,10 @@ class LoginController implements InvokableContract
     public function license_key($request)
     {
         $data = $request->get_params();
-        if ($this->option_exists('_rx_option_allow_multi_criteria')) {
+        if (ReviewXChecker::isReviewXExists() || ReviewXChecker::isReviewXSaasExists()) {
             $data['multicriteria'] = $this->existingPayload();
         }
-        $payload = \array_merge($data, $this->getRegisterDataApi());
+        $payload = \array_merge($data, $this->getLoginDataApi());
         try {
             $response = (new AuthApi())->licenseLogin($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
@@ -99,26 +101,45 @@ class LoginController implements InvokableContract
     {
         return ['site_id' => $site['id'], 'uid' => $site['uid'], 'name' => $site['name'], 'domain' => $site['domain'], 'url' => $site['url'], 'locale' => $site['locale'], 'email' => $site['email'], 'secret' => $site['key'], 'is_saas_sync' => 0, 'created_at' => \wp_date('Y-m-d H:i:s'), 'updated_at' => \wp_date('Y-m-d H:i:s')];
     }
-    public function getRegisterDataApi() : array
+    public function getLoginDataApi() : array
     {
-        $user = get_option('rvx_stored_user_info');
-        return ['domain' => Helper::getWpDomainNameOnly(), 'url' => site_url(), 'site_locale' => get_locale(), 'first_name' => $user['first_name'], 'last_name' => $user['last_name']];
+        $current_user = wp_get_current_user();
+        $first_name = $current_user->first_name ?: $current_user->user_login;
+        $last_name = $current_user->last_name ?: '';
+        return ['domain' => Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => sanitize_text_field($first_name), 'last_name' => sanitize_text_field($last_name)];
     }
+    // public function getRegisterDataApi(): array
+    // {
+    //     $user = get_option('rvx_stored_user_info');
+    //     return [
+    //         'domain' => Helper::getWpDomainNameOnly(),
+    //         'url' => site_url(),
+    //         'site_locale' => get_locale(),
+    //         'first_name' => $user['first_name'],
+    //         'last_name' => $user['last_name'],
+    //     ];
+    // }
     public function existingPayload()
     {
-        $data = get_option('_rx_option_review_criteria');
-        $keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
-        $criterias = [];
-        $i = 0;
-        foreach ($data as $key => $name) {
-            if (isset($keys[$i])) {
-                $criterias[] = ["key" => $keys[$i], "name" => $name];
+        $data = [];
+        if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
+            $data = get_option('_rx_option_review_criteria');
+            $keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+            $criterias = [];
+            $i = 0;
+            foreach ($data as $key => $name) {
+                if (isset($keys[$i])) {
+                    $criterias[] = ["key" => $keys[$i], "name" => $name];
+                }
+                $i++;
             }
-            $i++;
+            $multicrtriaEnableorDisale = get_option('_rx_option_allow_multi_criteria');
+            $data = ["enable" => $multicrtriaEnableorDisale == 1 ? \true : \false, "criterias" => $criterias];
+        } elseif (ReviewXChecker::isReviewXSaasExists()) {
+            $data = get_option('_rvx_settings_data');
+            $data = $data['setting']['review_settings']['reviews']['multicriteria'];
         }
-        $multicrtriaEnableorDisale = get_option('_rx_option_allow_multi_criteria');
-        $newCriteria = ["enable" => $multicrtriaEnableorDisale == 1 ? \true : \false, "criterias" => $criterias];
-        return $newCriteria;
+        return $data;
     }
     public function option_exists($option_name)
     {
@@ -130,7 +151,7 @@ class LoginController implements InvokableContract
         try {
             $response = $this->loginService->forgetPassword($request->get_params());
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Forget password fail', $e->getCode());
         }
     }
@@ -139,7 +160,7 @@ class LoginController implements InvokableContract
         try {
             $response = $this->loginService->resetPassword($request->get_params());
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Reset password fail', $e->getCode());
         }
     }

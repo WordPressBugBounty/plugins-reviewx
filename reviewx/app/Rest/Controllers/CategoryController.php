@@ -52,7 +52,6 @@ class CategoryController implements InvokableContract
     public function storeCategory($request)
     {
         $resp = $this->categoryService->storeCategory($request->get_params());
-        // $this->wpReviewService->createReview($request);
         return Helper::getApiResponse($resp);
     }
 }

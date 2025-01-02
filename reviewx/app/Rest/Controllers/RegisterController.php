@@ -13,6 +13,7 @@ use Rvx\Services\Api\LoginService;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 use Rvx\Handlers\MigrationRollback\MigrationPrompt;
+use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 class RegisterController implements InvokableContract
 {
     protected LoginService $loginService;
@@ -66,7 +67,12 @@ class RegisterController implements InvokableContract
     public function migrationPrompt()
     {
         $migrationData = new MigrationPrompt();
-        $result = $migrationData->rvx_retrieve_old_plugin_options_data();
+        $result = \false;
+        if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
+            $result = $migrationData->rvx_retrieve_old_plugin_options_data();
+        } elseif (ReviewXChecker::isReviewXSaasExists()) {
+            $result = $migrationData->rvx_retrieve_saas_plugin_options_data();
+        }
         if ($result !== \false) {
             $successMessage = "Old Data found";
             return Helper::rvxApi($result)->success($successMessage, 200);
@@ -91,9 +97,20 @@ class RegisterController implements InvokableContract
      * @param $request
      * @return array
      */
+    // public function getRegisterDataApi(): array
+    // {
+    //     return [
+    //         'domain' => Helper::getWpDomainNameOnly(),
+    //         'url' => site_url(),
+    //         'site_locale' => get_locale(),
+    //     ];
+    // }
     public function getRegisterDataApi() : array
     {
-        return ['domain' => Helper::getWpDomainNameOnly(), 'url' => site_url(), 'site_locale' => get_locale()];
+        $current_user = wp_get_current_user();
+        $first_name = $current_user->first_name ?: $current_user->user_login;
+        $last_name = $current_user->last_name ?: '';
+        return ['domain' => Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => sanitize_text_field($first_name), 'last_name' => sanitize_text_field($last_name)];
     }
     protected function prepareData(array $site) : array
     {

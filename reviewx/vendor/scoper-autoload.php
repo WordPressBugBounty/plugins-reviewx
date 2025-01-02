@@ -303,10 +303,8 @@ if (!function_exists('twig_trim_filter')) { function twig_trim_filter() { return
 if (!function_exists('twig_upper_filter')) { function twig_upper_filter() { return \Rvx\twig_upper_filter(...func_get_args()); } }
 if (!function_exists('twig_urlencode_filter')) { function twig_urlencode_filter() { return \Rvx\twig_urlencode_filter(...func_get_args()); } }
 if (!function_exists('twig_var_dump')) { function twig_var_dump() { return \Rvx\twig_var_dump(...func_get_args()); } }
-if (!function_exists('update_comment_meta')) { function update_comment_meta() { return \Rvx\update_comment_meta(...func_get_args()); } }
 if (!function_exists('update_option')) { function update_option() { return \Rvx\update_option(...func_get_args()); } }
 if (!function_exists('update_post_meta')) { function update_post_meta() { return \Rvx\update_post_meta(...func_get_args()); } }
-if (!function_exists('wc_create_order')) { function wc_create_order() { return \Rvx\wc_create_order(...func_get_args()); } }
 if (!function_exists('wc_format_datetime')) { function wc_format_datetime() { return \Rvx\wc_format_datetime(...func_get_args()); } }
 if (!function_exists('wc_get_account_orders_actions')) { function wc_get_account_orders_actions() { return \Rvx\wc_get_account_orders_actions(...func_get_args()); } }
 if (!function_exists('wc_get_account_orders_columns')) { function wc_get_account_orders_columns() { return \Rvx\wc_get_account_orders_columns(...func_get_args()); } }
@@ -315,15 +313,11 @@ if (!function_exists('wc_get_order')) { function wc_get_order() { return \Rvx\wc
 if (!function_exists('wc_get_order_status_name')) { function wc_get_order_status_name() { return \Rvx\wc_get_order_status_name(...func_get_args()); } }
 if (!function_exists('wc_get_product')) { function wc_get_product() { return \Rvx\wc_get_product(...func_get_args()); } }
 if (!function_exists('wc_print_notice')) { function wc_print_notice() { return \Rvx\wc_print_notice(...func_get_args()); } }
-if (!function_exists('wp_create_user')) { function wp_create_user() { return \Rvx\wp_create_user(...func_get_args()); } }
 if (!function_exists('wp_doing_ajax')) { function wp_doing_ajax() { return \Rvx\wp_doing_ajax(...func_get_args()); } }
 if (!function_exists('wp_get_attachment_image')) { function wp_get_attachment_image() { return \Rvx\wp_get_attachment_image(...func_get_args()); } }
 if (!function_exists('wp_get_current_user')) { function wp_get_current_user() { return \Rvx\wp_get_current_user(...func_get_args()); } }
-if (!function_exists('wp_insert_comment')) { function wp_insert_comment() { return \Rvx\wp_insert_comment(...func_get_args()); } }
-if (!function_exists('wp_insert_term')) { function wp_insert_term() { return \Rvx\wp_insert_term(...func_get_args()); } }
 if (!function_exists('wp_kses_post')) { function wp_kses_post() { return \Rvx\wp_kses_post(...func_get_args()); } }
 if (!function_exists('wp_parse_args')) { function wp_parse_args() { return \Rvx\wp_parse_args(...func_get_args()); } }
-if (!function_exists('wp_update_user')) { function wp_update_user() { return \Rvx\wp_update_user(...func_get_args()); } }
 if (!function_exists('wp_verify_nonce')) { function wp_verify_nonce() { return \Rvx\wp_verify_nonce(...func_get_args()); } }
 
 return $loader;

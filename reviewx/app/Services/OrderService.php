@@ -28,8 +28,8 @@ class OrderService extends \Rvx\Services\Service
     {
         $status = $order->get_status();
         $status_mapping = $this->orderStatusArray();
-        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', $order->get_date_created()->getTimestamp()) : null;
-        $updated_at = \wp_date('Y-m-d H:i:s', $order->get_date_modified()->getTimestamp()) ?? \wp_date('Y-m-d H:i:s');
+        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_created()->getTimestamp())) : null;
+        $updated_at = \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_modified()->getTimestamp())) ?? \wp_date('Y-m-d H:i:s');
         // Get the order state, ensure a fallback if 'date_paid' doesn't exist
         $paid_at = $this->wooOrderState($order->get_id()) ?? null;
         $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), "status" => $order->get_status(), "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "paid_at" => $paid_at, "created_at" => $created_at, "updated_at" => $updated_at];
@@ -48,19 +48,14 @@ class OrderService extends \Rvx\Services\Service
         $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
         $results = $wpdb->get_row($query);
         if ($results) {
-            return ['date_paid' => $results->date_paid, 'date_completed' => $results->date_completed];
+            return ['date_paid' => \wp_date('Y-m-d H:i:s', \strtotime($results->date_paid)) ?? null, 'date_completed' => \wp_date('Y-m-d H:i:s', \strtotime($results->date_completed)) ?? null];
         }
     }
     public function orderItems($order, $orderData = [])
     {
         $date = $this->wooOrderState($order->get_id());
-        $status = $order->get_status();
-        $status_mapping = $this->orderStatusArray();
         $items_data = [];
         $order_items = $order->get_items();
-        $timestamp_key = $status_mapping[$status];
-        $fulfilled_at = null;
-        $fulfilled_at = $orderData[$timestamp_key];
         foreach ($order_items as $order_item) {
             $product = $order_item->get_product();
             if ($product) {
@@ -69,7 +64,7 @@ class OrderService extends \Rvx\Services\Service
                     $item_data['fulfilled_at'] = \wp_date('Y-m-d H:i:s');
                 }
                 if ($order->get_status() == 'completed') {
-                    $item_data['fulfilled_at'] = $date['date_completed'];
+                    $item_data['fulfilled_at'] = \wp_date('Y-m-d H:i:s', \strtotime($date['date_completed']));
                 }
                 $items_data[] = $item_data;
             }

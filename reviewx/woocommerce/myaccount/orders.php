@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx;
 
 \defined('ABSPATH') || exit;
+use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 do_action('woocommerce_before_account_orders', $has_orders);
 ?>
@@ -28,16 +28,22 @@ if ($has_orders) {
                 <?php 
     }
     ?>
-                <th class="woocommerce-orders-table__header woocommerce-orders-table__header-product-image">
-                    <span class="nobr"><?php 
-    esc_html_e('Image', 'reviewx');
-    ?></span>
-                </th>
-                <th class="woocommerce-orders-table__header woocommerce-orders-table__header-review">
-                    <span class="nobr"><?php 
-    esc_html_e('Reviews', 'reviewx');
-    ?></span>
-                </th>
+                <?php 
+    if (Client::getSync() === \true) {
+        ?>
+                    <th class="woocommerce-orders-table__header woocommerce-orders-table__header-product-image">
+                        <span class="nobr"><?php 
+        esc_html_e('Image', 'reviewx');
+        ?></span>
+                    </th>
+                    <th class="woocommerce-orders-table__header woocommerce-orders-table__header-review">
+                        <span class="nobr"><?php 
+        esc_html_e('Reviews', 'reviewx');
+        ?></span>
+                    </th>
+                <?php 
+    }
+    ?>
             </tr>
             </thead>
 
@@ -127,53 +133,59 @@ if ($has_orders) {
                         <?php 
             }
             ?>
-                        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-product-image"
-                            data-title="<?php 
-            esc_attr_e('Product Image', 'reviewx');
-            ?>">
-                            <?php 
-            echo wp_kses_post($product_image);
-            ?>
-                        </td>
-                        <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-review"
-                            data-title="<?php 
-            esc_attr_e('Details', 'reviewx');
-            ?>">
-                            <?php 
-            $review_id = Helper::retrieveReviewId($order->get_id(), $product_id, get_current_user_id());
-            $review_id = !empty($review_id);
-            //$saas_order_status = Helper::reviewSettings()['setting']['review_settings']['reviews']['review_eligibility'];
-            $saas_order_status = Helper::reviewSettings()['reviews']['review_eligibility'];
-            $order_current_status = \str_replace(' ', '_', \strtolower(wc_get_order_status_name($order->get_status())));
-            if (\is_array($saas_order_status) && \array_key_exists($order_current_status, $saas_order_status) && $saas_order_status[$order_current_status] === \true) {
+                        <?php 
+            if (Client::getSync() === \true) {
                 ?>
-                                <a href="#reviewxForm" class="woocommerce-button button rvx-elem"
-                                    data-order-id="<?php 
-                echo esc_attr($order->get_id());
-                ?>"
-                                    data-product-id="<?php 
-                echo esc_attr($product_id);
-                ?>"
-                                    data-item-id="<?php 
-                echo esc_attr($item_id);
-                ?>"
-                                    data-product-name="<?php 
-                echo esc_attr($product->get_name());
-                ?>"
-                                    data-product-image='<?php 
-                echo wp_kses_post($product_image);
-                ?>'
-                                    data-review-id='<?php 
-                echo esc_attr($review_id);
-                ?>'>
-                                    <?php 
-                esc_html_e('Add Review', 'reviewx');
-                ?>
-                                </a>
+                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-product-image"
+                                data-title="<?php 
+                esc_attr_e('Product Image', 'reviewx');
+                ?>">
                                 <?php 
+                echo wp_kses_post($product_image);
+                ?>
+                            </td>
+                            <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-review"
+                                data-title="<?php 
+                esc_attr_e('Details', 'reviewx');
+                ?>">
+                                <?php 
+                $review_id = Helper::retrieveReviewId($order->get_id(), $product_id, get_current_user_id());
+                $review_id = !empty($review_id);
+                //$saas_order_status = Helper::reviewSettings()['setting']['review_settings']['reviews']['review_eligibility'];
+                $saas_order_status = Helper::reviewSettings()['reviews']['review_eligibility'];
+                $order_current_status = \str_replace(' ', '_', \strtolower(wc_get_order_status_name($order->get_status())));
+                if (\is_array($saas_order_status) && \array_key_exists($order_current_status, $saas_order_status) && $saas_order_status[$order_current_status] === \true) {
+                    ?>
+                                    <a href="#reviewxForm" class="woocommerce-button button rvx-elem"
+                                        data-order-id="<?php 
+                    echo esc_attr($order->get_id());
+                    ?>"
+                                        data-product-id="<?php 
+                    echo esc_attr($product_id);
+                    ?>"
+                                        data-item-id="<?php 
+                    echo esc_attr($item_id);
+                    ?>"
+                                        data-product-name="<?php 
+                    echo esc_attr($product->get_name());
+                    ?>"
+                                        data-product-image='<?php 
+                    echo wp_kses_post($product_image);
+                    ?>'
+                                        data-review-id='<?php 
+                    echo esc_attr($review_id);
+                    ?>'>
+                                        <?php 
+                    esc_html_e('Add Review', 'reviewx');
+                    ?>
+                                    </a>
+                                    <?php 
+                }
+                ?>
+                            </td>
+                        <?php 
             }
             ?>
-                        </td>
                     </tr>
                     <?php 
         }
@@ -268,16 +280,6 @@ do_action('woocommerce_after_account_orders', $has_orders);
                 // Show the modal and "Go Back" button
                 document.getElementById("reviewxForm").classList.remove("hidden");
                 document.querySelector("#isShowTable").classList.add("hidden");
-
-                /** 
-                window.__rvx_attributes__ = {
-                    ...window.__rvx_attributes__,
-                    myAccount:{
-                        productId: Number(productId),
-                        reviewId: Number(reviewId),
-                    }
-                }
-                */
                 
                 const alpineComponent = document.querySelector('[x-data="__reviewXState__()"]');
                 if (alpineComponent) {

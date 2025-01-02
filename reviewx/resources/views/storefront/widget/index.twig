@@ -55,7 +55,7 @@
     {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
 
 
-    <template x-if="(!haveReviews || isFiltering) && !fetchReviewsIsLoading" x-cloak>
+    <template x-if="!haveReviews && !fetchReviewsIsLoading" x-cloak>
         <div class="rvx-bg-neutral-100 rvx-py-[64px] rvx-px-space24 rvx-rounded-md rvx-text-center">
             {% include "storefront/widget/Components/EmptyPlaceholder.twig" %}
         </div>

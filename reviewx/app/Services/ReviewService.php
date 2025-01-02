@@ -3,9 +3,9 @@
 namespace Rvx\Services;
 
 use Exception;
+use Rvx\WPDrill\Response;
 use Rvx\Enum\ReviewStatusEnum;
 use Rvx\Models\User;
-use Rvx\WPDrill\Response;
 use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
@@ -42,7 +42,7 @@ class ReviewService extends \Rvx\Services\Service
             }
             $wpdb->query('COMMIT');
             return $res;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $wpdb->query('ROLLBACK');
         }
     }
@@ -63,14 +63,16 @@ class ReviewService extends \Rvx\Services\Service
             if ($uploaded_images) {
                 foreach ($uploaded_images['size'] as $size) {
                     if ($size > $max_file_size) {
-                        throw new \Exception('File size exceeds 100MB limit');
+                        throw new Exception('File size exceeds 100MB limit');
                     }
                 }
                 $attachments = $this->fileUpload($uploaded_images);
             } else {
                 $attachments = $data->get_params()['attachments'] ? $data->get_params()['attachments'] : [];
             }
-            $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : [];
+            $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
+            // Calculate the average rating
+            $averageRating = $this->calculateAverageRating($criterias);
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
                 add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
@@ -78,13 +80,13 @@ class ReviewService extends \Rvx\Services\Service
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
                 add_comment_meta($commentId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'rvx_criterias', $criterias);
-                add_comment_meta($commentId, 'rating', sanitize_text_field(\array_key_exists('rating', $data->get_params()) ? (int) $data->get_params()['rating'] : 0));
+                add_comment_meta($commentId, 'rating', $averageRating);
                 add_comment_meta($commentId, 'reviewx_attachments', $attachments);
                 add_comment_meta($commentId, 'rvx_review_version', 'v2');
                 return $commentId;
             }
             return 0;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
         }
     }
@@ -92,7 +94,9 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $attachments = !empty($file) ? $file : [];
-            $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : [];
+            $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
+            // Calculate the average rating
+            $averageRating = $this->calculateAverageRating($criterias);
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
                 add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
@@ -100,14 +104,14 @@ class ReviewService extends \Rvx\Services\Service
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
                 add_comment_meta($commentId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'rvx_criterias', $criterias);
-                add_comment_meta($commentId, 'rating', sanitize_text_field(\array_key_exists('rating', $data->get_params()) ? (int) $data->get_params()['rating'] : 0));
+                add_comment_meta($commentId, 'rating', $averageRating);
                 add_comment_meta($commentId, 'reviewx_attachments', $attachments);
                 add_comment_meta($commentId, 'rvx_review_version', 'v2');
                 return $commentId;
             }
             return 0;
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+        } catch (Exception $e) {
+            \error_log($e->getMessage());
         }
     }
     public function prepareWpCommentData($request) : array
@@ -333,7 +337,7 @@ class ReviewService extends \Rvx\Services\Service
             wp_update_comment($comment_id, $resReviewData);
             $wpdb->query('COMMIT');
             return $res;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $wpdb->query('ROLLBACK');
         }
     }
@@ -370,7 +374,7 @@ class ReviewService extends \Rvx\Services\Service
                 return ['error' => $res->getStatusCode()];
             }
             return $res;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return ["error" => "Review Not updated"];
         }
     }
@@ -390,20 +394,23 @@ class ReviewService extends \Rvx\Services\Service
             wp_update_comment(['comment_ID' => $reviewId, 'comment_content' => \strip_tags($wpCommentData['comment_content']), 'comment_approved' => sanitize_text_field($wpCommentData['comment_approved']), 'comment_author_email' => sanitize_text_field($wpCommentData['comment_author_email']), 'comment_author' => sanitize_text_field($wpCommentData['comment_author'])]);
             $this->updateReviewMeta($reviewId, $request);
             return $res;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return ["error" => "Review Not updated"];
         }
     }
     public function updateReviewMeta($reviewId, $data)
     {
         $attachments = \array_key_exists('attachements', $data->get_params()) ? $data->get_params()['attachements'] : [];
-        $criterias = \array_key_exists('criterias', $data->get_params()) ? $data->get_params()['criterias'] : [];
+        $criterias = \array_key_exists('criterias', $data->get_params()) ? $data->get_params()['criterias'] : null;
+        // Calculate the average rating
+        $averageRating = $this->calculateAverageRating($criterias);
+        // Sanitize and update review meta fields
         update_comment_meta($reviewId, 'reviewx_title', sanitize_text_field(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
         update_comment_meta($reviewId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
         update_comment_meta($reviewId, 'is_recommended', \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0);
         update_comment_meta($reviewId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
         update_comment_meta($reviewId, 'rvx_criterias', $criterias);
-        update_comment_meta($reviewId, 'rating', sanitize_text_field(\array_key_exists('rating', $data->get_params()) ? (int) $data->get_params()['rating'] : 0));
+        update_comment_meta($reviewId, 'rating', $averageRating);
         update_comment_meta($reviewId, 'reviewx_attachments', $attachments);
     }
     /**
@@ -555,7 +562,7 @@ class ReviewService extends \Rvx\Services\Service
                 return $res;
             }
             return $res;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $wpdb->query('ROLLBACK');
         }
     }
@@ -646,7 +653,7 @@ class ReviewService extends \Rvx\Services\Service
             //  return $this->reviewApi->reviewRequestStoreItem($saasData, $uid);
             $wpdb->query('COMMIT');
             return $saasData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $wpdb->query('ROLLBACK');
         }
     }
@@ -686,16 +693,17 @@ class ReviewService extends \Rvx\Services\Service
             foreach ($wpCommentData as $index => $comment) {
                 $criterias = $data['reviews'][$index]['criterias'];
                 if (!empty($criterias)) {
-                    $modified_rating = \array_sum($criterias) / \count($criterias);
+                    // Calculate the average rating
+                    $averageRating = $this->calculateAverageRating($criterias);
                     $modified_criteria = \json_encode($criterias);
                 } else {
-                    $modified_rating = sanitize_text_field($data['reviews'][$index]['rating']);
+                    $averageRating = sanitize_text_field($data['reviews'][$index]['rating']) ?? 1;
                     $modified_criteria = null;
                 }
                 $commentId = wp_insert_comment($comment);
                 add_comment_meta($commentId, 'rvx_comment_title', sanitize_text_field($data['reviews'][$index]['title'] ?? null));
-                add_comment_meta($commentId, 'rating', sanitize_text_field($modified_rating));
                 add_comment_meta($commentId, 'rvx_criterias', $modified_criteria);
+                add_comment_meta($commentId, 'rating', $averageRating);
                 add_comment_meta($commentId, 'rvx_comment_order_item', sanitize_text_field($data['reviews'][$index]['order_item_wp_unique_id']));
                 add_comment_meta($commentId, 'verified', 1);
                 add_comment_meta($commentId, 'is_recommended', 1);
@@ -704,17 +712,43 @@ class ReviewService extends \Rvx\Services\Service
                 $id[] = $commentId;
             }
             return $id;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             dd($e->getMessage());
         }
     }
+    /**
+     * Calculate the average rating from criteria values.
+     *
+     * @param array|null $criterias An array containing numeric values or key-value pairs with numeric values.
+     * @return int The ceiling value of the average, or 1 if no valid data exists.
+     */
+    public function calculateAverageRating($criterias)
+    {
+        // Ensure $criterias is an array; default to an empty array if it's null or not an array
+        if (!\is_array($criterias)) {
+            return 1;
+            // Fallback value
+        }
+        // Normalize all values to integers, ensuring they are numeric
+        $values = \array_map(function ($value) {
+            return \is_numeric($value) ? (int) $value : 0;
+            // Convert numeric values to integers, default non-numeric to 0
+        }, \array_values($criterias));
+        // Filter out any invalid (zero or negative) values
+        $values = \array_filter($values, function ($value) {
+            return $value > 0;
+            // Keep only positive integers
+        });
+        $total = \array_sum($values);
+        // Sum of all valid values
+        $count = \count($values);
+        // Count of valid values
+        return $count > 0 ? \ceil($total / $count) : 1;
+        // Calculate the average and round up
+    }
     public function thanksMessage($request)
     {
-        return ['message' => "Thanks For Give Yours Review"];
-    }
-    public function getWidgetReviewsForLocal($data)
-    {
-        return get_post_meta($data['product_id'], 'rvx_latest_reviews');
+        return ['message' => "Thank you for sharing your review"];
     }
     public function postMetaReviewInsert($id, $latest_reviews)
     {

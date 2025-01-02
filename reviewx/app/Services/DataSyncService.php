@@ -21,14 +21,14 @@ class DataSyncService extends \Rvx\Services\Service
             $totalLines += $syncedCaterories->syncCategory($file);
             $totalLines += (new \Rvx\Services\UserSyncService())->syncUser($file);
             $processProduct = new \Rvx\Services\ProductSyncService($syncedCaterories);
-            $productsCount = $processProduct->processProductForSync($file);
-            $totalLines += $productsCount;
-            $totalLines += (new \Rvx\Services\ReviewSyncService($processProduct))->processReviewForSync($file);
+            $totalLines += $processProduct->processProductForSync($file);
+            $totalLines += (new \Rvx\Services\ReviewSyncService())->processReviewForSync($file);
             if (\class_exists('WooCommerce')) {
                 $order = new \Rvx\Services\OrderItemSyncService();
                 $totalLines += $order->syncOrder($file);
                 $totalLines += $order->syncOrderItem($file);
             }
+            \fclose($file);
             $file_info = $this->prepareFileInfo($file_path);
             $file = $_FILES['file'] = $file_info;
             $fileUpload = (new DataSyncApi())->dataSync($file, $from, $totalLines);

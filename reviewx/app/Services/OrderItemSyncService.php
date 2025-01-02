@@ -20,8 +20,8 @@ class OrderItemSyncService extends \Rvx\Services\Service
     {
         $orderCount = 0;
         $this->orderStat();
-        $startDate = (new \DateTime())->modify('-60 days')->format('Y-m-d H:i:s');
-        $endDate = (new \DateTime())->format('Y-m-d H:i:s');
+        $startDate = (new DateTime())->modify('-60 days')->format('Y-m-d H:i:s');
+        $endDate = (new DateTime())->format('Y-m-d H:i:s');
         DB::table('wc_orders')->select(['id', 'customer_id', 'total_amount', 'tax_amount', 'status', 'date_created_gmt', 'date_updated_gmt'])->whereBetween('date_created_gmt', $startDate, $endDate)->chunk(100, function ($orders) use($file, &$orderCount) {
             foreach ($orders as $order) {
                 $this->validOrderIds[] = (int) $order->id;
@@ -37,13 +37,13 @@ class OrderItemSyncService extends \Rvx\Services\Service
     }
     public function formatOrderData($order) : array
     {
-        $paid_at = !empty($order->fulfilled_at) && \strtotime($order->fulfilled_at) ? \date('Y-m-d H:i:s', \strtotime($order->fulfilled_at)) : null;
+        $paid_at = !empty($order->fulfilled_at) && \strtotime($order->fulfilled_at) ? \wp_date('Y-m-d H:i:s', \strtotime($order->fulfilled_at)) : null;
         Helper::rvxLog($paid_at);
         return ['rid' => 'rid://Order/' . (int) $order->id, "wp_id" => (int) $order->id, "customer_id" => $order->customer_id ? Client::getUid() . '-' . $order->customer_id : null, "subtotal" => (float) ($order->total_amount ?? 0.0), "tax" => (float) ($order->tax_amount ?? 0.0), "total" => (float) ($order->total_amount ?? 0.0), "status" => isset($order->status) ? (int) Helper::rvxGetOrderStatus($order->status) : null, "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "paid_at" => $paid_at, 'created_at' => !empty($order->date_created_gmt) ? \wp_date('Y-m-d H:i:s', \strtotime($order->date_created_gmt)) : null, 'updated_at' => !empty($order->date_updated_gmt) ? \wp_date('Y-m-d H:i:s', \strtotime($order->date_updated_gmt)) : null];
     }
     public function formatOrderItem($orderItem) : array
     {
-        return ['rid' => 'rid://LineItem/' . (int) $orderItem->order_item_id, 'wp_id' => (int) $orderItem->order_item_id, 'order_id' => (int) $orderItem->order_id, 'product_wp_unique_id' => Client::getUid() . '-' . (int) $orderItem->product_id, 'name' => $orderItem->order_item_name ?? null, 'quantity' => (int) ($orderItem->quantity ?? 0), 'price' => (float) ($orderItem->price ?? 0.0), 'review_id' => null, 'site_id' => Client::getSiteId(), 'fulfillment_status' => $this->orderFullfillmentStatusRelation[(int) $orderItem->order_id] ?? '', 'fulfilled_at' => !empty($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) ? \wp_date('Y-m-d H:i:s', (int) $this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) : null, 'reviewed_at' => null];
+        return ['rid' => 'rid://LineItem/' . (int) $orderItem->order_item_id, 'wp_id' => (int) $orderItem->order_item_id, 'order_id' => (int) $orderItem->order_id, 'product_wp_unique_id' => Client::getUid() . '-' . (int) $orderItem->product_id, 'name' => $orderItem->order_item_name ?? null, 'quantity' => (int) ($orderItem->quantity ?? 0), 'price' => (float) ($orderItem->price ?? 0.0), 'review_id' => null, 'site_id' => Client::getSiteId(), 'fulfillment_status' => $this->orderFullfillmentStatusRelation[(int) $orderItem->order_id] ?? '', 'fulfilled_at' => !empty($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) ? \wp_date('Y-m-d H:i:s', \strtotime($this->orderFullfillmentAtRelation[(int) $orderItem->order_id])) : null, 'reviewed_at' => null];
     }
     public function orderStat()
     {
@@ -51,14 +51,14 @@ class OrderItemSyncService extends \Rvx\Services\Service
         $endDate = (new DateTime())->format('Y-m-d H:i:s');
         DB::table('wc_order_stats')->whereBetween('date_created', $startDate, $endDate)->chunk(100, function ($orderStats) {
             foreach ($orderStats as $orderStat) {
-                $data = ['fulfillment_status' => null, 'fulfilled_at' => null];
+                $data = [];
                 if ($orderStat->date_completed) {
-                    $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status);
-                    $data['fulfilled_at'] = $orderStat->date_completed;
+                    $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status) ?? null;
+                    $data['fulfilled_at'] = $orderStat->date_completed ?? null;
                 }
                 if (!$orderStat->date_completed && $orderStat->date_paid) {
-                    $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status);
-                    $data['fulfilled_at'] = $orderStat->date_paid;
+                    $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status) ?? null;
+                    $data['fulfilled_at'] = $orderStat->date_paid ?? null;
                 }
                 $this->orderFullfillmentStatusRelation[(int) $orderStat->order_id] = $data['fulfillment_status'];
                 $this->orderFullfillmentAtRelation[(int) $orderStat->order_id] = $data['fulfilled_at'];

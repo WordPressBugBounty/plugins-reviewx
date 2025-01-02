@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.0.7
+Stable tag: 2.1.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,13 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.1.0 - 1-1-2025 =
+- New: Added more previous data when user onboard.
+- Fix: Update the calendar interactions.
+- Fix: Maintain the left alignment in discount for review.
+- Fix: Disable the earlier date selection in discount for review.
+- Fix: All reviews filtered Date show.
+
 = 2.0.7 - 12-24-2024 =
 - New: Display a banner for the New Year discount notice.
 - Fix: Resolve the subdirectory issue.
