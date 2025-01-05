@@ -23,7 +23,10 @@ class OrderStatusChangedHandler
         $current_time = \wp_date('Y-m-d H:i:s');
         $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_created()->getTimestamp())) : null;
         $updated_at = \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_modified()->getTimestamp())) ?? \wp_date('Y-m-d H:i:s');
-        $orderStatusData = ["status" => $new_status, $orderStatusToTimestampKey => $current_time];
+        $orderStatusData = ["status" => $new_status];
+        if ($orderStatusToTimestampKey !== 'any') {
+            $orderStatusData[$orderStatusToTimestampKey] = $current_time;
+        }
         $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), 'created_at' => $created_at, 'updated_at' => $updated_at];
         $modifiedOrder = \array_merge($orderData, $orderStatusData);
         return ['order' => $modifiedOrder, 'order_items' => $this->orderItems($order, $orderStatusToTimestampKey, $orderStatusData)];
@@ -60,6 +63,9 @@ class OrderStatusChangedHandler
     public function orderStatusToTimestampKey($newStatus) : string
     {
         $statusMap = ['processing' => 'processing_at', 'pending' => 'pending_payment_at', 'on-hold' => 'on_hold_at', 'completed' => 'completed_at', 'cancelled' => 'cancelled_at', 'refunded' => 'refunded_at', 'failed' => 'failed_at', 'checkout-draft' => 'draft_at'];
+        if (!$statusMap[$newStatus]) {
+            return 'any';
+        }
         return $statusMap[$newStatus];
     }
 }

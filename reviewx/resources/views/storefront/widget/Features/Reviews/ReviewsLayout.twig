@@ -19,8 +19,9 @@
     </template>
 </div>
 
-
-<!--v-if="hasNextPage"-->
-<div x-show="reviewsData?.data?.meta.next_cursor" class="rvx-grid rvx-place-content-center rvx-mt-space20">
+<div x-show="isLoadMoreReviews" class="rvx-grid rvx-place-content-center rvx-h-[150px]">
+    {% include "storefront/widget/Components/Spinner.twig" %}
+</div>
+<div x-show="!isLoadMoreReviews && reviewsData?.data?.meta.next_cursor" class="rvx-grid rvx-place-content-center rvx-mt-space20">
     <button class="rvx-border-neutral-600 rvx-text-neutral-800 hover:rvx-border-neutral-600 hover:rvx-text-neutral-600 rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-font-semibold focus:rvx-bg-transparent rvx-bg-transparent disabled:!rvx-cursor-not-allowed" @click="loadMoreReviewHandler" :loader="fetchReviewsIsLoading" :disabled="fetchReviewsIsLoading"> {{__('Load More Reviews', 'reviewx')}}</button>
 </div>

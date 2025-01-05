@@ -10,5 +10,6 @@ return function (Plugin $plugin) {
     Shortcode::add('rvx-summary', \Rvx\Shortcodes\Products\ReviewSummaryShortcode::class);
     Shortcode::add('rvx-reviews', \Rvx\Shortcodes\Products\ReviewShowWIthIdsShortcode::class);
     Shortcode::add('rvx-review-list', \Rvx\Shortcodes\Products\ReviewListShortcode::class);
-    //Shortcode::add('rvx-google-review', \Rvx\Shortcodes\GoogleReviewLIst::class); //
+    Shortcode::add('rvx-star-count', \Rvx\Shortcodes\Products\ReviewsStarCountShortcode::class);
+    //Shortcode::add('rvx-google-review', \Rvx\Shortcodes\GoogleReviewLIst::class);
 };

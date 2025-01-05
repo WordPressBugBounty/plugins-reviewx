@@ -38,7 +38,7 @@ function __reviewXState__() {
         reviewWithReviewIdsShortCodeData: null,
         reviewSettingsData: undefined,
         reviewAggregationData: null,
-        loadMoreReview: false,
+        isLoadMoreReviews: false,
         layoutView: 'list',
         formatAggregations: [],
         formatMultiCriteriaAggregations: [],
@@ -97,7 +97,11 @@ function __reviewXState__() {
             };
         },
         async fetchReviews({query, loadMoreReview, productId}) {
-            this.fetchReviewsIsLoading = true;
+            if(loadMoreReview){
+                this.isLoadMoreReviews = true
+            }else{
+                this.fetchReviewsIsLoading = true;
+            }
             let queryParams;
             if (query) {
                 const newQuery = {
@@ -123,6 +127,7 @@ function __reviewXState__() {
                 console.log('Error fetching reviews:', e);
             } finally {
                 this.fetchReviewsIsLoading = false;
+                this.isLoadMoreReviews = false
             }
         },
         async fetchReviewListShortCodes(ids) {
@@ -423,7 +428,6 @@ function __reviewXState__() {
             const userIP = await this.fetchUserIPAddress()
             if (!result) return
             this.isReviewSubmitting = true
-
             const newCriterias = this.multiCriteriaRatingsToObject(this.multiCriteriaRatings)
             const updatedReviewPayload = {
                 feedback: this.newReview.feedback,
@@ -479,8 +483,9 @@ function __reviewXState__() {
                 }
                 this.showReviewSuccessModal = true
                 document.getElementById('rvx-storefront-widget').scrollIntoView({behavior: 'smooth'});
-                // await this.fetchReviews({productId: this.rvxAttributes?.product?.id})
-                await this.fetchReviewsSettings()
+                if(this.reviewSettingsData?.data?.setting?.review_settings?.reviews?.auto_approve_reviews){
+                    await this.fetchReviews({productId: this.rvxAttributes?.product?.id});
+                }
             } catch (error) {
                 console.log('error ======', error);
             } finally {

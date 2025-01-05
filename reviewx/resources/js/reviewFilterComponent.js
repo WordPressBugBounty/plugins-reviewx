@@ -61,6 +61,7 @@ function __rvxReviewFilterComponent__() {
             }
             this.storeFrontReviewQuery = {
                 ...this.storeFrontReviewQuery,
+                cursor: '',
                 ...newQuery
             }
             this.isFiltering = true
@@ -81,6 +82,7 @@ function __rvxReviewFilterComponent__() {
 
             this.storeFrontReviewQuery = {
                 ...this.storeFrontReviewQuery,
+                cursor: '',
                 ...newQuery
             };
             this.selectFilterCount = 0
@@ -97,6 +99,7 @@ function __rvxReviewFilterComponent__() {
                     if (this.fetchReviewsIsLoading) return;
                     this.storeFrontReviewQuery = {
                         ...this.storeFrontReviewQuery,
+                        cursor: '',
                         sortBy: newValue
                     }
                     this.fetchReviews({query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id})

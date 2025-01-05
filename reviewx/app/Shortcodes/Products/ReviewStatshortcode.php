@@ -18,10 +18,5 @@ class ReviewStatshortcode implements ShortcodeContract
     {
         $attributes = ['product' => ['id' => $productId], 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($attributes);
-        /**
-        echo '<script>
-        window.__rvx_attributes__ = ' . json_encode($attributes) . ';
-            </script>';
-        */
     }
 }

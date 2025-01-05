@@ -185,10 +185,13 @@ class ReviewService extends \Rvx\Services\Service
     public function restoreReview($request)
     {
         $wpUniqueId = sanitize_text_field($request->get_param('wpUniqueId'));
-        $this->restoreTrasToPublish($wpUniqueId);
-        return (new ReviewsApi())->restoreReview($wpUniqueId);
+        $response = (new ReviewsApi())->restoreReview($wpUniqueId);
+        if ($response->getStatusCode() === Response::HTTP_OK) {
+            $this->restoreTrashToPublish($wpUniqueId);
+        }
+        return $response;
     }
-    public function restoreTrasToPublish($review_unique_id)
+    public function restoreTrashToPublish($review_unique_id)
     {
         $id = $this->getLastSegment($review_unique_id);
         $status = get_comment_meta($id, '_wp_trash_meta_status', \true);
@@ -618,8 +621,11 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function reviewMoveToTrash($data)
     {
-        $this->trashInWp($data);
-        return (new ReviewsApi())->reviewMoveToTrash($data);
+        $response = (new ReviewsApi())->reviewMoveToTrash($data);
+        if ($response->getStatusCode() == Response::HTTP_OK) {
+            $this->trashInWp($data);
+        }
+        return $response;
     }
     public function trashInWp($data)
     {
@@ -713,7 +719,7 @@ class ReviewService extends \Rvx\Services\Service
             }
             return $id;
         } catch (Exception $e) {
-            dd($e->getMessage());
+            throw new Exception('Something went wrong!' . $e->getMessage());
         }
     }
     /**

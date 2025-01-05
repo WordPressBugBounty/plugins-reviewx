@@ -27,19 +27,5 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
     {
         $reviewIdsJson = [$reviewsIds, 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($reviewIdsJson);
-        /** 
-        // Structure the data for the JavaScript window object
-        echo '
-        <script>
-            window.__rvx_attributes__ = {
-            ...window.__rvx_attributes__,
-            shortCodes:{
-            ...window.__rvx_attributes__.shortCodes,
-                    rvx_reviews: '. json_encode($reviewsIds) . '
-                }
-            };
-        </script>
-        ';
-        */
     }
 }

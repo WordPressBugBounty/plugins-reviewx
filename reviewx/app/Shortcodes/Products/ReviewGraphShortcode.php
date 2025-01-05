@@ -18,20 +18,5 @@ class ReviewGraphShortcode implements ShortcodeContract
     {
         $attributes = ['product' => ['id' => $productId], 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($attributes);
-        /**
-         * echo '<script>
-         * window.parent.__rvx_attributes__.shortCodes.reviewGraph = ' . $attributesJson . ';
-         * </script>';
-         *
-         * echo '<script>
-         * window.__rvx_attributes__ = {
-         * ...window.__rvx_attributes__,
-         * shortCodes: {
-         * ...window.__rvx_attributes__.shortCodes,
-         * rvx_review_graph: '.$attributesJson.'
-         * }
-         * }
-         * </script>';
-         */
     }
 }

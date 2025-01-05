@@ -26,36 +26,5 @@ class ReviewListShortcode implements ShortcodeContract
     {
         $productIdsJson = [$productIds, 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($productIdsJson);
-        /**
-                echo '<script>
-                        window.__rvx_attributes__ = {
-                            ...window.__rvx_attributes__,
-                            shortCodes: 
-                            {
-                                rvx_review_list: {
-                                    1: ' . $productIdsJson . '
-                                }
-                            }
-                        }
-            </script>';
-        */
-        /**
-            // Structure the data for the JavaScript window object
-            echo '
-            <script>
-        
-            document.addEventListener("DOMContentLoaded", function () {
-                const alpineComponent = document.querySelector(\'[x-data="__reviewXState__()"]\');
-                if (alpineComponent) {
-                    const alpineData = Alpine.$data(alpineComponent);
-                    console.log(alpineData);
-                    if (alpineData) {
-                        alpineData.rvxAttributes.shortCodes.rvx_review_list = ' . json_encode($productIds) . ';
-                    }
-                }
-            });
-            </script>
-            ';
-        */
     }
 }
