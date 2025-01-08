@@ -14,4 +14,5 @@ export interface CriteriaProps {
     starSize?: string;
     height?: number;
     background?: string;
+    existingRating?: number;
 }

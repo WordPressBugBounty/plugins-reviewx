@@ -1,5 +1,6 @@
 <?php
 
+namespace Rvx;
 
 \defined('ABSPATH') || exit;
 use Rvx\Utilities\Auth\Client;

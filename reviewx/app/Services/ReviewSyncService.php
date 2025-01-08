@@ -6,6 +6,7 @@ use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
 use Rvx\Services\ReviewService;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
+use Rvx\Handlers\MigrationRollback\MigrationPrompt;
 class ReviewSyncService extends \Rvx\Services\Service
 {
     protected $reviewMetaTitle;
@@ -23,9 +24,11 @@ class ReviewSyncService extends \Rvx\Services\Service
     protected $procesedReviews;
     protected $commentReplyRelation;
     protected $reviewService;
+    protected $migrationData;
     public function __construct()
     {
         $this->reviewService = new ReviewService();
+        $this->migrationData = new MigrationPrompt();
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
             $this->criteria = get_option('_rx_option_review_criteria') ?? [];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
@@ -214,7 +217,8 @@ class ReviewSyncService extends \Rvx\Services\Service
         // Update the 'rating' comment meta with the new format
         $currentRating = (int) get_comment_meta($commentId, 'rating', \true);
         $averageRating = (int) $this->reviewService->calculateAverageRating($newCriteria);
-        if ($currentRating !== $averageRating) {
+        $critriaAllowed = $this->migrationData->rvx_retrieve_old_plugin_options_data()['multicriteria']['enable'] ?? \false;
+        if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
             update_comment_meta($commentId, 'rating', $averageRating);
         }
         // Fill in missing keys ('a' to 'j') with default value 0
@@ -251,7 +255,8 @@ class ReviewSyncService extends \Rvx\Services\Service
         // Update the 'rating' comment meta with the new format
         $currentRating = (int) get_comment_meta($commentId, 'rating', \true);
         $averageRating = (int) $this->reviewService->calculateAverageRating($newCriteria);
-        if ($currentRating !== $averageRating) {
+        $critriaAllowed = $this->migrationData->rvx_retrieve_saas_plugin_options_data()['multicriteria']['enable'] ?? \false;
+        if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
             update_comment_meta($commentId, 'rating', $averageRating);
         }
         // Fill in missing keys ('a' to 'j') with default value 0

@@ -71,8 +71,13 @@ class ReviewService extends \Rvx\Services\Service
                 $attachments = $data->get_params()['attachments'] ? $data->get_params()['attachments'] : [];
             }
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
+            $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
             // Calculate the average rating
-            $averageRating = $this->calculateAverageRating($criterias);
+            if ($criterias !== null && $isAllowedMultiCriteria === \true) {
+                $wcAverageRating = $this->calculateAverageRating($criterias);
+            } else {
+                $wcAverageRating = $data->get_params()['rating'];
+            }
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
                 add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
@@ -80,7 +85,7 @@ class ReviewService extends \Rvx\Services\Service
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
                 add_comment_meta($commentId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'rvx_criterias', $criterias);
-                add_comment_meta($commentId, 'rating', $averageRating);
+                add_comment_meta($commentId, 'rating', $wcAverageRating);
                 add_comment_meta($commentId, 'reviewx_attachments', $attachments);
                 add_comment_meta($commentId, 'rvx_review_version', 'v2');
                 return $commentId;
@@ -96,7 +101,13 @@ class ReviewService extends \Rvx\Services\Service
             $attachments = !empty($file) ? $file : [];
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
             // Calculate the average rating
-            $averageRating = $this->calculateAverageRating($criterias);
+            $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
+            // Calculate the average rating
+            if ($criterias !== null && $isAllowedMultiCriteria === \true) {
+                $wcAverageRating = $this->calculateAverageRating($criterias);
+            } else {
+                $wcAverageRating = $data->get_params()['rating'];
+            }
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
                 add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
@@ -104,7 +115,7 @@ class ReviewService extends \Rvx\Services\Service
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
                 add_comment_meta($commentId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'rvx_criterias', $criterias);
-                add_comment_meta($commentId, 'rating', $averageRating);
+                add_comment_meta($commentId, 'rating', $wcAverageRating);
                 add_comment_meta($commentId, 'reviewx_attachments', $attachments);
                 add_comment_meta($commentId, 'rvx_review_version', 'v2');
                 return $commentId;
@@ -406,14 +417,19 @@ class ReviewService extends \Rvx\Services\Service
         $attachments = \array_key_exists('attachements', $data->get_params()) ? $data->get_params()['attachements'] : [];
         $criterias = \array_key_exists('criterias', $data->get_params()) ? $data->get_params()['criterias'] : null;
         // Calculate the average rating
-        $averageRating = $this->calculateAverageRating($criterias);
+        $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
+        if ($criterias !== null && $isAllowedMultiCriteria === \true) {
+            $wcAverageRating = $this->calculateAverageRating($criterias);
+        } else {
+            $wcAverageRating = $data->get_params()['rating'];
+        }
         // Sanitize and update review meta fields
         update_comment_meta($reviewId, 'reviewx_title', sanitize_text_field(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
         update_comment_meta($reviewId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
         update_comment_meta($reviewId, 'is_recommended', \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0);
         update_comment_meta($reviewId, 'is_anonymous', \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0);
         update_comment_meta($reviewId, 'rvx_criterias', $criterias);
-        update_comment_meta($reviewId, 'rating', $averageRating);
+        update_comment_meta($reviewId, 'rating', $wcAverageRating);
         update_comment_meta($reviewId, 'reviewx_attachments', $attachments);
     }
     /**
@@ -696,20 +712,21 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $id = [];
+            $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
             foreach ($wpCommentData as $index => $comment) {
-                $criterias = $data['reviews'][$index]['criterias'];
-                if (!empty($criterias)) {
+                $criterias = $data['reviews'][$index]['criterias'] ?? null;
+                if (!empty($criterias) && $criterias !== null && $isAllowedMultiCriteria === \true) {
                     // Calculate the average rating
-                    $averageRating = $this->calculateAverageRating($criterias);
+                    $wcAverageRating = $this->calculateAverageRating($criterias);
                     $modified_criteria = \json_encode($criterias);
                 } else {
-                    $averageRating = sanitize_text_field($data['reviews'][$index]['rating']) ?? 1;
+                    $wcAverageRating = sanitize_text_field($data['reviews'][$index]['rating']) ?? 1;
                     $modified_criteria = null;
                 }
                 $commentId = wp_insert_comment($comment);
                 add_comment_meta($commentId, 'rvx_comment_title', sanitize_text_field($data['reviews'][$index]['title'] ?? null));
                 add_comment_meta($commentId, 'rvx_criterias', $modified_criteria);
-                add_comment_meta($commentId, 'rating', $averageRating);
+                add_comment_meta($commentId, 'rating', $wcAverageRating);
                 add_comment_meta($commentId, 'rvx_comment_order_item', sanitize_text_field($data['reviews'][$index]['order_item_wp_unique_id']));
                 add_comment_meta($commentId, 'verified', 1);
                 add_comment_meta($commentId, 'is_recommended', 1);

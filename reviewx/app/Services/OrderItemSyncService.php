@@ -60,8 +60,8 @@ class OrderItemSyncService extends \Rvx\Services\Service
                     $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status) ?? null;
                     $data['fulfilled_at'] = $orderStat->date_paid ?? null;
                 }
-                $this->orderFullfillmentStatusRelation[(int) $orderStat->order_id] = $data['fulfillment_status'];
-                $this->orderFullfillmentAtRelation[(int) $orderStat->order_id] = $data['fulfilled_at'];
+                $this->orderFullfillmentStatusRelation[(int) $orderStat->order_id] = $data['fulfillment_status'] ?? null;
+                $this->orderFullfillmentAtRelation[(int) $orderStat->order_id] = $data['fulfilled_at'] ?? null;
             }
         });
     }

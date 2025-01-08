@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,10 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.1.2 - 1-07-2025 =
+- Fix: Admin notice conflict with AffiliateWP
+- Enhance: Improve data synchronization performance.
+
 = 2.1.1 - 1-05-2025 =
 - New: Star count shortcode add
 - New: Added more previous data when user onboard.

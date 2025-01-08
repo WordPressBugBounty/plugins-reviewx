@@ -5,7 +5,7 @@ namespace Rvx\Handlers\Notice;
 use Rvx\WPDrill\Facades\View;
 class ReviewxAdminNoticeHandler
 {
-    public function __invoke()
+    public function adminNoticeHandler()
     {
         // Check if notice is temporarily dismissed
         $dismissUntil = get_option('rvx_admin_deal_notice_until', 0);

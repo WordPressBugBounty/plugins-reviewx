@@ -70,7 +70,7 @@ class PluginServiceProvider extends ServiceProvider
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
         add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
-        add_action('admin_notices', new ReviewxAdminNoticeHandler());
+        add_action('admin_notices', [new ReviewxAdminNoticeHandler(), 'adminNoticeHandler']);
         add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);

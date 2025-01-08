@@ -92,8 +92,8 @@ class SharedMethods
             }
             $i++;
         }
-        $multicrtriaEnableorDisale = get_option('_rx_option_allow_multi_criteria');
-        $newCriteria = ["enable" => $multicrtriaEnableorDisale == 1 ? \true : \false, "criterias" => $criterias];
+        $multicrtriaEnableorDisable = get_option('_rx_option_allow_multi_criteria');
+        $newCriteria = ["enable" => $multicrtriaEnableorDisable == 1 ? \true : \false, "criterias" => $criterias];
         return $newCriteria;
     }
     public function rvxRollbackReverseReviewCriteriaConverter($newCriteria)
