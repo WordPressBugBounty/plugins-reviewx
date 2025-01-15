@@ -6,12 +6,8 @@ use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
 class CustomBulkActionsForReviewsHandler
 {
-    public function __construct()
-    {
-    }
     public function __invoke($screen)
     {
-        \error_log('$screen' . \print_r($screen, \true));
         if (isset($screen) && $screen['id'] !== 'edit-comments') {
             return;
         }

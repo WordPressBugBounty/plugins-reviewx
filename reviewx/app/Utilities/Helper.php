@@ -2,6 +2,7 @@
 
 namespace Rvx\Utilities;
 
+use Throwable;
 use Rvx\WPDrill\Plugin;
 use Rvx\WPDrill\Response;
 use Rvx\Utilities\Auth\Client;
@@ -92,7 +93,7 @@ class Helper
                 return self::rest($response->getApiData())->success($response()->message, $response->getStatusCode());
             }
             return self::rest($response->getApiData())->fails($response()->message, $response->getStatusCode());
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return self::rest([])->fails($th->getMessage());
         }
     }
@@ -194,10 +195,6 @@ class Helper
         }
         return $array;
     }
-    public static function reviewSettings()
-    {
-        return \json_decode(get_option("rvx_review_settings"), \true);
-    }
     public static function retrieveReviewId($order_id, $prod_id, $user_id)
     {
         if (isset($order_id, $prod_id, $user_id)) {
@@ -243,8 +240,7 @@ class Helper
     }
     public static function rvxGetOrderStatus($orderStatus) : ?string
     {
-        $parts = \explode('-', $orderStatus);
-        return $parts[1];
+        return \str_replace('wc-', '', $orderStatus);
     }
     public static function appendToJsonl($file, $data, $jsonOptions = \JSON_UNESCAPED_UNICODE)
     {
@@ -277,5 +273,21 @@ class Helper
             $full_domain .= \rtrim($parsed_url['path'], '/');
         }
         return $full_domain;
+    }
+    public static function orderStatus($newStatus) : string
+    {
+        $statusMap = ['processing' => 'processing', 'pending' => 'pending', 'on-hold' => 'on_hold', 'completed' => 'completed', 'cancelled' => 'cancelled', 'refunded' => 'refunded', 'failed' => 'failed', 'checkout-draft' => 'draft', 'auto-draft' => 'auto_draft'];
+        if (!$statusMap[$newStatus]) {
+            return 'any';
+        }
+        return $statusMap[$newStatus];
+    }
+    public static function orderItemStatus($newStatus) : string
+    {
+        $statusMap = ['processing' => 'PROCESSING', 'pending' => 'PENDING_PAYMENT', 'on-hold' => 'ON_HOLD', 'completed' => 'COMPLETED', 'cancelled' => 'CANCELLED', 'refunded' => 'REFUNDED', 'failed' => 'FAILED', 'checkout-draft' => 'DRAFT', 'auto-draft' => 'AUTO-DRAFT'];
+        if (!$statusMap[$newStatus]) {
+            return 'any';
+        }
+        return $statusMap[$newStatus];
     }
 }

@@ -5,7 +5,7 @@
             <!--            Filter options-->
             <div class="rvx-relative rvx-inline-block rvx-text-left">
                 <!-- Menu Button -->
-                <button @click="openFilterOptions = !openFilterOptions" class="rvx-outline-none focus:rvx-outline-none rvx-review-filter__button rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-bg-transparent hover:rvx-bg-transparent focus:rvx-bg-transparent disabled:!rvx-cursor-not-allowed rvx-flex rvx-justify-center rvx-items-center rvx-gap-space8 !rvx-border-neutral-600 rvx-text-neutral-800 hover:rvx-text-neutral-800 focus:rvx-text-neutral-800 rvx-font-semibold hover:rvx-border-neutral-600 !rvx-font-nunito">
+                <button @click="openFilterOptions = !openFilterOptions" class="rvx-outline-none focus:rvx-outline-none rvx-review-filter__button rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-bg-transparent hover:rvx-bg-transparent focus:rvx-bg-transparent disabled:!rvx-cursor-not-allowed rvx-flex rvx-justify-center rvx-items-center rvx-gap-space8 !rvx-border-neutral-400 rvx-text-neutral-800 hover:rvx-text-neutral-800 focus:rvx-text-neutral-800 rvx-font-semibold hover:rvx-border-neutral-600 !rvx-font-nunito">
                     <span class="material-symbols-rounded rvx-review-filter__icon">{{__('filter_alt', 'reviewx')}}</span>  {{__('Filter', 'reviewx')}}
                 </button>
                 <div class="rvx-absolute rvx-size-[20px] rvx-bg-primary rvx-text-white rvx-rounded-full rvx-text-[12px] -rvx-top-[10px] rvx-right-0 rvx-grid rvx-place-items-center rvx-px-space8" x-show="selectFilterCount" x-text="selectFilterCount">{{__('10', 'reviewx')}}</div>
@@ -64,7 +64,7 @@
 
             <!--            Sort Options-->
             <div class="rvx-relative rvx-inline-block rvx-text-left">
-                <button @click="openSortOptions = !openSortOptions" class="rvx-outline-none focus:rvx-outline-none rvx-review-sort__button rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-bg-transparent hover:rvx-bg-transparent focus:rvx-bg-transparent disabled:!rvx-cursor-not-allowed rvx-flex rvx-justify-center rvx-items-center rvx-gap-space8 !rvx-border-neutral-600 rvx-text-neutral-800 focus:rvx-text-neutral-800 rvx-font-semibold hover:rvx-border-neutral-600 hover:rvx-text-neutral-600">
+                <button @click="openSortOptions = !openSortOptions" class="rvx-outline-none focus:rvx-outline-none rvx-review-sort__button rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-bg-transparent hover:rvx-bg-transparent focus:rvx-bg-transparent disabled:!rvx-cursor-not-allowed rvx-flex rvx-justify-center rvx-items-center rvx-gap-space8 !rvx-border-neutral-400 rvx-text-neutral-800 focus:rvx-text-neutral-800 rvx-font-semibold hover:rvx-border-neutral-600 hover:rvx-text-neutral-600">
                     <span class="material-symbols-rounded rvx-review-sort__icon">{{__('swap_vert', 'reviewx')}}</span>  {{__('Sort By', 'reviewx')}}
                 </button>
                 <div x-show="openSortOptions" @click.outside="openSortOptions = false"

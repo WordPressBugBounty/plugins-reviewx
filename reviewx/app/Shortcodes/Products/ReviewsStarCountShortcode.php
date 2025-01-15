@@ -10,24 +10,34 @@ class ReviewsStarCountShortcode implements ShortcodeContract
     public function render(array $attrs, string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'product_id' => null, 'post_id' => null], $attrs);
-        $attributes = $this->productWiseStarCountShow($attrs);
-        return View::render('storefront/shortcode/reviewsStarCount', ['title' => $attrs['title'], 'data' => $attributes]);
-    }
-    private function productWiseStarCountShow(array $attrs) : array
-    {
-        $data = $this->getProductReviewsStarCount($attrs);
-        if (!empty($attrs['product_id'])) {
-            return ['product' => ['id' => $attrs['product_id']], 'starCount' => $data['starCount'], 'reviewsCount' => $data['reviewsCount'], 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        if (!empty($attrs['product_id']) && !empty($attrs['post_id'])) {
+            return '<div class="warning">Error: Please use only one of "product_id" or "post_id" in the shortcode.</div>';
         }
-        if (!empty($attrs['post_id']) && empty($attrs['product_id'])) {
-            return ['product' => ['id' => $attrs['post_id']], 'starCount' => $data['starCount'], 'reviewsCount' => $data['reviewsCount'], 'domain' => ['baseDomain' => Helper::domainSupport()]];
-        }
-        return ['product' => ['id' => 0], 'starCount' => 0, 'reviewsCount' => 0, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $isProduct = !empty($attrs['product_id']);
+        $id = $isProduct ? (int) $attrs['product_id'] : (int) $attrs['post_id'];
+        $data = $this->getReviewsData($id, $isProduct);
+        return View::render('storefront/shortcode/reviewsStarCount', ['title' => $attrs['title'], 'data' => $data]);
     }
-    private function getProductReviewsStarCount(array $attrs) : array
+    private function getReviewsData(int $id, bool $isProduct) : array
     {
-        $starCount = get_post_meta((int) $attrs['product_id'], '_wc_average_rating', \true);
-        $reviewsCount = get_post_meta((int) $attrs['product_id'], '_wc_review_count', \true);
-        return ['starCount' => (float) $starCount ?? (float) 0.0, 'reviewsCount' => (int) $reviewsCount ?? (int) 0];
+        $post = get_post($id);
+        $typeKey = $isProduct ? 'product' : 'post';
+        $defaultData = [$typeKey => ['id' => $id], 'starCount' => 0, 'reviewsCount' => 0, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        if (!$post || $isProduct && $post->post_type !== 'product' || !$isProduct && $post->post_type === 'product') {
+            return $defaultData;
+        }
+        $starCount = 0.0;
+        $reviewsCount = 0;
+        if ($isProduct) {
+            // WooCommerce product meta
+            $starCount = get_post_meta($id, '_wc_average_rating', \true);
+            $reviewsCount = get_post_meta($id, '_wc_review_count', \true);
+        }
+        // if {
+        //     // Custom meta for non-products
+        //     // $starCount = get_post_meta($id, 'rvx_avg_rating', true);
+        //     // $reviewsCount = get_post_meta($id, '_total-comment_count', true);
+        // }
+        return \array_merge($defaultData, ['starCount' => (float) $starCount ?? 0.0, 'reviewsCount' => (int) $reviewsCount ?? 0]);
     }
 }

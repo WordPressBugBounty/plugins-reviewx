@@ -5,6 +5,7 @@ namespace Rvx;
 \defined('ABSPATH') || exit;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
+use Rvx\Services\SettingService;
 do_action('woocommerce_before_account_orders', $has_orders);
 ?>
 
@@ -56,10 +57,18 @@ if ($has_orders) {
         foreach ($items as $item_id => $item) {
             $product_id = $item->get_product_id();
             $product = wc_get_product($product_id);
-            // Custom image size
-            $product_image_id = $product->get_image_id();
-            $product_image = wp_get_attachment_image($product_image_id, array(60, 60));
-            // Set custom width and height here
+            // Initialize variables to prevent issues
+            $product_image_id = 0;
+            $product_image = '';
+            // Check if $product is valid and method exists
+            if ($product instanceof WC_Product && \method_exists($product, 'get_image_id')) {
+                $product_image_id = $product->get_image_id();
+            }
+            // Get product image if ID exists
+            if ($product_image_id) {
+                $product_image = wp_get_attachment_image($product_image_id, [60, 60]);
+                // Custom width and height
+            }
             ?>
                     <tr class="woocommerce-orders-table__row woocommerce-orders-table__row--status-<?php 
             echo esc_attr($order->get_status());
@@ -79,7 +88,6 @@ if ($has_orders) {
                                     <?php 
                     do_action('woocommerce_my_account_my_orders_column_' . $column_id, $order, $item);
                     ?>
-
                                 <?php 
                 } elseif ('order-number' === $column_id) {
                     ?>
@@ -90,7 +98,6 @@ if ($has_orders) {
                     echo esc_html(_x('#', 'hash before order number', 'woocommerce') . $order->get_order_number());
                     ?>
                                     </a>
-
                                 <?php 
                 } elseif ('order-date' === $column_id) {
                     ?>
@@ -101,21 +108,18 @@ if ($has_orders) {
                     echo $order->get_date_created() ? esc_html(wc_format_datetime($order->get_date_created())) : 'N/A';
                     ?>
                                     </time>
-
                                 <?php 
                 } elseif ('order-status' === $column_id) {
                     ?>
                                     <?php 
                     echo esc_html(wc_get_order_status_name($order->get_status()));
                     ?>
-
                                 <?php 
                 } elseif ('order-total' === $column_id) {
                     ?>
                                     <?php 
                     echo wp_kses_post(\sprintf('%1$s for %2$s', $item->get_total(), $item->get_name()));
                     ?>
-
                                 <?php 
                 } elseif ('order-actions' === $column_id) {
                     ?>
@@ -152,28 +156,32 @@ if ($has_orders) {
                                 <?php 
                 $review_id = Helper::retrieveReviewId($order->get_id(), $product_id, get_current_user_id());
                 $review_id = !empty($review_id);
-                //$saas_order_status = Helper::reviewSettings()['setting']['review_settings']['reviews']['review_eligibility'];
-                $saas_order_status = Helper::reviewSettings()['reviews']['review_eligibility'];
+                $saas_order_status = (new SettingService())->getReviewSettings()['reviews']['review_eligibility'];
                 $order_current_status = \str_replace(' ', '_', \strtolower(wc_get_order_status_name($order->get_status())));
+                if ($order_current_status === 'completed') {
+                    $order_current_status = 'completed_payment';
+                } elseif ($order_current_status === 'pending') {
+                    $order_current_status = 'pending_payment';
+                }
                 if (\is_array($saas_order_status) && \array_key_exists($order_current_status, $saas_order_status) && $saas_order_status[$order_current_status] === \true) {
                     ?>
                                     <a href="#reviewxForm" class="woocommerce-button button rvx-elem"
-                                        data-order-id="<?php 
+                                    data-order-id="<?php 
                     echo esc_attr($order->get_id());
                     ?>"
-                                        data-product-id="<?php 
+                                    data-product-id="<?php 
                     echo esc_attr($product_id);
                     ?>"
-                                        data-item-id="<?php 
+                                    data-item-id="<?php 
                     echo esc_attr($item_id);
                     ?>"
-                                        data-product-name="<?php 
+                                    data-product-name="<?php 
                     echo esc_attr($product->get_name());
                     ?>"
-                                        data-product-image='<?php 
+                                    data-product-image='<?php 
                     echo wp_kses_post($product_image);
                     ?>'
-                                        data-review-id='<?php 
+                                    data-review-id='<?php 
                     echo esc_attr($review_id);
                     ?>'>
                                         <?php 

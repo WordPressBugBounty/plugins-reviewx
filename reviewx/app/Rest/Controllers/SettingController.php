@@ -2,30 +2,21 @@
 
 namespace Rvx\Rest\Controllers;
 
+use Throwable;
 use Rvx\WPDrill\Response;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Services\SettingService;
-use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\Utilities\Helper;
-class SettingController implements InvokableContract
+class SettingController
 {
     protected SettingService $settingService;
-    /**
-     *
-     */
     public function __construct()
     {
         $this->settingService = new SettingService();
     }
-    /**
-     * @return void
-     */
-    public function __invoke()
+    public function getApiReviewSettings()
     {
-    }
-    public function getReviewSettings()
-    {
-        $response = $this->settingService->getReviewSettings();
+        $response = $this->settingService->getApiReviewSettings();
         return Helper::getApiResponse($response);
     }
     public function wooCommerceVerificationRating()
@@ -43,27 +34,29 @@ class SettingController implements InvokableContract
         $data = $request->get_params()['user_access'];
         update_option('__user_setting_access', \json_encode($data));
     }
-    public function saveReviewSettings($request)
+    public function saveApiReviewSettings($request)
     {
         try {
-            $response = $this->settingService->saveReviewSettings($request->get_params());
-            if ($response->getStatusCode() == Response::HTTP_OK) {
-                if ($response->getApiData()['review_settings']['reviews']['show_verified_badge'] === \true) {
+            $response = $this->settingService->saveApiReviewSettings($request->get_params());
+            if ($response->getStatusCode() === Response::HTTP_OK) {
+                // Update Review Settings
+                $review_settings = $response->getApiData()['review_settings'];
+                if ($review_settings['reviews']['show_verified_badge'] === \true) {
                     update_option('woocommerce_review_rating_verification_label', 'yes');
                 }
-                if ($response->getApiData()['review_settings']['reviews']['show_verified_badge'] === \false) {
+                if ($review_settings['reviews']['show_verified_badge'] === \false) {
                     update_option('woocommerce_review_rating_verification_label', 'no');
                 }
-                if ($response->getApiData()['review_settings']['reviews']['review_submission_policy']['options']['verified_customer'] === \true) {
+                if ($review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \true) {
                     update_option('woocommerce_review_rating_verification_required', 'yes');
                 }
-                if ($response->getApiData()['review_settings']['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
+                if ($review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
                     update_option('woocommerce_review_rating_verification_required', 'no');
                 }
-                update_option('rvx_review_settings', \json_encode($response->getApiData()['review_settings']));
+                $this->settingService->updateReviewSettings($review_settings);
             }
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review settings saved failed', $e->getCode());
         }
     }
@@ -72,7 +65,7 @@ class SettingController implements InvokableContract
         try {
             $response = $this->settingService->wooCommerceVerificationRatingUpdate($request->get_params());
             return $response;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review settings saved failed', $e->getCode());
         }
     }
@@ -81,13 +74,13 @@ class SettingController implements InvokableContract
         try {
             $response = $this->settingService->wooVerificationRating($request->get_params());
             return $response;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review settings saved failed', $e->getCode());
         }
     }
-    public function getWidgetSettings()
+    public function getApiWidgetSettings()
     {
-        $response = $this->settingService->getWidgetSettings();
+        $response = $this->settingService->getApiWidgetSettings();
         return Helper::getApiResponse($response);
     }
     public function userCurrentPlan()
@@ -95,26 +88,31 @@ class SettingController implements InvokableContract
         $response = $this->settingService->userCurrentPlan();
         return Helper::getApiResponse($response);
     }
-    public function saveWidgetSettings($request)
+    public function saveApiWidgetSettings($request)
     {
         try {
             $response = $this->settingService->saveWidgetSettings($request->get_params());
+            if ($response->getStatusCode() === Response::HTTP_OK) {
+                // Update Widget Settings
+                $widget_settings = $response->getApiData()['widget_settings'];
+                $this->settingService->updateWidgetSettings($widget_settings);
+            }
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Widget settings saved failed', $e->getCode());
         }
     }
-    public function getGeneralSettings()
+    public function getApiGeneralSettings()
     {
-        $response = $this->settingService->getGeneralSettings();
+        $response = $this->settingService->getApiGeneralSettings();
         return Helper::getApiResponse($response);
     }
-    public function saveGeneralSettings($request)
+    public function saveApiGeneralSettings($request)
     {
         try {
-            $response = $this->settingService->saveGeneralSettings($request->get_params());
+            $response = $this->settingService->saveApiGeneralSettings($request->get_params());
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
         }
     }
@@ -133,7 +131,7 @@ class SettingController implements InvokableContract
         try {
             $response = $this->settingService->allSettingsSave($request->get_params());
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
         }
     }
@@ -142,7 +140,7 @@ class SettingController implements InvokableContract
         try {
             $response = $this->settingService->removeCredentials();
             return $response;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
         }
     }

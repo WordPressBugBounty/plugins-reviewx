@@ -2,7 +2,6 @@
 
 namespace Rvx\Services;
 
-use Rvx\Apiz\Http\Response;
 use Rvx\Api\SettingApi;
 class SettingService extends \Rvx\Services\Service
 {
@@ -11,9 +10,65 @@ class SettingService extends \Rvx\Services\Service
     {
         $this->settingApi = new SettingApi();
     }
-    public function getReviewSettings()
+    public function getApiReviewSettings()
     {
-        return (new SettingApi())->getReviewSettings();
+        return (new SettingApi())->getApiReviewSettings();
+    }
+    public function saveApiReviewSettings($data)
+    {
+        return (new SettingApi())->saveApiReviewSettings($data);
+    }
+    public function getApiWidgetSettings()
+    {
+        return (new SettingApi())->getAPiWidgetSettings();
+    }
+    public function saveWidgetSettings($data)
+    {
+        return (new SettingApi())->saveApiWidgetSettings($data);
+    }
+    /**
+     * Get Settings Data
+     * @return array
+     */
+    public function getSettingsData() : array
+    {
+        $rvx_settings = get_option("_rvx_settings_data");
+        return $rvx_settings ?? [];
+    }
+    public function getReviewSettings() : array
+    {
+        $rvx_settings = get_option("_rvx_settings_data");
+        return $rvx_settings['setting']['review_settings'] ?? [];
+    }
+    public function getWidgetSettings() : array
+    {
+        $rvx_settings = get_option("_rvx_settings_data");
+        return $rvx_settings['setting']['widget_settings'] ?? [];
+    }
+    /**
+     * Upadte Settings Data
+     * @return array
+     */
+    public function updateSettingsData(array $data) : void
+    {
+        update_option("_rvx_settings_data", $data);
+    }
+    public function updateReviewSettings(array $review_settings) : void
+    {
+        $widget_settings = $this->getWidgetSettings();
+        $data = $this->updateSettingsMerger($review_settings, $widget_settings);
+        update_option("_rvx_settings_data", $data);
+    }
+    public function updateWidgetSettings(array $widget_settings) : void
+    {
+        $review_settings = $this->getReviewSettings();
+        $data = $this->updateSettingsMerger($review_settings, $widget_settings);
+        update_option("_rvx_settings_data", $data);
+    }
+    private function updateSettingsMerger(array $review_settings, array $widget_settings) : array
+    {
+        $data = ["setting" => ["widget_settings" => $widget_settings, "review_settings" => $review_settings]];
+        return $data ?? [];
     }
     public function wooCommerceVerificationRating()
     {
@@ -63,32 +118,17 @@ class SettingService extends \Rvx\Services\Service
             return $data;
         }
     }
-    public function reviewxSetting()
-    {
-    }
-    public function saveReviewSettings($data)
-    {
-        return (new SettingApi())->saveReviewSettings($data);
-    }
-    public function getWidgetSettings()
-    {
-        return (new SettingApi())->getWidgetSettings();
-    }
     public function userCurrentPlan()
     {
         return $this->settingApi->userCurrentPlan();
     }
-    public function saveWidgetSettings($data)
+    public function getApiGeneralSettings()
     {
-        return (new SettingApi())->saveWidgetSettings($data);
+        return (new SettingApi())->getApiGeneralSettings();
     }
-    public function getGeneralSettings()
+    public function saveApiGeneralSettings($data)
     {
-        return (new SettingApi())->getGeneralSettings();
-    }
-    public function saveGeneralSettings($data)
-    {
-        return (new SettingApi())->saveGeneralSettings($data);
+        return (new SettingApi())->saveApiGeneralSettings($data);
     }
     public function allSettingsSave($data)
     {

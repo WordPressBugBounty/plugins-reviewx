@@ -3,6 +3,7 @@
 namespace Rvx\Handlers\MigrationRollback;
 
 use Rvx\Handlers\MigrationRollback\SharedMethods;
+use Rvx\Services\SettingService;
 class RollbackPrompt
 {
     // Constructor
@@ -27,16 +28,11 @@ class RollbackPrompt
     // Handles the rollback of plugin options data
     public function rvx_retrieve_saas_plugin_options_data()
     {
-        $option_key = 'rvx_review_settings';
-        $existing_data = get_option($option_key);
-        // Decode options data if it is a string
-        $existing_data = \is_string($existing_data) ? \json_decode($existing_data, \true) : null;
-        $serialized_data = get_option('_rvx_settings_data');
-        $settings_data = \is_string($serialized_data) ? maybe_unserialize($serialized_data) : [];
+        $settings_data = (array) (new SettingService())->getSettingsData()['setting'] ?? [];
         // If settings data is an array, extract and update widget/review settings
         if (\is_array($settings_data)) {
-            $widget_settings = $settings_data['setting']['widget_settings'] ?? [];
-            $review_settings = $settings_data['setting']['review_settings']['reviews'] ?? [];
+            $widget_settings = $settings_data['widget_settings'] ?? [];
+            $review_settings = $settings_data['review_settings']['reviews'] ?? [];
             $this->update_widget_settings($widget_settings);
             $this->update_review_settings($review_settings);
         }

@@ -2,37 +2,48 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Api\ReviewsApi;
-use Rvx\Api\SettingApi;
-use Rvx\Api\UserApi;
-use Rvx\Utilities\Auth\Client;
+use Throwable;
 use Rvx\WPDrill\Response;
 use Rvx\Utilities\Helper;
+use Rvx\Services\SettingService;
 class WoocommerceSettingsSaveHandler
 {
-    public function __invoke()
+    public function wooProductSaveHandler()
     {
-        $data = \json_decode(get_option('rvx_review_settings'), \true);
-        $data['reviews']['show_verified_badge'] = isset($_POST['woocommerce_review_rating_verification_label']);
+        // Isset specific fields
+        $isset_label = isset($_POST['woocommerce_review_rating_verification_label']) ? \true : \false;
+        $isset_required = isset($_POST['woocommerce_review_rating_verification_required']) ? \true : \false;
+        $modifiedReviewsettings = $this->prepareData($isset_label, $isset_required);
         try {
-            $modifiedData = $this->prepareData($data);
-            $response = (new SettingApi())->saveReviewSettingsWoocommer($modifiedData);
+            $response = (new SettingService())->saveApiReviewSettings($modifiedReviewsettings);
+            if ($response->getStatusCode() === Response::HTTP_OK) {
+                $review_settings = $response->getApiData()['review_settings'];
+                (new SettingService())->updateReviewSettings($review_settings);
+            }
             if ($response->getStatusCode() !== Response::HTTP_OK) {
+                \error_log('API response - NOT OK: ' . \print_r($response->getApiData()['review_settings'], \true));
                 return Helper::rvxApi(['error' => "WC Settings Fail"])->fails('WC Settings Fail', $response->getStatusCode());
             }
-        } catch (\Exception $e) {
-            throw new \Rvx\Handlers\Exception(__('An error occurred: ', 'reviewx') . $e->getMessage());
+            return Helper::saasResponse($response);
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review settings saved failed', $e->getCode());
         }
     }
-    public function prepareData(array $input) : array
+    private function prepareData($isset_label, $isset_required)
     {
-        $wpOnlyVerifiedCustomerSendReview = isset($_POST['woocommerce_review_rating_verification_required']);
-        $anyone = \true;
-        $onlyVerified = \false;
-        if ($wpOnlyVerifiedCustomerSendReview) {
-            $anyone = \false;
-            $onlyVerified = \true;
+        // Retrieve the existing review settings
+        $review_settings = (array) (new SettingService())->getReviewSettings()['reviews'];
+        $review_settings['show_verified_badge'] = $isset_label ? \true : \false;
+        $wcReviewSubmissionPolicy = $isset_required ? \true : \false;
+        $isAnyone = \true;
+        $isOnlyVerified = \false;
+        if ($wcReviewSubmissionPolicy) {
+            $isAnyone = \false;
+            $isOnlyVerified = \true;
         }
-        return ["review_submission_policy" => ["options" => ["anyone" => $anyone, "verified_customer" => $onlyVerified]], "show_verified_badge" => (bool) $input['reviews']['show_verified_badge'], "censor_reviewer_name" => (bool) $input['reviews']['censor_reviewer_name'], "review_eligibility" => ["pending_payment" => (bool) $input['reviews']['review_eligibility']['pending_payment'], "processing" => (bool) $input['reviews']['review_eligibility']['processing'], "on_hold" => (bool) $input['reviews']['review_eligibility']['on_hold'], "completed_payment" => (bool) $input['reviews']['review_eligibility']['completed_payment'], "cancelled" => (bool) $input['reviews']['review_eligibility']['cancelled'], "refunded" => (bool) $input['reviews']['review_eligibility']['refunded'], "failed" => (bool) $input['reviews']['review_eligibility']['failed'], "draft" => (bool) $input['reviews']['review_eligibility']['draft']], "auto_approve_reviews" => (bool) $input['reviews']['auto_approve_reviews'], "show_reviewer_name" => (bool) $input['reviews']['show_reviewer_name'], "show_reviewer_country" => (bool) $input['reviews']['show_reviewer_country'], "enable_likes_dislikes" => ["enabled" => (bool) $input['reviews']['enable_likes_dislikes']['enabled'], "options" => ["allow_likes" => (bool) $input['reviews']['enable_likes_dislikes']['options']['allow_likes'], "allow_dislikes" => (bool) $input['reviews']['enable_likes_dislikes']['options']['allow_dislikes']]], "allow_review_sharing" => (bool) $input['reviews']['allow_review_sharing'], "allow_review_titles" => (bool) $input['reviews']['allow_review_titles'], "photo_reviews_allowed" => (bool) $input['reviews']['photo_reviews_allowed'], "video_reviews_allowed" => (bool) $input['reviews']['video_reviews_allowed'], "allow_recommendations" => (bool) $input['reviews']['allow_recommendations'], "anonymous_reviews_allowed" => (bool) $input['reviews']['anonymous_reviews_allowed'], "show_consent_checkbox" => ["enabled" => (bool) isset($input['reviews']['enabled']), "content" => isset($input['reviews']['content'])], "allow_multiple_reviews" => (bool) $input['reviews']['allow_multiple_reviews'], "multicriteria" => ["enable" => (bool) $input['reviews']['multicriteria']['enable'], "criterias" => $input['reviews']['multicriteria']['criterias']], "product_schema" => (bool) $input['reviews']['product_schema'], "recaptcha" => ["enabled" => isset($input['reviews']['recaptcha']['enabled']) ? (bool) $input['reviews']['recaptcha']['enabled'] : \false, "site_key" => $input['reviews']['recaptcha']['site_key'], "secret_key" => $input['reviews']['recaptcha']['secret_key']]];
+        $review_settings['review_submission_policy']['options']['anyone'] = $isAnyone;
+        $review_settings['review_submission_policy']['options']['verified_customer'] = $isOnlyVerified;
+        // $review_settings['recaptcha']['secret_key'] = null; // true if verified only [If for some reason data doesn't save, uncomment this and try]
+        return $review_settings;
     }
 }

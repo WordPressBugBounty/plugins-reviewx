@@ -123,24 +123,7 @@ return [
     ]],
     ],
        
-        'styles' => [
-//            [
-//                'handle' => 'reviewx-admin-onBoarding-css',
-//                'src' => 'frontend/dist/apps/onBoarding/rvx-on-boarding.css',
-//                'deps' => [],
-//                'ver' => false,
-//                'media' => 'all',
-//                'in_footer' => false
-//            ],
-            [
-                'handle' => 'reviewx-admin-css',
-                'src' => 'resources/assets/admin.css',
-                'deps' => [],
-                'ver' => false,
-                'media' => 'all',
-                'in_footer' => false
-            ]
-        ]
+        'styles' => []
     ],
     'frontend' => [
         'scripts' => [

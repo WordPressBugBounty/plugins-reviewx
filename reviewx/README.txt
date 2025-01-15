@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,20 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.1.3 - 1-15-2025 =
+- New: Aggregation summary design improve & increase progress bar `height`
+- New: Multi-criteria design improve & increase progress bar `height`
+- New: Recommendation banner design improve
+- New: Added line for separate between multi-criteria and reviews
+- New: Aggregation summary and multi-criteria overview added missing `color` `font-size` & `font-family
+- New: Reduce Review card `background-color`
+- Add: Refactored and redesigned plugin options and settings.
+- Fix: `Throwable` and `Exception` for better error handling.
+- Updated: Review star count shortcode for better functionality.
+- Fix: Order Status Change issue
+- Fix: The Rich Schema for product ratings.
+
+
 = 2.1.2 - 1-07-2025 =
 - Fix: Admin notice conflict with AffiliateWP
 - Enhance: Improve data synchronization performance.

@@ -42,6 +42,7 @@ humbug_phpscoper_expose_class('__TwigTemplate_dc885e6e534b617a5f93bfabd0b95889',
 humbug_phpscoper_expose_class('__TwigTemplate_2ebf23787b3af3e063e82fdc1d611027', 'Rvx\__TwigTemplate_2ebf23787b3af3e063e82fdc1d611027');
 humbug_phpscoper_expose_class('__TwigTemplate_6b31d68451843525135a5c97ca426d51', 'Rvx\__TwigTemplate_6b31d68451843525135a5c97ca426d51');
 humbug_phpscoper_expose_class('__TwigTemplate_eca0ffbcf23af39d3876c365bc1843d5', 'Rvx\__TwigTemplate_eca0ffbcf23af39d3876c365bc1843d5');
+humbug_phpscoper_expose_class('__TwigTemplate_f4027ad1d6114c344d6efb41022102b8', 'Rvx\__TwigTemplate_f4027ad1d6114c344d6efb41022102b8');
 humbug_phpscoper_expose_class('__TwigTemplate_c0976ddfb63e2ad6664af6d11344ef5b', 'Rvx\__TwigTemplate_c0976ddfb63e2ad6664af6d11344ef5b');
 humbug_phpscoper_expose_class('__TwigTemplate_9d829c521e8456cd23011e1609addde4', 'Rvx\__TwigTemplate_9d829c521e8456cd23011e1609addde4');
 humbug_phpscoper_expose_class('__TwigTemplate_0fea0b4dde4346d49ff636000dbf06f3', 'Rvx\__TwigTemplate_0fea0b4dde4346d49ff636000dbf06f3');
@@ -180,7 +181,6 @@ if (!function_exists('get_post_type')) { function get_post_type() { return \Rvx\
 if (!function_exists('get_resource_id')) { function get_resource_id() { return \Rvx\get_resource_id(...func_get_args()); } }
 if (!function_exists('get_stylesheet_directory')) { function get_stylesheet_directory() { return \Rvx\get_stylesheet_directory(...func_get_args()); } }
 if (!function_exists('get_template_directory')) { function get_template_directory() { return \Rvx\get_template_directory(...func_get_args()); } }
-if (!function_exists('get_user_meta')) { function get_user_meta() { return \Rvx\get_user_meta(...func_get_args()); } }
 if (!function_exists('getallheaders')) { function getallheaders() { return \Rvx\getallheaders(...func_get_args()); } }
 if (!function_exists('grapheme_extract')) { function grapheme_extract() { return \Rvx\grapheme_extract(...func_get_args()); } }
 if (!function_exists('grapheme_stripos')) { function grapheme_stripos() { return \Rvx\grapheme_stripos(...func_get_args()); } }
@@ -313,7 +313,6 @@ if (!function_exists('twig_trim_filter')) { function twig_trim_filter() { return
 if (!function_exists('twig_upper_filter')) { function twig_upper_filter() { return \Rvx\twig_upper_filter(...func_get_args()); } }
 if (!function_exists('twig_urlencode_filter')) { function twig_urlencode_filter() { return \Rvx\twig_urlencode_filter(...func_get_args()); } }
 if (!function_exists('twig_var_dump')) { function twig_var_dump() { return \Rvx\twig_var_dump(...func_get_args()); } }
-if (!function_exists('update_option')) { function update_option() { return \Rvx\update_option(...func_get_args()); } }
 if (!function_exists('update_post_meta')) { function update_post_meta() { return \Rvx\update_post_meta(...func_get_args()); } }
 if (!function_exists('wc_format_datetime')) { function wc_format_datetime() { return \Rvx\wc_format_datetime(...func_get_args()); } }
 if (!function_exists('wc_get_account_orders_actions')) { function wc_get_account_orders_actions() { return \Rvx\wc_get_account_orders_actions(...func_get_args()); } }
@@ -325,7 +324,6 @@ if (!function_exists('wc_get_product')) { function wc_get_product() { return \Rv
 if (!function_exists('wc_print_notice')) { function wc_print_notice() { return \Rvx\wc_print_notice(...func_get_args()); } }
 if (!function_exists('wp_doing_ajax')) { function wp_doing_ajax() { return \Rvx\wp_doing_ajax(...func_get_args()); } }
 if (!function_exists('wp_get_attachment_image')) { function wp_get_attachment_image() { return \Rvx\wp_get_attachment_image(...func_get_args()); } }
-if (!function_exists('wp_get_current_user')) { function wp_get_current_user() { return \Rvx\wp_get_current_user(...func_get_args()); } }
 if (!function_exists('wp_kses_post')) { function wp_kses_post() { return \Rvx\wp_kses_post(...func_get_args()); } }
 if (!function_exists('wp_parse_args')) { function wp_parse_args() { return \Rvx\wp_parse_args(...func_get_args()); } }
 if (!function_exists('wp_verify_nonce')) { function wp_verify_nonce() { return \Rvx\wp_verify_nonce(...func_get_args()); } }

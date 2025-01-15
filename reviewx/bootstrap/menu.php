@@ -27,13 +27,5 @@ return function (Plugin $plugin) {
         Menu::group(__("ReviewX", "reviewx"), \Rvx\Handlers\OnboardMenuHandler::class, 'manage_options', function (\Rvx\WPDrill\Menus\MenuBuilder $menu) {
             $menu->currentGroup()->position(2)->icon(\RVX_URL . 'resources/assets/logo/ReviewX_dash_icon_white.png');
         });
-        add_action('admin_head', function () {
-            $current_user = wp_get_current_user();
-            $first_name = get_user_meta($current_user->ID, 'first_name', \true);
-            $last_name = get_user_meta($current_user->ID, 'last_name', \true);
-            $user_data = array('ID' => $current_user->ID, 'display_name' => $current_user->display_name, 'first_name' => $first_name, 'last_name' => $last_name);
-            update_option('rvx_stored_user_info', $user_data);
-        });
     }
-    //    Menu::remove('upload.php');
 };

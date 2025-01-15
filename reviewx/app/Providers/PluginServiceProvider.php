@@ -8,7 +8,6 @@ use Rvx\WPDrill\ServiceProvider;
 use Rvx\Handlers\UserHandler;
 use Rvx\Handlers\ProductHandler;
 use Rvx\Handlers\CategoryHandler;
-use Rvx\Handlers\CommentBoxHandle;
 use Rvx\Handlers\UserDeleteHandler;
 use Rvx\Handlers\UserUpdateHandler;
 use Rvx\Handlers\OrderCreateHandler;
@@ -37,9 +36,8 @@ use Rvx\Handlers\WoocommerceCommentUntrashHandler;
 use Rvx\Handlers\RvxInit\PermalinkStructureHandler;
 use Rvx\Handlers\WcTemplates\WcAccountDetailsError;
 use Rvx\Handlers\WoocommerceCommentMoveToTrashHandler;
-use Rvx\Handlers\RichSchma\WoocommerceRichSchmaHandler;
+use Rvx\Handlers\RichSchema\WoocommerceRichSchemaHandler;
 use Rvx\Handlers\WoocommerceCommentStatusChangeHandler;
-use Rvx\Handlers\WcTemplates\CommentDefaultTemplateHandler;
 use Rvx\Handlers\WcTemplates\WoocommerceLocateTemplateHandler;
 use Rvx\Handlers\BulkAction\CustomBulkActionsForReviewsHandler;
 use Rvx\Handlers\BulkAction\RegisterBulkActionsForReviewsHandler;
@@ -51,6 +49,7 @@ use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
 use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\Handlers\WChooks\StorefrontReviewLinkClickScroll;
+use Rvx\Handlers\WChooks\AdminOrderCreateHandler;
 class PluginServiceProvider extends ServiceProvider
 {
     public function register() : void
@@ -74,7 +73,7 @@ class PluginServiceProvider extends ServiceProvider
         add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);
-        add_action('woocommerce_thankyou', new OrderCreateHandler());
+        add_action('woocommerce_new_order', new OrderCreateHandler());
         add_action('woocommerce_order_status_changed', new OrderStatusChangedHandler(), 10, 4);
         add_action('woocommerce_delete_order', new OrderDeleteHandler());
         /**
@@ -83,7 +82,6 @@ class PluginServiceProvider extends ServiceProvider
         add_action('create_term', new CategoryHandler());
         add_action('delete_category', new CategoryDeleteHandler());
         //Post category
-        // add_action('delete_product_cat', new CategoryProductDeleteHandler()); //Product category
         add_action('edited_term', new CategoryUpdateHandler());
         /**
          * Customer Hook
@@ -91,7 +89,6 @@ class PluginServiceProvider extends ServiceProvider
         add_action('user_register', new UserHandler());
         add_action('delete_user', new UserDeleteHandler());
         add_action('profile_update', new UserUpdateHandler());
-        // add_action('woocommerce_order_status_processing', (new VerifiedUserHandler()));
         add_action('woocommerce_update_order', new OrderUpdateHandler(), 10, 1);
         add_action('process_order_update', new OrderUpdateProcessHandler(), 20);
         /**
@@ -118,21 +115,19 @@ class PluginServiceProvider extends ServiceProvider
         add_filter('handle_bulk_actions', new RegisterBulkActionsForReviewsHandler(), 10, 3);
         add_action('trashed_comment', new WoocommerceCommentMoveToTrashHandler());
         add_action('untrash_comment', new WoocommerceCommentUntrashHandler());
-        add_action('woocommerce_settings_save_products', new WoocommerceSettingsSaveHandler());
+        add_action('woocommerce_settings_save_products', [new WoocommerceSettingsSaveHandler(), 'wooProductSaveHandler'], 10);
         /**
          * Woocommerce Edit Comment/Review
          */
         add_action('edit_comment', new WooCommerceReviewEditForm(), 10, 2);
         /**
-         * Woocommerce Comment status
+         * Woocommerce Rich Schema
          */
-        add_action('woocommerce_structured_data_product', new WoocommerceRichSchmaHandler(), 10, 2);
+        add_action('woocommerce_structured_data_product', new WoocommerceRichSchemaHandler(), 10, 2);
         /**
          * Woocommerce Template Modify
          */
         add_filter('woocommerce_locate_template', new WoocommerceLocateTemplateHandler(), 10, 3);
-        // add_filter('comments_template', new CommentDefaultTemplateHandler(), 10);
-        //add_filter('comments_template', new CommentBoxHandle(), 99);
         //Woocommerce Avater
         add_action('woocommerce_edit_account_form', new WcEditAccountForm(), 10);
         add_action('woocommerce_save_account_details_errors', new WcAccountDetailsError(), 10, 1);

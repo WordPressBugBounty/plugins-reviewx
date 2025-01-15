@@ -13,19 +13,14 @@ use Rvx\Services\DataSyncService;
 use Rvx\Services\Api\LoginService;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
+use Rvx\Services\SettingService;
 class LoginController implements InvokableContract
 {
     protected LoginService $loginService;
-    /**
-     *
-     */
     public function __construct()
     {
         $this->loginService = new LoginService();
     }
-    /**
-     * @return void
-     */
     public function __invoke()
     {
     }
@@ -108,17 +103,6 @@ class LoginController implements InvokableContract
         $last_name = $current_user->last_name ?: '';
         return ['domain' => Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => sanitize_text_field($first_name), 'last_name' => sanitize_text_field($last_name)];
     }
-    // public function getRegisterDataApi(): array
-    // {
-    //     $user = get_option('rvx_stored_user_info');
-    //     return [
-    //         'domain' => Helper::getWpDomainNameOnly(),
-    //         'url' => site_url(),
-    //         'site_locale' => get_locale(),
-    //         'first_name' => $user['first_name'],
-    //         'last_name' => $user['last_name'],
-    //     ];
-    // }
     public function existingPayload()
     {
         $data = [];
@@ -133,18 +117,13 @@ class LoginController implements InvokableContract
                 }
                 $i++;
             }
-            $multicrtriaEnableorDisale = get_option('_rx_option_allow_multi_criteria');
-            $data = ["enable" => $multicrtriaEnableorDisale == 1 ? \true : \false, "criterias" => $criterias];
+            $multicrtriaEnableorDisable = get_option('_rx_option_allow_multi_criteria');
+            $data = ["enable" => $multicrtriaEnableorDisable == 1 ? \true : \false, "criterias" => $criterias];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
-            $data = get_option('_rvx_settings_data');
-            $data = $data['setting']['review_settings']['reviews']['multicriteria'];
+            $data = (array) (new SettingService())->getReviewSettings() ?? [];
+            $data = $data['reviews']['multicriteria'];
         }
         return $data;
-    }
-    public function option_exists($option_name)
-    {
-        $option_value = get_option($option_name);
-        return $option_value !== \false;
     }
     public function forgetPassword($request)
     {

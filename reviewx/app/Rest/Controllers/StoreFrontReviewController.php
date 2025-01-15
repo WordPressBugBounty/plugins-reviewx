@@ -15,9 +15,6 @@ class StoreFrontReviewController implements InvokableContract
     protected ReviewService $reviewService;
     protected SettingService $settingService;
     protected LoginService $loginService;
-    /**
-     *
-     */
     public function __construct()
     {
         $this->reviewService = new ReviewService();
@@ -228,7 +225,7 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function getLocalSettings()
     {
-        $data = get_option("_rvx_settings_data");
+        $data = (array) (new SettingService())->getSettingsData() ?? [];
         if ($data) {
             return Helper::rest($data)->success("Success");
         } else {

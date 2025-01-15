@@ -95,19 +95,15 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/insight/review/request/email', [DashboardController::class, 'requestEmail']);
     Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
     /**
-     * Reviewx v1 Settings
-     */
-    // Route::get('/reviewx/wp/settings', [SettingController::class, 'reviewxSettings']);
-    /**
      * Review Settings
      */
-    Route::get('/reviews/settings/get', [SettingController::class, 'getReviewSettings']);
-    Route::post('/reviews/settings/save', [SettingController::class, 'saveReviewSettings']);
+    Route::get('/reviews/settings/get', [SettingController::class, 'getApiReviewSettings']);
+    Route::post('/reviews/settings/save', [SettingController::class, 'saveApiReviewSettings']);
     /**
      * Widget Settings
      */
-    Route::get('/settings/widget/get', [SettingController::class, 'getWidgetSettings']);
-    Route::post('/settings/widget/save', [SettingController::class, 'saveWidgetSettings']);
+    Route::get('/settings/widget/get', [SettingController::class, 'getAPiWidgetSettings']);
+    Route::post('/settings/widget/save', [SettingController::class, 'saveApiWidgetSettings']);
     /**
      * Remove table and user information
      */
@@ -115,8 +111,8 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     /**
      * Genaral Settings
      */
-    Route::get('/settings/general/get', [SettingController::class, 'getGeneralSettings']);
-    Route::post('/settings/general/save', [SettingController::class, 'saveGeneralSettings']);
+    Route::get('/settings/general/get', [SettingController::class, 'getApiGeneralSettings']);
+    Route::post('/settings/general/save', [SettingController::class, 'saveApiGeneralSettings']);
     /**
      * Woocommerc Product Settings
      */

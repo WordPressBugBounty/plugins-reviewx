@@ -5,10 +5,10 @@ namespace Rvx\Services;
 use Exception;
 use Rvx\WPDrill\Response;
 use Rvx\Enum\ReviewStatusEnum;
-use Rvx\Models\User;
 use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
+use Rvx\Services\SettingService;
 class ReviewService extends \Rvx\Services\Service
 {
     protected ReviewsApi $reviewApi;
@@ -71,7 +71,7 @@ class ReviewService extends \Rvx\Services\Service
                 $attachments = $data->get_params()['attachments'] ? $data->get_params()['attachments'] : [];
             }
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
-            $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
             // Calculate the average rating
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
@@ -101,7 +101,7 @@ class ReviewService extends \Rvx\Services\Service
             $attachments = !empty($file) ? $file : [];
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
             // Calculate the average rating
-            $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
             // Calculate the average rating
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
@@ -127,14 +127,10 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function prepareWpCommentData($request) : array
     {
-        $data = $this->getReviewStatus();
-        $auto_approve_reviews = $data['setting']['review_settings']['reviews']['auto_approve_reviews'];
+        $data = (array) (new SettingService())->getReviewSettings();
+        $auto_approve_reviews = $data['reviews']['auto_approve_reviews'];
         $review_type = get_post_type($request['wp_post_id']) === 'product' ? 'review' : 'comment';
         return ['comment_post_ID' => absint($request['wp_post_id']), 'comment_content' => \strip_tags(\trim($request['feedback'], '"') ?? null), 'comment_author' => sanitize_text_field($request['reviewer_name']), 'comment_author_email' => sanitize_text_field($request['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => sanitize_text_field($request['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
-    }
-    public function getReviewStatus()
-    {
-        return get_option('_rvx_settings_data');
     }
     /**
      * Prepare application review data.
@@ -417,7 +413,7 @@ class ReviewService extends \Rvx\Services\Service
         $attachments = \array_key_exists('attachements', $data->get_params()) ? $data->get_params()['attachements'] : [];
         $criterias = \array_key_exists('criterias', $data->get_params()) ? $data->get_params()['criterias'] : null;
         // Calculate the average rating
-        $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
+        $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
         if ($criterias !== null && $isAllowedMultiCriteria === \true) {
             $wcAverageRating = $this->calculateAverageRating($criterias);
         } else {
@@ -477,7 +473,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $settings = $request->get_params()['meta'];
-            update_option('_rvx_settings_data', $settings);
+            (new SettingService())->updateSettingsData($settings);
             return Helper::rest()->success("Success");
         } catch (Exception $th) {
             return Helper::rest()->fails("Fails");
@@ -699,8 +695,8 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function prepareWpCommentDataForEmail($data) : array
     {
-        $settingsData = $this->getReviewStatus();
-        $auto_approve_reviews = $settingsData['setting']['review_settings']['reviews']['auto_approve_reviews'];
+        $settingsData = (new SettingService())->getReviewSettings();
+        $auto_approve_reviews = $settingsData['reviews']['auto_approve_reviews'];
         $dataStore = [];
         foreach ($data['reviews'] as $review) {
             $dataWp = ['comment_post_ID' => absint($review['product_wp_id']), 'comment_content' => sanitize_text_field($review['feedback'] ?? ''), 'comment_author' => sanitize_text_field($review['reviewer_name']), 'comment_author_email' => sanitize_text_field($review['reviewer_email']), 'comment_type' => 'review', 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => absint($review['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
@@ -712,7 +708,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $id = [];
-            $isAllowedMultiCriteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
             foreach ($wpCommentData as $index => $comment) {
                 $criterias = $data['reviews'][$index]['criterias'] ?? null;
                 if (!empty($criterias) && $criterias !== null && $isAllowedMultiCriteria === \true) {

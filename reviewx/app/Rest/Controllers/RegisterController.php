@@ -93,18 +93,6 @@ class RegisterController implements InvokableContract
             }
         }
     }
-    /**
-     * @param $request
-     * @return array
-     */
-    // public function getRegisterDataApi(): array
-    // {
-    //     return [
-    //         'domain' => Helper::getWpDomainNameOnly(),
-    //         'url' => site_url(),
-    //         'site_locale' => get_locale(),
-    //     ];
-    // }
     public function getRegisterDataApi() : array
     {
         $current_user = wp_get_current_user();

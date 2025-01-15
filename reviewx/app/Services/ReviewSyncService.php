@@ -7,6 +7,7 @@ use Rvx\WPDrill\Facades\DB;
 use Rvx\Services\ReviewService;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 use Rvx\Handlers\MigrationRollback\MigrationPrompt;
+use Rvx\Services\SettingService;
 class ReviewSyncService extends \Rvx\Services\Service
 {
     protected $reviewMetaTitle;
@@ -32,7 +33,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
             $this->criteria = get_option('_rx_option_review_criteria') ?? [];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
-            $this->criteria = get_option('_rvx_settings_data')['setting']['review_settings']['reviews']['multicriteria']["criterias"] ?? [];
+            $this->criteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']["criterias"] ?? [];
         } else {
             $this->criteria = [];
         }

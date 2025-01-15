@@ -7,9 +7,6 @@ use Rvx\WPDrill\Response;
 use Rvx\Utilities\Auth\Client;
 class ProductUpdateHandler
 {
-    public function __construct()
-    {
-    }
     public function __invoke($product_id)
     {
         $product = wc_get_product($product_id);

@@ -23,6 +23,8 @@
 
             {% include "storefront/widget/Components/RecommendedBanner.twig" %}
 
+            <div class="rvx-w-full rvx-h-[2px] rvx-bg-neutral-100 rvx-rounded-full" :class="`${!reviewSettingsData?.data?.setting?.review_settings?.reviews?.multicriteria?.enable ? 'rvx-mb-space40' : 'rvx-mb-space12'}`"></div>
+
             {% include "storefront/widget/Features/MultriCriteriaAggregation/index.twig" %}
         </div>
     </template>

@@ -11,7 +11,7 @@
 
 <div :class="`${layoutView === 'masonry' || layoutView === 'grid' ? 'rvx-masonry-layout' : '' } rvx-review-wrapper`">
     <template x-for="review in reviewsData?.data?.reviews">
-        <div class="rvx-rounded-md rvx-shadow-100 rvx-bg-neutral-200 rvx-columns-box rvx-review-card" :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-p-space24'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
+        <div class="rvx-rounded-md rvx-shadow-100 rvx-columns-box rvx-review-card" :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-p-space24'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
 
         {% include 'storefront/widget/Features/Reviews/ReviewCard.twig' %}
 
