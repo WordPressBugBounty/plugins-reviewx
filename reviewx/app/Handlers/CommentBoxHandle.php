@@ -57,11 +57,16 @@ class CommentBoxHandle
     {
         // Helper function to extract specific values from the decoded Oxygen Builder data
         $builder_status_data = $this->builderStatusData();
+        //
         if ($builder_status_data[0] === \true) {
             if ($builder_status_data[1] === 'elementor') {
                 // Elementor builder is active
                 global $builderElementorSetting;
-                return \json_encode($builderElementorSetting);
+                if (!empty($builderElementorSetting)) {
+                    return \json_encode($builderElementorSetting, \JSON_UNESCAPED_UNICODE);
+                } else {
+                    return $this->rvxDefaultReviewFormLevelData();
+                }
             } elseif ($builder_status_data[1] === 'oxygen') {
                 // Oxygen builder is active
                 return $this->builderOxygenReviewFormLevelData();
@@ -128,23 +133,23 @@ class CommentBoxHandle
                 $regex_text_recommended_title = '/"oxy-reviewx-product-tabs_rvx_oxygen_text_recommended_title":"(.*?)"/';
                 \preg_match($regex_text_recommended_title, $post_meta, $text_recommended_title);
                 // Output the results with validation
-                $write_a_review = !empty($write_a_review) ? esc_html($write_a_review[1]) : 'Write a Review';
-                $text_rating_star_title = !empty($text_rating_star_title) ? esc_html($text_rating_star_title[1]) : 'Rating';
-                $text_review_title = !empty($text_review_title) ? esc_html($text_review_title[1]) : 'Review Title';
-                $placeholder_review_title = !empty($placeholder_review_title) ? esc_html($placeholder_review_title[1]) : 'Write Review Title';
-                $text_review_description = !empty($text_review_description) ? esc_html($text_review_description[1]) : 'Description';
-                $placeholder_review_description = !empty($placeholder_review_description) ? esc_html($placeholder_review_description[1]) : 'Write your description here';
-                $text_full_name = !empty($text_full_name) ? esc_html($text_full_name[1]) : 'Full name';
-                $placeholder_full_name = !empty($placeholder_full_name) ? esc_html($placeholder_full_name[1]) : 'Full Name';
-                $text_email_name = !empty($text_email_name) ? esc_html($text_email_name[1]) : 'Email address';
-                $placeholder_email_name = !empty($placeholder_email_name) ? esc_html($placeholder_email_name[1]) : 'Email Address';
-                $text_attachment_title = !empty($text_attachment_title) ? esc_html($text_attachment_title[1]) : 'Attachment';
-                $placeholder_upload_photo = !empty($placeholder_upload_photo) ? esc_html($placeholder_upload_photo[1]) : 'Upload Photo/Video';
-                $text_mark_as_anonymous = !empty($text_mark_as_anonymous) ? esc_html($text_mark_as_anonymous[1]) : 'Mark as Anonymous';
-                $text_recommended_title = !empty($text_recommended_title) ? esc_html($text_recommended_title[1]) : 'Recommendation?';
+                $write_a_review = !empty($write_a_review) ? esc_html_e($write_a_review[1]) : __('Write a Review', 'reviewx');
+                $text_rating_star_title = !empty($text_rating_star_title) ? esc_html_e($text_rating_star_title[1]) : __('Rating', 'reviewx');
+                $text_review_title = !empty($text_review_title) ? esc_html_e($text_review_title[1]) : __('Review Title', 'reviewx');
+                $placeholder_review_title = !empty($placeholder_review_title) ? esc_html_e($placeholder_review_title[1]) : __('Write Review Title', 'reviewx');
+                $text_review_description = !empty($text_review_description) ? esc_html_e($text_review_description[1]) : __('Description', 'reviewx');
+                $placeholder_review_description = !empty($placeholder_review_description) ? esc_html_e($placeholder_review_description[1]) : __('Write your description here', 'reviewx');
+                $text_full_name = !empty($text_full_name) ? esc_html_e($text_full_name[1]) : __('Full name', 'reviewx');
+                $placeholder_full_name = !empty($placeholder_full_name) ? esc_html_e($placeholder_full_name[1]) : __('Full Name', 'reviewx');
+                $text_email_name = !empty($text_email_name) ? esc_html_e($text_email_name[1]) : __('Email address', 'reviewx');
+                $placeholder_email_name = !empty($placeholder_email_name) ? esc_html_e($placeholder_email_name[1]) : __('Email Address', 'reviewx');
+                $text_attachment_title = !empty($text_attachment_title) ? esc_html_e($text_attachment_title[1]) : __('Attachment', 'reviewx');
+                $placeholder_upload_photo = !empty($placeholder_upload_photo) ? esc_html_e($placeholder_upload_photo[1]) : __('Upload Photo/Video', 'reviewx');
+                $text_mark_as_anonymous = !empty($text_mark_as_anonymous) ? esc_html_e($text_mark_as_anonymous[1]) : __('Mark as Anonymous', 'reviewx');
+                $text_recommended_title = !empty($text_recommended_title) ? esc_html_e($text_recommended_title[1]) : __('Recommendation?', ' reviewx');
                 // Define the default values, if no builder is active / available then use the default string / texts
                 $oxygen_values = ['write_a_review' => $write_a_review, 'text_rating_star_title' => $text_rating_star_title, 'text_review_title' => $text_review_title, 'placeholder_review_title' => $placeholder_review_title, 'text_review_description' => $text_review_description, 'placeholder_review_description' => $placeholder_review_description, 'text_full_name' => $text_full_name, 'placeholder_full_name' => $placeholder_full_name, 'text_email_name' => $text_email_name, 'placeholder_email_name' => $placeholder_email_name, 'text_attachment_title' => $text_attachment_title, 'placeholder_upload_photo' => $placeholder_upload_photo, 'text_mark_as_anonymous' => $text_mark_as_anonymous, 'text_recommended_title' => $text_recommended_title];
-                return \json_encode($oxygen_values);
+                return \json_encode($oxygen_values, \JSON_UNESCAPED_UNICODE);
             }
         }
         return $this->rvxDefaultReviewFormLevelData();
@@ -152,8 +157,8 @@ class CommentBoxHandle
     private function rvxDefaultReviewFormLevelData()
     {
         // Define the default values, if no builder is active / available then use the default string / texts
-        $default_values = ['write_a_review' => 'Write a Review', 'text_rating_star_title' => 'Rating', 'text_review_title' => 'Review Title', 'placeholder_review_title' => 'Write Review Title', 'text_review_description' => 'Description', 'placeholder_review_description' => 'Write your description here', 'text_full_name' => 'Full name', 'placeholder_full_name' => 'Full Name', 'text_email_name' => 'Email address', 'placeholder_email_name' => 'Email Address', 'text_attachment_title' => 'Attachment', 'placeholder_upload_photo' => 'Upload Photo/Video', 'text_mark_as_anonymous' => 'Mark as Anonymous', 'text_recommended_title' => 'Recommendation?'];
-        return \json_encode($default_values);
+        $default_values = ['write_a_review' => __('Write a Review', 'reviewx'), 'text_rating_star_title' => __('Rating', 'reviewx'), 'text_review_title' => __('Review Title', 'reviewx'), 'placeholder_review_title' => __('Write Review Title', 'reviewx'), 'text_review_description' => __('Description', 'reviewx'), 'placeholder_review_description' => __('Write your description here', 'reviewx'), 'text_full_name' => __('Full name', 'reviewx'), 'placeholder_full_name' => __('Full Name', 'reviewx'), 'text_email_name' => __('Email address', 'reviewx'), 'placeholder_email_name' => __('Email Address', 'reviewx'), 'text_attachment_title' => __('Attachment', 'reviewx'), 'placeholder_upload_photo' => __('Upload Photo/Video', 'reviewx'), 'text_mark_as_anonymous' => __('Mark as Anonymous', 'reviewx'), 'text_recommended_title' => __('Recommendation?', 'reviewx')];
+        return \json_encode($default_values, \JSON_UNESCAPED_UNICODE);
     }
     /*
      * Check is builder active or not
@@ -166,10 +171,8 @@ class CommentBoxHandle
         $builder_name = 'none';
         // Check if Elementor is active and used on the current page
         if (did_action('elementor/loaded')) {
-            if (\Elementor\Plugin::$instance->db->is_built_with_elementor(get_the_ID())) {
-                $builder_status = \true;
-                $builder_name = 'elementor';
-            }
+            $builder_status = \true;
+            $builder_name = 'elementor';
         }
         // Check if Oxygen is active and used on the current page
         if (\function_exists('Rvx\\oxygen_vsb_register_condition')) {

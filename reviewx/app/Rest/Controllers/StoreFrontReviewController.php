@@ -155,11 +155,11 @@ class StoreFrontReviewController implements InvokableContract
      * @param $request
      * @return Response
      */
-    public function requestReviewEmailAttachment($request)
+    public function requestReviewEmailAttachment($request) : Response
     {
         try {
-            $response = $this->reviewService->requestReviewEmailAttachment($request);
-            return $response;
+            $data = $this->reviewService->requestReviewEmailAttachment($request);
+            return Helper::rvxApi(["reviews" => $data])->success("Review Successfully sent", 200);
         } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }

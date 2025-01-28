@@ -2,9 +2,8 @@
 
 namespace Rvx\Services;
 
-use Rvx\Apiz\Http\Response;
+use Exception;
 use Rvx\Api\DiscountApi;
-use Rvx\WPDrill\Response as WPDrillResponse;
 class DiscountService extends \Rvx\Services\Service
 {
     /**
@@ -50,6 +49,17 @@ class DiscountService extends \Rvx\Services\Service
         }
         if (isset($data['maximum_amount'])) {
             $coupon->add_meta_data('maximum_amount', sanitize_text_field($data['maximum_amount']), \true);
+        }
+    }
+    public function deleteDiscount($couponId)
+    {
+        try {
+            $coupon = new \Rvx\WC_Coupon($couponId);
+            $coupon->delete(\true);
+            // true for force delete
+            return \true;
+        } catch (Exception $e) {
+            return \false;
         }
     }
     public function getDiscount()

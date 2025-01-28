@@ -29885,34 +29885,38 @@ const ri = /* @__PURE__ */ Js(qI), jI = /* @__PURE__ */ se({
 }), KN = /* @__PURE__ */ Ce(nN, [["__file", "/var/www/html/wp-content/plugins/reviewx/frontend/libs/share-ui/src/components/BulkCheckSearch/UIBulkCheckSearch.vue"]]), oN = { class: "!rvx-text-[14px] rvx-text-warning rvx-font-nunito rvx-m-0" }, iN = 5e3, aN = /* @__PURE__ */ se({
   __name: "UISyncOverlay",
   setup(e) {
-    const t = te(!1), r = te(0);
-    let n;
-    const o = async () => {
-      var l, s, u, f;
-      t.value = !0;
-      try {
-        const d = await Ry({
-          name: "data-sync-status"
-        });
-        r.value = (s = (l = d == null ? void 0 : d.data) == null ? void 0 : l.data) == null ? void 0 : s.progress_status_percentage, ((f = (u = d == null ? void 0 : d.data) == null ? void 0 : u.data) == null ? void 0 : f.progress_status_percentage) === 100 && (clearInterval(n), t.value = !1, r.value = 0, localStorage.setItem("isAlreadySyncSuccess", JSON.stringify(!0)), location.reload());
-      } catch (d) {
-        console.log(d);
+    const t = te(!1), r = te(!1), n = te(0);
+    let o;
+    const i = async () => {
+      var s, u, f, d;
+      if (t.value = !0, !r.value) {
+        r.value = !0;
+        try {
+          const c = await Ry({
+            name: "data-sync-status"
+          });
+          n.value = (u = (s = c == null ? void 0 : c.data) == null ? void 0 : s.data) == null ? void 0 : u.progress_status_percentage, ((d = (f = c == null ? void 0 : c.data) == null ? void 0 : f.data) == null ? void 0 : d.progress_status_percentage) === 100 && (clearInterval(o), t.value = !1, n.value = 0, localStorage.setItem("isAlreadySyncSuccess", JSON.stringify(!0)), location.reload());
+        } catch (c) {
+          console.log(c);
+        } finally {
+          r.value = !1;
+        }
       }
-    }, i = () => {
-      n = window.setInterval(o, iN);
     }, a = () => {
-      clearInterval(n), t.value = !1;
+      o = window.setInterval(i, iN);
+    }, l = () => {
+      clearInterval(o), t.value = !1;
     };
     return mg(() => {
       try {
-        const l = localStorage.getItem("isAlreadySyncSuccess");
-        (l ? JSON.parse(l) : !1) || i();
-      } catch (l) {
-        console.log("Error parsing localStorage data:", l);
+        const s = localStorage.getItem("isAlreadySyncSuccess");
+        (s ? JSON.parse(s) : !1) || a();
+      } catch (s) {
+        console.log("Error parsing localStorage data:", s);
       }
     }), ft(() => {
-      a();
-    }), (l, s) => (J(), ge(mi, { to: "#wpcontent" }, [
+      l();
+    }), (s, u) => (J(), ge(mi, { to: "#wpcontent" }, [
       t.value ? (J(), ge(we, {
         key: 0,
         class: "rvx-flex rvx-bg-neutral-900/40 rvx-z-10 rvx-p-space16 rvx-fixed rvx-top-0 rvx-left-[160px] rvx-right-[20px] rvx-h-full rvx-w-full"
@@ -29931,14 +29935,14 @@ const ri = /* @__PURE__ */ Js(qI), jI = /* @__PURE__ */ se({
                       $(we, null, {
                         default: ee(() => [
                           $(St, { class: "rvx-text-warning rvx-font-semibold" }, {
-                            default: ee(() => s[0] || (s[0] = [
+                            default: ee(() => u[0] || (u[0] = [
                               Ve("We’re upgrading your store to ReviewX-v2.0. Please be patient; the process will only take a few minutes. ")
                             ])),
                             _: 1
                             /* STABLE */
                           }),
                           $(St, { class: "rvx-text-neutral-800 !rvx-text-[13px]" }, {
-                            default: ee(() => s[1] || (s[1] = [
+                            default: ee(() => u[1] || (u[1] = [
                               Ve("Once the synchronization is complete, you’ll be able to enjoy all the new features. ")
                             ])),
                             _: 1
@@ -29953,7 +29957,7 @@ const ri = /* @__PURE__ */ Js(qI), jI = /* @__PURE__ */ se({
                     /* STABLE */
                   }),
                   Ae("          <UISyncIcon />"),
-                  s[2] || (s[2] = ce(
+                  u[2] || (u[2] = ce(
                     "span",
                     { class: "rvx-sync_loader" },
                     null,
@@ -29969,12 +29973,12 @@ const ri = /* @__PURE__ */ Js(qI), jI = /* @__PURE__ */ se({
                   $(Xs, {
                     background: "#FF6D00",
                     height: 8,
-                    width: r.value
+                    width: n.value
                   }, null, 8, ["width"]),
                   ce(
                     "p",
                     oN,
-                    Re(r.value) + "%",
+                    Re(n.value) + "%",
                     1
                     /* TEXT */
                   )

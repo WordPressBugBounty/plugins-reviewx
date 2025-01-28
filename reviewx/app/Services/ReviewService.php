@@ -323,7 +323,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         $parentReviewId = $this->getLastSegment($wpUniqueId);
         $comment_data = array('comment_ID' => $parentReviewId, 'comment_content' => $repliesUpdate['reply'], 'comment_date' => current_time('mysql'), 'comment_date_gmt' => current_time('mysql', 1));
-        $updated_comment_id = wp_update_comment($comment_data);
+        wp_update_comment($comment_data);
     }
     public function reviewRepliesDelete($request)
     {
@@ -375,7 +375,6 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function updateWooReview($updatedData, $wpUpdatedData)
     {
-        //$reviewId = $updatedData['wp_id'];
         $wpUniqueId = $updatedData['wp_unique_id'];
         try {
             $reviewApi = new ReviewsApi();
@@ -442,7 +441,6 @@ class ReviewService extends \Rvx\Services\Service
     public function prepareUpdateAppReview(array $payloadData, array $files)
     {
         $isRecommended = isset($payloadData['is_recommended']) == 1 ? \true : \false;
-        // $uploaded_images = $files['attachments'];
         $uploaded_images = isset($files['attachments']) ? $files['attachments'] : [];
         $attachments = $this->fileUpload($uploaded_images);
         $rating = Helper::arrayGet($payloadData, 'rating', null);
@@ -611,25 +609,53 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function requestReviewEmailAttachment($request)
     {
-        $data = $request->get_params();
-        foreach ($data as $id) {
-            $files = $request->get_file_params();
-            $attachments = [];
-            $uploaded_images = isset($files['attachments']) ? $files['attachments'] : [];
-            $attachments = $this->fileUpload($uploaded_images);
-            \error_log("Image print " . \print_r($attachments, \true));
-            update_comment_meta($id, 'reviewx_attachments', $attachments);
+        // Get parameters and file payload
+        $wpUniqueId = $request->get_params();
+        $payload = $request->get_file_params();
+        // Initialize the response array
+        $response = [];
+        // Maximum file size in bytes (e.g., 5MB)
+        $maxFileSize = 5 * 1024 * 1024;
+        // 5 MB
+        // Allowed mime types for images
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        // Loop through the reviews array
+        foreach ($wpUniqueId['reviews'] as $index => $reviewData) {
+            if (isset($reviewData['wp_unique_id'])) {
+                $wp_unique_id = $this->getLastSegment($reviewData['wp_unique_id']);
+                // Prepare the files array for this review
+                $files = [];
+                if (isset($payload['reviews']['tmp_name'][$index]['files'])) {
+                    foreach ($payload['reviews']['tmp_name'][$index]['files'] as $fileIndex => $tmpFile) {
+                        // Get the corresponding file details
+                        $file_info = ['name' => $payload['reviews']['name'][$index]['files'][$fileIndex]['file'], 'tmp_name' => $tmpFile['file'], 'type' => $payload['reviews']['type'][$index]['files'][$fileIndex]['file'], 'error' => $payload['reviews']['error'][$index]['files'][$fileIndex]['file'], 'size' => $payload['reviews']['size'][$index]['files'][$fileIndex]['file']];
+                        // Validate file size
+                        if ($file_info['size'] > $maxFileSize) {
+                            continue;
+                        }
+                        // Validate file type (mime type)
+                        if (!\in_array($file_info['type'], $allowedMimeTypes)) {
+                            continue;
+                        }
+                        if ($file_info['error'] === \UPLOAD_ERR_OK) {
+                            // Upload the file to WordPress
+                            $upload = wp_handle_upload($file_info, ['test_form' => \false]);
+                            if (!isset($upload['error']) && isset($upload['url'])) {
+                                // Add the file URL to the files array
+                                $files[] = ['file' => $upload['url']];
+                            }
+                        }
+                    }
+                }
+                $image_urls = \array_map(function ($file) {
+                    return $file['file'];
+                }, $files);
+                update_comment_meta($wp_unique_id, 'reviewx_attachments', $image_urls);
+                // Add the data for this review
+                $response[] = ['wp_unique_id' => Client::getUid() . '-' . $wp_unique_id, 'files' => $files];
+            }
         }
-        $reviews = [];
-        // Initialize an empty array to store all reviews
-        foreach ($data as $id) {
-            $reviews[] = [
-                // Append each review to the array
-                'wp_id' => $id,
-                'attachments' => get_comment_meta($id, 'reviewx_attachments', \true),
-            ];
-        }
-        return Helper::rest($reviews)->success("Success");
+        return $response;
     }
     public function reviewMoveToTrash($data)
     {
@@ -688,7 +714,7 @@ class ReviewService extends \Rvx\Services\Service
             if (!$comment) {
                 continue;
             }
-            $data = ['wp_id' => (int) $comment->comment_ID, 'product_wp_unique_id' => Client::getUid() . '-' . $comment->comment_post_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'rating' => (int) get_comment_meta($comment->comment_ID, 'rating', \true), 'feedback' => $comment->comment_content, 'created_at' => $comment->comment_date, 'title' => get_comment_meta($comment->comment_ID, 'rvx_comment_title', \true), 'order_item_wp_unique_id' => get_comment_meta($comment->comment_ID, 'rvx_comment_order_item', \true)];
+            $data = ['wp_id' => (int) $comment->comment_ID, 'product_wp_unique_id' => Client::getUid() . '-' . $comment->comment_post_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'rating' => (int) get_comment_meta($comment->comment_ID, 'rating', \true), 'feedback' => $comment->comment_content, 'created_at' => $comment->comment_date, 'title' => get_comment_meta($comment->comment_ID, 'rvx_comment_title', \true), 'order_item_wp_unique_id' => get_comment_meta($comment->comment_ID, 'rvx_comment_order_item', \true), 'criterias' => get_comment_meta($comment->comment_ID, 'rvx_criterias', \true)];
             $reviewData['reviews'][] = $data;
         }
         return $reviewData;
@@ -717,11 +743,11 @@ class ReviewService extends \Rvx\Services\Service
                     $modified_criteria = \json_encode($criterias);
                 } else {
                     $wcAverageRating = sanitize_text_field($data['reviews'][$index]['rating']) ?? 1;
-                    $modified_criteria = null;
+                    $modified_criteria = isset($data['reviews'][$index]['criterias']) ? \json_encode($data['reviews'][$index]['criterias']) : null;
                 }
                 $commentId = wp_insert_comment($comment);
                 add_comment_meta($commentId, 'rvx_comment_title', sanitize_text_field($data['reviews'][$index]['title'] ?? null));
-                add_comment_meta($commentId, 'rvx_criterias', $modified_criteria);
+                update_comment_meta($commentId, 'rvx_criterias', $modified_criteria);
                 add_comment_meta($commentId, 'rating', $wcAverageRating);
                 add_comment_meta($commentId, 'rvx_comment_order_item', sanitize_text_field($data['reviews'][$index]['order_item_wp_unique_id']));
                 add_comment_meta($commentId, 'verified', 1);

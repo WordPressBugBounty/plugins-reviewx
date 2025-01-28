@@ -6,42 +6,6 @@ function __rvxReviewFilterComponent__() {
         selectFilterByAttachment: 'both',
         selectFilterCount: 0,
         selectSortBy :'newest_first',
-        filterByRatingOptions:[
-            { label: 'All Rating', value: 'all' },
-            { label: '4 Star & above', value: '4' },
-            { label: '3 Star & above', value: '3' },
-            { label: '2 Star & above', value: '2' },
-            { label: '1 Star & above', value: '1' }
-        ],
-        filterByAttachment:[
-            { label: 'With Attachment', value: 'with_attachment' },
-            { label: 'Without Attachment', value: 'without_attachment' },
-            { label: 'Both', value: 'both' },
-        ],
-        sortByOptions(){
-            if(this.reviewSettingsData?.data?.setting?.widget_settings.filter_and_sort_options.sort_options.by_rating && this.reviewSettingsData?.data?.setting?.widget_settings.filter_and_sort_options.sort_options.by_time){
-                return [
-                    { label: 'Newest first', value: 'newest_first' },
-                    { label: 'Oldest first', value: 'oldest_first' },
-                    { label: 'Rating Ascending', value: 'rating_asc' },
-                    { label: 'Rating Descending', value: 'rating_desc' },
-                ]
-            }
-
-            if(this.reviewSettingsData?.data?.setting?.widget_settings.filter_and_sort_options.sort_options.by_rating){
-                return [
-                    { label: 'Rating Ascending', value: 'rating_asc' },
-                    { label: 'Rating Descending', value: 'rating_desc' },
-                ]
-            }
-            if (this.reviewSettingsData?.data?.setting?.widget_settings.filter_and_sort_options.sort_options.by_time){
-                return [
-                    { label: 'Newest first', value: 'newest_first' },
-                    { label: 'Oldest first', value: 'oldest_first' },
-                ]
-            }
-
-        },
         applyFilterHandler(){
             const newQuery = {}
             this.selectFilterCount = 0

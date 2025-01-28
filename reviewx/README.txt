@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,13 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.1.4 - 1-27-2025 =
+- Fix: Elementor form label issue
+- Fix: Six strings translation issue.
+- Fix: Discount payload change
+- Fix: Optmize Data sync API call
+- Fix: Storefront review filter options shown issue
+
 = 2.1.3 - 1-15-2025 =
 - New: Aggregation summary design improve & increase progress bar `height`
 - New: Multi-criteria design improve & increase progress bar `height`
