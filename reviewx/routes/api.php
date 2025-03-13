@@ -26,6 +26,7 @@ use Rvx\Rest\Middleware\DevMiddleware;
 use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\Rest\Controllers\LogController;
+use Rvx\Rest\Middleware\AuthSaasMiddleware;
 Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/login/key', [LoginController::class, 'license_key']);
@@ -36,9 +37,6 @@ Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManage
     Route::get('/migration/prompt', [RegisterController::class, 'migrationPrompt']);
     Route::post('/user/plan/access', [SettingController::class, 'userSettingsAccess']);
     Route::get('/user/current/plan', [SettingController::class, 'userCurrentPlan']);
-});
-Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
-    Route::post('/admin/access/control', [AccessController::class, 'adminAccess']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     /**
@@ -63,8 +61,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/wp/products', [ProductController::class, 'wpProducts']);
     Route::get('/products/selectable', [ProductController::class, 'selectable']);
     Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/highlight', [ReviewController::class, 'highlight']);
-    Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
-    Route::post('/reviews/bulk/action/product/meta', [ReviewController::class, 'bulkActionProductMeta']);
     Route::post('bulk/restore/trash', [ReviewController::class, 'restoreTrashItem']);
     /**
      * MultiCritriya 
@@ -149,16 +145,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::post('review/email/photo/contents', [EmailTemplateController::class, 'photoReview']);
     Route::post('review/email/send/test', [EmailTemplateController::class, 'testMail']);
     /**
-     * Review Reminder All request Settings
-     */
-    Route::get('/review/request/settings', [EmailTemplateController::class, 'reviewRequestSettings']);
-    Route::post('/review/request/settings', [EmailTemplateController::class, 'allReminderSettings']);
-    Route::post('/review/request/email/mark/done/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'markAsDone']);
-    Route::post('/review/request/email/cancel/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailCancel']);
-    Route::post('/review/request/email/send/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailSend']);
-    Route::post('/review/request/email/resend/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailResend']);
-    Route::post('/review/request/email/unsubscribe', [EmailTemplateController::class, 'requestEmailUnsubscribe']);
-    /**
      * Coupon
      */
     Route::get('discount', [DiscountController::class, 'getDiscount']);
@@ -179,9 +165,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     //form saas
     /**
      * CPT
-     */
-    /**
-     * All Settings
      */
     Route::get('custom/get', [CustomPostController::class, 'customGet']);
     Route::post('custom/store', [CustomPostController::class, 'customStore']);
@@ -212,6 +195,22 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/data/sync', [DataSyncController::class, 'dataSync']);
     Route::get('/sync/status', [DataSyncController::class, 'syncStatus']);
     Route::get('/backend/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [ReviewController::class, 'getSingleProductAllReviews']);
+});
+Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+    Route::get('/synced/data', [DataSyncController::class, 'syncedData']);
+    Route::post('/admin/access/control', [AccessController::class, 'adminAccess']);
+    Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
+    Route::post('/reviews/bulk/action/product/meta', [ReviewController::class, 'bulkActionProductMeta']);
+    /**
+     * Review Reminder All request Settings
+     */
+    Route::get('/review/request/settings', [EmailTemplateController::class, 'reviewRequestSettings']);
+    Route::post('/review/request/settings', [EmailTemplateController::class, 'allReminderSettings']);
+    Route::post('/review/request/email/mark/done/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'markAsDone']);
+    Route::post('/review/request/email/cancel/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailCancel']);
+    Route::post('/review/request/email/send/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailSend']);
+    Route::post('/review/request/email/resend/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailResend']);
+    Route::post('/review/request/email/unsubscribe', [EmailTemplateController::class, 'requestEmailUnsubscribe']);
 });
 Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     Route::post('/site/all/settings', [SettingController::class, 'allSettingsSave']);

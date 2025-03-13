@@ -1,5 +1,5 @@
 === ReviewX – WooCommerce Product Reviews with Multi-Criteria, Reminder Emails, Google Reviews, Schema & More ===
-Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar, mhrubel,sakhawatsifat,
+Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar, mhrubel, sakhawatsifat
 Donate link: https://reviewx.io
 Tags: woocommerce reviews, product reviews, customer reviews, review reminder, google reviews
 Requires at least: 5.0
@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.1.4
+Stable tag: 2.1.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,14 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+
+= 2.1.5 - 03-13-2025 =
+- Improve data synchronization performance
+- Remove the admin notice.
+- Update the discount for reviews auto expiration UI
+- Public Widget Design Improvement
+- google review preview & interacion
+
 = 2.1.4 - 1-27-2025 =
 - Fix: Elementor form label issue
 - Fix: Six strings translation issue.

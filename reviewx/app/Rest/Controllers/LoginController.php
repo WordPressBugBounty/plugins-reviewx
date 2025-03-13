@@ -49,7 +49,7 @@ class LoginController implements InvokableContract
             }
             Client::set(Site::where('uid', $site_info['uid'])->first());
             $dataResponse = (new DataSyncService())->dataSync('login');
-            if ($dataResponse->getStatusCode() !== Response::HTTP_OK) {
+            if (!$dataResponse) {
                 return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', $dataResponse->getStatusCode());
             }
             $this->loginService->resetPostMeta();
@@ -81,7 +81,7 @@ class LoginController implements InvokableContract
             }
             Client::set(Site::where('uid', $site_info['uid'])->first());
             $dataResponse = (new DataSyncService())->dataSync('login');
-            if ($dataResponse->getStatusCode() !== Response::HTTP_OK) {
+            if (!$dataResponse) {
                 return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', $dataResponse->getStatusCode());
             }
             $this->loginService->resetPostMeta();

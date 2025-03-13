@@ -43,7 +43,7 @@ class Helper
         // Encode the payload and return the JWT token
         return JWT::encode(\array_merge($payload, $additionalPayload), Client::getSecret(), "HS256");
     }
-    private static function getWpDomain() : string
+    public static function getWpDomain() : string
     {
         return $_SERVER["HTTP_HOST"];
     }
@@ -289,5 +289,17 @@ class Helper
             return 'any';
         }
         return $statusMap[$newStatus];
+    }
+    public static function validateReturnDate($dateString)
+    {
+        $timestamp = \strtotime($dateString);
+        if ($timestamp === \false || $timestamp < 0) {
+            return null;
+        }
+        return \wp_date('Y-m-d H:i:s', $timestamp);
+    }
+    public static function formatToTwoDecimalPlaces($number)
+    {
+        return \number_format($number, 2);
     }
 }

@@ -8,7 +8,6 @@ use Rvx\WPDrill\Facades\DB;
 class CategorySyncService extends \Rvx\Services\Service
 {
     protected $categories;
-    protected $categoriesCount;
     protected $taxonomyRelation;
     protected $descriptionRelation;
     protected $parentRelation;
@@ -62,18 +61,17 @@ class CategorySyncService extends \Rvx\Services\Service
     }
     public function syncTermTaxonomy() : void
     {
-        DB::table('term_taxonomy')->whereIn('taxonomy', ['product_cat', 'category', 'product_type', 'product_visibility'])->chunk(100, function ($allTermTaxonomy) {
+        DB::table('term_taxonomy')->select(['term_taxonomy_id', 'term_id', 'taxonomy', 'parent'])->whereIn('taxonomy', ['product_cat', 'category', 'product_type', 'product_visibility'])->chunk(100, function ($allTermTaxonomy) {
             foreach ($allTermTaxonomy as $termTaxonomy) {
                 $this->taxonomyTerm[$termTaxonomy->term_taxonomy_id] = (int) $termTaxonomy->term_id;
                 $this->selectedTerms[] = (int) $termTaxonomy->term_id;
                 $this->taxonomyRelation[$termTaxonomy->term_id] = $termTaxonomy->taxonomy;
-                $this->descriptionRelation[$termTaxonomy->term_id] = $termTaxonomy->description;
                 $this->parentRelation[$termTaxonomy->term_id] = $termTaxonomy->parent;
             }
         });
     }
     private function formatCategoryData($category) : array
     {
-        return ['rid' => 'rid://Category/' . (int) $category->term_id, 'wp_id' => (int) $category->term_id, 'title' => $category->name ?? null, 'slug' => $category->slug ?? '', 'taxonomy' => $this->taxonomyRelation[$category->term_id] ?? '', 'description' => $this->descriptionRelation[$category->term_id] ?? '', 'parent_wp_unique_id' => isset($this->parentRelation[$category->term_id]) ? Client::getUid() . '-' . $this->parentRelation[$category->term_id] : ''];
+        return ['rid' => 'rid://Category/' . (int) $category->term_id, 'wp_id' => (int) $category->term_id, 'title' => $category->name ?? null, 'slug' => $category->slug ?? null, 'taxonomy' => $this->taxonomyRelation[$category->term_id] ?? null, 'description' => null, 'parent_wp_unique_id' => isset($this->parentRelation[$category->term_id]) ? Client::getUid() . '-' . $this->parentRelation[$category->term_id] : ''];
     }
 }

@@ -1,8 +1,12 @@
-<div x-show="review?.reply" class="rvx-mb-space20 rvx-mt-space16 rvx-review-owner-replay">
-    <div class="rvx-flex rvx-gap-space5">
+<div x-show="review?.reply" class="rvx-mb-space20 rvx-review-owner-replay">
+    <div class="rvx-flex rvx-items-center rvx-gap-space5">
             <span class="material-symbols-rounded rvx-text-[20px] rvx-review-owner-replay__icon">
                  {{__('reply', 'reviewx')}}
               </span>
+
+        <div x-show="review?.shop_icon_url" class="rvx-flex rvx-justify-center rvx-items-center rvx-bg-white rvx-border-solid !rvx-border-[1px] !rvx-border-neutral-300 rvx-rounded-full rvx-size-[24px]">
+            <img :src="review.shop_icon_url" alt="store icon" width="16" height="16">
+        </div>
         <p class="!rvx-text-[14px] rvx-font-semibold rvx-text-neutral-800 rvx-leading-[22px] rvx-review-owner-replay__owner-name">
               {{__('Shop owner', 'reviewx')}}
             <span class="rvx-font-normal rvx-leading-[22px] rvx-review-owner-replay__text">  {{__('replied', 'reviewx')}}

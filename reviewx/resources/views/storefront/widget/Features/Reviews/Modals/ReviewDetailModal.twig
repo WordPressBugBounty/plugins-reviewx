@@ -47,16 +47,14 @@
                                                 </div>
                                             </template>
                                         </div>
-                                        <div x-data="avatarComponent({src: '', alt: 'Anonymous'})" x-show="selectedReviewDetails.is_anonymous"
+                                        <div x-show="selectedReviewDetails.is_anonymous"
                                              class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] sm:rvx-size-[56px] rvx-text-[32px] rvx-bg-white rvx-border rvx-border-solid rvx-border-neutral-400  rvx-rounded-full rvx-review-user__avatar">
-                                            <template x-if="showImage()">
-                                                <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
-                                            </template>
-                                            <template x-if="!showImage()">
-                                                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
-                                                    <span x-text="alt.charAt(0).toUpperCase()"></span>
-                                                </div>
-                                            </template>
+                                            <svg class="rvx-review-user__avatar-img" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36"><path fill="currentColor" d="M30.61 24.52a17.16 17.16 0 0 0-25.22 0a1.5 1.5 0 0 0-.39 1v6A1.5 1.5 0 0 0 6.5 33h23a1.5 1.5 0 0 0 1.5-1.5v-6a1.5 1.5 0 0 0-.39-.98" class="clr-i-solid clr-i-solid-path-1"/><circle cx="18" cy="10" r="7" fill="currentColor" class="clr-i-solid clr-i-solid-path-2"/><path fill="none" d="M0 0h36v36H0z"/></svg>
+                                        </div>
+                                    </div>
+                                    <div x-show="!reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                                        <div class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] rvx-bg-white rvx-review-user__avatar !rvx-border-[1px] !rvx-border-neutral-300 rvx-rounded-full rvx-border-solid">
+                                            <svg class="rvx-review-user__avatar-img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><path fill="#cfd8dc" d="M5 19h38v19H5z"/><path fill="#b0bec5" d="M5 38h38v4H5z"/><path fill="#455a64" d="M27 24h12v18H27z"/><path fill="#e3f2fd" d="M9 24h14v11H9z"/><path fill="#1e88e5" d="M10 25h12v9H10z"/><path fill="#90a4ae" d="M36.5 33.5c-.3 0-.5.2-.5.5v2c0 .3.2.5.5.5s.5-.2.5-.5v-2c0-.3-.2-.5-.5-.5"/><g fill="#558b2f"><circle cx="24" cy="19" r="3"/><circle cx="36" cy="19" r="3"/><circle cx="12" cy="19" r="3"/></g><path fill="#7cb342" d="M40 6H8c-1.1 0-2 .9-2 2v3h36V8c0-1.1-.9-2-2-2m-19 5h6v8h-6zm16 0h-5l1 8h6zm-26 0h5l-1 8H9z"/><g fill="#ffa000"><circle cx="30" cy="19" r="3"/><path d="M45 19c0 1.7-1.3 3-3 3s-3-1.3-3-3s1.3-3 3-3z"/><circle cx="18" cy="19" r="3"/><path d="M3 19c0 1.7 1.3 3 3 3s3-1.3 3-3s-1.3-3-3-3z"/></g><path fill="#ffc107" d="M32 11h-5v8h6zm10 0h-5l2 8h6zm-26 0h5v8h-6zM6 11h5l-2 8H3z"/></svg>
                                         </div>
                                     </div>
                                     <div>
@@ -259,7 +257,7 @@
                                 </div>
                             </div>
                             <!-- Help info -->
-                            <div class="rvx-font-nunito rvx-flex rvx-justify-between rvx-items-center rvx-gap-space8 rvx-absolute rvx-bottom-0">
+                            <div class="rvx-font-nunito rvx-flex rvx-items-center rvx-gap-space8 rvx-absolute rvx-bottom-0 rvx-left-[20px] rvx-right-[20px]" :class="`${reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled ? 'rvx-justify-between' : 'rvx-justify-end'}`">
                                 <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled">
                                     <div x-data="reviewHelpInfoComponent()"
                                          class="rvx-flex rvx-justify-end rvx-gap-space8 rvx-items-center rvx-pr-space16 rvx-pb-space16 rvx-review-footer">

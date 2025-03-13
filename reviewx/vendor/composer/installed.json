@@ -2439,12 +2439,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/WPDrill\/core.git",
-                "reference": "1a730e742503cb46044c58ae453280fdc21e1526"
+                "reference": "fe1a740bb48db8d572198e02e3891f6ea81b7238"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/WPDrill\/core\/zipball\/1a730e742503cb46044c58ae453280fdc21e1526",
-                "reference": "1a730e742503cb46044c58ae453280fdc21e1526",
+                "url": "https:\/\/api.github.com\/repos\/WPDrill\/core\/zipball\/fe1a740bb48db8d572198e02e3891f6ea81b7238",
+                "reference": "fe1a740bb48db8d572198e02e3891f6ea81b7238",
                 "shasum": ""
             },
             "require": {
@@ -2459,7 +2459,7 @@
                 "twig\/twig": "^3.0",
                 "usmanhalalit\/viocon": "1.0.*@dev"
             },
-            "time": "2024-12-01T11:14:33+00:00",
+            "time": "2025-03-05T10:01:03+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",

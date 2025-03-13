@@ -94,10 +94,11 @@ class LogController implements InvokableContract
         }
         if ($action === 'manual_sync') {
             $dataResponse = (new DataSyncService())->dataSync($from);
-            if ($dataResponse->getStatusCode() !== Response::HTTP_OK) {
+            if (!$dataResponse) {
                 return Helper::rvxApi(['error' => "Data Sync Failed"])->fails('Data Sync Failed', $dataResponse->getStatusCode());
             }
         }
+        return Helper::rvxApi()->success('Data Synced Successfully');
     }
     public function createJsonl()
     {

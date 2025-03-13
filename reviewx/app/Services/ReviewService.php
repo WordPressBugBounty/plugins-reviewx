@@ -216,8 +216,11 @@ class ReviewService extends \Rvx\Services\Service
     public function restoreTrashItem($data)
     {
         //Bulk trash restore
-        $this->bulkRestoreTrashItem($data);
-        return (new ReviewsApi())->restoreTrashItem($data);
+        $response = (new ReviewsApi())->restoreTrashItem($data);
+        if ($response->getStatusCode() === Response::HTTP_OK) {
+            $this->bulkRestoreTrashItem($data);
+        }
+        return $response;
     }
     public function bulkRestoreTrashItem($data)
     {
@@ -244,8 +247,11 @@ class ReviewService extends \Rvx\Services\Service
     {
         $wpUniqueId = $request['wpUniqueId'];
         $statusData = ['status' => $request->get_param('status')];
-        $this->visibilitySpam($request->get_params());
-        return (new ReviewsApi())->visibilityReviewData($statusData, $wpUniqueId);
+        $response = (new ReviewsApi())->visibilityReviewData($statusData, $wpUniqueId);
+        if ($response->getStatusCode() === Response::HTTP_OK) {
+            $this->visibilitySpam($request->get_params());
+        }
+        return $response;
     }
     public function visibilitySpam($data)
     {
@@ -496,14 +502,13 @@ class ReviewService extends \Rvx\Services\Service
     {
         return (new ReviewsApi())->getWidgetInsight($request);
     }
-    public function getWidgetInsightForWp($request, $aggregation)
-    {
-        update_post_meta($request['product_id'], 'rvx_aggregation_insight', $aggregation);
-    }
     public function reviewBulkUpdate($data)
     {
-        $this->reviewBulkStatusUpdateForWp($data);
-        return (new ReviewsApi())->reviewBulkUpdate($data);
+        $response = (new ReviewsApi())->reviewBulkUpdate($data);
+        if ($response->getStatusCode() == Response::HTTP_OK) {
+            $this->reviewBulkStatusUpdateForWp($data);
+        }
+        return $response;
     }
     public function reviewBulkStatusUpdateForWp($data)
     {
@@ -530,8 +535,11 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function reviewBulkTrash($data)
     {
-        $this->bulkTrashInWp($data);
-        return (new ReviewsApi())->reviewBulkTrash($data);
+        $response = (new ReviewsApi())->reviewBulkTrash($data);
+        if ($response->getStatusCode() == Response::HTTP_OK) {
+            $this->bulkTrashInWp($data);
+        }
+        return $response;
     }
     public function bulkTrashInWp($data)
     {
@@ -544,8 +552,11 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function reviewEmptyTrash($data)
     {
-        $this->emptyTrashInWp($data);
-        return (new ReviewsApi())->reviewEmptyTrash();
+        $response = (new ReviewsApi())->reviewEmptyTrash();
+        if ($response->getStatusCode() == Response::HTTP_OK) {
+            $this->emptyTrashInWp($data);
+        }
+        return $response;
     }
     public function emptyTrashInWp($review_ids)
     {
@@ -618,7 +629,7 @@ class ReviewService extends \Rvx\Services\Service
         $maxFileSize = 5 * 1024 * 1024;
         // 5 MB
         // Allowed mime types for images
-        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm', 'video/ogg'];
         // Loop through the reviews array
         foreach ($wpUniqueId['reviews'] as $index => $reviewData) {
             if (isset($reviewData['wp_unique_id'])) {

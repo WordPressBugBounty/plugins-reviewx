@@ -1,92 +1,93 @@
 <div class="rvx-flex rvx-gap-space8 rvx-review-user">
     <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
         <div x-data="avatarComponent({src: '', alt: review.reviewer_name})" x-show="!review.is_anonymous"
-             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[50px] rvx-bg-white rvx-text-[28px] rvx-border rvx-border-neutral-400  rvx-rounded-full rvx-review-user__avatar">
+             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] rvx-bg-white !rvx-border-[1px] !rvx-border-neutral-300 rvx-rounded-full rvx-border-solid rvx-review-user__avatar">
             <template x-if="showImage()">
                 <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
             </template>
             <template x-if="!showImage()">
-                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
+                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito rvx-border">
                     <span x-text="alt.charAt(0).toUpperCase()"></span>
                 </div>
             </template>
         </div>
-        <div x-data="avatarComponent({src: '', alt: 'Anonymous'})" x-show="review.is_anonymous"
-             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[50px] rvx-text-[28px] rvx-bg-white rvx-border rvx-border-neutral-400  rvx-rounded-full rvx-review-user__avatar">
-            <template x-if="showImage()">
-                <img @error="onError" :src="src" :alt="alt" class="rvx-review-user__avatar-img">
-            </template>
-            <template x-if="!showImage()">
-                <div class="rvx-review-user__avatar-fallback rvx-flex rvx-justify-center rvx-items-center rvx-text-neutral rvx-font-nunito">
-                    <span x-text="alt.charAt(0).toUpperCase()"></span>
-                </div>
-            </template>
+        <div x-show="review.is_anonymous"
+             class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] rvx-bg-white rvx-review-user__avatar !rvx-border-[1px] !rvx-border-neutral-300 rvx-rounded-full rvx-border-solid">
+            <svg class="rvx-review-user__avatar-img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36"><path fill="currentColor" d="M30.61 24.52a17.16 17.16 0 0 0-25.22 0a1.5 1.5 0 0 0-.39 1v6A1.5 1.5 0 0 0 6.5 33h23a1.5 1.5 0 0 0 1.5-1.5v-6a1.5 1.5 0 0 0-.39-.98" class="clr-i-solid clr-i-solid-path-1"/><circle cx="18" cy="10" r="7" fill="currentColor" class="clr-i-solid clr-i-solid-path-2"/><path fill="none" d="M0 0h36v36H0z"/></svg>
         </div>
     </div>
 
-    <div>
-        <div class="rvx-flex rvx-flex-wrap rvx-items-center rvx-gap-space8 rvx-font-nunito">
-            <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
-                <p x-show="!review.is_anonymous" x-text="layoutView === 'list' ? censorReviewerName({isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name, str: review.reviewer_name}) : showDisplayReviewerName({haveVerifiedBadge: (reviewSettingsData?.data.setting?.review_settings?.reviews?.show_verified_badge && review?.is_verified), showCountryFlg: reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country, str: review.reviewer_name, isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name})"
-                   class="!rvx-text-[16px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-900 rvx-review-user__name">
-                </p>
-                <p x-show="review.is_anonymous"
-                   class="!rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-text-neutral-900 rvx-review-user__name">
-                     {{__('Anonymous', 'reviewx')}}
-                </p>
-            </div>
+    <div x-show="!reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+        <div class="rvx-grid rvx-place-content-center rvx-overflow-hidden rvx-size-[40px] rvx-bg-white rvx-review-user__avatar !rvx-border-[1px] !rvx-border-neutral-300 rvx-rounded-full rvx-border-solid">
+{#            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m21.914 9.73l-.48-1.66l-1.11-3.17a2.8 2.8 0 0 0-1-1.36a2.74 2.74 0 0 0-1.62-.52H6.234a2.8 2.8 0 0 0-2.65 1.88l-1.13 3.21l-.46 1.62a.8.8 0 0 0 0 .21a3.85 3.85 0 0 0 2.06 3.39v4.83a2.8 2.8 0 0 0 .82 2a2.84 2.84 0 0 0 2 .82h10.28a2.8 2.8 0 0 0 2.81-2.81v-4.83a3.74 3.74 0 0 0 1.35-1.18a3.8 3.8 0 0 0 .7-2.21a1.5 1.5 0 0 0-.1-.22m-6.89 8.4h-6.17a1 1 0 1 1 0-2h6.17a1 1 0 0 1 0 2m5-6.85c-.282.399-.68.7-1.14.86a2.3 2.3 0 0 1-2.08-.31a2.34 2.34 0 0 1-.99-1.86a.75.75 0 1 0-1.5 0v.05a2.4 2.4 0 0 1-.14.74a2.4 2.4 0 0 1-.86 1.12a2.27 2.27 0 0 1-1.33.43a2.32 2.32 0 0 1-2.2-1.57a2 2 0 0 1-.14-.73a.75.75 0 0 0-1.5 0a2.36 2.36 0 0 1-.99 1.87a2.33 2.33 0 0 1-1.35.43a2.6 2.6 0 0 1-.77-.14a2.28 2.28 0 0 1-1.13-.85a2.33 2.33 0 0 1-.42-1.24l.41-1.48l1.11-3.16a1.31 1.31 0 0 1 1.24-.88h11.47c.27.004.535.088.76.24c.219.16.383.383.47.64l1.1 3.12l.43 1.52a2.35 2.35 0 0 1-.47 1.2z"/></svg>#}
+            <svg class="rvx-review-user__avatar-img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><path fill="#cfd8dc" d="M5 19h38v19H5z"/><path fill="#b0bec5" d="M5 38h38v4H5z"/><path fill="#455a64" d="M27 24h12v18H27z"/><path fill="#e3f2fd" d="M9 24h14v11H9z"/><path fill="#1e88e5" d="M10 25h12v9H10z"/><path fill="#90a4ae" d="M36.5 33.5c-.3 0-.5.2-.5.5v2c0 .3.2.5.5.5s.5-.2.5-.5v-2c0-.3-.2-.5-.5-.5"/><g fill="#558b2f"><circle cx="24" cy="19" r="3"/><circle cx="36" cy="19" r="3"/><circle cx="12" cy="19" r="3"/></g><path fill="#7cb342" d="M40 6H8c-1.1 0-2 .9-2 2v3h36V8c0-1.1-.9-2-2-2m-19 5h6v8h-6zm16 0h-5l1 8h6zm-26 0h5l-1 8H9z"/><g fill="#ffa000"><circle cx="30" cy="19" r="3"/><path d="M45 19c0 1.7-1.3 3-3 3s-3-1.3-3-3s1.3-3 3-3z"/><circle cx="18" cy="19" r="3"/><path d="M3 19c0 1.7 1.3 3 3 3s3-1.3 3-3s-1.3-3-3-3z"/></g><path fill="#ffc107" d="M32 11h-5v8h6zm10 0h-5l2 8h6zm-26 0h5v8h-6zM6 11h5l-2 8H3z"/></svg>
+        </div>
+    </div>
 
-            <div x-show="!reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
-                <p class="rvx-text-[20px] rvx-font-semibold rvx-leading-[32px] rvx-review-user__name">
-                     {{__('Shopper', 'reviewx')}}
-                </p>
-            </div>
 
-            <p x-show="reviewSettingsData?.data.setting?.review_settings.reviews.show_verified_badge && review?.is_verified"
-               class="rvx-flex rvx-items-center rvx-text-success rvx-gap-space5 !rvx-text-[14px] rvx-review-user__verify">
-                <span class="material-symbols-rounded-fill rvx-text-[16px]"> {{__('check_circle', 'reviewx')}}</span>
-                {{__('Verified', 'reviewx')}}
-            </p>
 
-            <template x-if="reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country && review?.reviewer_flag">
-                <div x-data="__rvxTooltipComponent__()" x-init="initial()" class="rvx-relative">
-                    <div x-ref="tooltip" x-show="tooltipVisible"
-                         :class="{
+    <div class="rvx-w-full">
+        <div class="rvx-flex rvx-flex-wrap rvx-items-center rvx-justify-between rvx-font-nunito">
+            <div class="rvx-flex rvx-flex-wrap rvx-items-center rvx-font-nunito rvx-gap-space8">
+                <div x-show="reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                    <p x-show="!review.is_anonymous" x-text="layoutView === 'list' ? censorReviewerName({isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name, str: review.reviewer_name}) : showDisplayReviewerName({haveVerifiedBadge: (reviewSettingsData?.data.setting?.review_settings?.reviews?.show_verified_badge && review?.is_verified), showCountryFlg: reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country, str: review.reviewer_name, isCensor: reviewSettingsData?.data.setting?.review_settings?.reviews.censor_reviewer_name})"
+                       class="!rvx-text-[14px] rvx-font-semibold rvx-leading-[22px] rvx-text-neutral-800 rvx-review-user__name">
+                    </p>
+                    <p x-show="review.is_anonymous"
+                       class="!rvx-text-[14px] rvx-font-semibold rvx-leading-[22px] rvx-text-neutral-800 rvx-review-user__name">
+                        {{__('Anonymous', 'reviewx')}}
+                    </p>
+                </div>
+
+                <div x-show="!reviewSettingsData?.data.setting?.review_settings?.reviews?.show_reviewer_name">
+                    <p class="rvx-text-[14px] rvx-font-semibold rvx-leading-[22px] rvx-text-neutral-800 rvx-review-user__name">
+                        {{__('Shopper', 'reviewx')}}
+                    </p>
+                </div>
+
+                <template x-if="reviewSettingsData?.data.setting.review_settings.reviews.show_reviewer_country && review?.reviewer_flag">
+                    <div x-data="__rvxTooltipComponent__()" x-init="initial()" class="rvx-relative rvx-px-space8">
+                        <div x-ref="tooltip" x-show="tooltipVisible"
+                             :class="{
                             'rvx-top-[-15px] left-1/2 -rvx-translate-x-1/2 -rvx-mt-0.5 -rvx-translate-y-full' : tooltipPosition === 'top',
                             'rvx-top-1/2 -rvx-translate-y-1/2 -rvx-ml-0.5 rvx-left-0 -rvx-translate-x-full' : tooltipPosition === 'left',
                             'rvx-bottom-[-20px]  -rvx-translate-x-1/2 -rvx-mb-0.5 rvx-translate-y-full' : tooltipPosition === 'bottom',
                             'rvx-top-1/2 -rvx-translate-y-1/2 -rvx-mr-0.5 rvx-right-0 rvx-translate-x-full' : tooltipPosition === 'right'
                             }"
-                         class="rvx-absolute rvx-w-auto rvx-text-sm" x-cloak>
+                             class="rvx-absolute rvx-w-auto rvx-text-sm" x-cloak>
 
-                        <div x-show="tooltipVisible" x-transition class="rvx-relative rvx-px-2 rvx-py-1 rvx-text-white rvx-bg-black rvx-rounded rvx-bg-opacity-90">
-                            <p x-text="review?.reviewer_country_short_name" class="rvx-flex-shrink-0 rvx-block rvx-text-xs rvx-whitespace-nowrap"></p>
-                            {#                    <div x-ref="tooltipArrow" x-show="tooltipArrow"#}
-                            {#                         :class="{#}
-                            {#                             'rvx-bottom-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 rvx-translate-y-full' : tooltipPosition == 'top',#}
-                            {#                             'rvx-right-0 -rvx-translate-y-1/2 rvx-top-1/2 h-2.5 -rvx-mt-px rvx-translate-x-full' : tooltipPosition == 'left',#}
-                            {#                             'rvx-top-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 -rvx-translate-y-full' : tooltipPosition == 'bottom',#}
-                            {#                             'rvx-left-0 -rvx-translate-y-1/2 rvx-top-1/2 rvx-h-2.5 -rvx-mt-px -rvx-translate-x-full' : tooltipPosition == 'right' }"#}
-                            {#                         class="rvx-absolute rvx-inline-flex rvx-items-center rvx-justify-center rvx-overflow-hidden">#}
+                            <div x-show="tooltipVisible" x-transition class="rvx-relative rvx-px-2 rvx-py-1 rvx-text-white rvx-bg-black rvx-rounded rvx-bg-opacity-90">
+                                <p x-text="review?.reviewer_country_short_name" class="rvx-flex-shrink-0 rvx-block rvx-text-[12px] rvx-whitespace-nowrap"></p>
+                                {#                    <div x-ref="tooltipArrow" x-show="tooltipArrow"#}
+                                {#                         :class="{#}
+                                {#                             'rvx-bottom-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 rvx-translate-y-full' : tooltipPosition == 'top',#}
+                                {#                             'rvx-right-0 -rvx-translate-y-1/2 rvx-top-1/2 h-2.5 -rvx-mt-px rvx-translate-x-full' : tooltipPosition == 'left',#}
+                                {#                             'rvx-top-0 -rvx-translate-x-1/2 rvx-left-1/2 rvx-w-2.5 -rvx-translate-y-full' : tooltipPosition == 'bottom',#}
+                                {#                             'rvx-left-0 -rvx-translate-y-1/2 rvx-top-1/2 rvx-h-2.5 -rvx-mt-px -rvx-translate-x-full' : tooltipPosition == 'right' }"#}
+                                {#                         class="rvx-absolute rvx-inline-flex rvx-items-center rvx-justify-center rvx-overflow-hidden">#}
 
-                            {#                        <div :class="{ 'rvx-origin-top-left -rvx-rotate-45' : tooltipPosition == 'top', 'rvx-origin-top-left rvx-rotate-45' : tooltipPosition == 'left', 'rvx-origin-bottom-left rvx-rotate-45' : tooltipPosition == 'bottom', 'rvx-origin-top-right -rvx-rotate-45' : tooltipPosition == 'right' }" class="rvx-w-1.5 rvx-h-1.5 rvx-transform rvx-bg-black rvx-bg-opacity-90"></div>#}
-                            {#                    </div>#}
+                                {#                        <div :class="{ 'rvx-origin-top-left -rvx-rotate-45' : tooltipPosition == 'top', 'rvx-origin-top-left rvx-rotate-45' : tooltipPosition == 'left', 'rvx-origin-bottom-left rvx-rotate-45' : tooltipPosition == 'bottom', 'rvx-origin-top-right -rvx-rotate-45' : tooltipPosition == 'right' }" class="rvx-w-1.5 rvx-h-1.5 rvx-transform rvx-bg-black rvx-bg-opacity-90"></div>#}
+                                {#                    </div>#}
+                            </div>
+                        </div>
+                        <div x-ref="content" class="rvx-leading-[0px]">
+                            <img :src="review?.reviewer_flag" alt="flag" width="22" height="26">
                         </div>
                     </div>
-                    <div x-ref="content">
-                        <img :src="review?.reviewer_flag" alt="flag" width="22" height="26">
-                    </div>
-                </div>
-            </template>
+                </template>
+            </div>
+            <p x-show="reviewSettingsData?.data.setting?.review_settings.reviews.show_verified_badge && review?.is_verified" class="rvx-flex rvx-items-center rvx-text-success rvx-gap-space5 !rvx-text-[12px] rvx-review-user__verify">
+                <span class="material-symbols-rounded-fill rvx-text-[16px]"> {{__('check_circle', 'reviewx')}}</span>
+                {{__('Verified', 'reviewx')}}
+            </p>
         </div>
-
         <template x-if="Number(review.rating)">
             <div x-data="{
                 reviewAverage: Number(review.rating),
                 totalRating: 5
-            }" class="review rvx-flex rvx-gap-[4px] rvx-mb-2">
+            }" class="review rvx-flex rvx-gap-[4px]">
                 <template x-for="star in totalRating">
-                   <div>
+                   <div class="!rvx-leading-[0px]">
                        <!-- Full star -->
                        <template x-if="isFullStar(star, reviewAverage)">
                            <svg class="rvx-reviewer__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

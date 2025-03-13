@@ -617,12 +617,6 @@ msgstr ""
 msgid "Read Documentation"
 msgstr ""
 
-msgid "reCAPTCHA Secret key"
-msgstr ""
-
-msgid "reCAPTCHA Site key"
-msgstr ""
-
 msgid "Recipient"
 msgstr ""
 
@@ -710,6 +704,9 @@ msgstr ""
 msgid "Secondary text will place here, below the image"
 msgstr ""
 
+msgid "Secret key"
+msgstr ""
+
 msgid "Section Preview"
 msgstr ""
 
@@ -789,6 +786,9 @@ msgid "Showing"
 msgstr ""
 
 msgid "Single Code for All"
+msgstr ""
+
+msgid "Site key"
 msgstr ""
 
 msgid "Sort by"

@@ -16,11 +16,11 @@ function truncateString(str = '', num) {
 function truncateReviewerName({haveVerifiedBadge = false, showCountryFlg = false, str = ''}) {
     let showStrChar
     if(haveVerifiedBadge && showCountryFlg){
-        showStrChar = 7
+        showStrChar = 10
     } else  if(haveVerifiedBadge && !showCountryFlg){
         showStrChar = 10
     } else if(!haveVerifiedBadge && showCountryFlg){
-        showStrChar = 15
+        showStrChar = 7
     }else {
         showStrChar = 17
     }

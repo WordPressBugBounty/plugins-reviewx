@@ -3,7 +3,7 @@
         transform: rotate(180deg);
     }
 </style>
-<div class="rvx-flex rvx-justify-between rvx-items-center rvx-gap-space8 rvx-font-nunito" :class="`${layoutView === 'list' ? 'rvx-pt-space12': 'rvx-px-space12 rvx-pb-space12'}`">
+<div class="rvx-flex rvx-items-center rvx-gap-space8 rvx-font-nunito" :class="`${reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled ? 'rvx-justify-between' : 'rvx-justify-end'}`">
     <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled">
         <div x-data="reviewHelpInfoComponent()"
              class="rvx-flex rvx-items-center rvx-gap-space8 rvx-review-footer">
@@ -55,19 +55,19 @@
                 </div>
 
             </template>
-
         </div>
     </template>
     <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_sharing">
-        <div x-data="{dropdownOpen: false, successCopy: false}" class="rvx-relative !rvx-leading-[0]">
+        <div x-data="{dropdownOpen: false, successCopy: false}" class="!rvx-leading-[0]">
             <span @click="dropdownOpen=true" class="material-symbols-rounded rvx-cursor-pointer !rvx-text-[18px] !rvx-text-neutral-600 hover:rvx-text-neutral-800 hover:rvx-rounded">share</span>
 
+{#            -rvx-right-[50px]#}
             <div x-show="dropdownOpen"
                  @click.away="dropdownOpen=false"
                  x-transition:enter="rvx-ease-out rvx-duration-200"
                  x-transition:enter-start="-rvx-translate-y-2"
                  x-transition:enter-end="rvx-translate-y-0"
-                 class="rvx-absolute rvx-top-0 rvx-z-50 rvx-w-56 rvx-mt-space16 -rvx-right-[50px]"
+                 class="rvx-absolute rvx-top-[136px] rvx-left-[20px] rvx-bottom-0 rvx-z-50 rvx-w-56 rvx-mt-space16"
                  x-cloak>
                 <div class="rvx-p-1 rvx-mt-1 rvx-text-sm rvx-bg-white rvx-border rvx-rounded-md rvx-shadow-md rvx-border-neutral-200/70 rvx-text-neutral-700">
                     <a :href="review.socials?.facebook" class="rvx-flex rvx-items-center rvx-gap-space5 !rvx-text-neutral-700 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">

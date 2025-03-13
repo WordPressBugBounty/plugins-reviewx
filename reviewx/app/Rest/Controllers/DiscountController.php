@@ -2,13 +2,14 @@
 
 namespace Rvx\Rest\Controllers;
 
+use Rvx\Models\Site;
 use Throwable;
 use Rvx\Services\DiscountService;
 use Rvx\Utilities\Auth\Client;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Response;
 use Rvx\Utilities\Helper;
-class DiscountController implements InvokableContract
+class DiscountController
 {
     protected $couponService;
     /**
@@ -17,12 +18,6 @@ class DiscountController implements InvokableContract
     public function __construct(DiscountService $couponService)
     {
         $this->couponService = $couponService;
-    }
-    /**
-     * @return void
-     */
-    public function __invoke()
-    {
     }
     /**
      * @param $request
@@ -37,7 +32,7 @@ class DiscountController implements InvokableContract
             }
             $couponData = $coupon->get_data();
             $couponId = Helper::arrayGet($couponData, 'id');
-            $payload = \array_merge($couponData, ['wp_id' => $couponId, 'wp_unique_id' => Client::getUid() . '-' . $couponId, 'code_type' => $request->get_param('code_type'), 'status' => 1, 'request_type' => $request->get_param('request_type'), 'type' => $request->get_param('discount_type') === 'percent' ? 'percentage' : 'fixed_amount', 'value' => Helper::arrayGet($couponData, 'amount'), 'usage_limit_per_user' => $request->get_param('usage_limit_per_user') ?? 0, 'usage_limit_per_coupon' => $request->get_param('usage_limit') ?? 0, 'minimum_amount' => (int) Helper::arrayGet($couponData, 'minimum_amount'), 'maximum_amount' => (int) Helper::arrayGet($couponData, 'maximum_amount'), 'free_shipping' => $request->get_param('free_shipping'), 'can_be_used_with_other_coupon' => $request->get_param('individual_use'), 'single_code' => Helper::arrayGet($couponData, 'code'), 'start_date' => $request->get_param('start_date') ?? \date('Y-m-d'), 'start_time' => $request->get_param('start_time'), 'expires_in' => $request->get_param('expires_in'), 'end_date' => $request->get_param('expiry_date'), 'end_time' => $request->get_param('end_time')]);
+            $payload = ['wp_id' => $couponId, 'wp_unique_id' => Client::getUid() . '-' . $couponId, 'code_type' => $request->get_param('code_type'), 'status' => 1, 'site_id' => Client::getSiteId(), 'request_type' => $request->get_param('request_type'), 'type' => $request->get_param('discount_type') === 'percent' ? 'percentage' : 'fixed_amount', 'value' => Helper::arrayGet($couponData, 'amount'), 'usage_limit_per_user' => $request->get_param('usage_limit_per_user') ?? 0, 'usage_limit_per_coupon' => $request->get_param('usage_limit') ?? 0, 'minimum_amount' => (int) Helper::arrayGet($couponData, 'minimum_amount'), 'maximum_amount' => (int) Helper::arrayGet($couponData, 'maximum_amount'), 'exclude_sale_items_from_discount' => $request->get_param('exclude_sale_items_from_discount'), 'free_shipping' => $request->get_param('free_shipping'), 'can_be_used_with_other_coupon' => $request->get_param('individual_use'), 'single_code' => Helper::arrayGet($couponData, 'code'), 'start_date' => $request->get_param('start_date') ?? \date('Y-m-d'), 'start_time' => $request->get_param('start_time'), 'expires_in' => $request->get_param('expires_in'), 'end_date' => $request->get_param('expiry_date'), 'end_time' => $request->get_param('end_time')];
             $resp = $this->couponService->saveDiscount($payload);
             if ($resp->getStatusCode() !== Response::HTTP_OK) {
                 // Delete the created coupon if API request failed

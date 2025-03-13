@@ -1,0 +1,31 @@
+<style>
+    .rvx-columns-box {
+        -moz-column-break-inside: avoid;
+        break-inside: avoid;
+    }
+</style>
+
+<div :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(240px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
+    <template x-for="loader in 4">
+        <div class="rvx-flex rvx-animate-pulse rvx-space-x-4 rvx-bg-neutral-100 rvx-p-space16 rvx-rounded-md rvx-columns-box">
+            <div class="rvx-flex-1 rvx-space-y-6 rvx-py-1">
+                <div class="rvx-space-y-3">
+                    <div class="rvx-grid rvx-grid-cols-8 rvx-items-center rvx-gap-space12">
+                        <div class="rvx-col-span-2 rvx-size-10 rvx-rounded-full rvx-bg-gray-200"></div>
+                        <div class="rvx-col-span-6 rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                    </div>
+                    <div class="rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                </div>
+                <div class="rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                <div class="rvx-space-y-3">
+
+                    <div class="rvx-grid rvx-grid-cols-3 rvx-gap-4">
+                        <div class="rvx-col-span-2 rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                        <div class="rvx-col-span-1 rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                    </div>
+                    <div class="rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

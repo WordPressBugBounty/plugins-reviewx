@@ -37,7 +37,7 @@ class Plugin
     protected string $restApiNamespace;
     protected array $providers = [];
     protected array $pluginConfig = [];
-    protected bool $isProd = \false;
+    protected bool $isProd = \true;
     public function __construct(string $file, string $containerClass = Container::class)
     {
         $this->file = $file;

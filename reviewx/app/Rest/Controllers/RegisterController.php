@@ -52,7 +52,7 @@ class RegisterController implements InvokableContract
             }
             Client::set(Site::where('uid', $site_info['uid'])->first());
             $dataResponse = (new DataSyncService())->dataSync('register');
-            if ($dataResponse->getStatusCode() !== Response::HTTP_OK) {
+            if (!$dataResponse) {
                 return Helper::rvxApi(['error' => "Registration Fail"])->fails('Registration Fail', $dataResponse->getStatusCode());
             }
             $this->loginService->resetPostMeta();

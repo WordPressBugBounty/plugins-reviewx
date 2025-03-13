@@ -23,7 +23,6 @@ use Rvx\Handlers\WooReviewTableHandler;
 use Rvx\Handlers\OrderStatusChangedHandler;
 use Rvx\Handlers\OrderUpdateProcessHandler;
 use Rvx\Handlers\RvxInit\PageBuilderHandler;
-use Rvx\Handlers\WcTemplates\WoocommerceInit;
 use Rvx\Handlers\Product\ProductImportHandler;
 use Rvx\Handlers\WcTemplates\WcAccountDetails;
 use Rvx\Handlers\WcTemplates\WcAccountFormTag;
@@ -32,10 +31,8 @@ use Rvx\Handlers\RvxInit\LoadTextDomainHandler;
 use Rvx\Handlers\WcTemplates\WcEditAccountForm;
 use Rvx\Handlers\RvxInit\RedirectReviewxHandler;
 use Rvx\Handlers\WoocommerceSettingsSaveHandler;
-use Rvx\Handlers\WoocommerceCommentUntrashHandler;
 use Rvx\Handlers\RvxInit\PermalinkStructureHandler;
 use Rvx\Handlers\WcTemplates\WcAccountDetailsError;
-use Rvx\Handlers\WoocommerceCommentMoveToTrashHandler;
 use Rvx\Handlers\RichSchema\WoocommerceRichSchemaHandler;
 use Rvx\Handlers\WoocommerceCommentStatusChangeHandler;
 use Rvx\Handlers\WcTemplates\WoocommerceLocateTemplateHandler;
@@ -49,7 +46,6 @@ use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
 use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\Handlers\WChooks\StorefrontReviewLinkClickScroll;
-use Rvx\Handlers\WChooks\AdminOrderCreateHandler;
 class PluginServiceProvider extends ServiceProvider
 {
     public function register() : void
@@ -69,7 +65,7 @@ class PluginServiceProvider extends ServiceProvider
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
         add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
-        add_action('admin_notices', [new ReviewxAdminNoticeHandler(), 'adminNoticeHandler']);
+        // add_action('admin_notices', [new ReviewxAdminNoticeHandler(), 'adminNoticeHandler']);
         add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);
@@ -113,8 +109,6 @@ class PluginServiceProvider extends ServiceProvider
         add_action('wp_set_comment_status', new WoocommerceCommentStatusChangeHandler(), 10, 2);
         add_filter('bulk_actions-edit-comments', new CustomBulkActionsForReviewsHandler());
         add_filter('handle_bulk_actions', new RegisterBulkActionsForReviewsHandler(), 10, 3);
-        add_action('trashed_comment', new WoocommerceCommentMoveToTrashHandler());
-        add_action('untrash_comment', new WoocommerceCommentUntrashHandler());
         add_action('woocommerce_settings_save_products', [new WoocommerceSettingsSaveHandler(), 'wooProductSaveHandler'], 10);
         /**
          * Woocommerce Edit Comment/Review

@@ -16,5 +16,9 @@ return [
         '__' => function ($text, $domain = 'default') {
             return __($text, $domain);
         },
+
+	    'bearer_token' => function () {
+		    return \Rvx\Utilities\Helper::getAuthToken();
+	    },
     ]
 ];

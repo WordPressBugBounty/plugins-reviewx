@@ -13,9 +13,8 @@
      @notify-attachment="notifyAttachmentAdded($event.detail.reviewAttachFiles)"
      @notify-close-success-modal="showReviewSuccessModal = false"
      @notify-like-dislike="await fetchReviews({productId: rvxAttributes.product.id})">
-
-    <div x-show="fetchReviewsSettingsIsLoading" class="rvx-grid rvx-place-content-center rvx-h-[186px]">
-        {% include "storefront/widget/Components/Spinner.twig" %}
+    <div x-show="fetchReviewsSettingsIsLoading" class="rvx-mb-space16">
+        {% include "storefront/widget/Components/Skeleton/SummarySkeleton.twig" %}
     </div>
     <template x-if="!fetchReviewsSettingsIsLoading" x-cloak>
         <div>
@@ -36,9 +35,7 @@
     </template>
 
     <template x-if="fetchReviewsIsLoading">
-        <div class="rvx-grid rvx-place-content-center rvx-h-[186px]">
-            {% include "storefront/widget/Components/Spinner.twig" %}
-        </div>
+            {% include "storefront/widget/Components/Skeleton/ReviewListSkeleton.twig" %}
     </template>
 
 

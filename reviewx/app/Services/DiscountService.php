@@ -6,13 +6,6 @@ use Exception;
 use Rvx\Api\DiscountApi;
 class DiscountService extends \Rvx\Services\Service
 {
-    /**
-     *
-     */
-    public function __construct()
-    {
-        //        add_action('save_post', [$this, 'saveProduct'], 10, 1);
-    }
     public function wpDiscountCreate($data)
     {
         $coupon = $this->setBasicCouponData($data);
