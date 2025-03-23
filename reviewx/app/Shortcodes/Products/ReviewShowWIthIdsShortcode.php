@@ -10,6 +10,10 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
     public function render(array $attrs, string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'review_ids' => null], $attrs);
+        // If review_ids is not provided, return an error.
+        if (empty($attrs['review_ids'])) {
+            return '<div class="warning">Error: Please provide "review_ids" in the shortcode.</div>';
+        }
         $reviewsIds = $attrs['review_ids'];
         $productIdArray = [];
         // If review_ids is not null, process it
@@ -17,15 +21,15 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
             // Split review_ids by commas and trim whitespace
             $productIdArray = \array_map('trim', \explode(',', $reviewsIds));
             // Send multiple product IDs to the JavaScript variable
-            $attributes = $this->reviewsWiseReviewShow($productIdArray);
+            $data = $this->reviewsWiseReviewShow($productIdArray);
             // Return the view (empty or simplified, as no review data is required)
-            return View::render('storefront/shortcode/reviewShowWIthIds', ['title' => $attrs['title'], 'data' => $attributes]);
+            return View::render('storefront/shortcode/reviewShowWIthIds', ['title' => $attrs['title'] ?: \false, 'data' => \json_encode($data)]);
         }
         return '';
     }
-    public function reviewsWiseReviewShow($reviewsIds)
+    public function reviewsWiseReviewShow($reviewsIds) : array
     {
-        $reviewIdsJson = [$reviewsIds, 'domain' => ['baseDomain' => Helper::domainSupport()]];
-        return \json_encode($reviewIdsJson);
+        $attributes = ['ids' => $reviewsIds, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        return $attributes;
     }
 }

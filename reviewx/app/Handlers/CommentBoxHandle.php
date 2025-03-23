@@ -2,10 +2,16 @@
 
 namespace Rvx\Handlers;
 
+use Rvx\CPT\CptHelper;
 use Rvx\WPDrill\Facades\View;
 use Rvx\Utilities\Helper;
 class CommentBoxHandle
 {
+    protected $cptHelper;
+    public function __construct()
+    {
+        $this->cptHelper = new CptHelper();
+    }
     public function __invoke() : void
     {
         $attributes = $this->setRvxAttributes();
@@ -28,21 +34,12 @@ class CommentBoxHandle
             $is_verified_customer = 0;
         }
         $user_name = Helper::loggedInUserFullName() ?: Helper::loggedInUserDisplayName();
-        $attributes = ['product' => ['id' => get_the_ID()], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $attributes = ['product' => ['id' => get_the_ID(), 'postType' => \strtolower(get_post_type())], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($attributes);
     }
     public function commentBoxDefaultStyleForCustomPostType() : void
     {
-        $data = get_option('_rvx_custom_post_type_settings');
-        $enabled_post_types = [];
-        if ($data && Helper::arrayGet($data, 'code') !== 40000) {
-            foreach ($data['data']['reviews'] as $review) {
-                if ($review['status'] === 'Enabled') {
-                    $enabled_post_types[] = $review['post_type'];
-                }
-            }
-        }
-        $enabled_post_types[] = 'product';
+        $enabled_post_types = $this->cptHelper->enabledCPT();
         if (!is_singular($enabled_post_types)) {
             ?>
             <style>

@@ -20,7 +20,8 @@ return function (Plugin $plugin) {
             $menu->add(__("Import / Export", "reviewx"), \Rvx\Handlers\ImportExpotHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_import_export');
             $menu->add(__("Custom Post Reviews", "reviewx"), \Rvx\Handlers\CptReviewsHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_cpt_review');
             $menu->add(__("Settings", "reviewx"), \Rvx\Handlers\GeneralSettingHandler::class, 'manage_options')->icon('dashicons-smiley');
-            $menu->add(__("Rollback to v1", "reviewx"), \Rvx\Handlers\MigrationRollback\RollbackMenuHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_rollback');
+            // $menu->add(__("Rollback to v1", "reviewx"), \Rvx\Handlers\MigrationRollback\RollbackMenuHandler::class, 'manage_options')
+            //     ->icon('dashicons-smiley')->slug('reviewx_rollback');
         });
     }
     if (!Client::has()) {

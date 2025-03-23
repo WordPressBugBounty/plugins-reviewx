@@ -14,9 +14,17 @@ class SettingController
     {
         $this->settingService = new SettingService();
     }
-    public function getApiReviewSettings()
+    public function getApiReviewSettingsOnSync($cpt_type = 'product') : array
     {
-        $response = $this->settingService->getApiReviewSettings();
+        $data = ["cpt_type" => $cpt_type];
+        $response = $this->settingService->getApiReviewSettings($data);
+        return \json_decode($response, \true);
+    }
+    public function getApiReviewSettings($request) : Response
+    {
+        $cpt_type = \strtolower($request->get_param('cpt_type')) ? \strtolower($request->get_param('cpt_type')) : \false;
+        $data = ["cpt_type" => $cpt_type];
+        $response = $this->settingService->getApiReviewSettings($data);
         return Helper::getApiResponse($response);
     }
     public function wooCommerceVerificationRating()
@@ -53,7 +61,7 @@ class SettingController
                 if ($review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
                     update_option('woocommerce_review_rating_verification_required', 'no');
                 }
-                $this->settingService->updateReviewSettings($review_settings);
+                $this->settingService->updateReviewSettings($review_settings, $request['post_type']);
             }
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
@@ -78,7 +86,12 @@ class SettingController
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review settings saved failed', $e->getCode());
         }
     }
-    public function getApiWidgetSettings()
+    public function getApiWidgetSettingsOnSync() : array
+    {
+        $response = $this->settingService->getApiWidgetSettings();
+        return \json_decode($response, \true);
+    }
+    public function getApiWidgetSettings() : Response
     {
         $response = $this->settingService->getApiWidgetSettings();
         return Helper::getApiResponse($response);

@@ -160,9 +160,6 @@ class Helper
     }
     public static function verifiedCustomer($customer_id)
     {
-        if (!is_user_logged_in()) {
-            return \false;
-        }
         $orders = wc_get_orders(["customer" => $customer_id, "status" => ["completed", "processing", "on-hold", "pending-payment"], "limit" => 1]);
         if (!empty($orders)) {
             return \true;
@@ -292,7 +289,11 @@ class Helper
     }
     public static function validateReturnDate($dateString)
     {
-        $timestamp = \strtotime($dateString);
+        if (\is_numeric($dateString) && $dateString > 0) {
+            $timestamp = (int) $dateString;
+        } else {
+            $timestamp = \strtotime($dateString);
+        }
         if ($timestamp === \false || $timestamp < 0) {
             return null;
         }
@@ -300,6 +301,9 @@ class Helper
     }
     public static function formatToTwoDecimalPlaces($number)
     {
-        return \number_format($number, 2);
+        if (empty($number)) {
+            $number = 0;
+        }
+        return \number_format((float) $number, 2);
     }
 }

@@ -5,14 +5,14 @@ namespace Rvx\Services;
 use Rvx\Api\SettingApi;
 class SettingService extends \Rvx\Services\Service
 {
-    protected SettingApi $settingApi;
+    protected $settingApi;
     public function __construct()
     {
-        $this->settingApi = new SettingApi();
+        // $this->settingApi = new SettingApi();
     }
-    public function getApiReviewSettings()
+    public function getApiReviewSettings($data)
     {
-        return (new SettingApi())->getApiReviewSettings();
+        return (new SettingApi())->getApiReviewSettings($data);
     }
     public function saveApiReviewSettings($data)
     {
@@ -30,44 +30,96 @@ class SettingService extends \Rvx\Services\Service
      * Get Settings Data
      * @return array
      */
-    public function getSettingsData() : array
+    public function getSettingsData($post_type = null) : array
     {
-        $rvx_settings = get_option("_rvx_settings_data");
-        return $rvx_settings ?? [];
+        $review_settings = $this->getReviewSettings($post_type);
+        $widget_settings = $this->getWidgetSettings();
+        $rvx_settings = $this->formatSettings($review_settings, $widget_settings);
+        // Ensure we always return an array even if invalid data exists
+        return \is_array($rvx_settings) ? $rvx_settings : [];
     }
-    public function getReviewSettings() : array
+    public function getReviewSettings($post_type = null) : array
     {
-        $rvx_settings = get_option("_rvx_settings_data");
+        $default_cpt_name = 'product';
+        if ($post_type !== null) {
+            $default_cpt_name = $post_type;
+        }
+        $option_name = '_rvx_settings_' . $default_cpt_name;
+        $rvx_settings = get_option($option_name, \false);
+        if ($post_type === 'product' && $rvx_settings === \false) {
+            $rvx_settings = get_option('_rvx_settings_data');
+        }
         return $rvx_settings['setting']['review_settings'] ?? [];
     }
     public function getWidgetSettings() : array
     {
-        $rvx_settings = get_option("_rvx_settings_data");
+        $option_name = '_rvx_settings_widget';
+        $rvx_settings = get_option($option_name, \false);
+        if ($rvx_settings === \false) {
+            $rvx_settings = get_option('_rvx_settings_data');
+        }
         return $rvx_settings['setting']['widget_settings'] ?? [];
     }
     /**
      * Upadte Settings Data
      * @return array
      */
-    public function updateSettingsData(array $data) : void
+    public function updateSettingsData(array $data, $post_type = null) : void
     {
         update_option("_rvx_settings_data", $data);
     }
-    public function updateReviewSettings(array $review_settings) : void
+    public function updateReviewSettings(array $review_settings, $post_type = null) : void
     {
-        $widget_settings = $this->getWidgetSettings();
-        $data = $this->updateSettingsMerger($review_settings, $widget_settings);
-        update_option("_rvx_settings_data", $data);
+        $default_cpt_name = 'product';
+        if ($post_type !== null) {
+            $default_cpt_name = $post_type;
+            if ($post_type === 'product') {
+                $review_settings = $review_settings['reviews'];
+            }
+        }
+        $option_name = '_rvx_settings_' . $default_cpt_name;
+        $data = ["setting" => ["review_settings" => ["reviews" => $review_settings]]];
+        if ($post_type !== 'product') {
+            // Define the review submission policy
+            $policy = ["review_submission_policy" => ["options" => ["anyone" => 1]]];
+            // Ensure reviews is an array and merge policy directly into it
+            if (!\is_array($data['setting']['review_settings']['reviews'])) {
+                $data['setting']['review_settings']['reviews'] = [];
+            }
+            // Merge the policy directly at the top level of "reviews"
+            $data['setting']['review_settings']['reviews'] = \array_merge($policy, $data['setting']['review_settings']['reviews']);
+        }
+        update_option($option_name, $data);
+    }
+    public function updateReviewSettingsOnSync(array $review_settings, $post_type = null) : void
+    {
+        $default_cpt_name = 'product';
+        if ($post_type !== null) {
+            $default_cpt_name = $post_type;
+            $review_settings = $review_settings['reviews'];
+        }
+        $option_name = '_rvx_settings_' . $default_cpt_name;
+        $data = ["setting" => ["review_settings" => ["reviews" => $review_settings]]];
+        if ($post_type !== 'product') {
+            // Define the review submission policy
+            $policy = ["review_submission_policy" => ["options" => ["anyone" => 1]]];
+            // Ensure reviews is an array and merge policy directly into it
+            if (!\is_array($data['setting']['review_settings']['reviews'])) {
+                $data['setting']['review_settings']['reviews'] = [];
+            }
+            // Merge the policy directly at the top level of "reviews"
+            $data['setting']['review_settings']['reviews'] = \array_merge($policy, $data['setting']['review_settings']['reviews']);
+        }
+        update_option($option_name, $data);
     }
     public function updateWidgetSettings(array $widget_settings) : void
     {
-        $review_settings = $this->getReviewSettings();
-        $data = $this->updateSettingsMerger($review_settings, $widget_settings);
-        update_option("_rvx_settings_data", $data);
+        $data = ["setting" => ["widget_settings" => $widget_settings]];
+        update_option("_rvx_settings_widget", $data);
     }
-    private function updateSettingsMerger(array $review_settings, array $widget_settings) : array
+    private function formatSettings(array $review_settings, array $widget_settings) : array
     {
-        $data = ["setting" => ["widget_settings" => $widget_settings, "review_settings" => $review_settings]];
+        $data = ["setting" => ["review_settings" => $review_settings, "widget_settings" => $widget_settings]];
         return $data ?? [];
     }
     public function wooCommerceVerificationRating()
@@ -120,7 +172,7 @@ class SettingService extends \Rvx\Services\Service
     }
     public function userCurrentPlan()
     {
-        return $this->settingApi->userCurrentPlan();
+        return (new SettingApi())->userCurrentPlan();
     }
     public function getApiGeneralSettings()
     {
@@ -145,8 +197,8 @@ class SettingService extends \Rvx\Services\Service
             return ['message' => "Table truncate successfully"];
         }
     }
-    public function getLocalSettings()
+    public function getLocalSettings($post_type)
     {
-        return (new SettingApi())->getLocalSettings();
+        return (new SettingApi())->getLocalSettings($post_type);
     }
 }

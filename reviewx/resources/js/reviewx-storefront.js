@@ -6,6 +6,7 @@ function __reviewXState__() {
             // },
             product: {
                 id: null,
+                postType: 'product',
             },
             userInfo: {
                 isLoggedIn: null,
@@ -48,6 +49,7 @@ function __reviewXState__() {
         showReviewDetailsModal: false,
         selectedReviewDetails: {},
         storeFrontReviewQuery: {},
+        storeFrontReviewListShortcodeQuery: {},
         storeFrontValidation: {
             isValidReviewTitle: false,
             isValidReviewFeedback: false,
@@ -133,7 +135,6 @@ function __reviewXState__() {
         async fetchReviewListShortCodes(ids) {
             this.fetchReviewsIsLoading = true;
             const reviewListShortCodeIds = ids?.[0]
-            console.log('reviewListShortCodeIds', reviewListShortCodeIds)
             if (!reviewListShortCodeIds) return
             try {
                 const url = `${this.rvxAttributes.baseDomain}/${reviewListShortCodeIds}/reviews`;
@@ -153,7 +154,6 @@ function __reviewXState__() {
         async fetchReviewListWithIdsShortCodes(ids) {
             this.fetchReviewsIsLoading = true;
             const reviewsShortCodeIds = ids
-            console.log('fetchReviewListWithIdsShortCodes', reviewsShortCodeIds)
             if (!reviewsShortCodeIds?.length) return
             const payload = {
                 review_ids: reviewsShortCodeIds
@@ -168,7 +168,7 @@ function __reviewXState__() {
                     }
                 });
                 const res = await data.json();
-                console.log('res =====', res)
+                // console.log('res =====', res)
                 if (!res?.data?.reviews?.length) {
                     this.haveReviews = true; // No more reviews available
                 } else {
@@ -181,6 +181,7 @@ function __reviewXState__() {
             }
         },
         loadMoreReviewHandler() {
+            
             const cursor = this.reviewsData?.data?.meta?.next_cursor;
             if (cursor) {
                 this.storeFrontReviewQuery = {
@@ -194,15 +195,75 @@ function __reviewXState__() {
                 });
             }
         },
-        async fetchReviewsSettings() {
-            console.log('Fetching review settings');
-            this.fetchReviewsSettingsIsLoading = true;
+        async fetchReviewListShortcodeReviews({ query, loadMoreReview, productId }) {
+            if (loadMoreReview) {
+                this.isLoadMoreReviews = true;
+            } else {
+                this.fetchReviewsIsLoading = true;
+            }
+            let queryParams;
+            if (query) {
+                const newQuery = { ...query };
+                queryParams = this.generateQueryParams(newQuery);
+            }
             try {
-                const data = await fetch(`${this.rvxAttributes.baseDomain}/wp/settings`);
+                const url = `${this.rvxAttributes.baseDomain}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
+                const data = await fetch(url);
+                const res = await data.json();
+                
+                if (loadMoreReview) {
+                    // Append new reviews to existing data
+                    if (this.reviewListShortCodeData?.data?.reviews) {
+                        this.reviewListShortCodeData = {
+                            ...this.reviewListShortCodeData,
+                            data: {
+                                ...this.reviewListShortCodeData.data,
+                                reviews: [...this.reviewListShortCodeData.data.reviews, ...res.data.reviews],
+                                meta: res.data.meta // Update next_cursor
+                            }
+                        };
+                    } else {
+                        this.reviewListShortCodeData = res;
+                    }
+                } else {
+                    // Initial load
+                    this.reviewListShortCodeData = res;
+                }
+        
+                if (res?.data?.reviews?.length) {
+                    this.haveReviews = true;
+                }
+            } catch (e) {
+                console.log('Error fetching reviews:', e);
+            } finally {
+                this.fetchReviewsIsLoading = false;
+                this.isLoadMoreReviews = false;
+            }
+        },
+        loadMoreReviewListShortcodeHandler() {
+            const cursor = this.reviewListShortCodeData?.data?.meta?.next_cursor;
+            if (cursor) {
+                this.storeFrontReviewListShortcodeQuery = {
+                    ...this.storeFrontReviewListShortcodeQuery,
+                    cursor
+                };
+                this.fetchReviewListShortcodeReviews({
+                    query: this.storeFrontReviewListShortcodeQuery,
+                    loadMoreReview: true,
+                    productId: this.reviewListShortCodeData?.data?.reviews[0]?.product_wp_id
+                });
+                console.log('Product ID: ', storeFrontReviewListShortcodeQuery);
+            }
+        },
+        async fetchReviewsSettings() {
+            this.fetchReviewsSettingsIsLoading = true;
+            let postType = this.rvxAttributes?.product?.postType ? this.rvxAttributes?.product?.postType : 'product';
+            try {
+                const data = await fetch(`${this.rvxAttributes.baseDomain}/wp/settings${'?cpt_type=' + postType}`);
                 const res = await data.json();
                 this.reviewSettingsData = res;
                 this.layoutView = res?.data.setting?.widget_settings?.outline?.layout_type
-                console.log('Settings:', res);
+                // console.log('Settings:', res);
                 if (res?.data?.setting?.review_settings) {
                     this.multiCriteriaRatings = this.createMultiCriteriaRatingObject({
                         criterias: res?.data.setting.review_settings.reviews.multicriteria.criterias
@@ -221,7 +282,7 @@ function __reviewXState__() {
             }
         },
         async fetchReviewsAggregation({productId}) {
-            console.log('Fetching review Aggregation');
+            // console.log('Fetching review Aggregation');
             this.fetchReviewsSettingsIsLoading = true;
             try {
                 const data = await fetch(`${this.rvxAttributes.baseDomain}/${productId}/insight`);
@@ -468,7 +529,7 @@ function __reviewXState__() {
                     body: payload,
                 })
                 const res = await data.json()
-                console.log('res =====', res.code)
+                // console.log('res =====', res.code)
                 // if(res.code)
                 this.notifyReviewAdded()
                 this.newReview = {
@@ -566,7 +627,7 @@ function __reviewXState__() {
                             },
                             body: JSON.stringify(payload)
                         });
-                        console.log('res ======', res)
+                        // console.log('res ======', res)
                         // this.$dispatch('notify-like-dislike')
                     } catch (error) {
                         console.log('error =======', error);
@@ -631,7 +692,7 @@ function __reviewXState__() {
             }
             this.rvxAttributesDataSetHandler(concatValue)
             try {
-                console.log('init 1')
+                // console.log('init 1')
                 await this.fetchReviewsSettings();
                 if (this.rvxAttributes?.product?.id) {
                     await this.fetchReviewsAggregation({productId: this.rvxAttributes?.product?.id});
@@ -644,16 +705,18 @@ function __reviewXState__() {
 
         async initializeMyAccountReviewForm(data) {
             // const parseData = JSON.parse(data.data)
-            console.log('init 2')
+            // console.log('init 2')
             const parseAttData = JSON.parse(data.data)
             const parseFormLabels = JSON.parse(data?.formLevelData)
-            console.log('parseFormLabels', parseFormLabels)
+            // console.log('parseAttData', parseAttData)
+            // console.log('parseFormLabels', parseFormLabels)
             const concatValue = {
                 ...parseAttData,
                 formLevelData: {
                     ...parseFormLabels
                 }
             }
+            // console.log('concatValue', concatValue)
             this.rvxAttributesDataSetHandler(concatValue)
             // this.rvxAttributesDataSetHandler(parseData)
             try {
@@ -664,7 +727,7 @@ function __reviewXState__() {
         },
         async initializeMyAccountReviewFormOnProductChange(productId) {
             try {
-                console.log('init 3')
+                // console.log('init 3')
                 await this.fetchReviewsAggregation({productId: productId});
             } catch (error) {
                 console.error('Error during initialization:', error);
@@ -672,7 +735,8 @@ function __reviewXState__() {
         },
         async initializeReviewGraphShortCodes(data) {
             const parseData = JSON.parse(data.data)
-            console.log('init 4')
+            this.rvxAttributesDataSetHandler(parseData)
+            // console.log('init 4')
             try {
                 await this.fetchReviewsSettings();
                 await this.fetchReviewsAggregation({productId: parseData.product.id});
@@ -681,29 +745,32 @@ function __reviewXState__() {
             }
         },
         async initializeReviewListShortCodes(data) {
-            const ids = JSON.parse(data.data)
+            const parseData = JSON.parse(data.data)
+            this.rvxAttributesDataSetHandler(parseData)
             try {
-                console.log('init 5')
+                // console.log('init 5')
                 await this.fetchReviewsSettings();
-                await this.fetchReviewListShortCodes(ids);
+                await this.fetchReviewListShortCodes(parseData.ids);
             } catch (error) {
                 console.error('Error during initialization:', error);
             }
         },
         async initializeReviewWithReviewIdsShortCodes(data) {
-            const ids = JSON.parse(data.data)
+            const parseData = JSON.parse(data.data)
+            this.rvxAttributesDataSetHandler(parseData)
             try {
-                console.log('init 6')
+                // console.log('init 6')
                 await this.fetchReviewsSettings();
-                await this.fetchReviewListWithIdsShortCodes(ids);
+                await this.fetchReviewListWithIdsShortCodes(parseData.ids);
             } catch (error) {
                 console.error('Error during initialization:', error);
             }
         },
         async initializeReviewStatsShortCodes(data) {
             const parseData = JSON.parse(data.data)
+            this.rvxAttributesDataSetHandler(parseData)
             try {
-                console.log('init 7')
+                // console.log('init 7')
                 await this.fetchReviewsSettings();
                 await this.fetchReviewsAggregation({productId: parseData.product.id});
             } catch (error) {
@@ -712,8 +779,9 @@ function __reviewXState__() {
         },
         async initializeReviewSummaryShortCodes(data) {
             const parseData = JSON.parse(data.data)
+            this.rvxAttributesDataSetHandler(parseData)
             try {
-                console.log('init 8')
+                // console.log('init 8')
                 await this.fetchReviewsSettings();
                 await this.fetchReviewsAggregation({productId: parseData.product.id});
             } catch (error) {

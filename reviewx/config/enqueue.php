@@ -144,7 +144,7 @@ return [
                 'src' => 'resources/js/reviewx-storefront.js',
                 'deps' => ['alpine-js'],
                 'ver' => false,
-                'in_footer' => false,
+                'in_footer' => true,
                 'attributes' =>
                     [
                         // 'type' => 'module',
@@ -163,7 +163,7 @@ return [
                 'src' => 'resources/js/mediaUploadComponent.js',
                 'deps' => ['alpine-js'],
                 'ver' => false,
-                'in_footer' => false,
+                'in_footer' => true,
                 'attributes' =>
                     [
                         // 'type' => 'module',
@@ -174,7 +174,7 @@ return [
                 'src' => 'resources/js/reviewSuccessModalComponent.js',
                 'deps' => ['alpine-js'],
                 'ver' => false,
-                'in_footer' => false,
+                'in_footer' => true,
                 'attributes' =>
                     [
                         // 'type' => 'module',
@@ -185,23 +185,32 @@ return [
                 'src' => 'resources/js/multiCriteriaRatingComponent.js',
                 'deps' => ['alpine-js'],
                 'ver' => false,
-                'in_footer' => false,
+                'in_footer' => true,
                 'attributes' =>
                     [
                         // 'type' => 'module',
                     ],
             ],
              [
-                'handle' => 'reviewx-rvxReviewFilterComponent', 'src' => 'resources/js/reviewFilterComponent.js', 'deps' => ['alpine-js'], 'ver' => false, 'in_footer' => false, 'attributes' =>
-                [
-                   // 'type' => 'module',
-                ],
+                'handle' => 'reviewx-rvxReviewFilterComponent',
+                'src' => 'resources/js/reviewFilterComponent.js',
+                'deps' => ['alpine-js'], 'ver' => false,
+                'in_footer' => true,
+                'attributes' =>
+                    [
+                    // 'type' => 'module',
+                    ],
             ],
             [
-                'handle' => 'reviewx-rvxEventDispatch', 'src' => 'resources/js/eventDispatch/notify/index.js', 'deps' => ['alpine-js'], 'ver' => false, 'in_footer' => false, 'attributes' =>
-                [
-                   // 'type' => 'module',
-                ],
+                'handle' => 'reviewx-rvxEventDispatch',
+                'src' => 'resources/js/eventDispatch/notify/index.js',
+                'deps' => ['alpine-js'],
+                'ver' => false,
+                'in_footer' => true,
+                'attributes' =>
+                    [
+                    // 'type' => 'module',
+                    ],
             ],
         ],
     //    'localize_scripts' => [['handle' => 'reviewx-storeFront-js', 'objectName' => 'rvx_locals', 'data' => [

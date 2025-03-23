@@ -28,8 +28,13 @@ class ReviewXChecker
         global $wpdb;
         // Define option name for ReviewX SaaS version
         $option_name = '_rvx_settings_data';
+        $option_name_latest = '_rvx_settings_product';
         // Check if the option exists in the wp_options table
         $option_exists = $wpdb->get_var($wpdb->prepare("SELECT option_name FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option_name));
+        if (empty($option_exists)) {
+            // Check if the option exists in the wp_options table
+            $option_exists = $wpdb->get_var($wpdb->prepare("SELECT option_name FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option_name_latest));
+        }
         return !empty($option_exists);
     }
 }

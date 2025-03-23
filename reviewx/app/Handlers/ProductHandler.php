@@ -24,7 +24,7 @@ class ProductHandler
                 }
             } else {
                 $payload = $this->customPost($post);
-                \error_log("Post " . \print_r($payload, \true));
+                \error_log("Custom post" . \print_r($payload, \true));
                 $response = (new ProductApi())->create($payload);
                 if ($response->getStatusCode() !== Response::HTTP_OK) {
                     \error_log("Cpt Not insert" . $response);

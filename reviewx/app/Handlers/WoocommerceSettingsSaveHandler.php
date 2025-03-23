@@ -18,7 +18,8 @@ class WoocommerceSettingsSaveHandler
             $response = (new SettingService())->saveApiReviewSettings($modifiedReviewsettings);
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 $review_settings = $response->getApiData()['review_settings'];
-                (new SettingService())->updateReviewSettings($review_settings);
+                $post_type = 'product';
+                (new SettingService())->updateReviewSettings($review_settings, $post_type);
             }
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 \error_log('API response - NOT OK: ' . \print_r($response->getApiData()['review_settings'], \true));
@@ -32,7 +33,7 @@ class WoocommerceSettingsSaveHandler
     private function prepareData($isset_label, $isset_required)
     {
         // Retrieve the existing review settings
-        $review_settings = (array) (new SettingService())->getReviewSettings()['reviews'];
+        $review_settings = (array) (new SettingService())->getReviewSettings('product')['reviews'];
         $review_settings['show_verified_badge'] = $isset_label ? \true : \false;
         $wcReviewSubmissionPolicy = $isset_required ? \true : \false;
         $isAnyone = \true;

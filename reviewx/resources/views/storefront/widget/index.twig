@@ -2,6 +2,9 @@
     #rvx-storefront-widget p {
         margin: 0;
     }
+    #rvx-storefront-widget .rvx-review-info p {
+        margin-bottom: 5px;
+    }
 
     [x-cloak] {
         display: none !important;
@@ -17,7 +20,7 @@
         {% include "storefront/widget/Components/Skeleton/SummarySkeleton.twig" %}
     </div>
     <template x-if="!fetchReviewsSettingsIsLoading" x-cloak>
-        <div>
+        <div class="rvx-mt-6">
             {% include "storefront/widget/Features/Aggregations/index.twig" %}
 
             {% include "storefront/widget/Components/RecommendedBanner.twig" %}

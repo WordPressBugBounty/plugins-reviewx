@@ -16,7 +16,6 @@ use Rvx\Handlers\OrderUpdateHandler;
 use Rvx\Utilities\Auth\ClientManager;
 use Rvx\Handlers\ProductDeleteHandler;
 use Rvx\Handlers\ProductUpdateHandler;
-use Rvx\Handlers\ReplayCommentHandler;
 use Rvx\Handlers\CategoryDeleteHandler;
 use Rvx\Handlers\CategoryUpdateHandler;
 use Rvx\Handlers\WooReviewTableHandler;
@@ -46,6 +45,17 @@ use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
 use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\Handlers\WChooks\StorefrontReviewLinkClickScroll;
+use Rvx\CPT\CptAverageRating;
+use Rvx\CPT\CptCommentsLinkMeta;
+use Rvx\CPT\CptRichSchemaHandler;
+use Rvx\CPT\CommentsRatingColumn;
+use Rvx\CPT\Shared\CommentsReviewsRowActionRemover;
+use Rvx\CPT\Shared\CommentsReviewsMetaBoxRemover;
+use Rvx\CPT\Shared\PostsRatingColumn;
+use Rvx\CPT\Shared\CptPostHandler;
+use Rvx\Form\ReviewForm;
+use Rvx\Handlers\MigrationRollback\UpgradeDBSettings;
+use Rvx\Handlers\ReplyCommentHandler;
 class PluginServiceProvider extends ServiceProvider
 {
     public function register() : void
@@ -57,16 +67,16 @@ class PluginServiceProvider extends ServiceProvider
     }
     public function boot() : void
     {
-        add_action('transition_post_status', new ProductHandler(), 10, 3);
-        add_action('woocommerce_update_product', new ProductUpdateHandler());
         add_action('init', new PermalinkStructureHandler(), 10);
-        add_action('init', new LoadTextDomainHandler(), 10);
+        add_action('init', new LoadTextDomainHandler(), 40);
         add_action('activated_plugin', new RedirectReviewxHandler(), 15, 1);
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
         add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
         // add_action('admin_notices', [new ReviewxAdminNoticeHandler(), 'adminNoticeHandler']);
-        add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
+        // add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
+        // Upgrade the WP DB to new v2.1.6
+        add_action('admin_init', [new UpgradeDBSettings(), 'run_upgrade']);
         add_action('wp_trash_post', new ProductDeleteHandler(), 10, 1);
         add_action('untrash_post', new ProductUntrashHandler(), 10, 1);
         add_action('woocommerce_new_order', new OrderCreateHandler());
@@ -94,7 +104,7 @@ class PluginServiceProvider extends ServiceProvider
         /**
          * Woocommerce Hooks
          */
-        add_action('wp_footer', [new StorefrontReviewLinkClickScroll(), 'addScrollScript'], 10);
+        add_action('wp_footer', [new StorefrontReviewLinkClickScroll(), 'addScrollScript'], 10, 2);
         /**
          * Woocommerce review table sync with saas
          */
@@ -102,11 +112,55 @@ class PluginServiceProvider extends ServiceProvider
         /**
          * Woocommerce review replay comments
          */
-        add_action('comment_post', new ReplayCommentHandler(), 10, 3);
+        add_action('comment_post', new ReplyCommentHandler(), 10, 3);
+        /**
+         * CPT Posts - Create/Update
+         */
+        add_action('save_post', new CptPostHandler(), 10, 3);
+        // add_action('transition_post_status', new ProductHandler(), 10, 3);
+        // add_action('woocommerce_update_product', new ProductUpdateHandler());
+        // Remove Comment / Review Meta box from Add/Edit page (post/product)
+        add_action('add_meta_boxes', [new CommentsReviewsMetaBoxRemover(), 'removeCommentsReviewsMetaBox'], 99);
+        // Remove the 'comment_row_actions' filter
+        add_filter('comment_row_actions', [new CommentsReviewsRowActionRemover(), 'removeCommentsReviewsRowActions'], 999, 2);
+        // Add the new column for rating
+        add_filter('manage_edit-comments_columns', [new CommentsRatingColumn(), 'addRatingColumn']);
+        // Populate the new column with rating data
+        add_action('manage_comments_custom_column', [new CommentsRatingColumn(), 'populateRatingColumn'], 10, 2);
+        // Add sorting functionality to comments (ReviewX Rating) Column
+        //add_filter('manage_edit-comments_sortable_columns', [new CommentsRatingColumn(), 'makeRatingColumnSortable']);
+        // add_action('pre_get_comments', [new CommentsRatingColumn(), 'sortCommentsByRating']);
+        // Rating column for CPT/ Product
+        // Hook into the admin_init action to instantiate the PostsRatingColumn class
+        add_action('admin_init', [new PostsRatingColumn(), 'addColumn']);
+        /**
+         * CPT comments / reviews
+         */
+        add_action('wp_insert_comment', function ($comment_id, $comment) {
+            if ($comment) {
+                CptAverageRating::update_average_rating($comment->comment_post_ID);
+            }
+        }, 10, 2);
+        add_action('comment_post', [CptAverageRating::class, 'handle_comment_rating'], 10, 2);
+        add_action('comment_post', [CptAverageRating::class, 'handle_comment_rating'], 10, 3);
+        add_action('get_comments_number', [new CptCommentsLinkMeta(), 'replace_total_comments_count'], 10, 2);
+        add_action('edit_comment', function ($comment_id) {
+            $comment = get_comment($comment_id);
+            if ($comment) {
+                CptAverageRating::update_average_rating($comment->comment_post_ID);
+            }
+        });
+        add_action('wp_set_comment_status', [CptAverageRating::class, 'handle_comment_status_change'], 10, 2);
+        add_action('save_post', [CptAverageRating::class, 'update_average_rating'], 10, 2);
+        /**
+         * CPT Rich Schema
+         * Hook into WordPress frontend to add schema to the post head.
+         */
+        add_action('wp_head', [CptRichSchemaHandler::class, 'addCustomRichSchema'], 10);
         /**
          * Woocommerce Comment status
          */
-        add_action('wp_set_comment_status', new WoocommerceCommentStatusChangeHandler(), 10, 2);
+        // add_action('wp_set_comment_status', new WoocommerceCommentStatusChangeHandler(), 10, 2);
         add_filter('bulk_actions-edit-comments', new CustomBulkActionsForReviewsHandler());
         add_filter('handle_bulk_actions', new RegisterBulkActionsForReviewsHandler(), 10, 3);
         add_action('woocommerce_settings_save_products', [new WoocommerceSettingsSaveHandler(), 'wooProductSaveHandler'], 10);
@@ -133,5 +187,10 @@ class PluginServiceProvider extends ServiceProvider
          */
         add_action('customize_register', new WidgetCustomizeOptionsHandler(), 10);
         add_action('wp_head', new WidgetCustomizeOutputCSSHandler(), 20);
+        /*
+         * Comment / Review Form Injection on Front-end
+         */
+        add_action('init', [ReviewForm::class, 'post_type_support']);
+        add_filter('comments_template', [ReviewForm::class, 'comments_template_init'], \PHP_INT_MAX);
     }
 }

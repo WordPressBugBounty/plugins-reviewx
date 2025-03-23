@@ -6,6 +6,10 @@ class RegisterBulkActionsForReviewsHandler
 {
     public function __invoke($new_status, $old_status, $comment)
     {
+        $screen = \Rvx\get_current_screen();
+        if ($screen->id !== 'edit-comments') {
+            return;
+        }
         if (isset($_REQUEST['action']) && $_REQUEST['action'] != -1) {
             $doaction = $_REQUEST['action'];
         } elseif (isset($_REQUEST['action2']) && $_REQUEST['action2'] != -1) {

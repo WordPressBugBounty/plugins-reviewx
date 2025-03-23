@@ -2,8 +2,8 @@
 
 namespace Rvx\Api;
 
-use Rvx\Apiz\Http\Response;
 use Exception;
+use Rvx\Apiz\Http\Response;
 use Rvx\Models\Post;
 use Rvx\Utilities\Auth\Client;
 class ReviewsApi extends \Rvx\Api\BaseApi
@@ -12,7 +12,7 @@ class ReviewsApi extends \Rvx\Api\BaseApi
      * @return Response
      * @throws Exception
      */
-    public function getReviews($data) : \Rvx\Apiz\Http\Response
+    public function getReviews($data) : Response
     {
         if (!empty($data)) {
             if (\is_numeric($_GET['product'])) {
@@ -28,7 +28,7 @@ class ReviewsApi extends \Rvx\Api\BaseApi
     /**
      * @return Response
      */
-    public function reviewList($data) : \Rvx\Apiz\Http\Response
+    public function reviewList($data) : Response
     {
         if (!empty($data)) {
             if (\is_numeric(isset($_GET['product']))) {

@@ -1,15 +1,23 @@
-<div x-data="__reviewXState__()"
-      x-init="await initializeReviewGraphShortCodes({data: '{{ data }}' })">
-{#      <style>#}
-{#        .rvx-review-form__star-active{#}
-{#            fill: #ecbb09;#}
-{#        }#}
-{#        .rvx-review-form__star-inactive{#}
-{#            fill: gray;#}
-{#        }#}
-{#    </style>#}
-    <div
-         class="rvx-flex rvx-justify-between rvx-items-center">
+<div x-data="{
+         ...__reviewXState__(),  // Spread the state from the function
+         title: '{{ title }}',    // Set the title from Twig
+         showTitle: true          // Default to true, will be evaluated in x-init
+     }"
+     id="review-graph-container" 
+     class="rvx-container rvx-mx-auto"
+     x-init="
+         // Initialize the review graph
+         await initializeReviewGraphShortCodes({ data: '{{ data }}' });
+
+         // Evaluate the title condition
+         showTitle = title !== 'false' && title.trim().toLowerCase() !== 'false';
+     ">
+
+    <template x-if="showTitle">
+        <h2 class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]" x-text="title"></h2>
+    </template>
+
+    <div id="rvx-review-graph" class="rvx-flex rvx-justify-between rvx-items-center">
         {% include "storefront/widget/Features/Aggregations/aggregations.twig" %}
     </div>
 </div>

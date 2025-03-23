@@ -6,9 +6,13 @@ use Rvx\Apiz\Http\Response;
 use Rvx\Utilities\Auth\Client;
 class SettingApi extends \Rvx\Api\BaseApi
 {
-    public function getApiReviewSettings() : Response
+    public function getApiReviewSettings($data) : Response
     {
-        return $this->get('reviews/settings/get');
+        $url = 'reviews/settings/get';
+        if (isset($data['cpt_type'])) {
+            return $this->get($url . '?cpt_type=' . $data['cpt_type']);
+        }
+        return $this->get($url);
     }
     public function getApiWidgetSettings() : Response
     {
@@ -18,10 +22,13 @@ class SettingApi extends \Rvx\Api\BaseApi
     {
         return $this->get('user/current/plan');
     }
-    public function getLocalSettings() : Response
+    public function getLocalSettings($post_type = null) : Response
     {
         $uid = Client::getUid();
-        return $this->get('storefront/' . $uid . '/widgets/settings');
+        if ($post_type === null) {
+            $post_type = 'product';
+        }
+        return $this->get('storefront/' . $uid . '/widgets/settings?cpt_type=' . $post_type);
     }
     public function getApiGeneralSettings() : Response
     {

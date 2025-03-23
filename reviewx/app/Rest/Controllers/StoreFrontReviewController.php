@@ -46,8 +46,17 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function getWidgetReviewsForProduct($request)
     {
+        $diffReviewCount = $this->reviewCountDifferent($request["product_id"]);
+        if ($diffReviewCount === \true) {
+            delete_post_meta($request["product_id"], '_rvx_latest_reviews');
+            return $this->dataGetFormSaas($request);
+        }
         $postMata = get_post_meta($request["product_id"], "_rvx_latest_reviews", \true);
         if ($postMata) {
+            if (\count($postMata["reviews"]) != $this->insightReviewCount($request["product_id"])) {
+                delete_post_meta($request["product_id"], '_rvx_latest_reviews');
+                return $this->dataGetFormSaas($request);
+            }
             if ($request->get_param("cursor") || $request->get_param("rating") || $request->get_param("sortBy") || $request->get_param("attachment")) {
                 $response = $this->reviewService->getWidgetReviewsForProduct($request);
                 return Helper::saasResponse($response);
@@ -100,6 +109,10 @@ class StoreFrontReviewController implements InvokableContract
     public function getWidgetInsight($request)
     {
         try {
+            $diffReviewCount = $this->reviewCountDifferent($request["product_id"]);
+            if ($diffReviewCount === \true) {
+                return ["data" => $this->insightDataelsePart($request)];
+            }
             $data = get_post_meta($request["product_id"], "_rvx_latest_reviews_insight", \true);
             if ($data) {
                 $aggregation = \json_decode($data, \true);
@@ -117,26 +130,58 @@ class StoreFrontReviewController implements InvokableContract
                 }
             } else {
                 // Fetch the latest aggregation data
-                $latestAggregation = $this->insightDataGetInSaas($request);
-                // Check if the data retrieval fails
-                if (!$latestAggregation) {
-                    return Helper::rvxApi(["error" => "Fails"])->fails("failed");
-                }
-                // Extract 'criteria_stats' from the latest aggregation data (always an array)
-                $criteriaStat = Helper::arrayGet($latestAggregation, "criteria_stats");
-                // No need to decode since it's always an array, just assign back
-                $latestAggregation["criteria_stats"] = $criteriaStat;
-                // Store the data in post meta as a JSON string
-                update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
-                return ["data" => $latestAggregation];
+                return ["data" => $this->insightDataelsePart($request)];
             }
         } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
         }
     }
+    public function insightDataelsePart($request)
+    {
+        $latestAggregation = $this->insightDataGetInSaas($request);
+        // Check if the data retrieval fails
+        if (!$latestAggregation) {
+            return Helper::rvxApi(["error" => "Fails"])->fails("failed");
+        }
+        // Extract 'criteria_stats' from the latest aggregation data (always an array)
+        $criteriaStat = Helper::arrayGet($latestAggregation, "criteria_stats");
+        // No need to decode since it's always an array, just assign back
+        $latestAggregation["criteria_stats"] = $criteriaStat;
+        delete_post_meta($request->get_param("product_id"), '_rvx_latest_reviews_insight');
+        // Store the data in post meta as a JSON string
+        update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
+        return $latestAggregation;
+    }
     public function productTitleAndDescriptionBackSlashRemove($data)
     {
         return \preg_replace('/("title":")([^"\\\\]+)\\\\\'/', '$1$2\'', $data);
+    }
+    public function reviewCountDifferent($id) : bool
+    {
+        $wpReview = $this->getOnlyApproveReviewCount($id);
+        $saasReview = $this->insightReviewCount($id);
+        if ($wpReview > $saasReview) {
+            return \true;
+        }
+        if ($wpReview < $saasReview) {
+            return \true;
+        }
+        return \false;
+    }
+    public function getOnlyApproveReviewCount($id) : int
+    {
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT COUNT(*) \n             FROM {$wpdb->comments} \n             WHERE comment_post_ID = %d \n             AND comment_approved = '1' \n             AND comment_parent = 0\n             AND comment_type IN ('comment', 'review')", $id);
+        return (int) $wpdb->get_var($query);
+    }
+    public function insightReviewCount($id) : int
+    {
+        if (metadata_exists('post', $id, '_rvx_latest_reviews_insight')) {
+            $data = get_post_meta($id, "_rvx_latest_reviews_insight", \true);
+            $reviewAggregation = \json_decode($data, \true);
+            return $reviewAggregation['aggregation']['total_reviews'] ?? 0;
+        }
+        return 0;
     }
     /**
      * @param $request
@@ -146,6 +191,7 @@ class StoreFrontReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->saveWidgetReviewsForProduct($request);
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
@@ -217,20 +263,32 @@ class StoreFrontReviewController implements InvokableContract
     public function getSpecificReviewItem($request)
     {
         try {
-            $response = $this->reviewService->getSpecificReviewItem($request);
-            return Helper::saasResponse($response);
+            $resp = get_option('_review_shortcode');
+            if ($resp) {
+                $data = ['reviews' => $resp['reviews'], 'meta' => $resp['meta']];
+                return Helper::rest($data)->success("Success");
+            } else {
+                $response = $this->reviewService->getSpecificReviewItem($request);
+                update_option('_review_shortcode', $response->getApiData());
+                return Helper::saasResponse($response);
+            }
         } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("Specific Review Item Fails", $e->getCode());
         }
     }
-    public function getLocalSettings()
+    public function getLocalSettings($request)
     {
-        $data = (array) (new SettingService())->getSettingsData() ?? [];
+        // Get API param
+        $post_type = $request->get_param('cpt_type') ? \strtolower($request->get_param('cpt_type')) : 'product';
+        $data = (array) (new SettingService())->getSettingsData($post_type) ?? [];
         if ($data) {
             return Helper::rest($data)->success("Success");
         } else {
-            $resp = $this->settingService->getLocalSettings();
-            return Helper::getApiResponse($resp);
+            $response = $this->settingService->getLocalSettings($post_type);
+            $apiResponse = Helper::getApiResponse($response);
+            $review_setting = $apiResponse->data['data']['setting']['review_settings'];
+            $this->settingService->updateReviewSettings($review_setting, $post_type);
+            return $apiResponse;
         }
     }
 }

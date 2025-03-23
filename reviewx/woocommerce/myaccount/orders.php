@@ -156,7 +156,7 @@ if ($has_orders) {
                                 <?php 
                 $review_id = Helper::retrieveReviewId($order->get_id(), $product_id, get_current_user_id());
                 $review_id = !empty($review_id);
-                $saas_order_status = (new SettingService())->getReviewSettings()['reviews']['review_eligibility'];
+                $saas_order_status = (new SettingService())->getReviewSettings('product')['reviews']['review_eligibility'];
                 $order_current_status = \str_replace(' ', '_', \strtolower(wc_get_order_status_name($order->get_status())));
                 if ($order_current_status === 'completed') {
                     $order_current_status = 'completed_payment';

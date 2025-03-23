@@ -1,5 +1,5 @@
 === ReviewX – WooCommerce Product Reviews with Multi-Criteria, Reminder Emails, Google Reviews, Schema & More ===
-Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar, mhrubel, sakhawatsifat
+Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar, mhrubel, sakhawatsifat, akmshakib
 Donate link: https://reviewx.io
 Tags: woocommerce reviews, product reviews, customer reviews, review reminder, google reviews
 Requires at least: 5.0
@@ -7,7 +7,7 @@ Tested up to: 6.7
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.4.1
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,28 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.1.6 - 03-22-2025 =
+- Added average rating display for each Custom Post Type (CPT) post.
+- Integrated Review Rich Schema for each CPT post.
+- Automated syncing of CPTs and products with the SaaS API on creation, edits, and status changes.
+- Unified CPT and product add/edit processes using a central hook.
+- Added a "Rating" column to the Comments page and CPT/product listing pages (similar to WooReviews).
+- Excluded review replies from comment counts in WP Admin and on post pages.
+- Removed redundant Comments/Reviews meta boxes from selected CPT and Product add/edit screens.
+- Separated and stored individual CPT review settings using distinct WP DB keys.
+- Enabled and fixed comment functionality for CPTs and products.
+- Introduced a "post-id" attribute in the Star Count shortcode to target specific CPT posts.
+- Resolved issues with shortcodes not loading consistently.
+- Upgraded rating icons from Unicode to Dashicons.
+- Refactored the storefront review form by moving it into its own class.
+- Implemented smooth scrolling when clicking the total comment count to direct users to the reviews section.
+- Refined the storefront widget form and review list
+- Fixed issues with CustomBulkActions in WP Admin Comments
+- Addressed review reply saving and detaching errors.
+- Conducted overall code optimizations and refinements for enhanced performance.
+- Data sync single(6 table) data sync
+- Data sync warning issue
+- Bulk action taking too much time issue
 
 = 2.1.5 - 03-13-2025 =
 - Improve data synchronization performance
@@ -240,7 +262,6 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 - Updated: Review star count shortcode for better functionality.
 - Fix: Order Status Change issue
 - Fix: The Rich Schema for product ratings.
-
 
 = 2.1.2 - 1-07-2025 =
 - Fix: Admin notice conflict with AffiliateWP
@@ -278,7 +299,6 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 - Fix: Has a z-index issue with the review details modal and image preview modal
 - Fix: Spelling mistake `Mark as Span`  will be `Mark as Spam`
 - New: animated loader in data-sync overlay banner
-
 
 = 2.0.5 - 12-12-2024 =
 - Fix: SQL query optimize.

@@ -53,7 +53,7 @@ class CategorySyncService extends \Rvx\Services\Service
                 if (\array_key_exists($termTaxonomyRelation->object_id, $this->postTermRelation)) {
                     $this->postTermRelation[$termTaxonomyRelation->object_id] = \array_merge($this->postTermRelation[$termTaxonomyRelation->object_id], [(int) $termTaxonomyRelation->term_taxonomy_id]);
                 } else {
-                    $this->postTermRelation[$termTaxonomyRelation->object_id] = $this->taxonomyTerm[$termTaxonomyRelation->term_taxonomy_id] ? [$this->taxonomyTerm[$this->taxonomyTerm[$termTaxonomyRelation->term_taxonomy_id]]] : [];
+                    $this->postTermRelation[$termTaxonomyRelation->object_id] = isset($this->taxonomyTerm[$termTaxonomyRelation->term_taxonomy_id]) ? [Helper::arrayGet($this->taxonomyTerm, $termTaxonomyRelation->term_taxonomy_id, [])] : [];
                 }
             }
         });

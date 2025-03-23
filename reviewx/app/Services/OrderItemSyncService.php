@@ -10,6 +10,7 @@ class OrderItemSyncService extends \Rvx\Services\Service
 {
     protected $orderFullfillmentStatusRelation;
     protected $validOrderIds = [];
+    protected $validOrdersMetaIds = [];
     protected $orderItemCount = 0;
     protected $orderFullfillmentAtRelation;
     protected $orderItemOrderRelation = [];
@@ -68,23 +69,24 @@ class OrderItemSyncService extends \Rvx\Services\Service
     public function syncOrderItem($file) : int
     {
         $orderItemCount = 0;
-        $this->getOrderItemMeta();
         DB::table('woocommerce_order_items')->whereNotIn('order_item_type', ['shipping'])->whereIn('order_id', $this->validOrderIds)->chunk(100, function ($orderItems) use($file, &$orderItemCount) {
             foreach ($orderItems as $orderItem) {
-                $orderItem->product_id = $this->orderItemProductRelation[$orderItem->order_item_id];
-                $orderItem->quantity = $this->orderItemQtyRelation[$orderItem->order_item_id];
-                $orderItem->price = $this->orderItemPriceRelation[$orderItem->order_item_id];
+                $this->validOrdersMetaIds[] = $orderItem->order_item_id;
+                $orderItem->product_id = $this->orderItemProductRelation[$orderItem->order_item_id] ?? null;
+                $orderItem->quantity = $this->orderItemQtyRelation[$orderItem->order_item_id] ?? null;
+                $orderItem->price = $this->orderItemPriceRelation[$orderItem->order_item_id] ?? null;
                 $formattedOrderItem = $this->formatOrderItem($orderItem);
                 Helper::appendToJsonl($file, $formattedOrderItem);
                 $orderItemCount++;
             }
         });
+        $this->getOrderItemMeta();
         Helper::rvxLog($orderItemCount, "Order Item Done");
         return $orderItemCount;
     }
     public function getOrderItemMeta() : void
     {
-        DB::table('woocommerce_order_itemmeta')->whereIn('meta_key', ['_product_id', '_qty', '_line_total'])->chunk(100, function ($orderItemMeta) {
+        DB::table('woocommerce_order_itemmeta')->whereIn('order_item_id', $this->validOrdersMetaIds)->whereIn('meta_key', ['_product_id', '_qty', '_line_total'])->chunk(100, function ($orderItemMeta) {
             foreach ($orderItemMeta as $item) {
                 if ($item->meta_key === '_product_id') {
                     $this->orderItemProductRelation[$item->order_item_id] = $item->meta_value;

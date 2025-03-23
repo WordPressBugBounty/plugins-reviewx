@@ -31,7 +31,7 @@ class ProductUpdateHandler
         foreach ($product_categories as $category_id) {
             $category = get_term($category_id, 'product_cat');
             if ($category && $category->parent == 0) {
-                $parent_category_ids[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . $category_id;
+                $parent_category_ids[] = Client::getUid() . '-' . $category_id;
             }
         }
         return $parent_category_ids;

@@ -1,21 +1,87 @@
-<style>
-   .rvx-masonry-layout {
-       columns: 4 325px;
-       column-gap: 16px;
-   }
-</style>
-<div x-data="__reviewXState__()"
-      x-init="await initializeReviewListShortCodes({ data: '{{ data }}' })"
-      @notify-like-dislike="await fetchReviewListShortCodes()">
+<div x-data="{
+         ...__reviewXState__(),  // Spread the state from the function
+         title: '{{ title }}',    // Set the title from Twig
+         showTitle: true          // Default to true, will be evaluated in x-init
+     }"
+     id="review-list-container" 
+     class="rvx-container rvx-mx-auto"
+     x-init="
+         // Initialize the review list
+         await initializeReviewListShortCodes({ data: '{{ data }}' });
 
-    <h2>{{ product_id }}</h2>
+         // Evaluate the title condition
+         showTitle = title !== 'false' && title.trim().toLowerCase() !== 'false';
+     "
+     @notify-like-dislike="await fetchReviewListShortCodes()">
+    <style>
+        #rvx-review-list .rvx-masonry-layout {
+            columns: 4 325px;
+            column-gap: 16px;
+        }
+        #rvx-review-list p.rvx-review-user__name {
+            margin-bottom: 0px;
+        }
+        #rvx-review-list p {
+            margin-bottom: 5px;
+        }
+        .rvx-columns-box {
+            -moz-column-break-inside: avoid;
+            break-inside: avoid;
+        }
+    </style>
 
-    <div :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(240px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
+    <template x-if="showTitle">
+        <h2 class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]" x-text="title"></h2>
+    </template>
+
+    <div id="rvx-review-list"
+         :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(240px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
         <template x-for="review in reviewListShortCodeData?.data?.reviews">
-            <div class="rvx-rounded-md rvx-shadow-100 rvx-bg-neutral-100 rvx-columns-box rvx-review-card" :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-py-space16 rvx-pl-space16 rvx-pr-[47px]'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
+            <div class="rvx-rounded-md rvx-shadow-100 rvx-bg-neutral-100 rvx-columns-box rvx-review-card" 
+                 :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-py-space16 rvx-pl-space16 rvx-pr-[47px]'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
                 {% include 'storefront/widget/Features/Reviews/ReviewCard.twig' %}
             </div>
         </template>
+
+        <div x-show="isLoadMoreReviews" class="rvx-my-space24" >
+            {# {% include "storefront/widget/Components/Skeleton/LoadMoreReviewListSkeleton.twig" %} #}
+            <div :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(240px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
+                <template x-for="loader in 1">
+                    <div class="rvx-flex rvx-animate-pulse rvx-space-x-4 rvx-bg-neutral-100 rvx-p-space16 rvx-rounded-md rvx-columns-box">
+                        <div class="rvx-flex-1 rvx-space-y-6 rvx-py-1">
+                            <div class="rvx-space-y-3">
+                                <div class="rvx-grid rvx-grid-cols-8 rvx-items-center rvx-gap-space12">
+                                    <div class="rvx-col-span-2 rvx-size-10 rvx-rounded-full rvx-bg-gray-200"></div>
+                                    <div class="rvx-col-span-6 rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                                </div>
+                                <div class="rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                            </div>
+                            <div class="rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                            <div class="rvx-space-y-3">
+
+                                <div class="rvx-grid rvx-grid-cols-3 rvx-gap-4">
+                                    <div class="rvx-col-span-2 rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                                    <div class="rvx-col-span-1 rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                                </div>
+                                <div class="rvx-h-2 rvx-rounded rvx-bg-gray-200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <div class="rvx-grid">
+            <div x-show="reviewListShortCodeData?.data?.meta?.next_cursor" class="rvx-grid rvx-place-content-center rvx-mt-space20">
+                <button
+                    class="rvx-border-neutral-600 rvx-text-neutral-800 hover:rvx-border-neutral-600 hover:rvx-text-white rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-font-semibold focus:rvx-bg-transparent rvx-bg-transparent disabled:!rvx-cursor-not-allowed"
+                    @click="loadMoreReviewListShortcodeHandler"
+                    :loader="fetchReviewsIsLoading"
+                    :disabled="fetchReviewsIsLoading">
+                    {{__('Load More Reviews', 'reviewx')}}
+                </button>
+            </div>
+        </div>
+        
     </div>
 </div>
-

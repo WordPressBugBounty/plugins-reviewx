@@ -3986,12 +3986,14 @@ const Ry = ({ input: e, targetCase: t }) => {
     default:
       return e;
   }
-}, By = ({ pageQueryValue: e, navigateToPortal: t, customLink: r, haveCustomLink: n }) => {
-  if (e && (e != null && e.length)) {
+}, By = ({ navigateToPortal: e, customLink: t, haveCustomLink: r, query: n }) => {
+  if (n && Object.keys(n).length) {
     const o = new URL(window.location.href);
-    o.searchParams.set("page", e), window.history.replaceState({}, "", o), location.reload();
+    Object.entries(n).forEach(([i, a]) => {
+      a != null && o.searchParams.set(i, String(a));
+    }), window.history.replaceState({}, "", o), location.reload();
   }
-  t && window.open("https://client.reviewx.io/plan?price_id=pri_01jcfjctn233re7jfncajscnh5", "_blank"), n && r && window.open(r, "_blank");
+  e && window.open("https://client.reviewx.io/plan?price_id=pri_01jcfjctn233re7jfncajscnh5", "_blank"), r && t && window.open(t, "_blank");
 }, Fy = () => {
   window.open("https://client.reviewx.io?live_chat=true", "_blank");
 }, iu = "-", qy = (e) => {

@@ -120,7 +120,7 @@ class LoginController implements InvokableContract
             $multicrtriaEnableorDisable = get_option('_rx_option_allow_multi_criteria');
             $data = ["enable" => $multicrtriaEnableorDisable == 1 ? \true : \false, "criterias" => $criterias];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
-            $data = (array) (new SettingService())->getReviewSettings() ?? [];
+            $data = (array) (new SettingService())->getReviewSettings('product') ?? [];
             $data = $data['reviews']['multicriteria'];
         }
         return $data;

@@ -71,12 +71,12 @@ class ReviewService extends \Rvx\Services\Service
                 $attachments = $data->get_params()['attachments'] ? $data->get_params()['attachments'] : [];
             }
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
-            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
             // Calculate the average rating
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
             } else {
-                $wcAverageRating = $data->get_params()['rating'];
+                $wcAverageRating = (float) \round($data->get_params()['rating'], 2);
             }
             $commentId = wp_insert_comment($wpCommentData);
             if (!is_wp_error($commentId)) {
@@ -92,17 +92,16 @@ class ReviewService extends \Rvx\Services\Service
             }
             return 0;
         } catch (Exception $e) {
-            dd($e->getMessage());
+            throw new Exception("Review Save field" . $e->getMessage());
         }
     }
-    public function storeReviewMetaFormWidget($data, array $wpCommentData, $file = []) : int
+    public function storeReviewMetaFormWidget($data, array $wpCommentData, $file = [])
     {
         try {
             $attachments = !empty($file) ? $file : [];
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
             // Calculate the average rating
-            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
-            // Calculate the average rating
+            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
             } else {
@@ -127,10 +126,16 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function prepareWpCommentData($request) : array
     {
-        $data = (array) (new SettingService())->getReviewSettings();
-        $auto_approve_reviews = $data['reviews']['auto_approve_reviews'];
-        $review_type = get_post_type($request['wp_post_id']) === 'product' ? 'review' : 'comment';
-        return ['comment_post_ID' => absint($request['wp_post_id']), 'comment_content' => \strip_tags(\trim($request['feedback'], '"') ?? null), 'comment_author' => sanitize_text_field($request['reviewer_name']), 'comment_author_email' => sanitize_text_field($request['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => sanitize_text_field($request['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
+        $data = (array) (new SettingService())->getReviewSettings(get_post_type($request['wp_post_id']));
+        $review_type = 'review';
+        if (get_post_type($request['wp_post_id']) !== 'product') {
+            $review_type = 'comment';
+        }
+        $status = Helper::arrayGet($request->get_params(), 'status') ?? $data['reviews']['auto_approve_reviews'];
+        if (!$status) {
+            $status = 0;
+        }
+        return ['comment_post_ID' => absint($request['wp_post_id']), 'comment_content' => \strip_tags(\trim($request['feedback'], '"') ?? null), 'comment_author' => sanitize_text_field($request['reviewer_name']), 'comment_author_email' => sanitize_text_field($request['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $status, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => sanitize_text_field($request['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
     }
     /**
      * Prepare application review data.
@@ -141,9 +146,7 @@ class ReviewService extends \Rvx\Services\Service
      */
     public function prepareAppReviewData(array $payloadData, int $commentId) : array
     {
-        $isVerified = isset($payloadData['verified']) == 1 ? \true : \false;
-        $autoPublish = isset($payloadData['auto_publish']) == 1 ? \true : \false;
-        $data = ['wp_id' => $commentId, 'product_wp_unique_id' => Client::getUid() . '-' . $payloadData['wp_post_id'] ?? null, 'wp_post_id' => $payloadData['wp_post_id'] ?? null, 'reviewer_email' => sanitize_text_field($payloadData['reviewer_email'] ?? null), 'reviewer_name' => sanitize_text_field($payloadData['reviewer_name'] ?? null), 'rating' => (int) sanitize_text_field($payloadData['rating'] ?? 0), 'feedback' => \strip_tags($payloadData['feedback'] ?? null), 'is_verified' => $isVerified, 'auto_publish' => $autoPublish, 'created_at' => current_time('mysql', \true), 'title' => \strip_tags($payloadData['title'] ?? null), 'attachments' => isset($payloadData['attachments']) ? $payloadData['attachments'] : []];
+        $data = ['wp_id' => $commentId, 'product_wp_unique_id' => Client::getUid() . '-' . $payloadData['wp_post_id'] ?? null, 'wp_post_id' => $payloadData['wp_post_id'] ?? null, 'reviewer_email' => sanitize_text_field($payloadData['reviewer_email'] ?? null), 'reviewer_name' => sanitize_text_field($payloadData['reviewer_name'] ?? null), 'rating' => (float) \round(sanitize_text_field($payloadData['rating'] ?? 1.0), 2), 'feedback' => \strip_tags($payloadData['feedback'] ?? null), 'is_verified' => Helper::arrayGet($payloadData, 'verified'), 'auto_publish' => Helper::arrayGet($payloadData, 'status'), 'created_at' => current_time('mysql', \true), 'title' => \strip_tags($payloadData['title'] ?? null), 'attachments' => isset($payloadData['attachments']) ? $payloadData['attachments'] : []];
         $data = \array_merge($data, $payloadData);
         $criterias = Helper::arrayGet($data, 'criterias');
         if ($criterias) {
@@ -217,7 +220,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         //Bulk trash restore
         $response = (new ReviewsApi())->restoreTrashItem($data);
-        if ($response->getStatusCode() === Response::HTTP_OK) {
+        if ((int) $response->getStatusCode() === 200) {
             $this->bulkRestoreTrashItem($data);
         }
         return $response;
@@ -226,10 +229,16 @@ class ReviewService extends \Rvx\Services\Service
     {
         foreach ($data['wp_id'] as $id) {
             $status = get_comment_meta($id, '_wp_trash_meta_status', \true);
-            if ($status === ReviewStatusEnum::APPROVED) {
+            if ($status == ReviewStatusEnum::APPROVED) {
                 wp_set_comment_status($id, 'approve');
+            }
+            if ($status == ReviewStatusEnum::PENDING) {
+                wp_set_comment_status($id, 'pending');
+            }
+            if ($status == ReviewStatusEnum::SPAM) {
+                wp_set_comment_status($id, 'spam');
             } else {
-                wp_set_comment_status($id, 'hold');
+                wp_set_comment_status($id, 'approve');
             }
         }
     }
@@ -275,7 +284,7 @@ class ReviewService extends \Rvx\Services\Service
         $wpUniqueId = $request['wpUniqueId'];
         $verifyData = (new ReviewsApi())->sendUpdateReviewRequestEmail($data, $wpUniqueId);
         if ($verifyData) {
-            return Helper::rest($verifyData()->from('data')->toArray())->success(__("Varify", "reviewx"));
+            return Helper::rest($verifyData()->from('data')->toArray())->success(__("Verify", "reviewx"));
         }
         return Helper::rest(null)->fails(__('Fail', 'reviewx'));
     }
@@ -286,9 +295,16 @@ class ReviewService extends \Rvx\Services\Service
         $commentReply = (new ReviewsApi())->commentReply($replies, $wpUniqueId);
         if ($commentReply) {
             $this->reviewRepliesForWp($replies);
-            return Helper::rest($commentReply()->from('data')->toArray())->success();
+            $this->reviewCacheDelete($this->getLastSegment($wpUniqueId));
+            return Helper::rvxApi(['success' => null])->success('Reply submitted sucesfully.', 200);
         }
         return Helper::rest(null)->fails(__('Replies Fail', 'reviewx'));
+    }
+    public function reviewCacheDelete($review_id)
+    {
+        $post_id = get_comment($review_id)->comment_post_ID ?? null;
+        delete_post_meta($post_id, '_rvx_latest_reviews');
+        delete_post_meta($post_id, '_rvx_latest_reviews_insight');
     }
     public function reviewRepliesForWp($replies)
     {
@@ -300,11 +316,12 @@ class ReviewService extends \Rvx\Services\Service
         $replyData = $this->prepareDataForReply($parent_comment, $replies, $parentReviewId);
         if ($parent_comment->comment_parent == 0) {
             $replayId = wp_insert_comment($replyData);
+            return \true;
         }
     }
     public function prepareDataForReply($parent_comment, $replies, $parentReviewId)
     {
-        return ['comment_post_ID' => $parent_comment->comment_post_ID, 'comment_author' => $parent_comment->comment_author, 'comment_author_email' => $parent_comment->comment_author_email, 'comment_author_url' => '', 'comment_content' => $replies['reply'], 'comment_type' => 'review', 'comment_parent' => $parentReviewId, 'user_id' => get_current_user_id(), 'comment_approved' => 1, 'comment_date' => current_time('mysql'), 'comment_date_gmt' => current_time('mysql', 1)];
+        return ['comment_post_ID' => $parent_comment->comment_post_ID, 'comment_author' => $parent_comment->comment_author, 'comment_author_email' => $parent_comment->comment_author_email, 'comment_author_url' => '', 'comment_content' => $replies['reply'], 'comment_type' => $parent_comment->comment_type, 'comment_parent' => $parentReviewId, 'user_id' => get_current_user_id(), 'comment_approved' => 1, 'comment_date' => current_time('mysql'), 'comment_date_gmt' => current_time('mysql', 1)];
     }
     private function getLastSegment($string)
     {
@@ -321,6 +338,7 @@ class ReviewService extends \Rvx\Services\Service
         $commentReply = (new ReviewsApi())->updateCommentReply($repliesUpdate, $wpUniqueId);
         if ($commentReply) {
             $this->reviewRepliesUpdateForWp($wpUniqueId, $repliesUpdate);
+            $this->reviewCacheDelete($wpUniqueId);
             return Helper::rest($commentReply()->from('data')->toArray())->success();
         }
         return Helper::rest(null)->fails(__('Update Fail', 'reviewx'));
@@ -377,7 +395,11 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function aiReviewWp($request)
     {
-        return ['comment_post_ID' => absint($request['product_id']), 'comment_content' => sanitize_text_field($request['feedback'] ?? ''), 'comment_author' => sanitize_text_field(get_userdata(get_current_user_id())->display_name), 'comment_author_email' => sanitize_text_field(get_userdata(get_current_user_id())->user_email), 'comment_type' => 'review', 'comment_approved' => sanitize_text_field($request['status'] ?? ''), 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'comment_date' => current_time('mysql', \true)];
+        $review_type = 'review';
+        if (get_post_type($request['wp_post_id']) !== 'product') {
+            $review_type = 'comment';
+        }
+        return ['comment_post_ID' => absint($request['product_id']), 'comment_content' => sanitize_text_field($request['feedback'] ?? ''), 'comment_author' => sanitize_text_field(get_userdata(get_current_user_id())->display_name), 'comment_author_email' => sanitize_text_field(get_userdata(get_current_user_id())->user_email), 'comment_type' => $review_type, 'comment_approved' => sanitize_text_field($request['status'] ?? ''), 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'comment_date' => current_time('mysql', \true)];
     }
     public function updateWooReview($updatedData, $wpUpdatedData)
     {
@@ -407,6 +429,7 @@ class ReviewService extends \Rvx\Services\Service
                 return ['error' => $res->getStatusCode()];
             }
             wp_update_comment(['comment_ID' => $reviewId, 'comment_content' => \strip_tags($wpCommentData['comment_content']), 'comment_approved' => sanitize_text_field($wpCommentData['comment_approved']), 'comment_author_email' => sanitize_text_field($wpCommentData['comment_author_email']), 'comment_author' => sanitize_text_field($wpCommentData['comment_author'])]);
+            $this->reviewCacheDelete($reviewId);
             $this->updateReviewMeta($reviewId, $request);
             return $res;
         } catch (Exception $e) {
@@ -418,11 +441,11 @@ class ReviewService extends \Rvx\Services\Service
         $attachments = \array_key_exists('attachements', $data->get_params()) ? $data->get_params()['attachements'] : [];
         $criterias = \array_key_exists('criterias', $data->get_params()) ? $data->get_params()['criterias'] : null;
         // Calculate the average rating
-        $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
+        $isAllowedMultiCriteria = (new SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
         if ($criterias !== null && $isAllowedMultiCriteria === \true) {
             $wcAverageRating = $this->calculateAverageRating($criterias);
         } else {
-            $wcAverageRating = $data->get_params()['rating'];
+            $wcAverageRating = (float) \round($data->get_params()['rating'], 2);
         }
         // Sanitize and update review meta fields
         update_comment_meta($reviewId, 'reviewx_title', sanitize_text_field(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
@@ -447,10 +470,11 @@ class ReviewService extends \Rvx\Services\Service
     public function prepareUpdateAppReview(array $payloadData, array $files)
     {
         $isRecommended = isset($payloadData['is_recommended']) == 1 ? \true : \false;
-        $uploaded_images = isset($files['attachments']) ? $files['attachments'] : [];
-        $attachments = $this->fileUpload($uploaded_images);
+        // $uploaded_images = $files['attachments'];
+        // $uploaded_images = isset($files['attachments']) ? $files['attachments'] : [];
+        // $attachments = $this->fileUpload($uploaded_images);
         $rating = Helper::arrayGet($payloadData, 'rating', null);
-        $payloadData['rating'] = $rating ? (int) $rating : null;
+        $payloadData['rating'] = $rating ? (float) \round($rating, 2) : (float) 0.0;
         $data = [
             // 'rating' => (int)$payloadData['rating'],
             'feedback' => \strip_tags($payloadData['feedback']),
@@ -613,8 +637,18 @@ class ReviewService extends \Rvx\Services\Service
         $data['feedback'] = \strip_tags($request['feedback']);
         $data['title'] = \strip_tags($request['title']);
         $criterias = Helper::arrayGet($data, 'criterias');
-        if ($criterias) {
+        $post_type = get_post_type($productId);
+        $review_setting = (new SettingService())->getReviewSettings($post_type);
+        $criteria_enabled = $review_setting['reviews']['multicriteria']['enable'];
+        if ($criterias && $criteria_enabled === \true) {
             $data['criterias'] = \array_map('intval', $criterias);
+            // Rating Modified
+            $total_rating = \array_sum($data['criterias']);
+            $rating_count = \count($data['criterias']);
+            // Count of valid values
+            $data['rating'] = $rating_count > 0 ? (float) \round($total_rating / $rating_count, 2) : (float) 1.0;
+        } else {
+            $data['rating'] = $request['rating'] ? (float) \round($request['rating'], 2) : (float) 1.0;
         }
         return $data;
     }
@@ -725,18 +759,23 @@ class ReviewService extends \Rvx\Services\Service
             if (!$comment) {
                 continue;
             }
-            $data = ['wp_id' => (int) $comment->comment_ID, 'product_wp_unique_id' => Client::getUid() . '-' . $comment->comment_post_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'rating' => (int) get_comment_meta($comment->comment_ID, 'rating', \true), 'feedback' => $comment->comment_content, 'created_at' => $comment->comment_date, 'title' => get_comment_meta($comment->comment_ID, 'rvx_comment_title', \true), 'order_item_wp_unique_id' => get_comment_meta($comment->comment_ID, 'rvx_comment_order_item', \true), 'criterias' => get_comment_meta($comment->comment_ID, 'rvx_criterias', \true)];
+            $data = ['wp_id' => (int) $comment->comment_ID, 'product_wp_unique_id' => Client::getUid() . '-' . $comment->comment_post_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'rating' => (float) \round(get_comment_meta($comment->comment_ID, 'rating', \true), 2), 'feedback' => $comment->comment_content, 'created_at' => $comment->comment_date, 'title' => get_comment_meta($comment->comment_ID, 'rvx_comment_title', \true), 'order_item_wp_unique_id' => get_comment_meta($comment->comment_ID, 'rvx_comment_order_item', \true), 'criterias' => get_comment_meta($comment->comment_ID, 'rvx_criterias', \true)];
             $reviewData['reviews'][] = $data;
         }
         return $reviewData;
     }
     public function prepareWpCommentDataForEmail($data) : array
     {
-        $settingsData = (new SettingService())->getReviewSettings();
+        //Send email review only product
+        $settingsData = (new SettingService())->getReviewSettings('product');
         $auto_approve_reviews = $settingsData['reviews']['auto_approve_reviews'];
+        $review_type = 'review';
+        if (get_post_type($request['wp_post_id']) !== 'product') {
+            $review_type = 'comment';
+        }
         $dataStore = [];
         foreach ($data['reviews'] as $review) {
-            $dataWp = ['comment_post_ID' => absint($review['product_wp_id']), 'comment_content' => sanitize_text_field($review['feedback'] ?? ''), 'comment_author' => sanitize_text_field($review['reviewer_name']), 'comment_author_email' => sanitize_text_field($review['reviewer_email']), 'comment_type' => 'review', 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => absint($review['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
+            $dataWp = ['comment_post_ID' => absint($review['product_wp_id']), 'comment_content' => sanitize_text_field($review['feedback'] ?? ''), 'comment_author' => sanitize_text_field($review['reviewer_name']), 'comment_author_email' => sanitize_text_field($review['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $auto_approve_reviews === \true ? 1 : 0, 'comment_agent' => $_SERVER['HTTP_USER_AGENT'], 'comment_author_IP' => $_SERVER['REMOTE_ADDR'], 'comment_date_gmt' => current_time('mysql', 1), 'user_id' => absint($review['user_id']) ?? 0, 'comment_date' => current_time('mysql', \true)];
             $dataStore[] = $dataWp;
         }
         return $dataStore;
@@ -745,7 +784,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $id = [];
-            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings()['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings('product')['reviews']['multicriteria']['enable'] ?? \false;
             foreach ($wpCommentData as $index => $comment) {
                 $criterias = $data['reviews'][$index]['criterias'] ?? null;
                 if (!empty($criterias) && $criterias !== null && $isAllowedMultiCriteria === \true) {
@@ -753,8 +792,8 @@ class ReviewService extends \Rvx\Services\Service
                     $wcAverageRating = $this->calculateAverageRating($criterias);
                     $modified_criteria = \json_encode($criterias);
                 } else {
-                    $wcAverageRating = sanitize_text_field($data['reviews'][$index]['rating']) ?? 1;
-                    $modified_criteria = isset($data['reviews'][$index]['criterias']) ? \json_encode($data['reviews'][$index]['criterias']) : null;
+                    $wcAverageRating = (float) \round(sanitize_text_field($data['reviews'][$index]['rating']) ?? 1.0, 2);
+                    $modified_criteria = null;
                 }
                 $commentId = wp_insert_comment($comment);
                 add_comment_meta($commentId, 'rvx_comment_title', sanitize_text_field($data['reviews'][$index]['title'] ?? null));
@@ -782,13 +821,13 @@ class ReviewService extends \Rvx\Services\Service
     {
         // Ensure $criterias is an array; default to an empty array if it's null or not an array
         if (!\is_array($criterias)) {
-            return 1;
+            return (float) 1.0;
             // Fallback value
         }
-        // Normalize all values to integers, ensuring they are numeric
+        // Normalize all values to float
         $values = \array_map(function ($value) {
             return \is_numeric($value) ? (int) $value : 0;
-            // Convert numeric values to integers, default non-numeric to 0
+            // Convert numeric values to float, default to 0.00
         }, \array_values($criterias));
         // Filter out any invalid (zero or negative) values
         $values = \array_filter($values, function ($value) {
@@ -799,7 +838,7 @@ class ReviewService extends \Rvx\Services\Service
         // Sum of all valid values
         $count = \count($values);
         // Count of valid values
-        return $count > 0 ? \ceil($total / $count) : 1;
+        return $count > 0 ? (float) \round($total / $count, 2) : (float) 1.0;
         // Calculate the average and round up
     }
     public function thanksMessage($request)
@@ -809,5 +848,49 @@ class ReviewService extends \Rvx\Services\Service
     public function postMetaReviewInsert($id, $latest_reviews)
     {
         update_post_meta($id, "_rvx_latest_reviews", wp_slash($latest_reviews));
+    }
+    public function allReviewApproveCount() : int
+    {
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT COUNT(*) \n             FROM {$wpdb->comments} \n             WHERE comment_approved = '1' \n             AND comment_parent = 0 \n             AND comment_type IN ('review','comment')");
+        return (int) $wpdb->get_var($query);
+    }
+    public function allReviewPendingCount() : int
+    {
+        global $wpdb;
+        $query = $wpdb->prepare("SELECT COUNT(*) \n        FROM {$wpdb->comments} \n        WHERE comment_approved = '0' \n        AND comment_parent = 0\n        AND comment_type IN ('review','comment')");
+        return (int) $wpdb->get_var($query);
+    }
+    public function saasStatusReviewCount()
+    {
+        $data = get_transient('reviews_data_list');
+        if (\is_array($data)) {
+            return $data['count'];
+        }
+        return [];
+    }
+    public function makeSaaSCallDecision()
+    {
+        $approveReviewCount = $this->allReviewApproveCount();
+        $pendingReviewCount = $this->allReviewPendingCount();
+        $saasApproveReviewCount = \array_key_exists('published', $this->saasStatusReviewCount()) ? $this->saasStatusReviewCount()['published'] : 0;
+        $saasPendingReviewCount = \array_key_exists('pending', $this->saasStatusReviewCount()) ? $this->saasStatusReviewCount()['pending'] : 0;
+        if ($approveReviewCount != $saasApproveReviewCount) {
+            return \true;
+        }
+        if ($saasPendingReviewCount != $pendingReviewCount) {
+            return \true;
+        }
+        return \false;
+    }
+    public function removeCache()
+    {
+        delete_transient('reviews_data_list');
+        delete_transient('review_approve_data');
+        delete_transient('review_pending_data');
+        delete_transient('review_spam_data');
+        delete_transient('review_trash_data');
+        delete_transient('reviewx_aggregation');
+        delete_transient('review_shortcode');
     }
 }

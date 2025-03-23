@@ -15,7 +15,6 @@ use Rvx\Rest\Controllers\CategoryController;
 use Rvx\Rest\Controllers\DiscountController;
 use Rvx\Rest\Controllers\RegisterController;
 use Rvx\Rest\Controllers\DashboardController;
-use Rvx\Rest\Controllers\CustomPostController;
 use Rvx\Rest\Controllers\SaveOptionsController;
 use Rvx\Rest\Controllers\GoogleReviewController;
 use Rvx\Rest\Controllers\ImportExportController;
@@ -26,6 +25,7 @@ use Rvx\Rest\Middleware\DevMiddleware;
 use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\Rest\Controllers\LogController;
+use Rvx\Rest\Controllers\CptController;
 use Rvx\Rest\Middleware\AuthSaasMiddleware;
 Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     Route::post('/login', [LoginController::class, 'login']);
@@ -45,7 +45,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/reviews', [ReviewController::class, 'index']);
     Route::post('/reviews/create/manual', [ReviewController::class, 'store']);
     Route::get('/reviews/list', [ReviewController::class, 'reviewList']);
-    Route::post('/reviews/bulk/status/update', [ReviewController::class, 'reviewBulkUpdate']);
     Route::post('/reviews/bulk/trash', [ReviewController::class, 'reviewBulkTrash']);
     Route::post('/reviews/trash/(?P<WpUniqueId>[a-zA-Z0-9-]+)', [ReviewController::class, 'reviewMoveToTrash']);
     Route::post('/reviews/empty/trash', [ReviewController::class, 'reviewEmptyTrash']);
@@ -166,13 +165,13 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     /**
      * CPT
      */
-    Route::get('custom/get', [CustomPostController::class, 'customGet']);
-    Route::post('custom/store', [CustomPostController::class, 'customStore']);
-    Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/update', [CustomPostController::class, 'customUpdate']);
-    Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/delete', [CustomPostController::class, 'customdelete']);
-    Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/status', [CustomPostController::class, 'customPostStatusChange']);
+    Route::get('custom/get', [CptController::class, 'cptGet']);
+    Route::post('custom/store', [CptController::class, 'cptStore']);
+    Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/update', [CptController::class, 'cptUpdate']);
+    Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/delete', [CptController::class, 'cptDelete']);
+    Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/status', [CptController::class, 'cptStatusChange']);
     // wordpress custom post show this route
-    Route::get('custom/wp/get', [CustomPostController::class, 'customWpGet']);
+    Route::get('custom/wp/get', [CptController::class, 'customPostTypes']);
     /**
      * Data sync 
      */
@@ -236,4 +235,5 @@ Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManage
 Route::group(['prefix' => '/api/v1', 'middleware' => AdminMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
     Route::get('/rvx/error/log/', [LogController::class, 'rvxRecentLog']);
     Route::get('/append/json/', [LogController::class, 'appendJsonSync']);
+    Route::get('/data/manual/sync', [DataSyncController::class, 'dataManualSync']);
 });

@@ -29,13 +29,101 @@ class ReviewController implements InvokableContract
      */
     public function index($request)
     {
-        $resp = $this->reviewService->getReviews($request->get_params());
+        $aggregation = get_transient('reviewx_aggregation');
+        if (empty($request->get_params()) && $aggregation) {
+            $response = ['aggregations' => $aggregation['aggregations'], 'count' => $aggregation['count'], 'reviews' => $aggregation['reviews'], 'meta' => $aggregation['meta']];
+            return Helper::rest($response)->success("Success");
+        } else {
+            $resp = $this->reviewService->getReviews($request->get_params());
+            if ($resp->getStatusCode() === Response::HTTP_OK) {
+                $this->aggregationDataStore($resp->getApiData());
+            }
+            return Helper::getApiResponse($resp);
+        }
+    }
+    public function aggregationDataStore($data)
+    {
+        delete_transient('reviewx_aggregation');
+        set_transient('reviewx_aggregation', $data, 86400);
+    }
+    public function adminAllReviewSaasCall($data)
+    {
+        $resp = $this->reviewService->reviewList($data);
+        if ($resp->getStatusCode() === Response::HTTP_OK) {
+            $this->storeVisibilityReview($resp->getApiData(), $data['isVisible']);
+        }
         return Helper::getApiResponse($resp);
     }
     public function reviewList($request)
     {
-        $resp = $this->reviewService->reviewList($request->get_params());
-        return Helper::getApiResponse($resp);
+        try {
+            $differentReview = $this->reviewService->makeSaaSCallDecision();
+            $this->visibilityPaginationSaasCall($request, $differentReview);
+            $isVisible = $request->get_params()['isVisible'];
+            $transientKeys = ['published' => 'review_approve_data', 'pending' => 'review_pending_data', 'spam' => 'review_spam_data', 'trash' => 'review_trash_data'];
+            if (\array_key_exists($isVisible, $transientKeys)) {
+                $approve = get_transient($transientKeys[$isVisible]);
+                $params = $request->get_params();
+                $filterParams = ['page', 'rating', 'date', 'reviewer', 'search', 'product', 'category', 'oldest_first', 'newest_first'];
+                if (\array_intersect_key(\array_flip($filterParams), $params)) {
+                    $resp = $this->reviewService->reviewList($params);
+                    return Helper::getApiResponse($resp);
+                } elseif ($approve) {
+                    $response = ['count' => $approve['count'], 'reviews' => $approve['reviews'], 'meta' => $approve['meta']];
+                    return Helper::rest($response)->success("Success");
+                } else {
+                    $this->adminAllReviewSaasCall($params);
+                }
+            }
+            if (empty($request->get_params())) {
+                $data = get_transient('reviews_data_list');
+                if ($data) {
+                    $response = ['count' => $data['count'], 'reviews' => $data['reviews'], 'meta' => $data['meta']];
+                    return Helper::rest($response)->success("Success");
+                } else {
+                    $resp = $this->reviewService->reviewList($request->get_params());
+                    if ($resp->getStatusCode() === Response::HTTP_OK && empty($request->get_params())) {
+                        $this->reviewListStoreInDB($resp->getApiData());
+                    }
+                    return Helper::getApiResponse($resp);
+                }
+            } else {
+                $resp = $this->reviewService->reviewList($request->get_params());
+                return Helper::getApiResponse($resp);
+            }
+        } catch (Exception $e) {
+            \error_log("Error fetching review list: " . $e->getMessage());
+        }
+    }
+    public function visibilityPaginationSaasCall($request, $differentReview)
+    {
+        if ($differentReview === \true) {
+            $this->adminAllReviewSaasCall($request->get_params());
+        }
+    }
+    public function reviewListStoreInDB($reviewData)
+    {
+        delete_transient('reviews_data_list');
+        set_transient('reviews_data_list', $reviewData, 86400);
+    }
+    public function storeVisibilityReview($data, $visibility)
+    {
+        if ($visibility === 'published') {
+            delete_transient('review_approve_data');
+            set_transient('review_approve_data', $data, 86400);
+        }
+        if ($visibility === 'pending') {
+            delete_transient('review_pending_data');
+            set_transient('review_pending_data', $data, 86400);
+        }
+        if ($visibility === 'spam') {
+            delete_transient('review_spam_data');
+            set_transient('review_spam_data', $data, 86400);
+        }
+        if ($visibility === 'trash') {
+            delete_transient('review_trash_data');
+            set_transient('review_trash_data', $data, 86400);
+        }
     }
     /**
      * @param $request
@@ -60,6 +148,7 @@ class ReviewController implements InvokableContract
             // Re-enable the comment notification emails
             add_action('comment_post', 'wp_notify_postauthor');
             remove_filter('comments_notify', '__return_false');
+            $this->reviewService->removeCache();
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
             // Re-enable the comment notification emails in case of error
@@ -76,6 +165,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->updateReview($request);
+            $this->reviewService->removeCache();
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Not Create', $e->getCode());
@@ -89,6 +179,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->deleteReview($request);
+            $this->reviewService->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
@@ -102,6 +193,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->restoreReview($request);
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
@@ -115,6 +207,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->isVerify($request);
+            $this->reviewService->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Not Change', $e->getCode());
@@ -128,6 +221,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->isvisibility($request);
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Not Change', $e->getCode());
@@ -141,6 +235,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->updateReqEmail($request);
+            $this->reviewService->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -156,7 +251,7 @@ class ReviewController implements InvokableContract
             $resp = $this->reviewService->reviewReplies($request);
             return $resp;
         } catch (Throwable $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Replay Fails', $e->getCode());
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Reply Fails', $e->getCode());
         }
     }
     /**
@@ -167,9 +262,9 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->reviewRepliesUpdate($request);
-            return Helper::getApiResponse($resp);
+            return Helper::rvxApi($resp)->success('Review Reply Updated');
         } catch (Throwable $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Replay Updated Fails', $e->getCode());
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Reply Updated Fails', $e->getCode());
         }
     }
     /**
@@ -237,6 +332,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewBulkUpdate($request->get_params());
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -250,6 +346,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewBulkTrash($request->get_params());
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -263,9 +360,10 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewEmptyTrash($request->get_params());
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Empty Fails', $e->getCode());
         }
     }
     /**
@@ -288,8 +386,13 @@ class ReviewController implements InvokableContract
      */
     public function reviewAggregation()
     {
-        $resp = $this->reviewService->reviewAggregation();
-        return Helper::getApiResponse($resp);
+        try {
+            $resp = $this->reviewService->reviewAggregation();
+            // dd($resp->getApiData());
+            return Helper::getApiResponse($resp);
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Aggregation Fails', $e->getCode());
+        }
     }
     /**
      * @param $request
@@ -299,6 +402,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewMoveToTrash($request->get_params());
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Move to trash Fails', $e->getCode());
@@ -312,6 +416,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->highlight($request->get_params());
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails(__('Review Highlight', 'reviewx'), $e->getCode());
@@ -321,6 +426,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->bulkTenReviews($request->get_params());
+            $this->reviewService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails(__('Review Highlight', 'reviewx'), $e->getCode());

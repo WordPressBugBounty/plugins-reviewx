@@ -1,20 +1,38 @@
-<div x-data="__reviewXState__()"
-      x-init="await initializeReviewStatsShortCodes({data: '{{ data }}'})">
-      <style>
-        .rvx-review-stats__star-active{
+<div x-data="{
+         ...__reviewXState__(),  // Spread the state from the function
+         title: '{{ title }}',    // Set the title from Twig
+         showTitle: true          // Default to true, will be evaluated in x-init
+     }"
+     id="review-stats-container" 
+     class="rvx-container rvx-mx-auto"
+     x-init="
+         // Initialize the review stats
+         await initializeReviewStatsShortCodes({ data: '{{ data }}' });
+
+         // Evaluate the title condition
+         showTitle = title !== 'false' && title.trim().toLowerCase() !== 'false';
+     ">
+    <style>
+        .rvx-review-stats__star-active {
             fill: #ecbb09;
         }
-        .rvx-review-stats__star-inactive{
+        .rvx-review-stats__star-inactive {
             fill: gray;
         }
     </style>
-    <div
+
+    {# Use x-if to completely remove the h2 element if showTitle is false #}
+    <template x-if="showTitle">
+        <h2 class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]" x-text="title"></h2>
+    </template>
+    
+    <div id="rvx-review-stats"
          class="rvx-flex rvx-justify-between rvx-items-center">
         <div class="rvx-space-y-space8">
             <div class="rvx-flex rvx-gap-space12 rvx-items-center">
                 <div class="rvx-flex">
                     <p x-text="reviewAggregationData?.data?.aggregation?.total_avg_review"
-                       class="rvx-rating-out-of  rvx-flex rvx-items-baseline rvx-gap-space5 !rvx-text-[40px] rvx-font-bold rvx-leading-[38px] rvx-font-nunito rvx-text-neutral-800">
+                       class="rvx-rating-out-of rvx-mb-[0px!important] rvx-flex rvx-items-baseline rvx-gap-space5 !rvx-text-[40px] rvx-font-bold rvx-leading-[38px] rvx-font-nunito rvx-text-neutral-800">
                     </p>
                     <span class="rvx-rating !rvx-text-[24px] rvx-font-normal rvx-leading-[38px] rvx-font-nunito rvx-text-neutral-400">
                         /5

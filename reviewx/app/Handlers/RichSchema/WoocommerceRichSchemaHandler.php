@@ -30,7 +30,7 @@ class WoocommerceRichSchemaHandler
             }
         }
         // Remove schema elements based on settings.
-        if (is_product() && (new SettingService())->getReviewSettings()['reviews']['product_schema'] === \true) {
+        if (is_product() && (new SettingService())->getReviewSettings('product')['reviews']['product_schema'] === \true) {
             unset($markup['aggregateRating'], $markup['review']);
         }
         return $markup;
