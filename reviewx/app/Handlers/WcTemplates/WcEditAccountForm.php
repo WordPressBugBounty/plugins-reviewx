@@ -18,7 +18,7 @@ class WcEditAccountForm
           <p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
                <label for="image"><?php 
         esc_html_e("Image", "woocommerce");
-        ?>&nbsp;<span class="required">*</span></label>
+        ?></label>
                <input type="file" class="woocommerce-Input" name="image" accept="image/x-png,image/gif,image/jpeg">
             </p>   
             <?php 

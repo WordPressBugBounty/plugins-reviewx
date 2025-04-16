@@ -263,13 +263,20 @@ class StoreFrontReviewController implements InvokableContract
     public function getSpecificReviewItem($request)
     {
         try {
-            $resp = get_option('_review_shortcode');
-            if ($resp) {
+            $defferentIds = $this->reviewService->clearShortcodesCache(get_option('_rvx_reviews_ids'), $request->get_params());
+            if ($defferentIds == \false) {
+                delete_transient('_rvx_shortcode_transient');
+            }
+            $transient_key = '_rvx_shortcode_transient';
+            $resp = get_transient($transient_key);
+            if ($resp !== \false) {
                 $data = ['reviews' => $resp['reviews'], 'meta' => $resp['meta']];
-                return Helper::rest($data)->success("Success");
+                return Helper::rest($data)->success("Success (from transient)");
             } else {
                 $response = $this->reviewService->getSpecificReviewItem($request);
-                update_option('_review_shortcode', $response->getApiData());
+                $api_data = $response->getApiData();
+                set_transient($transient_key, $api_data, 12 * HOUR_IN_SECONDS);
+                update_option('_rvx_reviews_ids', $request->get_params());
                 return Helper::saasResponse($response);
             }
         } catch (Throwable $e) {

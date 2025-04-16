@@ -892,5 +892,24 @@ class ReviewService extends \Rvx\Services\Service
         delete_transient('review_trash_data');
         delete_transient('reviewx_aggregation');
         delete_transient('review_shortcode');
+        delete_transient('_rvx_shortcode_transient');
+    }
+    public function clearShortcodesCache($arrayFirst, $arraySecond)
+    {
+        if (empty($arrayFirst)) {
+            return \false;
+        }
+        $firstData = maybe_unserialize($arrayFirst);
+        if (!\is_array($firstData) || !\is_array($arraySecond)) {
+            return \false;
+        }
+        \ksort($firstData);
+        \ksort($arraySecond);
+        $firstHash = \md5(\json_encode($firstData));
+        $secondHash = \md5(\json_encode($arraySecond));
+        if ($firstHash === $secondHash) {
+            return \true;
+        }
+        return \false;
     }
 }

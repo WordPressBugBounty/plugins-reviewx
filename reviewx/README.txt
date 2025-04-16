@@ -3,11 +3,11 @@ Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujans
 Donate link: https://reviewx.io
 Tags: woocommerce reviews, product reviews, customer reviews, review reminder, google reviews
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 WC requires at least: 3.1
 Requires PHP: 7.4
-WC tested up to: 9.4.1
-Stable tag: 2.1.6
+WC tested up to: 9.8.1
+Stable tag: 2.1.7
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -213,6 +213,9 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.1.7 - 04-16-2025 =
+- Fix: Added optional profile image upload field to WooCommerce My Account page
+
 = 2.1.6 - 03-22-2025 =
 - Added average rating display for each Custom Post Type (CPT) post.
 - Integrated Review Rich Schema for each CPT post.
