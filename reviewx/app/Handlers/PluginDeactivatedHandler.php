@@ -2,6 +2,7 @@
 
 namespace Rvx\Handlers;
 
+use Rvx\Api\AuthApi;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\DB\Migration\Migrator;
 class PluginDeactivatedHandler implements InvokableContract
@@ -10,6 +11,9 @@ class PluginDeactivatedHandler implements InvokableContract
     {
         global $wpdb;
         $rvxSites = $wpdb->prefix . 'rvx_sites';
-        $wpdb->query("TRUNCATE TABLE {$rvxSites}");
+        $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+        if ($uid) {
+            (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 0]);
+        }
     }
 }

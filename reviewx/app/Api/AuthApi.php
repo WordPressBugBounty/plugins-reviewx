@@ -55,4 +55,8 @@ class AuthApi extends \Rvx\Api\BaseApi
     {
         return $this->withJson($data)->post('reset-password');
     }
+    public function changePluginStatus(array $data) : Response
+    {
+        return $this->withJson($data)->post('/plugin/change-status');
+    }
 }

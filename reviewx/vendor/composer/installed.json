@@ -68,17 +68,17 @@
         },
         {
             "name": "guzzlehttp\/guzzle",
-            "version": "7.9.2",
-            "version_normalized": "7.9.2.0",
+            "version": "7.9.3",
+            "version_normalized": "7.9.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/guzzle\/guzzle.git",
-                "reference": "d281ed313b989f213357e3be1a179f02196ac99b"
+                "reference": "7b2f29fe81dc4da0ca0ea7d42107a0845946ea77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/guzzle\/guzzle\/zipball\/d281ed313b989f213357e3be1a179f02196ac99b",
-                "reference": "d281ed313b989f213357e3be1a179f02196ac99b",
+                "url": "https:\/\/api.github.com\/repos\/guzzle\/guzzle\/zipball\/7b2f29fe81dc4da0ca0ea7d42107a0845946ea77",
+                "reference": "7b2f29fe81dc4da0ca0ea7d42107a0845946ea77",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
                 "ext-intl": "Required for Internationalized Domain Name (IDN) support",
                 "psr\/log": "Required for using the Log middleware"
             },
-            "time": "2024-07-24T11:22:20+00:00",
+            "time": "2025-03-27T13:37:11+00:00",
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -177,7 +177,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/guzzle\/guzzle\/issues",
-                "source": "https:\/\/github.com\/guzzle\/guzzle\/tree\/7.9.2"
+                "source": "https:\/\/github.com\/guzzle\/guzzle\/tree\/7.9.3"
             },
             "funding": [
                 {
@@ -197,17 +197,17 @@
         },
         {
             "name": "guzzlehttp\/promises",
-            "version": "2.0.4",
-            "version_normalized": "2.0.4.0",
+            "version": "2.2.0",
+            "version_normalized": "2.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/guzzle\/promises.git",
-                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455"
+                "reference": "7c69f28996b0a6920945dd20b3857e499d9ca96c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/guzzle\/promises\/zipball\/f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
-                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
+                "url": "https:\/\/api.github.com\/repos\/guzzle\/promises\/zipball\/7c69f28996b0a6920945dd20b3857e499d9ca96c",
+                "reference": "7c69f28996b0a6920945dd20b3857e499d9ca96c",
                 "shasum": ""
             },
             "require": {
@@ -217,7 +217,7 @@
                 "bamarni\/composer-bin-plugin": "^1.8.2",
                 "phpunit\/phpunit": "^8.5.39 || ^9.6.20"
             },
-            "time": "2024-10-17T10:06:22+00:00",
+            "time": "2025-03-27T13:27:01+00:00",
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -263,7 +263,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/guzzle\/promises\/issues",
-                "source": "https:\/\/github.com\/guzzle\/promises\/tree\/2.0.4"
+                "source": "https:\/\/github.com\/guzzle\/promises\/tree\/2.2.0"
             },
             "funding": [
                 {
@@ -283,17 +283,17 @@
         },
         {
             "name": "guzzlehttp\/psr7",
-            "version": "2.7.0",
-            "version_normalized": "2.7.0.0",
+            "version": "2.7.1",
+            "version_normalized": "2.7.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/guzzle\/psr7.git",
-                "reference": "a70f5c95fb43bc83f07c9c948baa0dc1829bf201"
+                "reference": "c2270caaabe631b3b44c85f99e5a04bbb8060d16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/guzzle\/psr7\/zipball\/a70f5c95fb43bc83f07c9c948baa0dc1829bf201",
-                "reference": "a70f5c95fb43bc83f07c9c948baa0dc1829bf201",
+                "url": "https:\/\/api.github.com\/repos\/guzzle\/psr7\/zipball\/c2270caaabe631b3b44c85f99e5a04bbb8060d16",
+                "reference": "c2270caaabe631b3b44c85f99e5a04bbb8060d16",
                 "shasum": ""
             },
             "require": {
@@ -314,7 +314,7 @@
             "suggest": {
                 "laminas\/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
-            "time": "2024-07-18T11:15:46+00:00",
+            "time": "2025-03-27T12:30:47+00:00",
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -382,7 +382,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/guzzle\/psr7\/issues",
-                "source": "https:\/\/github.com\/guzzle\/psr7\/tree\/2.7.0"
+                "source": "https:\/\/github.com\/guzzle\/psr7\/tree\/2.7.1"
             },
             "funding": [
                 {
@@ -531,17 +531,17 @@
         },
         {
             "name": "myclabs\/deep-copy",
-            "version": "1.12.1",
-            "version_normalized": "1.12.1.0",
+            "version": "1.13.0",
+            "version_normalized": "1.13.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/myclabs\/DeepCopy.git",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845"
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/myclabs\/DeepCopy\/zipball\/123267b2c49fbf30d78a7b2d333f6be754b94845",
-                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845",
+                "url": "https:\/\/api.github.com\/repos\/myclabs\/DeepCopy\/zipball\/024473a478be9df5fdaca2c793f2232fe788e414",
+                "reference": "024473a478be9df5fdaca2c793f2232fe788e414",
                 "shasum": ""
             },
             "require": {
@@ -557,7 +557,7 @@
                 "phpspec\/prophecy": "^1.10",
                 "phpunit\/phpunit": "^7.5.20 || ^8.5.23 || ^9.5.13"
             },
-            "time": "2024-11-08T17:47:46+00:00",
+            "time": "2025-02-12T12:17:51+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -582,7 +582,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/myclabs\/DeepCopy\/issues",
-                "source": "https:\/\/github.com\/myclabs\/DeepCopy\/tree\/1.12.1"
+                "source": "https:\/\/github.com\/myclabs\/DeepCopy\/tree\/1.13.0"
             },
             "funding": [
                 {
@@ -865,17 +865,17 @@
         },
         {
             "name": "php-di\/invoker",
-            "version": "2.3.4",
-            "version_normalized": "2.3.4.0",
+            "version": "2.3.6",
+            "version_normalized": "2.3.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/PHP-DI\/Invoker.git",
-                "reference": "33234b32dafa8eb69202f950a1fc92055ed76a86"
+                "reference": "59f15608528d8a8838d69b422a919fd6b16aa576"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/PHP-DI\/Invoker\/zipball\/33234b32dafa8eb69202f950a1fc92055ed76a86",
-                "reference": "33234b32dafa8eb69202f950a1fc92055ed76a86",
+                "url": "https:\/\/api.github.com\/repos\/PHP-DI\/Invoker\/zipball\/59f15608528d8a8838d69b422a919fd6b16aa576",
+                "reference": "59f15608528d8a8838d69b422a919fd6b16aa576",
                 "shasum": ""
             },
             "require": {
@@ -887,7 +887,7 @@
                 "mnapoli\/hard-mode": "~0.3.0",
                 "phpunit\/phpunit": "^9.0"
             },
-            "time": "2023-09-08T09:24:21+00:00",
+            "time": "2025-01-17T12:49:27+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -911,7 +911,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/PHP-DI\/Invoker\/issues",
-                "source": "https:\/\/github.com\/PHP-DI\/Invoker\/tree\/2.3.4"
+                "source": "https:\/\/github.com\/PHP-DI\/Invoker\/tree\/2.3.6"
             },
             "funding": [
                 {
@@ -1435,12 +1435,12 @@
             "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https:\/\/github.com\/symfony\/contracts",
+                    "name": "symfony\/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "2.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony\/contracts",
-                    "url": "https:\/\/github.com\/symfony\/contracts"
                 }
             },
             "installation-source": "dist",
@@ -2149,12 +2149,12 @@
             "time": "2024-09-25T14:11:13+00:00",
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https:\/\/github.com\/symfony\/contracts",
+                    "name": "symfony\/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "2.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony\/contracts",
-                    "url": "https:\/\/github.com\/symfony\/contracts"
                 }
             },
             "installation-source": "dist",
@@ -2439,12 +2439,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/WPDrill\/core.git",
-                "reference": "fe1a740bb48db8d572198e02e3891f6ea81b7238"
+                "reference": "e4cf5ace108b3cb8777c4673f265af52d6f3f04b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/WPDrill\/core\/zipball\/fe1a740bb48db8d572198e02e3891f6ea81b7238",
-                "reference": "fe1a740bb48db8d572198e02e3891f6ea81b7238",
+                "url": "https:\/\/api.github.com\/repos\/WPDrill\/core\/zipball\/e4cf5ace108b3cb8777c4673f265af52d6f3f04b",
+                "reference": "e4cf5ace108b3cb8777c4673f265af52d6f3f04b",
                 "shasum": ""
             },
             "require": {
@@ -2459,7 +2459,7 @@
                 "twig\/twig": "^3.0",
                 "usmanhalalit\/viocon": "1.0.*@dev"
             },
-            "time": "2025-03-05T10:01:03+00:00",
+            "time": "2025-04-17T10:39:23+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",

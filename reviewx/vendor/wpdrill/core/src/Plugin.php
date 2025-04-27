@@ -115,7 +115,7 @@ class Plugin
             register_deactivation_hook($this->file, $this->resolveHandler($deactivationHandler));
         }
         if ($uninstallHandler) {
-            register_uninstall_hook($this->file, $this->resolveHandler($uninstallHandler));
+            register_uninstall_hook($this->file, $uninstallHandler);
         }
     }
     public function resolveHandler(string $handler) : InvokableContract
