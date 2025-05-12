@@ -2,8 +2,6 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Api\UserApi;
-use Rvx\WPDrill\Response;
 class CommentStatusHandler
 {
     public function __invoke($comment_id)

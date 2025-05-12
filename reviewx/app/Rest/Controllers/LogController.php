@@ -11,7 +11,6 @@ use Rvx\Services\ReviewSyncService;
 use Rvx\Services\UserSyncService;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
 class LogController implements InvokableContract
 {
     /**

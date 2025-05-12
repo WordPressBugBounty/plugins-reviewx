@@ -7,10 +7,10 @@ if (!\defined('ABSPATH')) {
     exit;
 }
 use Elementor\Controls_Manager;
-use Elementor\Plugin;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
+use Elementor\Plugin;
 use Elementor\Utils;
 use Elementor\Widget_Base;
 /**

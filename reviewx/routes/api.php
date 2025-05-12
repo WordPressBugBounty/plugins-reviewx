@@ -6,14 +6,11 @@ use Rvx\Rest\Middleware\AdminMiddleware;
 use Rvx\WPDrill\Facades\Route;
 use Rvx\Rest\Middleware\AuthMiddleware;
 use Rvx\Rest\Controllers\UserController;
-use Rvx\Rest\Controllers\LoginController;
+use Rvx\Rest\Controllers\AuthController;
 use Rvx\Rest\Controllers\ReviewController;
-use Rvx\Rest\Middleware\WPDrillMiddleware;
 use Rvx\Rest\Controllers\SettingController;
-use Rvx\Rest\Controllers\WPDrillController;
 use Rvx\Rest\Controllers\CategoryController;
 use Rvx\Rest\Controllers\DiscountController;
-use Rvx\Rest\Controllers\RegisterController;
 use Rvx\Rest\Controllers\DashboardController;
 use Rvx\Rest\Controllers\SaveOptionsController;
 use Rvx\Rest\Controllers\GoogleReviewController;
@@ -21,24 +18,23 @@ use Rvx\Rest\Controllers\ImportExportController;
 use Rvx\Rest\Controllers\EmailTemplateController;
 use Rvx\Rest\Controllers\Products\ProductController;
 use Rvx\Rest\Controllers\StoreFrontReviewController;
-use Rvx\Rest\Middleware\DevMiddleware;
 use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\Rest\Controllers\LogController;
 use Rvx\Rest\Controllers\CptController;
 use Rvx\Rest\Middleware\AuthSaasMiddleware;
-Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
-    Route::post('/login', [LoginController::class, 'login']);
-    Route::post('/login/key', [LoginController::class, 'license_key']);
-    Route::post('/forget/password', [LoginController::class, 'forgetPassword']);
-    Route::post('/reset/password', [LoginController::class, 'resetPassword']);
+Route::group(['prefix' => '/api/v1'], function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login/key', [AuthController::class, 'license_key']);
+    Route::post('/forget/password', [AuthController::class, 'forgetPassword']);
+    Route::post('/reset/password', [AuthController::class, 'resetPassword']);
     Route::post('/save_options', [SaveOptionsController::class, 'save_options']);
-    Route::post('/register', [RegisterController::class, 'register']);
-    Route::get('/migration/prompt', [RegisterController::class, 'migrationPrompt']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/migration/prompt', [AuthController::class, 'migrationPrompt']);
     Route::post('/user/plan/access', [SettingController::class, 'userSettingsAccess']);
     Route::get('/user/current/plan', [SettingController::class, 'userCurrentPlan']);
 });
-Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function () {
     /**
      * Reviews API
      */
@@ -62,7 +58,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/highlight', [ReviewController::class, 'highlight']);
     Route::post('bulk/restore/trash', [ReviewController::class, 'restoreTrashItem']);
     /**
-     * MultiCritriya 
+     * Multi-Criteria
      */
     Route::get('reviews/list/multi/criteria', [ReviewController::class, 'reviewListMultiCriteria']);
     Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/replies', [ReviewController::class, 'replies']);
@@ -104,12 +100,12 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
      */
     Route::post('/user/credentials/remove', [SettingController::class, 'removeCredentials']);
     /**
-     * Genaral Settings
+     * General Settings
      */
     Route::get('/settings/general/get', [SettingController::class, 'getApiGeneralSettings']);
     Route::post('/settings/general/save', [SettingController::class, 'saveApiGeneralSettings']);
     /**
-     * Woocommerc Product Settings
+     * WooCommerce Product Settings
      */
     Route::get('/woo/review/rating/verification/label', [SettingController::class, 'wooCommerceVerificationRating']);
     Route::post('/woo/review/rating/verification/change', [SettingController::class, 'wooCommerceVerificationRatingUpdate']);
@@ -170,7 +166,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/update', [CptController::class, 'cptUpdate']);
     Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/delete', [CptController::class, 'cptDelete']);
     Route::post('custom/(?P<uid>[a-zA-Z0-9-]+)/status', [CptController::class, 'cptStatusChange']);
-    // wordpress custom post show this route
+    // WordPress custom post show this route
     Route::get('custom/wp/get', [CptController::class, 'customPostTypes']);
     /**
      * Data sync 
@@ -194,8 +190,12 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/data/sync', [DataSyncController::class, 'dataSync']);
     Route::get('/sync/status', [DataSyncController::class, 'syncStatus']);
     Route::get('/backend/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [ReviewController::class, 'getSingleProductAllReviews']);
+    /**
+     * Plugin meta data gather
+     */
+    Route::get('/ping', [DataSyncController::class, 'ping']);
 });
-Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class], function () {
     Route::get('/synced/data', [DataSyncController::class, 'syncedData']);
     Route::post('/admin/access/control', [AccessController::class, 'adminAccess']);
     Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
@@ -211,7 +211,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/review/request/email/resend/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailResend']);
     Route::post('/review/request/email/unsubscribe', [EmailTemplateController::class, 'requestEmailUnsubscribe']);
 });
-Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+Route::group(['prefix' => '/api/v1'], function () {
     Route::post('/site/all/settings', [SettingController::class, 'allSettingsSave']);
     /**
      * Store Front
@@ -222,7 +222,7 @@ Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManage
     Route::post('/storefront/request/review/email/attachments/items', [StoreFrontReviewController::class, 'requestReviewEmailAttachment']);
     Route::post('data/sync/complete', [DataSyncController::class, 'dataSynComplete']);
     Route::post('reviews/single/action/product/meta', [StoreFrontReviewController::class, 'singleActionProductMata']);
-    Route::post('/storefront/reviews/(?P<uniq_id>[a-zA-Z0-9-]+)/preference', [StoreFrontReviewController::class, 'likeDIslikePreference']);
+    Route::post('/storefront/reviews/(?P<uniq_id>[a-zA-Z0-9-]+)/preference', [StoreFrontReviewController::class, 'likeDislikePreference']);
     Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/wp', [StoreFrontReviewController::class, 'wpLocalStorageData']);
     Route::post('/storefront/request/review/email/(?P<uid>[a-zA-Z0-9-]+)/store/items', [StoreFrontReviewController::class, 'reviewRequestStoreItem']);
     Route::get('/storefront/thanks/message', [StoreFrontReviewController::class, 'thanksMessage']);
@@ -231,8 +231,10 @@ Route::group(['prefix' => '/api/v1'], function (\Rvx\WPDrill\Routing\RouteManage
     Route::post('/storefront/widgets/short/code/reviews', [StoreFrontReviewController::class, 'getSpecificReviewItem']);
     //wp setting get form db
     Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
+    //ALl review shortcode
+    Route::post('/storefront/all/reviews/short/code', [StoreFrontReviewController::class, 'getAllReviewForShortcode']);
 });
-Route::group(['prefix' => '/api/v1', 'middleware' => AdminMiddleware::class], function (\Rvx\WPDrill\Routing\RouteManager $route) {
+Route::group(['prefix' => '/api/v1', 'middleware' => AdminMiddleware::class], function () {
     Route::get('/rvx/error/log/', [LogController::class, 'rvxRecentLog']);
     Route::get('/append/json/', [LogController::class, 'appendJsonSync']);
     Route::get('/data/manual/sync', [DataSyncController::class, 'dataManualSync']);

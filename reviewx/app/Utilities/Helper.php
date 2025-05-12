@@ -2,11 +2,11 @@
 
 namespace Rvx\Utilities;
 
+use Rvx\Firebase\JWT\JWT;
+use Rvx\Utilities\Auth\Client;
 use Throwable;
 use Rvx\WPDrill\Plugin;
 use Rvx\WPDrill\Response;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Firebase\JWT\JWT;
 class Helper
 {
     public static function plugin() : Plugin
@@ -38,53 +38,14 @@ class Helper
         if (!Client::has()) {
             return "";
         }
-        $payload = ["iss" => self::getWpDomain(), "iat" => \time(), "exp" => \time() + 300, "nbf" => \time(), "jti" => \uniqid("", \true)];
+        $payload = ["iss" => $_SERVER["HTTP_HOST"], "iat" => \time(), "exp" => \time() + 300, "nbf" => \time(), "jti" => \uniqid("", \true)];
         $additionalPayload = ["uid" => Client::getUid()];
         // Encode the payload and return the JWT token
         return JWT::encode(\array_merge($payload, $additionalPayload), Client::getSecret(), "HS256");
     }
-    public static function getWpDomain() : string
-    {
-        return $_SERVER["HTTP_HOST"];
-    }
-    public static function getWpVersion() : string
-    {
-        return get_bloginfo("version");
-    }
-    public static function getActiveTheme() : string
-    {
-        $active_theme = wp_get_theme();
-        return $active_theme->get("Name");
-    }
     public static function getWpDomainNameOnly() : string
     {
-        return \parse_url(home_url(), \PHP_URL_HOST);
-    }
-    public static function getStrUnique(int $length = 16) : string
-    {
-        $side = \rand(0, 1);
-        // 0 = left, 1 = right
-        $salt = \rand(0, 9);
-        $len = $length - 1;
-        $string = self::generateRandomString($len <= 0 ? 7 : $len);
-        $separatorPos = (int) \ceil($length / 4);
-        $string = $side === 0 ? $salt . $string : $string . $salt;
-        $string = \substr_replace($string, "-", $separatorPos, 0);
-        return \substr_replace($string, "-", self::negativeValue($separatorPos), 0);
-    }
-    public static function generateRandomString(int $length) : string
-    {
-        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $charactersLength = \strlen($characters);
-        $randomString = "";
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[\rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-    public static function negativeValue(int $value) : int
-    {
-        return -$value;
+        return \trim(\parse_url(home_url(), \PHP_URL_HOST), '/');
     }
     public static function getApiResponse($response)
     {
@@ -114,37 +75,13 @@ class Helper
     {
         return is_user_logged_in() ? 1 : 0;
     }
-    public static function loggedInUserFullName()
+    public static function getWpCurrentUser() : ?\WP_User
     {
         $current_user = wp_get_current_user();
         if (!$current_user instanceof \WP_User) {
-            return '';
+            return null;
         }
-        return $current_user->display_name;
-    }
-    public static function loggedInUserEmail()
-    {
-        $current_user = wp_get_current_user();
-        if (!$current_user instanceof \WP_User) {
-            return '';
-        }
-        return $current_user->user_email;
-    }
-    public static function loggedInUserDisplayName()
-    {
-        $current_user = wp_get_current_user();
-        if (!$current_user instanceof \WP_User) {
-            return '';
-        }
-        return $current_user->display_name;
-    }
-    public static function userId()
-    {
-        $current_user = wp_get_current_user();
-        if (!$current_user instanceof \WP_User) {
-            return 0;
-        }
-        return $current_user->ID;
+        return $current_user;
     }
     public static function arrayGet($data, $accessor, $default = null)
     {
@@ -158,7 +95,7 @@ class Helper
         }
         return $value;
     }
-    public static function verifiedCustomer($customer_id)
+    public static function verifiedCustomer($customer_id) : bool
     {
         $orders = wc_get_orders(["customer" => $customer_id, "status" => ["completed", "processing", "on-hold", "pending-payment"], "limit" => 1]);
         if (!empty($orders)) {
@@ -204,10 +141,6 @@ class Helper
             }
         }
         return 0;
-    }
-    public static function productId($product_id)
-    {
-        return $product_id;
     }
     public static function getIpAddress()
     {
@@ -305,5 +238,12 @@ class Helper
             $number = 0;
         }
         return \number_format((float) $number, 2);
+    }
+    public static function getWpClientInfo() : array
+    {
+        $current_user = wp_get_current_user();
+        $first_name = $current_user->first_name ?: $current_user->user_login;
+        $last_name = $current_user->last_name ?: '';
+        return ['domain' => \Rvx\Utilities\Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => sanitize_text_field($first_name), 'last_name' => sanitize_text_field($last_name)];
     }
 }

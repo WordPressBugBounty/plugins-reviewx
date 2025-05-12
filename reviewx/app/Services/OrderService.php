@@ -3,8 +3,8 @@
 namespace Rvx\Services;
 
 use Rvx\Api\OrderApi;
-use Rvx\WPDrill\Response;
 use Rvx\Utilities\Auth\Client;
+use Rvx\WPDrill\Response;
 class OrderService extends \Rvx\Services\Service
 {
     public function __construct()

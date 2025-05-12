@@ -2,13 +2,12 @@
 
 namespace Rvx\CPT;
 
-use Rvx\CPT\CptHelper;
 class CommentsRatingColumn
 {
     protected $cptHelper;
     public function __construct()
     {
-        $this->cptHelper = new CptHelper();
+        $this->cptHelper = new \Rvx\CPT\CptHelper();
     }
     /**
      * Add a new column to the comments page for the review rating.

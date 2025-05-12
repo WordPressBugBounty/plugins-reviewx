@@ -2,8 +2,6 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\Models\User;
-use Rvx\Utilities\Auth\Client;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 use Rvx\WPDrill\Response;

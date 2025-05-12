@@ -2,14 +2,13 @@
 
 namespace Rvx\Handlers\MigrationRollback;
 
-use Rvx\Handlers\MigrationRollback\SharedMethods;
 use Rvx\Services\SettingService;
 class MigrationPrompt
 {
     public function rvx_retrieve_old_plugin_options_data()
     {
         $data = [];
-        $sharedMethods = new SharedMethods();
+        $sharedMethods = new \Rvx\Handlers\MigrationRollback\SharedMethods();
         // Options to retrieve
         if ($sharedMethods->key_exists('_rx_option_review_criteria')) {
             $data['multicriteria'] = $sharedMethods->rvxOldReviewCriteriaConverter();

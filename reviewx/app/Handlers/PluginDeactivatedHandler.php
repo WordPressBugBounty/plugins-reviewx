@@ -4,7 +4,6 @@ namespace Rvx\Handlers;
 
 use Rvx\Api\AuthApi;
 use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\DB\Migration\Migrator;
 class PluginDeactivatedHandler implements InvokableContract
 {
     public function __invoke()

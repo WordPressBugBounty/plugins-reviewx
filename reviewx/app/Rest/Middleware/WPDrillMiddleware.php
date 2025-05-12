@@ -2,7 +2,6 @@
 
 namespace Rvx\Rest\Middleware;
 
-use Rvx\Utilities\Auth\Client;
 class WPDrillMiddleware
 {
     /**

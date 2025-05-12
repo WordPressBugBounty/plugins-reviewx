@@ -3,9 +3,9 @@
 namespace Rvx\Services;
 
 use Exception;
-use Rvx\WPDrill\Facades\DB;
-use Rvx\Utilities\Helper;
 use Rvx\Utilities\Auth\Client;
+use Rvx\Utilities\Helper;
+use Rvx\WPDrill\Facades\DB;
 class DiscountSyncService extends \Rvx\Services\Service
 {
     protected $discountCount = 0;

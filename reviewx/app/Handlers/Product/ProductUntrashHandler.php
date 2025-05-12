@@ -2,10 +2,10 @@
 
 namespace Rvx\Handlers\Product;
 
-use Rvx\CPT\CptHelper;
-use Rvx\WPDrill\Response;
 use Rvx\Api\ProductApi;
+use Rvx\CPT\CptHelper;
 use Rvx\Utilities\Auth\Client;
+use Rvx\WPDrill\Response;
 class ProductUntrashHandler
 {
     protected $cptHelper;

@@ -2,7 +2,6 @@
 
 namespace Rvx\Handlers\MigrationRollback;
 
-use Rvx\Handlers\MigrationRollback\SharedMethods;
 use Rvx\Services\SettingService;
 class RollbackPrompt
 {
@@ -36,7 +35,7 @@ class RollbackPrompt
             $this->update_widget_settings($widget_settings);
             $this->update_review_settings($review_settings);
         }
-        $sharedMethods = new SharedMethods();
+        $sharedMethods = new \Rvx\Handlers\MigrationRollback\SharedMethods();
         // Convert multi-criteria data if available
         if (isset($existing_data['reviews']['multicriteria'])) {
             $oldCriteriaData = $sharedMethods->rvxRollbackReverseReviewCriteriaConverter($existing_data['reviews']['multicriteria']);

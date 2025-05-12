@@ -2,10 +2,6 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Api\OrderApi;
-use Rvx\WPDrill\Response;
-use Rvx\Api\DataSyncApi;
-use Rvx\Utilities\Auth\Client;
 class ImportProductHandler
 {
     public function __invoke($new_status, $old_status, $product)

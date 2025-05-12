@@ -2,8 +2,8 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Utilities\Auth\Client;
 use Rvx\Services\ReviewService;
+use Rvx\Utilities\Auth\Client;
 class WooCommerceReviewEditForm
 {
     public function __invoke($id, $data)

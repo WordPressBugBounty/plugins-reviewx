@@ -3,7 +3,6 @@
 namespace Rvx\Api;
 
 use Rvx\Apiz\Http\Response;
-use Rvx\Utilities\Auth\Client;
 class CategoryApi extends \Rvx\Api\BaseApi
 {
     /**
@@ -26,7 +25,7 @@ class CategoryApi extends \Rvx\Api\BaseApi
     /**
      * @param $id
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function remove($id)
     {
@@ -37,7 +36,7 @@ class CategoryApi extends \Rvx\Api\BaseApi
      * @param array $data
      * @param $uid
      * @return Response
-     * @throws Exception
+     * @throws \Exception
      */
     public function update(array $data, $uid) : Response
     {

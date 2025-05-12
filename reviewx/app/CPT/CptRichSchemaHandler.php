@@ -3,8 +3,6 @@
 namespace Rvx\CPT;
 
 use WP_Post;
-use Rvx\Services\SettingService;
-use Rvx\CPT\CptHelper;
 class CptRichSchemaHandler
 {
     /**
@@ -71,7 +69,7 @@ class CptRichSchemaHandler
     public static function addCustomRichSchema()
     {
         // List of post types to target
-        $enabled_post_types = (new CptHelper())->enabledCPT();
+        $enabled_post_types = (new \Rvx\CPT\CptHelper())->enabledCPT();
         unset($enabled_post_types['product']);
         // Unset Product
         $post_type = get_post_type();

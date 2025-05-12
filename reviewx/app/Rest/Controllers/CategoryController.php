@@ -3,9 +3,9 @@
 namespace Rvx\Rest\Controllers;
 
 use Rvx\Services\CategoryService;
+use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Response;
-use Rvx\Utilities\Helper;
 class CategoryController implements InvokableContract
 {
     protected $categoryService;

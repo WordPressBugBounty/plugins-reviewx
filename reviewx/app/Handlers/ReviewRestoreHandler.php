@@ -2,9 +2,6 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
 class ReviewRestoreHandler
 {
     public function __construct()

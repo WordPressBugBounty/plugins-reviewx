@@ -2,7 +2,6 @@
 
 namespace Rvx\Services;
 
-use Rvx\Apiz\Http\Response;
 use Rvx\Api\DashboardApi;
 class DashboardServices extends \Rvx\Services\Service
 {

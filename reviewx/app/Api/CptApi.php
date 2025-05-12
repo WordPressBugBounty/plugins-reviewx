@@ -2,8 +2,8 @@
 
 namespace Rvx\Api;
 
-use Exception;
 use Rvx\Apiz\Http\Response;
+use Exception;
 class CptApi extends \Rvx\Api\BaseApi
 {
     /**

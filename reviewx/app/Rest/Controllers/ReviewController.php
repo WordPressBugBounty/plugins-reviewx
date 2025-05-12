@@ -3,20 +3,23 @@
 namespace Rvx\Rest\Controllers;
 
 use Exception;
-use Throwable;
-use Rvx\WPDrill\Response;
 use Rvx\Services\ReviewService;
-use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\Utilities\Helper;
+use Throwable;
+use Rvx\Services\CacheServices;
+use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\Response;
 class ReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;
+    protected CacheServices $cacheServices;
     /**
      *
      */
     public function __construct()
     {
         $this->reviewService = new ReviewService();
+        $this->cacheServices = new CacheServices();
     }
     /**
      * @return void
@@ -57,7 +60,7 @@ class ReviewController implements InvokableContract
     public function reviewList($request)
     {
         try {
-            $differentReview = $this->reviewService->makeSaaSCallDecision();
+            $differentReview = $this->cacheServices->makeSaaSCallDecision();
             $this->visibilityPaginationSaasCall($request, $differentReview);
             $isVisible = $request->get_params()['isVisible'];
             $transientKeys = ['published' => 'review_approve_data', 'pending' => 'review_pending_data', 'spam' => 'review_spam_data', 'trash' => 'review_trash_data'];
@@ -148,7 +151,7 @@ class ReviewController implements InvokableContract
             // Re-enable the comment notification emails
             add_action('comment_post', 'wp_notify_postauthor');
             remove_filter('comments_notify', '__return_false');
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
             // Re-enable the comment notification emails in case of error
@@ -165,7 +168,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->updateReview($request);
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Not Create', $e->getCode());
@@ -179,7 +182,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->deleteReview($request);
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
@@ -193,7 +196,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->restoreReview($request);
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
@@ -207,7 +210,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->isVerify($request);
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Not Change', $e->getCode());
@@ -221,7 +224,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->isvisibility($request);
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Not Change', $e->getCode());
@@ -235,7 +238,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->updateReqEmail($request);
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -332,7 +335,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewBulkUpdate($request->get_params());
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -346,7 +349,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewBulkTrash($request->get_params());
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -360,7 +363,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewEmptyTrash($request->get_params());
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Empty Fails', $e->getCode());
@@ -402,7 +405,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->reviewMoveToTrash($request->get_params());
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Move to trash Fails', $e->getCode());
@@ -416,7 +419,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->highlight($request->get_params());
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails(__('Review Highlight', 'reviewx'), $e->getCode());
@@ -426,7 +429,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->bulkTenReviews($request->get_params());
-            $this->reviewService->removeCache();
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails(__('Review Highlight', 'reviewx'), $e->getCode());

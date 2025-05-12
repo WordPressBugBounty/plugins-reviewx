@@ -4,8 +4,8 @@ namespace Rvx\Handlers;
 
 use Rvx\Api\OrderApi;
 use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
 use Rvx\Utilities\Helper;
+use Rvx\WPDrill\Response;
 class OrderStatusChangedHandler
 {
     public function __invoke($order_id, $old_status, $new_status, $order)

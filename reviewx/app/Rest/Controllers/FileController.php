@@ -2,10 +2,8 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\Services\CategoryService;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
 class FileController implements InvokableContract
 {
     public function __invoke()

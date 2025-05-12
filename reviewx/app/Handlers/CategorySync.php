@@ -2,10 +2,10 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\WPDrill\Response;
 use Rvx\Api\CategoryApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\Response;
 class CategorySync implements InvokableContract
 {
     public function __invoke()

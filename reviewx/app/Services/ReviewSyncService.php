@@ -2,12 +2,10 @@
 
 namespace Rvx\Services;
 
+use Rvx\Handlers\MigrationRollback\MigrationPrompt;
+use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
-use Rvx\Services\ReviewService;
-use Rvx\Handlers\MigrationRollback\ReviewXChecker;
-use Rvx\Handlers\MigrationRollback\MigrationPrompt;
-use Rvx\Services\SettingService;
 class ReviewSyncService extends \Rvx\Services\Service
 {
     protected $reviewMetaTitle;
@@ -28,12 +26,12 @@ class ReviewSyncService extends \Rvx\Services\Service
     protected $migrationData;
     public function __construct()
     {
-        $this->reviewService = new ReviewService();
+        $this->reviewService = new \Rvx\Services\ReviewService();
         $this->migrationData = new MigrationPrompt();
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
             $this->criteria = get_option('_rx_option_review_criteria') ?? [];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
-            $this->criteria = (new SettingService())->getReviewSettings('product')['reviews']['multicriteria']["criterias"] ?? [];
+            $this->criteria = (new \Rvx\Services\SettingService())->getReviewSettings('product')['reviews']['multicriteria']["criterias"] ?? [];
         } else {
             $this->criteria = [];
         }

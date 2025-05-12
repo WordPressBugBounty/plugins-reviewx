@@ -3,8 +3,8 @@
 namespace Rvx\Shortcodes\Products;
 
 use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\View;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
+use Rvx\WPDrill\Facades\View;
 class ReviewStarCountShortcode implements ShortcodeContract
 {
     public function render(array $attrs, string $content = null) : string

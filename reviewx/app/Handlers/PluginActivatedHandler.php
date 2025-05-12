@@ -3,11 +3,11 @@
 namespace Rvx\Handlers;
 
 use Rvx\Api\AuthApi;
-use Rvx\Utilities\Helper;
-use Rvx\Services\DataSyncService;
 use Rvx\Services\Api\LoginService;
-use Rvx\WPDrill\DB\Migration\Migrator;
+use Rvx\Services\DataSyncService;
+use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\DB\Migration\Migrator;
 class PluginActivatedHandler implements InvokableContract
 {
     private Migrator $migrator;

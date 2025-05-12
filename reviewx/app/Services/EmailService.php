@@ -4,7 +4,6 @@ namespace Rvx\Services;
 
 use Rvx\Apiz\Http\Response;
 use Rvx\Api\EmailApi;
-use Rvx\Utilities\Auth\Client;
 class EmailService extends \Rvx\Services\Service
 {
     /**

@@ -4,7 +4,6 @@ namespace Rvx\Services;
 
 use Rvx\Apiz\Http\Response;
 use Rvx\Api\GoogleReviewApi;
-use Rvx\Services\SettingService;
 class GoogleReviewService extends \Rvx\Services\Service
 {
     /**
@@ -23,7 +22,7 @@ class GoogleReviewService extends \Rvx\Services\Service
     }
     public function googleRecaptchaVerify($data)
     {
-        $secret = (new SettingService())->getReviewSettings()['reviews']['recaptcha']['secret_key'];
+        $secret = (new \Rvx\Services\SettingService())->getReviewSettings()['reviews']['recaptcha']['secret_key'];
         $token = $data['token'];
         $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . \urlencode($secret) . '&response=' . \urlencode($token);
         $response = wp_remote_get($recaptcha_url);

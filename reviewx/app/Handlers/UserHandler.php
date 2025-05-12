@@ -2,7 +2,6 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\Api\CategoryApi;
 use Rvx\Api\UserApi;
 use Rvx\WPDrill\Response;
 class UserHandler

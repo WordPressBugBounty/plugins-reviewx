@@ -2,15 +2,16 @@
 
 namespace Rvx\Handlers;
 
-use Rvx\WPDrill\Facades\Config;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Facades\DB;
-use Rvx\WPDrill\Facades\View;
 use Rvx\Handlers\MigrationRollback\SharedMethods;
+use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\Facades\View;
 class OnboardMenuHandler implements InvokableContract
 {
     public function __invoke()
     {
+        global $wpdb;
+        $rvxSites = $wpdb->prefix . 'rvx_sites';
+        $wpdb->query("TRUNCATE TABLE {$rvxSites}");
         $sharedMethods = new SharedMethods();
         $is_pro_active = $sharedMethods->rvx_is_old_pro_plugin_active();
         if ($is_pro_active === \true) {

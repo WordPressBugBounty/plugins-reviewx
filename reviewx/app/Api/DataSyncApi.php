@@ -3,7 +3,6 @@
 namespace Rvx\Api;
 
 use Rvx\Apiz\Http\Response;
-use Rvx\Utilities\Auth\Client;
 class DataSyncApi extends \Rvx\Api\BaseApi
 {
     /**

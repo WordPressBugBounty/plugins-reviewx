@@ -2,7 +2,6 @@
 
 namespace Rvx\Rest\Middleware;
 
-use Rvx\Models\Site;
 use Rvx\Utilities\Auth\Client;
 class AdminMiddleware
 {

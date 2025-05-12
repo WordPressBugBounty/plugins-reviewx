@@ -5,7 +5,6 @@ namespace Rvx\Rest\Middleware;
 use Rvx\Firebase\JWT\JWT;
 use Rvx\Firebase\JWT\Key;
 use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
 class AuthMiddleware
 {
     /**

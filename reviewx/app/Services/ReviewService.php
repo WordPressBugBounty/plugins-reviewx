@@ -3,12 +3,11 @@
 namespace Rvx\Services;
 
 use Exception;
-use Rvx\WPDrill\Response;
-use Rvx\Enum\ReviewStatusEnum;
 use Rvx\Api\ReviewsApi;
+use Rvx\Enum\ReviewStatusEnum;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
-use Rvx\Services\SettingService;
+use Rvx\WPDrill\Response;
 class ReviewService extends \Rvx\Services\Service
 {
     protected ReviewsApi $reviewApi;
@@ -71,7 +70,7 @@ class ReviewService extends \Rvx\Services\Service
                 $attachments = $data->get_params()['attachments'] ? $data->get_params()['attachments'] : [];
             }
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
-            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new \Rvx\Services\SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
             // Calculate the average rating
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
@@ -101,7 +100,7 @@ class ReviewService extends \Rvx\Services\Service
             $attachments = !empty($file) ? $file : [];
             $criterias = isset($data->get_params()['criterias']) ? $data->get_params()['criterias'] : null;
             // Calculate the average rating
-            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new \Rvx\Services\SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
             } else {
@@ -126,7 +125,7 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function prepareWpCommentData($request) : array
     {
-        $data = (array) (new SettingService())->getReviewSettings(get_post_type($request['wp_post_id']));
+        $data = (array) (new \Rvx\Services\SettingService())->getReviewSettings(get_post_type($request['wp_post_id']));
         $review_type = 'review';
         if (get_post_type($request['wp_post_id']) !== 'product') {
             $review_type = 'comment';
@@ -441,7 +440,7 @@ class ReviewService extends \Rvx\Services\Service
         $attachments = \array_key_exists('attachements', $data->get_params()) ? $data->get_params()['attachements'] : [];
         $criterias = \array_key_exists('criterias', $data->get_params()) ? $data->get_params()['criterias'] : null;
         // Calculate the average rating
-        $isAllowedMultiCriteria = (new SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
+        $isAllowedMultiCriteria = (new \Rvx\Services\SettingService())->getReviewSettings(get_post_type($data->get_params()['wp_post_id']))['reviews']['multicriteria']['enable'] ?? \false;
         if ($criterias !== null && $isAllowedMultiCriteria === \true) {
             $wcAverageRating = $this->calculateAverageRating($criterias);
         } else {
@@ -501,7 +500,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $settings = $request->get_params()['meta'];
-            (new SettingService())->updateSettingsData($settings);
+            (new \Rvx\Services\SettingService())->updateSettingsData($settings);
             return Helper::rest()->success("Success");
         } catch (Exception $th) {
             return Helper::rest()->fails("Fails");
@@ -638,7 +637,7 @@ class ReviewService extends \Rvx\Services\Service
         $data['title'] = \strip_tags($request['title']);
         $criterias = Helper::arrayGet($data, 'criterias');
         $post_type = get_post_type($productId);
-        $review_setting = (new SettingService())->getReviewSettings($post_type);
+        $review_setting = (new \Rvx\Services\SettingService())->getReviewSettings($post_type);
         $criteria_enabled = $review_setting['reviews']['multicriteria']['enable'];
         if ($criterias && $criteria_enabled === \true) {
             $data['criterias'] = \array_map('intval', $criterias);
@@ -767,7 +766,7 @@ class ReviewService extends \Rvx\Services\Service
     public function prepareWpCommentDataForEmail($data) : array
     {
         //Send email review only product
-        $settingsData = (new SettingService())->getReviewSettings('product');
+        $settingsData = (new \Rvx\Services\SettingService())->getReviewSettings('product');
         $auto_approve_reviews = $settingsData['reviews']['auto_approve_reviews'];
         $review_type = 'review';
         if (get_post_type($request['wp_post_id']) !== 'product') {
@@ -784,7 +783,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         try {
             $id = [];
-            $isAllowedMultiCriteria = (new SettingService())->getReviewSettings('product')['reviews']['multicriteria']['enable'] ?? \false;
+            $isAllowedMultiCriteria = (new \Rvx\Services\SettingService())->getReviewSettings('product')['reviews']['multicriteria']['enable'] ?? \false;
             foreach ($wpCommentData as $index => $comment) {
                 $criterias = $data['reviews'][$index]['criterias'] ?? null;
                 if (!empty($criterias) && $criterias !== null && $isAllowedMultiCriteria === \true) {
@@ -883,33 +882,8 @@ class ReviewService extends \Rvx\Services\Service
         }
         return \false;
     }
-    public function removeCache()
+    public function getAllReviewForShortcode($data)
     {
-        delete_transient('reviews_data_list');
-        delete_transient('review_approve_data');
-        delete_transient('review_pending_data');
-        delete_transient('review_spam_data');
-        delete_transient('review_trash_data');
-        delete_transient('reviewx_aggregation');
-        delete_transient('review_shortcode');
-        delete_transient('_rvx_shortcode_transient');
-    }
-    public function clearShortcodesCache($arrayFirst, $arraySecond)
-    {
-        if (empty($arrayFirst)) {
-            return \false;
-        }
-        $firstData = maybe_unserialize($arrayFirst);
-        if (!\is_array($firstData) || !\is_array($arraySecond)) {
-            return \false;
-        }
-        \ksort($firstData);
-        \ksort($arraySecond);
-        $firstHash = \md5(\json_encode($firstData));
-        $secondHash = \md5(\json_encode($arraySecond));
-        if ($firstHash === $secondHash) {
-            return \true;
-        }
-        return \false;
+        return (new ReviewsApi())->getAllReviewForShortcode($data);
     }
 }

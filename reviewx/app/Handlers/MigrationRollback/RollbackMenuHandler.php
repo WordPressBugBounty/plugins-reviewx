@@ -2,18 +2,14 @@
 
 namespace Rvx\Handlers\MigrationRollback;
 
-use Rvx\WPDrill\Facades\Config;
 use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Facades\DB;
 use Rvx\WPDrill\Facades\View;
-use Rvx\Handlers\MigrationRollback\SharedMethods;
-use Rvx\Handlers\MigrationRollback\RollbackPrompt;
 class RollbackMenuHandler implements InvokableContract
 {
     public function __invoke()
     {
-        $sharedMethods = new SharedMethods();
-        $rollbackPrompt = new RollbackPrompt();
+        $sharedMethods = new \Rvx\Handlers\MigrationRollback\SharedMethods();
+        $rollbackPrompt = new \Rvx\Handlers\MigrationRollback\RollbackPrompt();
         echo '<div class="wrap p-6 bg-gray-100 rounded-lg shadow-md">';
         View::output('storeadmin/rollback', ['title' => 'Rollback to ReviewX v1', 'content' => 'Revert to the previous version with ease and restore functionality seamlessly.', 'page_url' => $_SERVER['REQUEST_URI']]);
         if (isset($_GET['rollback_start'])) {

@@ -2,10 +2,10 @@
 
 namespace Rvx\CPT\Shared;
 
-use Rvx\CPT\CptHelper;
-use Rvx\WPDrill\Response;
 use Rvx\Api\ProductApi;
+use Rvx\CPT\CptHelper;
 use Rvx\Utilities\Auth\Client;
+use Rvx\WPDrill\Response;
 class CptPostHandler
 {
     protected $cptHelper;

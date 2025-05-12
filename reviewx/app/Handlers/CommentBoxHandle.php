@@ -3,8 +3,8 @@
 namespace Rvx\Handlers;
 
 use Rvx\CPT\CptHelper;
-use Rvx\WPDrill\Facades\View;
 use Rvx\Utilities\Helper;
+use Rvx\WPDrill\Facades\View;
 class CommentBoxHandle
 {
     protected $cptHelper;
@@ -28,13 +28,14 @@ class CommentBoxHandle
     public function setRvxAttributes()
     {
         $user_id = get_current_user_id();
+        $wpCurrentUser = Helper::getWpCurrentUser();
         if (\class_exists('WooCommerce') && is_singular() && 'product' === get_post_type()) {
             $is_verified_customer = Helper::verifiedCustomer($user_id);
         } else {
             $is_verified_customer = 0;
         }
-        $user_name = Helper::loggedInUserFullName() ?: Helper::loggedInUserDisplayName();
-        $attributes = ['product' => ['id' => get_the_ID(), 'postType' => \strtolower(get_post_type())], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => Helper::userId(), 'name' => $user_name, 'email' => Helper::loggedInUserEmail(), 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $user_name = $wpCurrentUser ? $wpCurrentUser->display_name : '';
+        $attributes = ['product' => ['id' => get_the_ID(), 'postType' => \strtolower(get_post_type())], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser ? $wpCurrentUser->ID : null, 'name' => $user_name, 'email' => $wpCurrentUser ? $wpCurrentUser->user_email : '', 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport()]];
         return \json_encode($attributes);
     }
     public function commentBoxDefaultStyleForCustomPostType() : void

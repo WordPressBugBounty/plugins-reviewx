@@ -17,7 +17,7 @@ class BaseApi extends AbstractApi
         if (Helper::plugin()->isProduction()) {
             return "https://api.reviewx.io";
         }
-        return "http://3.1.193.218:82";
+        return "http://3.1.193.218:82/";
     }
     public function getIp() : string
     {
@@ -35,6 +35,6 @@ class BaseApi extends AbstractApi
      */
     public function getDefaultHeaders() : array
     {
-        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-Version' => Helper::getWpVersion(), 'Accept' => 'application/json', 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => Helper::getActiveTheme(), 'X-Url' => site_url(), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Reviewx-Version' => RVX_VERSION, 'X-Environment' => Helper::plugin()->isProduction() ? 'production' : 'development'];
+        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'Accept' => 'application/json', 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => wp_get_theme()->get('Name'), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Wp-Version' => get_bloginfo("version"), 'X-Reviewx-Version' => RVX_VERSION, 'X-Environment' => Helper::plugin()->isProduction() ? 'production' : 'development'];
     }
 }

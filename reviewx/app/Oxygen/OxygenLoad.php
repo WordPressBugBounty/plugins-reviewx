@@ -2,7 +2,6 @@
 
 namespace Rvx\Oxygen;
 
-use Rvx\Oxygen\RvxOxyElement;
 class OxygenLoad
 {
     public function rvx_oxygen_woocommerce_init()
@@ -11,7 +10,7 @@ class OxygenLoad
             return;
         }
         $this->loadRequiredFiles();
-        $rvxOxyElement = new RvxOxyElement();
+        $rvxOxyElement = new \Rvx\Oxygen\RvxOxyElement();
         // $rvxOxyWooEl = new RvxOxyWooEl();
     }
     private function loadRequiredFiles()

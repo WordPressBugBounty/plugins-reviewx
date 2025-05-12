@@ -2,8 +2,6 @@
 
 namespace Rvx\Handlers\WcTemplates;
 
-use Rvx\Api\UserApi;
-use Rvx\Utilities\Auth\Client;
 class WcSendEmailPermissionHandler
 {
     public function __invoke($fields)

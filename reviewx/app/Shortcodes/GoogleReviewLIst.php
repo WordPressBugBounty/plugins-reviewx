@@ -2,10 +2,9 @@
 
 namespace Rvx\Shortcodes;
 
-use Rvx\Api\ReviewsApi;
-use Rvx\WPDrill\Facades\View;
 use Rvx\Api\GoogleReviewApi;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
+use Rvx\WPDrill\Facades\View;
 class GoogleReviewLIst implements ShortcodeContract
 {
     protected $googlereview;

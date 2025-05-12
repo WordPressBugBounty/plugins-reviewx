@@ -2,10 +2,9 @@
 
 namespace Rvx\Shortcodes\Products;
 
-use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\View;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
+use Rvx\WPDrill\Facades\View;
 class ReviewSummaryShortcode implements ShortcodeContract
 {
     public function render(array $attrs, string $content = null) : string

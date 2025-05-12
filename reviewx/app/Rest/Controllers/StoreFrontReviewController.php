@@ -3,23 +3,26 @@
 namespace Rvx\Rest\Controllers;
 
 use Exception;
-use Throwable;
-use Rvx\WPDrill\Response;
-use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\Services\Api\LoginService;
 use Rvx\Services\ReviewService;
+use Rvx\Services\CacheServices;
 use Rvx\Services\SettingService;
 use Rvx\Utilities\Helper;
+use Throwable;
+use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\Response;
 class StoreFrontReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;
     protected SettingService $settingService;
     protected LoginService $loginService;
+    protected CacheServices $cacheService;
     public function __construct()
     {
         $this->reviewService = new ReviewService();
         $this->settingService = new SettingService();
         $this->loginService = new LoginService();
+        $this->cacheService = new CacheServices();
     }
     /**
      * @return void
@@ -191,7 +194,7 @@ class StoreFrontReviewController implements InvokableContract
     {
         try {
             $response = $this->reviewService->saveWidgetReviewsForProduct($request);
-            $this->reviewService->removeCache();
+            $this->cacheService->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
@@ -214,7 +217,7 @@ class StoreFrontReviewController implements InvokableContract
      * @param $request
      * @return Response
      */
-    public function likeDIslikePreference($request)
+    public function likeDislikePreference($request)
     {
         try {
             $response = $this->reviewService->likeDIslikePreference($request->get_params());
@@ -263,7 +266,7 @@ class StoreFrontReviewController implements InvokableContract
     public function getSpecificReviewItem($request)
     {
         try {
-            $defferentIds = $this->reviewService->clearShortcodesCache(get_option('_rvx_reviews_ids'), $request->get_params());
+            $defferentIds = $this->cacheService->clearShortcodesCache(get_option('_rvx_reviews_ids'), $request->get_params());
             if ($defferentIds == \false) {
                 delete_transient('_rvx_shortcode_transient');
             }
@@ -298,4 +301,35 @@ class StoreFrontReviewController implements InvokableContract
             return $apiResponse;
         }
     }
+    public function getAllReviewForShortcode($request)
+    {
+        try {
+            $cursor = $request->get_param('cursor');
+            $params = $request->get_params();
+            $cache_key = 'rvx_shortcode_reviews_' . \md5(\serialize($params));
+            $domainKeyRemove = \array_diff_key($params, ['domain' => '']);
+            $paramiterDifferent = $this->cacheService->clearShortcodesCache(get_option('_rvx_review_attributes_' . \md5(\serialize($domainKeyRemove))), $domainKeyRemove);
+            if ($paramiterDifferent == \false) {
+                delete_transient($cache_key);
+            }
+            $cached = get_transient($cache_key);
+            if ($cached && !$cursor) {
+                return Helper::rest(['reviews' => $cached['reviews'], 'meta' => $cached['meta']])->success("Success");
+            }
+            $resp = $this->reviewService->getAllReviewForShortcode($params);
+            if ($resp->getStatusCode() === Response::HTTP_OK) {
+                // Update to use the unique cache key
+                set_transient($cache_key, $resp->getApiData(), HOUR_IN_SECONDS);
+                update_option('_rvx_review_attributes_' . \md5(\serialize($domainKeyRemove)), ['rating' => $request->get_param('rating'), 'sort_by' => $request->get_param('sortBy'), 'post_type' => $request->get_param('post_type')]);
+            }
+            return Helper::saasResponse($resp);
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('All Review Item Fails', $e->getCode());
+        }
+    }
+    // private function cacheAllReviewShortcode($data)
+    // {
+    //     delete_transient('rvx_shortcode_all_reviews');
+    //     set_transient('rvx_shortcode_all_reviews', $data, 86400);
+    // }
 }

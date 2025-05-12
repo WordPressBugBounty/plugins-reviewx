@@ -2,10 +2,10 @@
 
 namespace Rvx\Services;
 
+use DateTime;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
-use DateTime;
 class OrderItemSyncService extends \Rvx\Services\Service
 {
     protected $orderFullfillmentStatusRelation;

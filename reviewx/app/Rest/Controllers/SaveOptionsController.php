@@ -2,12 +2,10 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
-use WP_REST_Response;
-use WP_REST_Request;
 use Rvx\Rest\Api;
 use Rvx\Rest\Api\BaseApi;
+use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 class SaveOptionsController implements InvokableContract
 {
     /**

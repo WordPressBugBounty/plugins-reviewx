@@ -2,8 +2,8 @@
 
 namespace Rvx\CPT;
 
-use Rvx\Utilities\Auth\Client;
 use Rvx\Services\ReviewService;
+use Rvx\Utilities\Auth\Client;
 class CptReviewAddReply
 {
     public function __invoke($id, $data)

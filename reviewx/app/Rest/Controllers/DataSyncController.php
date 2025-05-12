@@ -2,16 +2,12 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Throwable;
-use Rvx\Models\Site;
-use Rvx\WPDrill\Response;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\Services\DataSyncService;
-use Rvx\Utilities\Helper;
-use Rvx\Rest\Controllers\CptController;
 use Rvx\CPT\CptHelper;
+use Rvx\Models\Site;
+use Rvx\Services\DataSyncService;
 use Rvx\Services\SettingService;
-use Rvx\WPDrill\Facades\Request;
+use Rvx\Utilities\Helper;
+use Throwable;
 class DataSyncController
 {
     protected SettingService $settingService;
@@ -51,7 +47,7 @@ class DataSyncController
     public function updateSettingsOnSync()
     {
         // Save '_rvx_cpt_settings' data after sync is completed from Sass API to WP DB
-        $response = (new CptController())->cptGetOnSync();
+        $response = (new \Rvx\Rest\Controllers\CptController())->cptGetOnSync();
         if ($response[0] === \true) {
             // Get the enabled post types array
             $used_post_types = (new CptHelper())->usedCPTOnSync('used');
@@ -93,5 +89,27 @@ class DataSyncController
         \header('Content-Length: ' . \filesize($file_path));
         \readfile($file_path);
         exit;
+    }
+    /**
+     * Ping from sass and (cached for 7 days) return site info.
+     *
+     * @return \WP_REST_Response
+     */
+    public function ping() : \WP_REST_Response
+    {
+        // Cache time-to-live: 7 days
+        $cache_duration = 86400 * 7;
+        try {
+            // Try to get cache
+            $data = get_transient('rvx_ping_cache');
+            if (\false === $data) {
+                // Cache miss: fetch fresh data, store and return
+                $data = $this->dataSyncService->ping();
+                set_transient('rvx_ping_cache', $data, $cache_duration);
+            }
+            return Helper::rvxApi($data)->success(__('Plugin Active', 'reviewx'), 200);
+        } catch (\Exception $e) {
+            return Helper::rvxApi()->fails(__('Plugin deactivated or uninstalled', 'reviewx'), 404);
+        }
     }
 }

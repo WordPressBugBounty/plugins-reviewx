@@ -151,6 +151,29 @@ function __reviewXState__() {
                 this.fetchReviewsIsLoading = false;
             }
         },
+        async fetchInitializeAllReviewListShortCodes(requestData) {
+            this.fetchReviewsIsLoading = true;
+            try {
+                const url = `${this.rvxAttributes.baseDomain}/all/reviews/short/code`;
+                const data = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData),
+                });
+                const res = await data.json();
+                if (!res?.data?.reviews?.length) {
+                    this.haveReviews = true; // No more reviews available
+                } else {
+                    this.reviewListShortCodeData = res;
+                }
+            } catch (e) {
+                console.log('Error fetching reviews:', e);
+            } finally {
+                this.fetchReviewsIsLoading = false;
+            }
+        },
         async fetchReviewListWithIdsShortCodes(ids) {
             this.fetchReviewsIsLoading = true;
             const reviewsShortCodeIds = ids
@@ -240,6 +263,56 @@ function __reviewXState__() {
                 this.isLoadMoreReviews = false;
             }
         },
+        async fetchAllReviewListShortcodeReviews({ query, loadMoreReview}) {
+            if (loadMoreReview) {
+                this.isLoadMoreReviews = true;
+            } else {
+                this.fetchReviewsIsLoading = true;
+            }
+            let queryParams;
+            if (query) {
+                queryParams = query;
+            }
+            try {
+                const url = `${this.rvxAttributes.baseDomain}/all/reviews/short/code`;
+                const data = await fetch(url, {
+                    method: 'POST', // Use POST instead of GET
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(queryParams),
+                });
+                const res = await data.json();
+                
+                if (loadMoreReview) {
+                    // Append new reviews to existing data
+                    if (this.reviewListShortCodeData?.data?.reviews) {
+                        this.reviewListShortCodeData = {
+                            ...this.reviewListShortCodeData,
+                            data: {
+                                ...this.reviewListShortCodeData.data,
+                                reviews: [...this.reviewListShortCodeData.data.reviews, ...res.data.reviews],
+                                meta: res.data.meta // Update next_cursor
+                            }
+                        };
+                    } else {
+                        this.reviewListShortCodeData = res;
+                    }
+                } else {
+                    // Initial load
+                    this.reviewListShortCodeData = res;
+                }
+        
+                if (res?.data?.reviews?.length) {
+                    this.haveReviews = true;
+                }
+            } catch (e) {
+                console.log('Error fetching reviews:', e);
+            } finally {
+                this.fetchReviewsIsLoading = false;
+                this.isLoadMoreReviews = false;
+            }
+        },
         loadMoreReviewListShortcodeHandler() {
             const cursor = this.reviewListShortCodeData?.data?.meta?.next_cursor;
             if (cursor) {
@@ -251,6 +324,23 @@ function __reviewXState__() {
                     query: this.storeFrontReviewListShortcodeQuery,
                     loadMoreReview: true,
                     productId: this.reviewListShortCodeData?.data?.reviews[0]?.product_wp_id
+                });
+                console.log('Product ID: ', storeFrontReviewListShortcodeQuery);
+            }
+        },
+        loadMoreAllReviewListShortcodeHandler() {
+            const cursor = this.reviewListShortCodeData?.data?.meta?.next_cursor;
+            const per_page = this.reviewListShortCodeData?.data?.meta?.per_page;
+            
+            if (cursor) {
+                this.storeFrontReviewListShortcodeQuery = {
+                    ...this.storeFrontReviewListShortcodeQuery,
+                    cursor,
+                    per_page
+                };
+                this.fetchAllReviewListShortcodeReviews({
+                    query: this.storeFrontReviewListShortcodeQuery,
+                    loadMoreReview: true
                 });
                 console.log('Product ID: ', storeFrontReviewListShortcodeQuery);
             }
@@ -750,7 +840,19 @@ function __reviewXState__() {
             try {
                 // console.log('init 5')
                 await this.fetchReviewsSettings();
+                
                 await this.fetchReviewListShortCodes(parseData.ids);
+            } catch (error) {
+                console.error('Error during initialization:', error);
+            }
+        },
+        async initializeAllReviewListShortCodes(data) {
+            const parseData = JSON.parse(data.data)
+            this.rvxAttributesDataSetHandler(parseData)
+            try {
+                // console.log('init 5')
+                await this.fetchReviewsSettings();
+                await this.fetchInitializeAllReviewListShortCodes(parseData);
             } catch (error) {
                 console.error('Error during initialization:', error);
             }

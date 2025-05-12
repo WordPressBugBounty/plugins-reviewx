@@ -2,8 +2,8 @@
 
 namespace Rvx\Api;
 
-use Exception;
 use Rvx\Apiz\Http\Response;
+use Exception;
 use Rvx\Models\Post;
 use Rvx\Utilities\Auth\Client;
 class ReviewsApi extends \Rvx\Api\BaseApi
@@ -366,5 +366,14 @@ class ReviewsApi extends \Rvx\Api\BaseApi
     public function reviewRequestStoreItem(array $data, $uid) : Response
     {
         return $this->withJson($data)->post('storefront/request-review/email/' . $uid . '/store/items');
+    }
+    public function getAllReviewForShortcode($data)
+    {
+        $query_string = \http_build_query($data);
+        $site_id = Client::getSiteId();
+        if (!empty($query_string)) {
+            return $this->get('storefront/' . $site_id . '/reviews?' . $query_string);
+        }
+        return $this->get('storefront/' . $site_id . '/reviews');
     }
 }

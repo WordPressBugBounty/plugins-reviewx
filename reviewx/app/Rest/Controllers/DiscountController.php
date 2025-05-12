@@ -2,13 +2,11 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\Models\Site;
-use Throwable;
 use Rvx\Services\DiscountService;
 use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
 use Rvx\Utilities\Helper;
+use Throwable;
+use Rvx\WPDrill\Response;
 class DiscountController
 {
     protected $couponService;

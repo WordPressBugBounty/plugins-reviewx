@@ -3,8 +3,8 @@
 namespace Rvx\Handlers;
 
 use Rvx\Api\ProductApi;
-use Rvx\WPDrill\Response;
 use Rvx\Utilities\Auth\Client;
+use Rvx\WPDrill\Response;
 class ProductUpdateHandler
 {
     public function __invoke($product_id)
