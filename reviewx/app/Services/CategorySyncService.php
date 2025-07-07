@@ -5,6 +5,7 @@ namespace Rvx\Services;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
+use Rvx\Handlers\DataSyncHandler;
 class CategorySyncService extends \Rvx\Services\Service
 {
     protected $categories;
@@ -15,6 +16,11 @@ class CategorySyncService extends \Rvx\Services\Service
     protected $syncedCategories;
     protected $postTermRelation = [];
     protected $taxonomyTerm;
+    protected $datSyncHandler;
+    public function __construct()
+    {
+        $this->datSyncHandler = new DataSyncHandler();
+    }
     public function syncCategory($file)
     {
         $catCount = 0;
@@ -61,7 +67,7 @@ class CategorySyncService extends \Rvx\Services\Service
     }
     public function syncTermTaxonomy() : void
     {
-        DB::table('term_taxonomy')->select(['term_taxonomy_id', 'term_id', 'taxonomy', 'parent'])->whereIn('taxonomy', ['product_cat', 'category', 'product_type', 'product_visibility'])->chunk(100, function ($allTermTaxonomy) {
+        DB::table('term_taxonomy')->select(['term_taxonomy_id', 'term_id', 'taxonomy', 'parent'])->whereIn('taxonomy', $this->datSyncHandler->getProductTaxonomies())->chunk(100, function ($allTermTaxonomy) {
             foreach ($allTermTaxonomy as $termTaxonomy) {
                 $this->taxonomyTerm[$termTaxonomy->term_taxonomy_id] = (int) $termTaxonomy->term_id;
                 $this->selectedTerms[] = (int) $termTaxonomy->term_id;

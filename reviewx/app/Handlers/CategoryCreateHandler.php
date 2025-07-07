@@ -7,7 +7,7 @@ use Rvx\Api\CategoryApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\CPT\CptHelper;
 use Rvx\WPDrill\Response;
-class CategoryUpdateHandler
+class CategoryCreateHandler
 {
     protected $cptHelper;
     protected $taxonomyHandler;
@@ -37,17 +37,16 @@ class CategoryUpdateHandler
         if (!$term) {
             return;
         }
-        $this->syncTermUpdate($term);
+        $this->syncTermCreate($term);
         // if ($this->taxonomyHandler->termParentChanged($term_id, $this_taxonomy_name)) {
         //     $this->handleHierarchyUpdates($term);
         // }
     }
-    protected function syncTermUpdate($term)
+    protected function syncTermCreate($term)
     {
         try {
-            $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => $term->parent > 0 ? Client::getUid() . '-' . $term->parent : null, 'updated_at' => current_time('mysql')];
-            $uid = Client::getUid() . '-' . $term->term_id;
-            $response = (new CategoryApi())->update($payload, $uid);
+            $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => Client::getUid() . '-' . $term->parent ?? null];
+            $response = (new CategoryApi())->create($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 throw new Exception("API status: " . $response->getStatusCode());
             }
@@ -71,7 +70,7 @@ class CategoryUpdateHandler
     }
     protected function handleNewParentTerm($term)
     {
-        // error_log("Term {$term->term_id} is now a parent");
+        "Term {$term->term_id} is now a parent";
         // Add specific new parent logic here
     }
     protected function handleFormerParentTerm($term)

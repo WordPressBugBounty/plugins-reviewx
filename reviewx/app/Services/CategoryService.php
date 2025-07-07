@@ -3,6 +3,7 @@
 namespace Rvx\Services;
 
 use Rvx\Apiz\Http\Response;
+use Rvx\WPDrill\Response as drillResponse;
 use Rvx\Api\CategoryApi;
 use Rvx\Utilities\Helper;
 class CategoryService extends \Rvx\Services\Service
@@ -31,7 +32,7 @@ class CategoryService extends \Rvx\Services\Service
     /**
      * @return Response
      */
-    public function getCategoryAll()
+    public function getCategoryAll() : drillResponse
     {
         $product_categories = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => \false));
         $response = array();

@@ -4,6 +4,7 @@ namespace Rvx\Rest\Controllers;
 
 use Exception;
 use Rvx\Api\AuthApi;
+use Rvx\CPT\CptHelper;
 use Rvx\Handlers\MigrationRollback\MigrationPrompt;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 use Rvx\Models\Site;
@@ -15,12 +16,17 @@ use Rvx\Utilities\Helper;
 use Throwable;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Response;
+use Rvx\Services\CacheServices;
 class AuthController implements InvokableContract
 {
     protected LoginService $loginService;
+    protected DataSyncService $dataSyncService;
+    protected CacheServices $cacheServices;
     public function __construct()
     {
         $this->loginService = new LoginService();
+        $this->dataSyncService = new DataSyncService();
+        $this->cacheServices = new CacheServices();
     }
     public function __invoke()
     {
@@ -48,10 +54,21 @@ class AuthController implements InvokableContract
                 Site::where("id", $site->id)->update($site_info);
             }
             Client::set(Site::where('uid', $site_info['uid'])->first());
-            $dataResponse = (new DataSyncService())->dataSync('login');
+            $dataResponse = $this->dataSyncService->dataSync('login', 'product');
             if (!$dataResponse) {
                 return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', $dataResponse->getStatusCode());
             }
+            // Sleep for 1 seconds
+            \sleep(1);
+            // Upload CPT data to Saas
+            $enabled_post_types = (new CptHelper())->usedCPTOnSync('used');
+            unset($enabled_post_types['product']);
+            // Exclude 'product' post type
+            // Loop through each post type and hook into the actions/filters dynamically
+            foreach ($enabled_post_types as $post_type) {
+                $this->dataSyncService->dataSync('default', $post_type);
+            }
+            $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
             return Helper::saasResponse($response);
         } catch (Exception $e) {
@@ -78,10 +95,21 @@ class AuthController implements InvokableContract
                 Site::where("id", $site->id)->update($site_info);
             }
             Client::set(Site::where('uid', $site_info['uid'])->first());
-            $dataResponse = (new DataSyncService())->dataSync('login');
+            $dataResponse = $this->dataSyncService->dataSync('login', 'product');
             if (!$dataResponse) {
                 return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', $dataResponse->getStatusCode());
             }
+            // Sleep for 1 seconds
+            \sleep(1);
+            // Upload CPT data to Saas
+            $enabled_post_types = (new CptHelper())->usedCPTOnSync('used');
+            unset($enabled_post_types['product']);
+            // Exclude 'product' post type
+            // Loop through each post type and hook into the actions/filters dynamically
+            foreach ($enabled_post_types as $post_type) {
+                $this->dataSyncService->dataSync('default', $post_type);
+            }
+            $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
             return Helper::saasResponse($response);
         } catch (Exception $e) {
@@ -157,10 +185,11 @@ class AuthController implements InvokableContract
                 Site::where("id", $site->id)->update($site_info);
             }
             Client::set(Site::where('uid', $site_info['uid'])->first());
-            $dataResponse = (new DataSyncService())->dataSync('register');
+            $dataResponse = $this->dataSyncService->dataSync('register', 'product');
             if (!$dataResponse) {
                 return Helper::rvxApi(['error' => "Registration Fail"])->fails('Registration Fail', $dataResponse->getStatusCode());
             }
+            $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
             $this->removeUserSettingsFormLocal();
             return Helper::saasResponse($response);

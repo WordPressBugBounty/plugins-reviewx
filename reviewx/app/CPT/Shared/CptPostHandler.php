@@ -15,18 +15,18 @@ class CptPostHandler
     }
     public function __invoke($post_id, $post, $update)
     {
+        // Ignore if called during autosave or automatic draft
+        if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE || \in_array($post->post_status, ['auto-draft', 'inherit'], \true)) {
+            return;
+        }
         // Define the target post types
-        $enabled_post_types = $this->cptHelper->usedCPT('used');
+        $enabled_post_types = $this->cptHelper->enabledCPT();
         $post_type = $post->post_type;
         $post_status = $post->post_status;
-        if (!empty($enabled_post_types[$post_type]) && $enabled_post_types[$post_type] !== $post_type) {
+        if (!isset($enabled_post_types[$post_type])) {
             return;
         }
         if ($post_status === 'trash') {
-            return;
-        }
-        // Ignore
-        if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE || \in_array($post->post_status, ['auto-draft', 'inherit'], \true)) {
             return;
         }
         // Check if the meta key 'rvx_sync_status' exists

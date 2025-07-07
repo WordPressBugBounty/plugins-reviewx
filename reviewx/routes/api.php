@@ -12,7 +12,6 @@ use Rvx\Rest\Controllers\SettingController;
 use Rvx\Rest\Controllers\CategoryController;
 use Rvx\Rest\Controllers\DiscountController;
 use Rvx\Rest\Controllers\DashboardController;
-use Rvx\Rest\Controllers\SaveOptionsController;
 use Rvx\Rest\Controllers\GoogleReviewController;
 use Rvx\Rest\Controllers\ImportExportController;
 use Rvx\Rest\Controllers\EmailTemplateController;
@@ -22,17 +21,39 @@ use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\Rest\Controllers\LogController;
 use Rvx\Rest\Controllers\CptController;
+use Rvx\Rest\Controllers\PingController;
 use Rvx\Rest\Middleware\AuthSaasMiddleware;
 Route::group(['prefix' => '/api/v1'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/login/key', [AuthController::class, 'license_key']);
     Route::post('/forget/password', [AuthController::class, 'forgetPassword']);
     Route::post('/reset/password', [AuthController::class, 'resetPassword']);
-    Route::post('/save_options', [SaveOptionsController::class, 'save_options']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/migration/prompt', [AuthController::class, 'migrationPrompt']);
     Route::post('/user/plan/access', [SettingController::class, 'userSettingsAccess']);
     Route::get('/user/current/plan', [SettingController::class, 'userCurrentPlan']);
+    Route::post('/site/all/settings', [SettingController::class, 'allSettingsSave']);
+    /**
+     * Frontend API
+     * Store Front
+     */
+    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [StoreFrontReviewController::class, 'getWidgetReviewsForProduct']);
+    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/insight', [StoreFrontReviewController::class, 'getWidgetInsight']);
+    Route::post('/storefront/reviews', [StoreFrontReviewController::class, 'saveWidgetReviewsForProduct']);
+    Route::post('/storefront/request/review/email/attachments/items', [StoreFrontReviewController::class, 'requestReviewEmailAttachment']);
+    Route::post('data/sync/complete', [DataSyncController::class, 'dataSynComplete']);
+    Route::post('reviews/single/action/product/meta', [StoreFrontReviewController::class, 'singleActionProductMata']);
+    Route::post('/storefront/reviews/(?P<uniq_id>[a-zA-Z0-9-]+)/preference', [StoreFrontReviewController::class, 'likeDislikePreference']);
+    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/wp', [StoreFrontReviewController::class, 'wpLocalStorageData']);
+    Route::post('/storefront/request/review/email/(?P<uid>[a-zA-Z0-9-]+)/store/items', [StoreFrontReviewController::class, 'reviewRequestStoreItem']);
+    Route::get('/storefront/thanks/message', [StoreFrontReviewController::class, 'thanksMessage']);
+    Route::post('/storefront/test', [StoreFrontReviewController::class, 'test']);
+    Route::post('/setting/meta', [StoreFrontReviewController::class, 'settingMeta']);
+    Route::post('/storefront/widgets/short/code/reviews', [StoreFrontReviewController::class, 'getSpecificReviewItem']);
+    //wp setting get form db
+    Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
+    //ALl review shortcode
+    Route::post('/storefront/all/reviews/short/code', [StoreFrontReviewController::class, 'getAllReviewForShortcode']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function () {
     /**
@@ -169,10 +190,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     // WordPress custom post show this route
     Route::get('custom/wp/get', [CptController::class, 'customPostTypes']);
     /**
-     * Data sync 
-     */
-    Route::get('/site/sync/status', [SettingController::class, 'dataSyncStatus']);
-    /**
      * Google Review
      */
     Route::get('google/review/get', [GoogleReviewController::class, 'googleReviewGet']);
@@ -185,15 +202,16 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
      */
     Route::post('google/rich/schma', [GoogleReviewController::class, 'googleRichSchma']);
     /**
-     * Sync
+     * Data / CPT Sync
      */
     Route::get('/data/sync', [DataSyncController::class, 'dataSync']);
     Route::get('/sync/status', [DataSyncController::class, 'syncStatus']);
+    Route::get('/site/sync/status', [SettingController::class, 'dataSyncStatus']);
     Route::get('/backend/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [ReviewController::class, 'getSingleProductAllReviews']);
     /**
      * Plugin meta data gather
      */
-    Route::get('/ping', [DataSyncController::class, 'ping']);
+    Route::get('/ping', [PingController::class, 'ping']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class], function () {
     Route::get('/synced/data', [DataSyncController::class, 'syncedData']);
@@ -210,29 +228,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/review/request/email/send/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailSend']);
     Route::post('/review/request/email/resend/(?P<uid>[a-zA-Z0-9-]+)', [EmailTemplateController::class, 'requestEmailResend']);
     Route::post('/review/request/email/unsubscribe', [EmailTemplateController::class, 'requestEmailUnsubscribe']);
-});
-Route::group(['prefix' => '/api/v1'], function () {
-    Route::post('/site/all/settings', [SettingController::class, 'allSettingsSave']);
-    /**
-     * Store Front
-     */
-    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [StoreFrontReviewController::class, 'getWidgetReviewsForProduct']);
-    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/insight', [StoreFrontReviewController::class, 'getWidgetInsight']);
-    Route::post('/storefront/reviews', [StoreFrontReviewController::class, 'saveWidgetReviewsForProduct']);
-    Route::post('/storefront/request/review/email/attachments/items', [StoreFrontReviewController::class, 'requestReviewEmailAttachment']);
-    Route::post('data/sync/complete', [DataSyncController::class, 'dataSynComplete']);
-    Route::post('reviews/single/action/product/meta', [StoreFrontReviewController::class, 'singleActionProductMata']);
-    Route::post('/storefront/reviews/(?P<uniq_id>[a-zA-Z0-9-]+)/preference', [StoreFrontReviewController::class, 'likeDislikePreference']);
-    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/wp', [StoreFrontReviewController::class, 'wpLocalStorageData']);
-    Route::post('/storefront/request/review/email/(?P<uid>[a-zA-Z0-9-]+)/store/items', [StoreFrontReviewController::class, 'reviewRequestStoreItem']);
-    Route::get('/storefront/thanks/message', [StoreFrontReviewController::class, 'thanksMessage']);
-    Route::post('/storefront/test', [StoreFrontReviewController::class, 'test']);
-    Route::post('/setting/meta', [StoreFrontReviewController::class, 'settingMeta']);
-    Route::post('/storefront/widgets/short/code/reviews', [StoreFrontReviewController::class, 'getSpecificReviewItem']);
-    //wp setting get form db
-    Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
-    //ALl review shortcode
-    Route::post('/storefront/all/reviews/short/code', [StoreFrontReviewController::class, 'getAllReviewForShortcode']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AdminMiddleware::class], function () {
     Route::get('/rvx/error/log/', [LogController::class, 'rvxRecentLog']);

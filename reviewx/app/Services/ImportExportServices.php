@@ -33,28 +33,60 @@ class ImportExportServices extends \Rvx\Services\Service
         $this->prepareImportDataReview($reviews, $request);
         return $reviews;
     }
-    public function productIdGet($product_name)
-    {
-        $args = array('post_type' => 'product', 'posts_per_page' => 1, 's' => $product_name);
-        $query = new \WP_Query($args);
-        if ($query->have_posts()) {
-            return $query->posts[0]->ID;
-        }
-        return null;
-    }
     public function prepareImportDataReview($reviews, $request)
     {
-        foreach ($reviews as $review_data) {
-            $reviews_id = $this->productIdGet($review_data['Product_Title']);
-            if ($reviews_id) {
-                $this->insertReview($reviews_id, $review_data, $request);
+        if (empty($request['product_match']) || !\is_array($request['product_match'])) {
+            return;
+        }
+        if (empty($reviews) || !\is_array($reviews)) {
+            return;
+        }
+        $productIds = $this->extractProductIds($request['product_match']);
+        $this->processReviews($reviews, $productIds, $request);
+    }
+    /**
+     * Extract product IDs from product match data
+     */
+    private function extractProductIds(array $productMatches) : array
+    {
+        $productIds = [];
+        foreach ($productMatches as $productData) {
+            if (\is_array($productData) && isset($productData['product_title'], $productData['wp_id'])) {
+                $productIds[] = $productData['wp_id'];
+            }
+        }
+        return $productIds;
+    }
+    /**
+     * Process reviews and insert them
+     */
+    private function processReviews(array $reviews, array $productIds, array $request) : void
+    {
+        foreach ($reviews as $index => $reviewData) {
+            if (!isset($productIds[$index]) || empty($productIds[$index]) || !\is_array($reviewData)) {
+                continue;
+            }
+            $postType = $reviewData['Post_Type'] ?? 'product';
+            try {
+                delete_post_meta($productIds[$index], '_rvx_latest_reviews');
+                delete_post_meta($productIds[$index], '_rvx_latest_reviews_insight');
+                $this->insertReview($productIds[$index], $reviewData, $request, $postType);
+            } catch (Exception $e) {
+                \error_log("Failed to insert review at index {$index}: " . $e->getMessage());
             }
         }
     }
-    public function insertReview($reviews_id, $review_data, $request)
+    public function insertReview($reviews_id, $review_data, $request, $post_type)
     {
-        $mediaArray = \explode(',', Helper::arrayGet($review_data, 'Media'));
-        $comment_data = ['comment_post_ID' => $reviews_id, 'comment_author' => $review_data['Reviewer_Name'], 'comment_author_email' => $review_data['Email'], 'comment_content' => $review_data['Review_Description'], 'comment_date' => \wp_date('Y-m-d H:i:s', \strtotime($review_data['Date (YYYY-MM-DD H:M)'])), 'comment_approved' => Helper::arrayGet($request, 'status'), 'comment_type' => 'review', 'comment_meta' => ['rating' => Helper::arrayGet($review_data, 'Rating'), 'attachments' => $mediaArray ?? [], 'verified' => Helper::arrayGet($request, 'verified')]];
+        $mediaArray = [];
+        if (isset($review_data[$request['map']['attachment']]) && !empty($review_data[$request['map']['attachment']])) {
+            $mediaArray = \explode(',', $review_data[$request['map']['attachment']]);
+        }
+        $comment_type = 'review';
+        if (!empty($post_type) && \strtolower($post_type) != 'product') {
+            $comment_type = 'comment';
+        }
+        $comment_data = ['comment_post_ID' => $reviews_id, 'comment_author' => $review_data[$request['map']['customer_name']], 'comment_author_email' => $review_data[$request['map']['customer_email']], 'comment_content' => $review_data[$request['map']['feedback']], 'comment_date' => !empty($review_data[$request['map']['created_at']]) && \strtotime($review_data[$request['map']['created_at']]) !== \false ? \wp_date('Y-m-d H:i:s', \strtotime($review_data[$request['map']['created_at']])) : \wp_date('Y-m-d H:i:s'), 'comment_approved' => Helper::arrayGet($request, 'status'), 'comment_type' => $comment_type, 'comment_meta' => ['reviewx_title' => $review_data[$request['map']['review_title']] ?? null, 'rating' => $review_data[$request['map']['rating']] ?? 5, 'reviewx_attachments' => $mediaArray, 'verified' => Helper::arrayGet($request, 'verified')]];
         wp_insert_comment($comment_data);
     }
     /**

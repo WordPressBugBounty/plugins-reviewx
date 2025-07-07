@@ -11,8 +11,14 @@ use Rvx\Services\ReviewSyncService;
 use Rvx\Services\UserSyncService;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
+use Rvx\Services\CacheServices;
 class LogController implements InvokableContract
 {
+    protected CacheServices $cacheServices;
+    public function __construct()
+    {
+        $this->cacheServices = new CacheServices();
+    }
     /**
      * @return void
      */
@@ -93,6 +99,7 @@ class LogController implements InvokableContract
         }
         if ($action === 'manual_sync') {
             $dataResponse = (new DataSyncService())->dataSync($from);
+            $this->cacheServices->removeCache();
             if (!$dataResponse) {
                 return Helper::rvxApi(['error' => "Data Sync Failed"])->fails('Data Sync Failed', $dataResponse->getStatusCode());
             }

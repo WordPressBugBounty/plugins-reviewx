@@ -2,8 +2,14 @@
 
 namespace Rvx\Handlers\BulkAction;
 
+use Rvx\Services\CacheServices;
 class RegisterBulkActionsForReviewsHandler
 {
+    protected $cacheServices;
+    public function __construct()
+    {
+        $this->cacheServices = new CacheServices();
+    }
     public function __invoke($new_status, $old_status, $comment)
     {
         $screen = \Rvx\get_current_screen();
@@ -59,5 +65,6 @@ class RegisterBulkActionsForReviewsHandler
             wp_safe_redirect($redirect_to);
             exit;
         }
+        $this->cacheServices->removeCache();
     }
 }

@@ -17,7 +17,7 @@ class BaseApi extends AbstractApi
         if (Helper::plugin()->isProduction()) {
             return "https://api.reviewx.io";
         }
-        return "http://3.1.193.218:82/";
+        return "https://api-dev.reviewx.io";
     }
     public function getIp() : string
     {

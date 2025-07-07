@@ -20,11 +20,7 @@ class StorefrontReviewLinkClickScroll
         // Define the target post types
         $enabled_post_types = $this->cptHelper->enabledCPT();
         $post_type = $post->post_type ?? '';
-        // Ensure $post_type is valid and exists in enabled post types
-        if (empty($post_type) || !\is_array($enabled_post_types) || !\array_key_exists($post_type, $enabled_post_types)) {
-            return;
-        }
-        if ($enabled_post_types[$post_type] != $post_type) {
+        if (!isset($enabled_post_types[$post_type])) {
             return;
         }
         // Check if WooCommerce is active and we are on a product page

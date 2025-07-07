@@ -4,13 +4,20 @@ namespace Rvx\Handlers;
 
 use Rvx\Services\ReviewService;
 use Rvx\Utilities\Auth\Client;
+use Rvx\Services\CacheServices;
 class WooCommerceReviewEditForm
 {
+    protected $cacheServices;
+    public function __construct()
+    {
+        $this->cacheServices = new CacheServices();
+    }
     public function __invoke($id, $data)
     {
         $updatedData = $this->prepareData($id, $data);
         $reviewService = new ReviewService();
-        $response = $reviewService->updateWooReview($updatedData, $data);
+        $reviewService->updateWooReview($updatedData, $data);
+        $this->cacheServices->removeCache();
     }
     public function prepareData($id, $data)
     {

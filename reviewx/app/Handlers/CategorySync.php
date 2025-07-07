@@ -22,7 +22,7 @@ class CategorySync implements InvokableContract
         foreach ($products as $category) {
             $modyFiedCategories[] = $this->processCategories($category);
         }
-        $this->categorySync($modyFiedCategories);
+        $this->catSync($modyFiedCategories);
         $totalProducts = $offset + \count($products);
         update_option('total_catagory_count', $totalProducts);
         \error_log('Total Category=: ' . $totalProducts);
@@ -44,7 +44,7 @@ class CategorySync implements InvokableContract
         $query = $wpdb->prepare("\n            SELECT *\n            FROM {$wpdb->terms}\n            LIMIT %d OFFSET %d\n        ", $limit, $offset);
         return $wpdb->get_results($query);
     }
-    public function categorySync($payload)
+    public function catSync($payload)
     {
         if (Client::getSync() == \false) {
             $response = (new CategoryApi())->dataSync(['categories' => $payload]);

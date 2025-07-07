@@ -3,9 +3,9 @@
 namespace Rvx\Rest\Controllers;
 
 use Exception;
+use Throwable;
 use Rvx\Services\ReviewService;
 use Rvx\Utilities\Helper;
-use Throwable;
 use Rvx\Services\CacheServices;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Response;
@@ -13,9 +13,6 @@ class ReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;
     protected CacheServices $cacheServices;
-    /**
-     *
-     */
     public function __construct()
     {
         $this->reviewService = new ReviewService();
@@ -52,8 +49,9 @@ class ReviewController implements InvokableContract
     public function adminAllReviewSaasCall($data)
     {
         $resp = $this->reviewService->reviewList($data);
+        $isVisible = $data['isVisible'] ?? '';
         if ($resp->getStatusCode() === Response::HTTP_OK) {
-            $this->storeVisibilityReview($resp->getApiData(), $data['isVisible']);
+            $this->storeVisibilityReview($resp->getApiData(), $isVisible);
         }
         return Helper::getApiResponse($resp);
     }
@@ -62,7 +60,7 @@ class ReviewController implements InvokableContract
         try {
             $differentReview = $this->cacheServices->makeSaaSCallDecision();
             $this->visibilityPaginationSaasCall($request, $differentReview);
-            $isVisible = $request->get_params()['isVisible'];
+            $isVisible = $request->get_params()['isVisible'] ?? '';
             $transientKeys = ['published' => 'review_approve_data', 'pending' => 'review_pending_data', 'spam' => 'review_spam_data', 'trash' => 'review_trash_data'];
             if (\array_key_exists($isVisible, $transientKeys)) {
                 $approve = get_transient($transientKeys[$isVisible]);
@@ -440,7 +438,7 @@ class ReviewController implements InvokableContract
         try {
             foreach ($request->get_params() as $item) {
                 if (!Helper::arrayGet($item, 'product_wp_id')) {
-                    return "No prodduct found";
+                    return "No product found";
                 }
                 $reviewAndMeta = ['reviews' => Helper::arrayGet($item, 'reviews'), 'meta' => Helper::arrayGet($item, 'meta')];
                 $latest_ten_review = \json_encode($reviewAndMeta, \true);

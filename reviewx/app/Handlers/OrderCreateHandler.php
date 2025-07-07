@@ -2,10 +2,11 @@
 
 namespace Rvx\Handlers;
 
+use Rvx\Api\UserApi;
 use Rvx\Api\OrderApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Response;
+use Rvx\Utilities\Helper;
+use Rvx\Utilities\Auth\Client;
 class OrderCreateHandler
 {
     public function __invoke($order_id)
@@ -18,6 +19,11 @@ class OrderCreateHandler
             update_post_meta($order_id, '_rvx_is_new_order', \true);
             $payload = $this->prepareData($order);
             $response = (new OrderApi())->create($payload);
+            if ($response->getStatusCode() !== Response::HTTP_OK) {
+                return \false;
+            }
+            $customers = $this->customerPayload($order);
+            $response = (new UserApi())->create($customers);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 return \false;
             }
@@ -46,5 +52,13 @@ class OrderCreateHandler
             $items_data[] = $item_data;
         }
         return $items_data;
+    }
+    public function customerPayload($order)
+    {
+        $customer_id = $order->get_customer_id();
+        // if ($customer_id === 0) {
+        //     return [];
+        // }
+        return ['wp_id' => $customer_id, 'name' => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(), 'email' => $order->get_billing_email(), 'city' => $order->get_billing_city() ?? '', 'phone' => $order->get_billing_phone() ?? '', 'address' => $order->get_billing_address_1() ?? '', 'country' => $order->get_billing_country() ?? '', 'status' => 1];
     }
 }

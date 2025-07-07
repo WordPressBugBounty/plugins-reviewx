@@ -52,7 +52,7 @@ class CptAverageRating
         $enabled_post_types = (new \Rvx\CPT\CptHelper())->usedCPT('used');
         unset($enabled_post_types['product']);
         // Unset Product
-        if (!empty($enabled_post_types[$post_type]) && $enabled_post_types[$post_type] !== $post_type) {
+        if (!isset($enabled_post_types[$post_type])) {
             return;
         }
         global $wpdb;
@@ -89,9 +89,8 @@ class CptAverageRating
         $enabled_post_types = (new \Rvx\CPT\CptHelper())->usedCPT('used');
         unset($enabled_post_types['product']);
         // Unset Product
-        if (!\in_array($post_type, $enabled_post_types)) {
+        if (!isset($enabled_post_types[$post_type])) {
             return;
-            // Exit
         }
         // Check if the rvx_avg_rating key already exists
         if (!get_post_meta($post_id, 'rvx_avg_rating', \true)) {

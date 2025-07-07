@@ -47,7 +47,7 @@ class CommentsRatingColumn
             // Get the post type of the comment
             $post_type = get_post_type($comment->comment_post_ID);
             // Define the target post types
-            $enabled_post_types = $this->cptHelper->usedCPT('enabled');
+            $enabled_post_types = $this->cptHelper->enabledCPT();
             unset($enabled_post_types['product']);
             // Unset Product
             // Check if the comment's post type is in the target post types and comment type is 'review' and 'comment'

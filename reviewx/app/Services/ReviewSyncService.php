@@ -6,6 +6,7 @@ use Rvx\Handlers\MigrationRollback\MigrationPrompt;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
+use Rvx\Services\ReviewService;
 class ReviewSyncService extends \Rvx\Services\Service
 {
     protected $reviewMetaTitle;
@@ -22,11 +23,11 @@ class ReviewSyncService extends \Rvx\Services\Service
     protected $criteria;
     protected $procesedReviews;
     protected $commentReplyRelation;
-    protected $reviewService;
-    protected $migrationData;
+    protected ReviewService $reviewService;
+    protected MigrationPrompt $migrationData;
     public function __construct()
     {
-        $this->reviewService = new \Rvx\Services\ReviewService();
+        $this->reviewService = new ReviewService();
         $this->migrationData = new MigrationPrompt();
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
             $this->criteria = get_option('_rx_option_review_criteria') ?? [];
@@ -40,25 +41,26 @@ class ReviewSyncService extends \Rvx\Services\Service
     {
         return $this->criteria;
     }
-    public function processReviewForSync($file) : int
+    public function processReviewForSync($file, $post_type) : int
     {
         $this->syncReviewMata();
-        return $this->syncReview($file);
+        return $this->syncReview($file, $post_type);
     }
-    public function syncReview($file) : int
+    public function syncReview($file, $post_type) : int
     {
         $this->procesedReviews = [];
         $this->reviewids = [];
         $this->reviewRelationId = [];
         $reviewCount = 0;
         //Reply
-        DB::table('comments')->where('comment_parent', '!=', 0)->chunk(100, function ($comments) use(&$file) {
+        DB::table('comments')->join('posts', 'posts.ID', '=', 'comments.comment_post_ID')->where('posts.post_type', $post_type)->where('comment_parent', '!=', 0)->chunk(100, function ($comments) use(&$file) {
             foreach ($comments as $comment) {
                 $this->commentReplyRelation[$comment->comment_parent][] = [$comment->comment_ID => $comment->comment_content];
             }
         });
-        //Review & comment
-        DB::table('comments')->where('comment_parent', '=', 0)->whereIn('comment_type', ['review', 'comment'])->chunk(100, function ($comments) use(&$commentReplyRelation, &$file, &$reviewCount) {
+        //WC Reviews / CPT Reviews
+        $review_type = $post_type === 'product' ? ['review'] : ['comment'];
+        DB::table('comments')->join('posts', 'posts.ID', '=', 'comments.comment_post_ID')->where('posts.post_type', $post_type)->where('comment_parent', '=', 0)->whereIn('comment_type', $review_type)->chunk(100, function ($comments) use(&$commentReplyRelation, &$file, &$reviewCount) {
             foreach ($comments as $comment) {
                 $this->procesedReviews = $this->processReview($comment);
                 Helper::appendToJsonl($file, $this->procesedReviews);

@@ -4,8 +4,14 @@ namespace Rvx\Handlers\BulkAction;
 
 use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
+use Rvx\Services\CacheServices;
 class CustomBulkActionsForReviewsHandler
 {
+    protected $cacheServices;
+    public function __construct()
+    {
+        $this->cacheServices = new CacheServices();
+    }
     public function __invoke()
     {
         $screen = get_current_screen();
@@ -54,6 +60,7 @@ class CustomBulkActionsForReviewsHandler
                 $reviewApi->reviewBulkTrash($data);
                 break;
         }
+        $this->cacheServices->removeCache();
     }
     public function modifiyIds($comment_ids)
     {

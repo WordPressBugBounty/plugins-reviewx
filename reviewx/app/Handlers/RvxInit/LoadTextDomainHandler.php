@@ -4,15 +4,13 @@ namespace Rvx\Handlers\RvxInit;
 
 class LoadTextDomainHandler
 {
-    public function __invoke()
+    /**
+     * Load the plugin text domain for translations.
+     *
+     * This method loads the text domain for the ReviewX plugin, allowing it to be translated.
+     */
+    public function loadLanguage()
     {
-        $reviewxProDeactive = 'reviewx-pro/reviewx-pro.php';
-        // Path to the plugin to deactivate
-        // Check if the plugin is active
-        if (is_plugin_active($reviewxProDeactive)) {
-            deactivate_plugins($reviewxProDeactive);
-            // Deactivate the plugin
-        }
-        load_plugin_textdomain('reviewx', \false, \dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain('reviewx', \false, \dirname(plugin_basename(__DIR__)) . '/languages');
     }
 }

@@ -2,26 +2,27 @@
 
 namespace Rvx\Rest\Controllers;
 
-use Rvx\Services\ImportExportServices;
-use Rvx\Utilities\Helper;
 use Throwable;
-use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Response;
+use Rvx\Utilities\Helper;
+use Rvx\Services\CacheServices;
+use Rvx\Services\ImportExportServices;
+use Rvx\WPDrill\Contracts\InvokableContract;
 class ImportExportController implements InvokableContract
 {
     protected ImportExportServices $importExportServices;
+    protected CacheServices $cacheServices;
     /**
      *
      */
     public function __construct()
     {
         $this->importExportServices = new ImportExportServices();
+        $this->cacheServices = new CacheServices();
     }
-    /**
-     * @return void
-     */
     public function __invoke()
     {
+        // This method is required by the InvokableContract but not used in this controller.
     }
     /**
      * @param $request
@@ -45,6 +46,7 @@ class ImportExportController implements InvokableContract
     {
         try {
             $response = $this->importExportServices->importStore($request);
+            $this->cacheServices->removeCache();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('FIle Not Import', $e->getCode());

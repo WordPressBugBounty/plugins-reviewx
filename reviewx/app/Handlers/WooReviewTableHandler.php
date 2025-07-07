@@ -5,8 +5,14 @@ namespace Rvx\Handlers;
 use Exception;
 use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
+use Rvx\Services\CacheServices;
 class WooReviewTableHandler
 {
+    protected $cacheServices;
+    public function __construct()
+    {
+        $this->cacheServices = new CacheServices();
+    }
     public function __invoke($new_status, $old_status, $comment)
     {
         $screen = \Rvx\get_current_screen();
@@ -33,6 +39,7 @@ class WooReviewTableHandler
                 $this->changeVisibility($new_status, $old_status, $wpUniqueId);
                 break;
         }
+        $this->cacheServices->removeCache();
     }
     /**
      * Generate the unique ID for a WordPress comment.

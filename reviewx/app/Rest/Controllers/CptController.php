@@ -4,17 +4,23 @@ namespace Rvx\Rest\Controllers;
 
 use Rvx\CPT\CptHelper;
 use Rvx\Services\CptService;
+use Rvx\Services\DataSyncService;
 use Rvx\Services\SettingService;
 use Rvx\Utilities\Helper;
+use Rvx\Services\CacheServices;
 use Throwable;
 use Rvx\WPDrill\Response;
 class CptController
 {
-    protected $cptService;
-    protected $cptHelper;
+    protected CptService $cptService;
+    protected DataSyncService $dataSyncService;
+    protected CacheServices $cacheServices;
+    protected CptHelper $cptHelper;
     public function __construct()
     {
         $this->cptService = new CptService();
+        $this->dataSyncService = new DataSyncService();
+        $this->cacheServices = new CacheServices();
         $this->cptHelper = new CptHelper();
     }
     /**
@@ -48,13 +54,16 @@ class CptController
                 $response = $this->cptService->cptGet();
                 $this->cptSettings($response);
                 // Update (_rvx_ettings_{post_type}) CPT Settings
-                $post_type = $resData->data['data']['post_type'] ? \strtolower($resData->data['data']['post_type']) : 'product';
+                $post_type = $resData->data['data']['post_type'] ? \strtolower($resData->data['data']['post_type']) : '';
                 if (!empty($post_type)) {
                     $review_response = (new \Rvx\Rest\Controllers\SettingController())->getApiReviewSettingsOnSync($post_type);
                     // Update Review settings
                     $review_settings = $review_response['data']['review_settings'];
                     (new SettingService())->updateReviewSettingsOnSync($review_settings, \strtolower($post_type));
                 }
+                // Upload CPT data to Saas
+                $this->dataSyncService->dataSync('default', $post_type);
+                $this->cacheServices->removeCache();
             }
             return Helper::rvxApi($resData)->success('Create Success', 200);
         } catch (Throwable $e) {
@@ -274,6 +283,13 @@ class CptController
                 // Update (_rvx_cpt_settings) CPT Settings
                 $response = $this->cptService->cptGet();
                 $this->cptSettings($response);
+                // Update (_rvx_ettings_{post_type}) CPT Settings
+                $post_type = $resData->data['data']['post_type'] ? \strtolower($resData->data['data']['post_type']) : '';
+                // Upload CPT data to Saas
+                if ($resData->data['data']['status'] === 'Enabled') {
+                    $this->dataSyncService->dataSync('default', $post_type);
+                    $this->cacheServices->removeCache();
+                }
             }
             return Helper::rvxApi($resData)->success('Status Change Success', 200);
         } catch (Throwable $e) {

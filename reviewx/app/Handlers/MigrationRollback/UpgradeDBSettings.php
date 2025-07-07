@@ -28,7 +28,7 @@ class UpgradeDBSettings
         $product_settings = get_option('_rvx_settings_product');
         $widget_settings = get_option('_rvx_settings_widget');
         $cpt_settings = get_option('_rvx_cpt_settings');
-        // If any of the required options are missing, run your upgrade logic.
+        // If any of the required options are missing, run upgrade logic.
         if (\false === $product_settings || \false === $widget_settings || \false === $cpt_settings) {
             // Initialize default settings if they are not available.
             $this->dataSyncController->updateSettingsOnSync();

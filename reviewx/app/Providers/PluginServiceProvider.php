@@ -13,12 +13,13 @@ use Rvx\CPT\Shared\PostsRatingColumn;
 use Rvx\Form\ReviewForm;
 use Rvx\Handlers\BulkAction\CustomBulkActionsForReviewsHandler;
 use Rvx\Handlers\BulkAction\RegisterBulkActionsForReviewsHandler;
+use Rvx\Handlers\CategoryCreateHandler;
 use Rvx\Handlers\CategoryDeleteHandler;
-use Rvx\Handlers\CategoryHandler;
 use Rvx\Handlers\CategoryUpdateHandler;
 use Rvx\Handlers\Customize\WidgetCustomizeOptionsHandler;
 use Rvx\Handlers\Customize\WidgetCustomizeOutputCSSHandler;
 use Rvx\Handlers\MigrationRollback\UpgradeDBSettings;
+use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
 use Rvx\Handlers\OrderCreateHandler;
 use Rvx\Handlers\OrderDeleteHandler;
 use Rvx\Handlers\OrderStatusChangedHandler;
@@ -35,6 +36,7 @@ use Rvx\Handlers\RvxInit\PageBuilderHandler;
 use Rvx\Handlers\RvxInit\PermalinkStructureHandler;
 use Rvx\Handlers\RvxInit\RedirectReviewxHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
+use Rvx\Handlers\RvxInit\ReviewXoldPluginDeactivateHandler;
 use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
 use Rvx\Handlers\UserDeleteHandler;
 use Rvx\Handlers\UserHandler;
@@ -63,11 +65,15 @@ class PluginServiceProvider extends ServiceProvider
     }
     public function boot() : void
     {
+        add_action('init', new ReviewXoldPluginDeactivateHandler(), 10);
         add_action('init', new PermalinkStructureHandler(), 10);
-        add_action('init', new LoadTextDomainHandler(), 40);
+        add_action('plugins_loaded', function () {
+            // Instantiate and register this init hook only after WordPress is loaded
+            add_action('init', [new LoadTextDomainHandler(), 'loadLanguage'], 10);
+        });
         add_action('activated_plugin', new RedirectReviewxHandler(), 15, 1);
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
-        add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
+        // add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
         // add_action('admin_notices', [new ReviewxAdminNoticeHandler(), 'adminNoticeHandler']);
         // add_action('wp_ajax_rvx_dismiss_notice', [new ReviewxAdminNoticeHandler(), 'rvx_admin_deal_notice_until']);
@@ -81,9 +87,8 @@ class PluginServiceProvider extends ServiceProvider
         /**
          * Category Hook
          */
-        add_action('create_term', new CategoryHandler());
-        add_action('delete_category', new CategoryDeleteHandler());
-        //Post category
+        add_action('create_term', new CategoryCreateHandler());
+        add_action('delete_term', [new CategoryDeleteHandler(), 'deleteHandler'], 10, 5);
         add_action('edited_term', new CategoryUpdateHandler());
         /**
          * Customer Hook
