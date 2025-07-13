@@ -269,7 +269,6 @@ if (!function_exists('et_theme_builder_wc_placeholders')) { function et_theme_bu
 if (!function_exists('et_theme_builder_wc_reset_global_objects')) { function et_theme_builder_wc_reset_global_objects() { return \Rvx\et_theme_builder_wc_reset_global_objects(...func_get_args()); } }
 if (!function_exists('et_theme_builder_wc_set_global_objects')) { function et_theme_builder_wc_set_global_objects() { return \Rvx\et_theme_builder_wc_set_global_objects(...func_get_args()); } }
 if (!function_exists('fdiv')) { function fdiv() { return \Rvx\fdiv(...func_get_args()); } }
-if (!function_exists('get_current_screen')) { function get_current_screen() { return \Rvx\get_current_screen(...func_get_args()); } }
 if (!function_exists('get_current_user_id')) { function get_current_user_id() { return \Rvx\get_current_user_id(...func_get_args()); } }
 if (!function_exists('get_debug_type')) { function get_debug_type() { return \Rvx\get_debug_type(...func_get_args()); } }
 if (!function_exists('get_option')) { function get_option() { return \Rvx\get_option(...func_get_args()); } }

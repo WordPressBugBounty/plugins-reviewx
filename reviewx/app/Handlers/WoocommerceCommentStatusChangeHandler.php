@@ -8,7 +8,7 @@ class WoocommerceCommentStatusChangeHandler
 {
     public function __invoke($comment_id, $status)
     {
-        $screen = \Rvx\get_current_screen();
+        $screen = \get_current_screen();
         if ($screen instanceof \WP_Screen || $screen->id == "edit-comments") {
             $this->prepareData($comment_id, $status);
         }

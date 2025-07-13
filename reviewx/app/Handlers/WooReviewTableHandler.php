@@ -15,7 +15,7 @@ class WooReviewTableHandler
     }
     public function __invoke($new_status, $old_status, $comment)
     {
-        $screen = \Rvx\get_current_screen();
+        $screen = \get_current_screen();
         if ($screen instanceof \WP_Screen || $screen->id == 'edit-comments') {
             $comment_id = $comment->comment_ID;
             $this->handleAction($new_status, $old_status, $comment_id);

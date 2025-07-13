@@ -12,7 +12,7 @@ class RegisterBulkActionsForReviewsHandler
     }
     public function __invoke($new_status, $old_status, $comment)
     {
-        $screen = \Rvx\get_current_screen();
+        $screen = \get_current_screen();
         if ($screen->id !== 'edit-comments') {
             return;
         }

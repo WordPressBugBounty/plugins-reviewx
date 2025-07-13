@@ -14,7 +14,7 @@ class CustomBulkActionsForReviewsHandler
     }
     public function __invoke()
     {
-        $screen = get_current_screen();
+        $screen = \get_current_screen();
         // Ensure we are on the 'edit-comments' screen
         if (!$screen instanceof \Rvx\Handlers\BulkAction\WP_Screen || $screen->id !== 'edit-comments') {
             return;
