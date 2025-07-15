@@ -58,7 +58,7 @@ class ProductImportHandler
         $product_categories = $product->get_category_ids();
         $parent_category_ids = array();
         foreach ($product_categories as $category_id) {
-            $category = get_term($category_id, 'product_cat');
+            $category = \get_term($category_id, 'product_cat');
             if ($category && $category->parent == 0) {
                 $parent_category_ids[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . $category_id;
             }

@@ -279,7 +279,6 @@ if (!function_exists('get_post_type')) { function get_post_type() { return \Rvx\
 if (!function_exists('get_resource_id')) { function get_resource_id() { return \Rvx\get_resource_id(...func_get_args()); } }
 if (!function_exists('get_stylesheet_directory')) { function get_stylesheet_directory() { return \Rvx\get_stylesheet_directory(...func_get_args()); } }
 if (!function_exists('get_template_directory')) { function get_template_directory() { return \Rvx\get_template_directory(...func_get_args()); } }
-if (!function_exists('get_term')) { function get_term() { return \Rvx\get_term(...func_get_args()); } }
 if (!function_exists('getallheaders')) { function getallheaders() { return \Rvx\getallheaders(...func_get_args()); } }
 if (!function_exists('grapheme_extract')) { function grapheme_extract() { return \Rvx\grapheme_extract(...func_get_args()); } }
 if (!function_exists('grapheme_stripos')) { function grapheme_stripos() { return \Rvx\grapheme_stripos(...func_get_args()); } }
@@ -295,7 +294,6 @@ if (!function_exists('hrtime')) { function hrtime() { return \Rvx\hrtime(...func
 if (!function_exists('is_admin')) { function is_admin() { return \Rvx\is_admin(...func_get_args()); } }
 if (!function_exists('is_countable')) { function is_countable() { return \Rvx\is_countable(...func_get_args()); } }
 if (!function_exists('is_oxygen_edit_page')) { function is_oxygen_edit_page() { return \Rvx\is_oxygen_edit_page(...func_get_args()); } }
-if (!function_exists('is_wp_error')) { function is_wp_error() { return \Rvx\is_wp_error(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \Rvx\mb_check_encoding(...func_get_args()); } }
 if (!function_exists('mb_chr')) { function mb_chr() { return \Rvx\mb_chr(...func_get_args()); } }
 if (!function_exists('mb_convert_case')) { function mb_convert_case() { return \Rvx\mb_convert_case(...func_get_args()); } }

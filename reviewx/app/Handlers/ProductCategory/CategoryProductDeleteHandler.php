@@ -9,7 +9,7 @@ class CategoryProductDeleteHandler
 {
     public function __invoke($term_id)
     {
-        $term = get_term($term_id);
+        $term = \get_term($term_id);
         $category_id = $term_id;
         $child_id = $term->parent;
         $uid = Client::getUid() . '-' . $term->term_id;

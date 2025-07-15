@@ -11,7 +11,7 @@ class WcAccountDetails
         if (isset($_FILES["image"]) && $_FILES["image"]["error"] == \UPLOAD_ERR_OK) {
             require_once ABSPATH . "wp-admin/includes/image.php";
             $attachment_id = media_handle_upload("image", 0);
-            if (!is_wp_error($attachment_id)) {
+            if (!\is_wp_error($attachment_id)) {
                 \error_log("da3333" . \print_r([$user_id, $attachment_id], \true));
                 update_user_meta($user_id, "rvx_image", $attachment_id);
                 $this->userDataForm();

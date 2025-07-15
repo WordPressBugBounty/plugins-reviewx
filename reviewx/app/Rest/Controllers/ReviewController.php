@@ -29,7 +29,7 @@ class ReviewController implements InvokableContract
      */
     public function index($request)
     {
-        $aggregation = get_transient('reviewx_aggregation');
+        $aggregation = \get_transient('reviewx_aggregation');
         if (empty($request->get_params()) && $aggregation) {
             $response = ['aggregations' => $aggregation['aggregations'], 'count' => $aggregation['count'], 'reviews' => $aggregation['reviews'], 'meta' => $aggregation['meta']];
             return Helper::rest($response)->success("Success");
@@ -43,7 +43,7 @@ class ReviewController implements InvokableContract
     }
     public function aggregationDataStore($data)
     {
-        delete_transient('reviewx_aggregation');
+        \delete_transient('reviewx_aggregation');
         set_transient('reviewx_aggregation', $data, 86400);
     }
     public function adminAllReviewSaasCall($data)
@@ -63,7 +63,7 @@ class ReviewController implements InvokableContract
             $isVisible = $request->get_params()['isVisible'] ?? '';
             $transientKeys = ['published' => 'review_approve_data', 'pending' => 'review_pending_data', 'spam' => 'review_spam_data', 'trash' => 'review_trash_data'];
             if (\array_key_exists($isVisible, $transientKeys)) {
-                $approve = get_transient($transientKeys[$isVisible]);
+                $approve = \get_transient($transientKeys[$isVisible]);
                 $params = $request->get_params();
                 $filterParams = ['page', 'rating', 'date', 'reviewer', 'search', 'product', 'category', 'oldest_first', 'newest_first'];
                 if (\array_intersect_key(\array_flip($filterParams), $params)) {
@@ -77,7 +77,7 @@ class ReviewController implements InvokableContract
                 }
             }
             if (empty($request->get_params())) {
-                $data = get_transient('reviews_data_list');
+                $data = \get_transient('reviews_data_list');
                 if ($data) {
                     $response = ['count' => $data['count'], 'reviews' => $data['reviews'], 'meta' => $data['meta']];
                     return Helper::rest($response)->success("Success");
@@ -104,25 +104,25 @@ class ReviewController implements InvokableContract
     }
     public function reviewListStoreInDB($reviewData)
     {
-        delete_transient('reviews_data_list');
+        \delete_transient('reviews_data_list');
         set_transient('reviews_data_list', $reviewData, 86400);
     }
     public function storeVisibilityReview($data, $visibility)
     {
         if ($visibility === 'published') {
-            delete_transient('review_approve_data');
+            \delete_transient('review_approve_data');
             set_transient('review_approve_data', $data, 86400);
         }
         if ($visibility === 'pending') {
-            delete_transient('review_pending_data');
+            \delete_transient('review_pending_data');
             set_transient('review_pending_data', $data, 86400);
         }
         if ($visibility === 'spam') {
-            delete_transient('review_spam_data');
+            \delete_transient('review_spam_data');
             set_transient('review_spam_data', $data, 86400);
         }
         if ($visibility === 'trash') {
-            delete_transient('review_trash_data');
+            \delete_transient('review_trash_data');
             set_transient('review_trash_data', $data, 86400);
         }
     }

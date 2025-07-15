@@ -43,7 +43,7 @@ class ImportProductHandler
     {
         $terms = wp_get_post_terms($product_id, 'product_cat');
         $categories = [];
-        if (!empty($terms) && !is_wp_error($terms)) {
+        if (!empty($terms) && !\is_wp_error($terms)) {
             foreach ($terms as $term) {
                 $categories[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . $term->term_id;
             }

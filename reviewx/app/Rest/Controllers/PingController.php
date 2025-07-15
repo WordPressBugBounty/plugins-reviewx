@@ -23,7 +23,7 @@ class PingController
         $cache_duration = 86400 * 7;
         try {
             // Try to get cache
-            $data = get_transient('rvx_ping_cache');
+            $data = \get_transient('rvx_ping_cache');
             if (\false === $data) {
                 // Cache miss: fetch fresh data, store and return
                 $data = $this->pingService->ping();

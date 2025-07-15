@@ -268,10 +268,10 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $defferentIds = $this->cacheService->clearShortcodesCache(get_option('_rvx_reviews_ids'), $request->get_params());
             if ($defferentIds == \false) {
-                delete_transient('_rvx_shortcode_transient');
+                \delete_transient('_rvx_shortcode_transient');
             }
             $transient_key = '_rvx_shortcode_transient';
-            $resp = get_transient($transient_key);
+            $resp = \get_transient($transient_key);
             if ($resp !== \false) {
                 $data = ['reviews' => $resp['reviews'], 'meta' => $resp['meta']];
                 return Helper::rest($data)->success("Success (from transient)");
@@ -310,9 +310,9 @@ class StoreFrontReviewController implements InvokableContract
             $domainKeyRemove = \array_diff_key($params, ['domain' => '']);
             $paramiterDifferent = $this->cacheService->clearShortcodesCache(get_option('_rvx_review_attributes_' . \md5(\serialize($domainKeyRemove))), $domainKeyRemove);
             if ($paramiterDifferent == \false) {
-                delete_transient($cache_key);
+                \delete_transient($cache_key);
             }
-            $cached = get_transient($cache_key);
+            $cached = \get_transient($cache_key);
             if ($cached && !$cursor) {
                 return Helper::rest(['reviews' => $cached['reviews'], 'meta' => $cached['meta']])->success("Success");
             }

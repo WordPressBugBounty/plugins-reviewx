@@ -39,7 +39,7 @@ class SharedMethods
         // Activate the plugin if it is found and not already active
         if ($found_plugin && !is_plugin_active($found_plugin)) {
             $result = activate_plugin($found_plugin);
-            if (is_wp_error($result)) {
+            if (\is_wp_error($result)) {
                 // Optionally, handle errors if activation fails
             } else {
                 // Optionally, display an admin notice for successful activation
@@ -71,7 +71,7 @@ class SharedMethods
         // Deactivate the plugin if it is found and not already deactive
         if ($found_plugin && is_plugin_active($found_plugin)) {
             $result = deactivate_plugins($found_plugin);
-            if (is_wp_error($result)) {
+            if (\is_wp_error($result)) {
                 // Optionally, handle errors if deactivation fails
             } else {
                 // Optionally, display an admin notice for successful deactivation

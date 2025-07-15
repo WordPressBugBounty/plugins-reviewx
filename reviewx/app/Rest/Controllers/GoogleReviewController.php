@@ -53,7 +53,7 @@ class GoogleReviewController implements InvokableContract
     {
         try {
             $response = $this->googleReviewService->googleReviewKey($request->get_params());
-            delete_transient('google_reviews_cache');
+            \delete_transient('google_reviews_cache');
             // When settings is changed remove the cache wpdb transient data
             return Helper::saasResponse($response);
         } catch (\Throwable $e) {
@@ -67,7 +67,7 @@ class GoogleReviewController implements InvokableContract
     {
         try {
             $response = $this->googleReviewService->googleReviewSetting($request->get_params());
-            delete_transient('google_reviews_cache');
+            \delete_transient('google_reviews_cache');
             // When settings is changed remove the cache wpdb transient data
             return Helper::saasResponse($response);
         } catch (\Throwable $e) {

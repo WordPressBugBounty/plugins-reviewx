@@ -45,7 +45,7 @@ class PingService extends \Rvx\Services\Service
     private function test_rest_api()
     {
         $response = wp_remote_get(rest_url('wp/v2/types/post'));
-        return ['status' => !is_wp_error($response), 'response_code' => wp_remote_retrieve_response_code($response), 'error' => is_wp_error($response) ? $response->get_error_message() : null];
+        return ['status' => !\is_wp_error($response), 'response_code' => wp_remote_retrieve_response_code($response), 'error' => \is_wp_error($response) ? $response->get_error_message() : null];
     }
     private function get_theme_details()
     {

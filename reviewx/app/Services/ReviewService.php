@@ -78,7 +78,7 @@ class ReviewService extends \Rvx\Services\Service
                 $wcAverageRating = (float) \round($data->get_params()['rating'], 2);
             }
             $commentId = wp_insert_comment($wpCommentData);
-            if (!is_wp_error($commentId)) {
+            if (!\is_wp_error($commentId)) {
                 add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
                 add_comment_meta($commentId, 'is_recommended', \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
@@ -107,7 +107,7 @@ class ReviewService extends \Rvx\Services\Service
                 $wcAverageRating = $data->get_params()['rating'];
             }
             $commentId = wp_insert_comment($wpCommentData);
-            if (!is_wp_error($commentId)) {
+            if (!\is_wp_error($commentId)) {
                 add_comment_meta($commentId, 'reviewx_title', \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null));
                 add_comment_meta($commentId, 'is_recommended', \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0);
                 add_comment_meta($commentId, 'verified', \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified']);
@@ -862,7 +862,7 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function saasStatusReviewCount()
     {
-        $data = get_transient('reviews_data_list');
+        $data = \get_transient('reviews_data_list');
         if (\is_array($data)) {
             return $data['count'];
         }

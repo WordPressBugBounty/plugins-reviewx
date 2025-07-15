@@ -21,7 +21,7 @@ class UpgradeReviewxDeactiveProHandler
                 }
             }
             $response = wp_remote_get("https://api.wordpress.org/plugins/info/1.0/reviewx.json");
-            if (!is_wp_error($response)) {
+            if (!\is_wp_error($response)) {
                 $plugin_data = \json_decode(wp_remote_retrieve_body($response));
                 if ($plugin_data && isset($plugin_data->version)) {
                     global $wpdb;

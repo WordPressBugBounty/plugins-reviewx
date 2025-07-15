@@ -28,7 +28,7 @@ class GoogleReviewLIst implements ShortcodeContract
     public function review($cache_time)
     {
         // Check cache first
-        $cached_reviews = get_transient('google_reviews_cache');
+        $cached_reviews = \get_transient('google_reviews_cache');
         if ($cached_reviews !== \false) {
             return $cached_reviews;
         }
