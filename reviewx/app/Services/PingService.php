@@ -67,7 +67,7 @@ class PingService extends \Rvx\Services\Service
     }
     private function check_plugin_update($plugin_path, $plugin_data)
     {
-        $updates = get_site_transient('update_plugins');
+        $updates = \get_transient('update_plugins');
         return isset($updates->response[$plugin_path]) ? $updates->response[$plugin_path]->new_version : \false;
     }
 }

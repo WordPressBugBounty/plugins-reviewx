@@ -51,13 +51,14 @@ class StoreFrontReviewController implements InvokableContract
     {
         $diffReviewCount = $this->reviewCountDifferent($request["product_id"]);
         if ($diffReviewCount === \true) {
-            delete_post_meta($request["product_id"], '_rvx_latest_reviews');
+            \delete_transient("rvx_{$request["product_id"]}_latest_reviews");
             return $this->dataGetFormSaas($request);
         }
-        $postMata = get_post_meta($request["product_id"], "_rvx_latest_reviews", \true);
+        $productId = $request["product_id"];
+        $postMata = \get_transient("rvx_{$productId}_latest_reviews");
         if ($postMata) {
             if (\count($postMata["reviews"]) != $this->insightReviewCount($request["product_id"])) {
-                delete_post_meta($request["product_id"], '_rvx_latest_reviews');
+                \delete_transient("rvx_{$request["product_id"]}_latest_reviews");
                 return $this->dataGetFormSaas($request);
             }
             if ($request->get_param("cursor") || $request->get_param("rating") || $request->get_param("sortBy") || $request->get_param("attachment")) {
@@ -116,7 +117,7 @@ class StoreFrontReviewController implements InvokableContract
             if ($diffReviewCount === \true) {
                 return ["data" => $this->insightDataelsePart($request)];
             }
-            $data = get_post_meta($request["product_id"], "_rvx_latest_reviews_insight", \true);
+            $data = \get_transient("rvx_{$request["product_id"]}_latest_reviews_insight");
             if ($data) {
                 $aggregation = \json_decode($data, \true);
                 if (\is_array($aggregation)) {
@@ -150,9 +151,11 @@ class StoreFrontReviewController implements InvokableContract
         $criteriaStat = Helper::arrayGet($latestAggregation, "criteria_stats");
         // No need to decode since it's always an array, just assign back
         $latestAggregation["criteria_stats"] = $criteriaStat;
-        delete_post_meta($request->get_param("product_id"), '_rvx_latest_reviews_insight');
+        \delete_transient("rvx_{$request->get_param("product_id")}_latest_reviews_insight");
         // Store the data in post meta as a JSON string
-        update_post_meta($request->get_param("product_id"), "_rvx_latest_reviews_insight", \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES));
+        $latestAggregationJson = \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
+        set_transient("rvx_{$request->get_param("product_id")}_latest_reviews_insight", $latestAggregationJson, 604800);
+        // Expires in 7 days
         return $latestAggregation;
     }
     public function productTitleAndDescriptionBackSlashRemove($data)
@@ -180,7 +183,7 @@ class StoreFrontReviewController implements InvokableContract
     public function insightReviewCount($id) : int
     {
         if (metadata_exists('post', $id, '_rvx_latest_reviews_insight')) {
-            $data = get_post_meta($id, "_rvx_latest_reviews_insight", \true);
+            $data = \get_transient("rvx_{$id}_latest_reviews_insight");
             $reviewAggregation = \json_decode($data, \true);
             return $reviewAggregation['aggregation']['total_reviews'] ?? 0;
         }
@@ -242,7 +245,8 @@ class StoreFrontReviewController implements InvokableContract
     public function storeAggregationMeta($productId, $payload)
     {
         $aggregation_data = \json_encode(wp_slash(Helper::arrayGet($payload, "meta")), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-        update_post_meta($productId, "_rvx_latest_reviews_insight", $aggregation_data);
+        set_transient("rvx_{$productId}_latest_reviews_insight", $aggregation_data, 604800);
+        // Expires in 7 days
     }
     public function reviewRequestStoreItem($request)
     {

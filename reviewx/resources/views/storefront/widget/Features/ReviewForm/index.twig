@@ -56,7 +56,7 @@
                 <div class="rvx-flex rvx-items-center rvx-gap-space16 rvx-review-form__product">
                     <div class="">
                         <img class="!rvx-size-[64px] rvx-object-cover rvx-rounded-md rvx-bg-white rvx-review-form__product--image"
-                            :src="`${reviewAggregationData?.data?.product?.image ?? 'https://revews-bucket.s3.ap-southeast-1.amazonaws.com/reviewx/product_placeholder.jpg'}`"
+                            :src="`${reviewAggregationData?.data?.product?.image ?? 'https://jouleslabs.s3.ap-southeast-1.amazonaws.com/reviewx/product_placeholder.jpg'}`"
                             :alt="`${reviewAggregationData?.data?.product?.title ?? ''}`" />
                     </div>
                     <h2 x-text="truncateString(reviewAggregationData?.data?.product.title ?? '', 20)"

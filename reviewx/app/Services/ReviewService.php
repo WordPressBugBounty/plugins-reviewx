@@ -302,8 +302,8 @@ class ReviewService extends \Rvx\Services\Service
     public function reviewCacheDelete($review_id)
     {
         $post_id = get_comment($review_id)->comment_post_ID ?? null;
-        delete_post_meta($post_id, '_rvx_latest_reviews');
-        delete_post_meta($post_id, '_rvx_latest_reviews_insight');
+        \delete_transient("rvx_{$post_id}_latest_reviews");
+        \delete_transient("rvx_{$post_id}_latest_reviews_insight");
     }
     public function reviewRepliesForWp($replies)
     {
@@ -381,7 +381,8 @@ class ReviewService extends \Rvx\Services\Service
                 if (Helper::arrayGet($data, 'product_wp_id')) {
                     return;
                 }
-                update_post_meta($data['product_wp_id'], '_rvx_latest_reviews_insight', \json_encode($data['meta']));
+                set_transient("rvx_{$data['product_wp_id']}_latest_reviews_insight", \json_encode($data['meta']), 604800);
+                // Expires in 7 days
             }
             return Helper::rest()->success("Success");
         } catch (Exception $e) {
@@ -846,7 +847,8 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function postMetaReviewInsert($id, $latest_reviews)
     {
-        update_post_meta($id, "_rvx_latest_reviews", wp_slash($latest_reviews));
+        set_transient("rvx_{$id}_latest_reviews", wp_slash($latest_reviews), 604800);
+        // Expires in 7 days
     }
     public function allReviewApproveCount() : int
     {

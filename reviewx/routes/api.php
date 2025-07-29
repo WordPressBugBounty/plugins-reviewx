@@ -117,10 +117,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/settings/widget/get', [SettingController::class, 'getAPiWidgetSettings']);
     Route::post('/settings/widget/save', [SettingController::class, 'saveApiWidgetSettings']);
     /**
-     * Remove table and user information
-     */
-    Route::post('/user/credentials/remove', [SettingController::class, 'removeCredentials']);
-    /**
      * General Settings
      */
     Route::get('/settings/general/get', [SettingController::class, 'getApiGeneralSettings']);
@@ -218,6 +214,10 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/admin/access/control', [AccessController::class, 'adminAccess']);
     Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
     Route::post('/reviews/bulk/action/product/meta', [ReviewController::class, 'bulkActionProductMeta']);
+    /**
+     * Remove table and user information
+     */
+    Route::post('/user/credentials/remove', [SettingController::class, 'removeCredentials']);
     /**
      * Review Reminder All request Settings
      */

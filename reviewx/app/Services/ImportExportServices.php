@@ -68,8 +68,8 @@ class ImportExportServices extends \Rvx\Services\Service
             }
             $postType = $reviewData['Post_Type'] ?? 'product';
             try {
-                delete_post_meta($productIds[$index], '_rvx_latest_reviews');
-                delete_post_meta($productIds[$index], '_rvx_latest_reviews_insight');
+                \delete_transient("rvx_{$productIds[$index]}_latest_reviews");
+                \delete_transient("rvx_{$productIds[$index]}_latest_reviews_insight");
                 $this->insertReview($productIds[$index], $reviewData, $request, $postType);
             } catch (Exception $e) {
                 \error_log("Failed to insert review at index {$index}: " . $e->getMessage());

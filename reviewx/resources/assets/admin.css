@@ -43,17 +43,17 @@
 
 .rvx-border-primary {
   --tw-border-opacity: 1;
-  border-color: rgb(0 67 221 / var(--tw-border-opacity, 1))
+  border-color: rgb(0 67 221 / var(--tw-border-opacity))
 }
 
 .\!rvx-border-l-primary {
   --tw-border-opacity: 1 !important;
-  border-left-color: rgb(0 67 221 / var(--tw-border-opacity, 1)) !important
+  border-left-color: rgb(0 67 221 / var(--tw-border-opacity)) !important
 }
 
 .rvx-bg-primary {
   --tw-bg-opacity: 1;
-  background-color: rgb(0 67 221 / var(--tw-bg-opacity, 1))
+  background-color: rgb(0 67 221 / var(--tw-bg-opacity))
 }
 
 .rvx-p-space8 {
@@ -76,12 +76,12 @@
 
 .rvx-text-neutral-700 {
   --tw-text-opacity: 1;
-  color: rgb(97 97 97 / var(--tw-text-opacity, 1))
+  color: rgb(97 97 97 / var(--tw-text-opacity))
 }
 
 .rvx-text-white {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+  color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 
 .rvx-no-underline {
@@ -116,11 +116,11 @@
 
 .hover\:rvx-bg-primary-100:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(0 57 187 / var(--tw-bg-opacity, 1))
+  background-color: rgb(0 57 187 / var(--tw-bg-opacity))
 }
 
 .hover\:rvx-text-white:hover {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1))
+  color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 

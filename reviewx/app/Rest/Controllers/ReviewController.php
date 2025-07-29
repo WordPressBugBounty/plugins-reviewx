@@ -442,7 +442,8 @@ class ReviewController implements InvokableContract
                 }
                 $reviewAndMeta = ['reviews' => Helper::arrayGet($item, 'reviews'), 'meta' => Helper::arrayGet($item, 'meta')];
                 $latest_ten_review = \json_encode($reviewAndMeta, \true);
-                update_post_meta($item['product_wp_id'], '_rvx_latest_reviews', $latest_ten_review);
+                set_transient("rvx_{$item['product_wp_id']}_latest_reviews", $latest_ten_review, 604800);
+                // Expires in 7 days
                 return Helper::rest()->success("Success");
             }
         } catch (Exception $e) {

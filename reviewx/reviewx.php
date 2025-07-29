@@ -6,7 +6,7 @@ namespace Rvx;
  * Plugin Name:       ReviewX – Multi-Criteria Rating & Reviews
  * Plugin URI:        https://reviewx.io
  * Description:       Advanced Multi-Criteria Rating & Reviews for WooCommerce. Turn customer reviews into sales by leveraging reviews with multiple criteria, reminder emails, Google reviews, review schemas, and incentives like discounts.
- * Version:           2.2.2
+ * Version:           2.2.3
  * Author:            ReviewX
  * Author URI:        https://reviewx.io
  * Text Domain: reviewx
@@ -20,7 +20,7 @@ namespace Rvx;
 @\ini_set('display_errors', 0);
 // don't call the file directly
 \defined('ABSPATH') || die;
-\define('RVX_VERSION', '2.2.2');
+\define('RVX_VERSION', '2.2.3');
 \define('RVX_DIR_PATH', plugin_dir_path(__FILE__));
 \define('RVX_DIR_NAME', \basename(\RVX_DIR_PATH));
 \define('RVX_PREFIX', 'rvx_');
@@ -38,4 +38,6 @@ require __DIR__ . '/vendor/autoload.php';
 \call_user_func(function ($bootstrap) {
     $bootstrap(__FILE__);
 }, require __DIR__ . '/bootstrap/boot.php');
+// This will ensure that the localStorage is reset when the sync flag is set
+new \Rvx\Handlers\IsAlreadySyncSucess();
 require_once \ABSPATH . 'wp-admin/includes/image.php';

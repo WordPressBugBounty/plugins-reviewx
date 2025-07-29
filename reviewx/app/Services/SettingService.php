@@ -186,16 +186,18 @@ class SettingService extends \Rvx\Services\Service
     {
         $payload_json = \json_encode($data['settings']);
         update_option('rvx_all_setting_data', $payload_json);
+        return ['message' => __('Settings saved successfully'), 'data' => $data['settings']];
     }
     public function removeCredentials()
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'rvx_sites';
         $sql = "TRUNCATE TABLE {$table_name}";
-        $wpdb->query($sql);
+        $result = $wpdb->query($sql);
         if ($wpdb->last_error) {
-            return ['message' => "Table truncate successfully"];
+            return ['message' => 'Error: ' . $wpdb->last_error];
         }
+        return ['message' => 'Table truncated successfully', 'result' => $result];
     }
     public function getLocalSettings($post_type)
     {
