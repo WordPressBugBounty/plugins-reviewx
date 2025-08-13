@@ -1,6 +1,6 @@
 <?php
 
-
+namespace Rvx;
 
 $styles = [
     //Graph
@@ -8,7 +8,7 @@ $styles = [
     'rvx_rvx_review_graph_rating_out_of_color_rvx' => ['selector' => '#rvx-storefront-widget .rvx-max-rating', 'custom_css' => 'color:%s!important;'],
     'rvx_rvx_review_graph_badge_background_color_rvx' => ['selector' => '#rvx-storefront-widget .rvx-rating-badge', 'custom_css' => 'background-color:%s!important;'],
     'rvx_rvx_review_graph_badge_text_color_rvx' => ['selector' => '#rvx-storefront-widget .rvx-rating-badge__text', 'custom_css' => 'color:%s!important;'],
-    'rvx_rvx_review_graph_summary_star_color_rvx' => ['selector' => '#rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-review-form__star-active', 'custom_css' => 'fill:%s!important;'],
+    'rvx_rvx_review_graph_summary_star_color_rvx' => ['selector' => '#rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-aggregation-summary__star-active', 'custom_css' => 'fill:%s!important;'],
     'rvx_rvx_review_graph_summary_criteria_star_color_rvx' => ['selector' => 'rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-review-form__star-inactive', 'custom_css' => 'color:%s!important;'],
     'rvx_rvx_review_graph_aggregation_multicriteria_bar_rvx' => ['selector' => '#rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-total-review', 'custom_css' => 'color:%s!important;'],
     'rvx_rvx_review_graph_progressbar_active_color_rvx' => ['selector' => '#rvx-storefront-widget #rvx-storefront-widget--aggregation__summary .rvx-aggregation__row .rvx-aggregation__rating-icon path', 'custom_css' => 'fill:%s!important;'],

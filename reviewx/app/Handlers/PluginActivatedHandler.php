@@ -29,7 +29,6 @@ class PluginActivatedHandler implements InvokableContract
         $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
         if ($uid) {
             // Change rvx_sites table is_saas_sync to 0
-            // Change rvx_sites table is_saas_sync to 0
             $wpdb->update(
                 $rvxSites,
                 ['is_saas_sync' => 0],
@@ -38,7 +37,7 @@ class PluginActivatedHandler implements InvokableContract
                 // format for is_saas_sync (integer)
                 ['%s']
             );
-            // Reset the localStorage isAlreadySyncSuccess to false
+            // Set the localStorage isAlreadySyncSuccess to false
             update_option('rvx_reset_sync_flag', \true);
             (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => RVX_VERSION, 'wp_version' => get_bloginfo('version')]);
             $dataResponse = $this->dataSyncService->dataSync('login', 'product');

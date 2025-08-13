@@ -5,6 +5,7 @@ namespace Rvx\Rest\Middleware;
 use Rvx\Firebase\JWT\JWT;
 use Rvx\Firebase\JWT\Key;
 use Rvx\Utilities\Auth\Client;
+use Throwable;
 class AuthMiddleware
 {
     /**
@@ -32,7 +33,7 @@ class AuthMiddleware
             if ($response->uid === Client::getUid()) {
                 return \true;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return \false;
         }
         return \false;

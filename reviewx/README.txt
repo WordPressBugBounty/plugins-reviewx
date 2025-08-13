@@ -7,7 +7,7 @@ Tested up to: 6.8
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.8
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -82,6 +82,8 @@ Whether you’re looking to boost customer engagement or improve product credibi
 **🔒 [reCAPTCHA](https://reviewx.io/docs/how-to-enable-recaptcha/)**: Keep spam and bots away by enabling reCAPTCHA on your customer review plugin. Only legit customers will be able to leave feedback.
 
 **✍️ [Review for Custom Post](https://reviewx.io/docs/how-to-use-reviewx-with-custom-post-types/)**: Use ReviewX to collect customer reviews for WooCommerce on custom posts too. Whether it’s a blog post or a custom content type, you can gather valuable feedback from your audience.
+
+**🔄 [One-Click Judge.me Review Migration](https://reviewx.io/docs/how-to-migrate-judge-me-reviews-to-reviewx-in-wordpress/)**: Switching from Judge me? We've made it effortless. With our one-click migration tool, you can import all your existing product reviews from Judgeme to ReviewX, including review content, ratings, and reviewer details.
 
 ## Pro Features
 
@@ -213,12 +215,19 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.2.4 - 08-11-2025 =
+- Fix: Minor bug fixes of CSV Import
+- Added: Judge.me Reviews Migration tool
+- Improved UI
+- Improved security
+
 = 2.2.3 - 07-29-2025 =
 - Regular update
 
 = 2.2.2 - 07-14-2025 =
 - Regular update
 
+== Changelog ==
 = 2.2.1 - 07-10-2025 =
 - Regular update
 

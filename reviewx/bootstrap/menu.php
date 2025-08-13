@@ -18,6 +18,9 @@ return function (Plugin $plugin) {
             $menu->add(__("Discount for Review", "reviewx"), \Rvx\Handlers\DiscountHandler::class, 'manage_options')->icon('dashicons-smiley');
             $menu->add(__("Google Review", "reviewx"), \Rvx\Handlers\GoogleReviewsHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_google_review');
             $menu->add(__("Import / Export", "reviewx"), \Rvx\Handlers\ImportExpotHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_import_export');
+            if (!empty(get_option('judgeme_domain')) && !empty(get_option('judgeme_shop_token'))) {
+                $menu->add(__("Judge.me Migration", "reviewx"), \Rvx\Handlers\ImportJudgeMeHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_import_judgeme');
+            }
             $menu->add(__("Custom Post Reviews", "reviewx"), \Rvx\Handlers\CptReviewsHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_cpt_review');
             $menu->add(__("Settings", "reviewx"), \Rvx\Handlers\GeneralSettingHandler::class, 'manage_options')->icon('dashicons-smiley')->slug('reviewx_settings');
             // $menu->add(__("Tools", "reviewx"), \Rvx\Handlers\ToolsHandler::class, 'manage_options')

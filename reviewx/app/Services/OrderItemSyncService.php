@@ -11,6 +11,7 @@ class OrderItemSyncService extends \Rvx\Services\Service
     protected $orderFullfillmentStatusRelation;
     protected $validOrderIds = [];
     protected $validOrdersMetaIds = [];
+    protected $orderItems = [];
     protected $orderItemCount = 0;
     protected $orderFullfillmentAtRelation;
     protected $orderItemOrderRelation = [];
@@ -26,8 +27,8 @@ class OrderItemSyncService extends \Rvx\Services\Service
         DB::table('wc_orders')->select(['id', 'customer_id', 'total_amount', 'tax_amount', 'status', 'date_created_gmt', 'date_updated_gmt'])->whereBetween('date_created_gmt', $startDate, $endDate)->chunk(100, function ($orders) use($file, &$orderCount) {
             foreach ($orders as $order) {
                 $this->validOrderIds[] = (int) $order->id;
-                $order->fulfillment_status = $this->orderFullfillmentStatusRelation[(int) $order->id];
-                $order->fulfilled_at = $this->orderFullfillmentAtRelation[(int) $order->id];
+                $order->fulfillment_status = $this->orderFullfillmentStatusRelation[(int) $order->id] ?? null;
+                $order->fulfilled_at = $this->orderFullfillmentAtRelation[(int) $order->id] ?? null;
                 $formattedOrder = $this->formatOrderData($order);
                 Helper::appendToJsonl($file, $formattedOrder);
                 $orderCount++;
@@ -39,12 +40,7 @@ class OrderItemSyncService extends \Rvx\Services\Service
     public function formatOrderData($order) : array
     {
         $paid_at = !empty($order->fulfilled_at) && \strtotime($order->fulfilled_at) ? \wp_date('Y-m-d H:i:s', \strtotime($order->fulfilled_at)) : null;
-        Helper::rvxLog($paid_at);
-        return ['rid' => 'rid://Order/' . (int) $order->id, "wp_id" => (int) $order->id, "customer_wp_unique_id" => $order->customer_id ? Client::getUid() . '-' . $order->customer_id : null, "subtotal" => Helper::formatToTwoDecimalPlaces($order->total_amount ?? 0.0), "tax" => Helper::formatToTwoDecimalPlaces($order->tax_amount ?? 0.0), "total" => Helper::formatToTwoDecimalPlaces($order->total_amount ?? 0.0), "status" => isset($order->status) ? Helper::orderStatus(Helper::rvxGetOrderStatus($order->status)) : null, "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "paid_at" => $paid_at, 'created_at' => !empty($order->date_created_gmt) ? Helper::validateReturnDate($order->date_created_gmt) : null, 'updated_at' => !empty($order->date_updated_gmt) ? Helper::validateReturnDate($order->date_updated_gmt) : null];
-    }
-    public function formatOrderItem($orderItem) : array
-    {
-        return ['rid' => 'rid://LineItem/' . (int) $orderItem->order_item_id, 'wp_id' => (int) $orderItem->order_item_id, 'order_id' => (int) $orderItem->order_id, 'product_wp_unique_id' => Client::getUid() . '-' . (int) $orderItem->product_id, 'name' => $orderItem->order_item_name ?? null, 'quantity' => (int) ($orderItem->quantity ?? 0), 'price' => Helper::formatToTwoDecimalPlaces($orderItem->price ?? 0.0), 'review_id' => null, 'site_id' => Client::getSiteId(), 'fulfillment_status' => $this->orderFullfillmentStatusRelation[(int) $orderItem->order_id] ?? null, 'fulfilled_at' => !empty($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) ? Helper::validateReturnDate($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) : null, 'reviewed_at' => null];
+        return ['rid' => 'rid://Order/' . (int) $order->id, 'wp_id' => (int) $order->id, 'customer_wp_unique_id' => $order->customer_id ? Client::getUid() . '-' . $order->customer_id : null, 'subtotal' => Helper::formatToTwoDecimalPlaces($order->total_amount ?? 0.0), 'tax' => Helper::formatToTwoDecimalPlaces($order->tax_amount ?? 0.0), 'total' => Helper::formatToTwoDecimalPlaces($order->total_amount ?? 0.0), 'status' => isset($order->status) ? Helper::orderStatus(Helper::rvxGetOrderStatus($order->status)) : null, 'review_request_email_sent_at' => null, 'review_reminder_email_sent_at' => null, 'photo_review_email_sent_at' => null, 'paid_at' => $paid_at, 'created_at' => !empty($order->date_created_gmt) ? Helper::validateReturnDate($order->date_created_gmt) : null, 'updated_at' => !empty($order->date_updated_gmt) ? Helper::validateReturnDate($order->date_updated_gmt) : null];
     }
     public function orderStat()
     {
@@ -69,20 +65,34 @@ class OrderItemSyncService extends \Rvx\Services\Service
     public function syncOrderItem($file) : int
     {
         $orderItemCount = 0;
-        DB::table('woocommerce_order_items')->whereNotIn('order_item_type', ['shipping'])->whereIn('order_id', $this->validOrderIds)->chunk(100, function ($orderItems) use($file, &$orderItemCount) {
+        // Step 1: Collect valid order items and their IDs
+        $this->validOrdersMetaIds = [];
+        $this->orderItems = [];
+        // Store full order item objects keyed by order_item_id
+        DB::table('woocommerce_order_items')->whereNotIn('order_item_type', ['shipping'])->whereIn('order_id', $this->validOrderIds)->chunk(500, function ($orderItems) {
             foreach ($orderItems as $orderItem) {
                 $this->validOrdersMetaIds[] = $orderItem->order_item_id;
-                $orderItem->product_id = $this->orderItemProductRelation[$orderItem->order_item_id] ?? null;
-                $orderItem->quantity = $this->orderItemQtyRelation[$orderItem->order_item_id] ?? null;
-                $orderItem->price = $this->orderItemPriceRelation[$orderItem->order_item_id] ?? null;
-                $formattedOrderItem = $this->formatOrderItem($orderItem);
-                Helper::appendToJsonl($file, $formattedOrderItem);
-                $orderItemCount++;
+                $this->orderItems[$orderItem->order_item_id] = $orderItem;
             }
         });
+        // Step 2: Fetch associated meta data for the collected order items
         $this->getOrderItemMeta();
+        // Step 3: Format and write each order item to the file
+        foreach ($this->orderItems as $orderItemId => $orderItem) {
+            $orderItem->product_id = $this->orderItemProductRelation[$orderItemId] ?? 0;
+            $orderItem->quantity = $this->orderItemQtyRelation[$orderItemId] ?? 0;
+            $orderItem->price = $this->orderItemPriceRelation[$orderItemId] ?? 0.0;
+            $formattedOrderItem = $this->formatOrderItem($orderItem);
+            Helper::appendToJsonl($file, $formattedOrderItem);
+            $orderItemCount++;
+        }
         Helper::rvxLog($orderItemCount, "Order Item Done");
         return $orderItemCount;
+    }
+    public function formatOrderItem($orderItem) : array
+    {
+        $productId = (int) ($orderItem->product_id ?? 0);
+        return ['rid' => 'rid://LineItem/' . (int) $orderItem->order_item_id, 'wp_id' => (int) $orderItem->order_item_id, 'order_id' => (int) $orderItem->order_id, 'product_wp_unique_id' => Client::getUid() . '-' . $productId, 'name' => $orderItem->order_item_name ?? null, 'quantity' => (int) ($orderItem->quantity ?? 0), 'price' => Helper::formatToTwoDecimalPlaces($orderItem->price ?? 0.0), 'review_id' => null, 'site_id' => Client::getSiteId(), 'fulfillment_status' => $this->orderFullfillmentStatusRelation[(int) $orderItem->order_id] ?? null, 'fulfilled_at' => !empty($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) ? Helper::validateReturnDate($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) : null, 'reviewed_at' => null];
     }
     public function getOrderItemMeta() : void
     {

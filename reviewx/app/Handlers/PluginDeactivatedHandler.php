@@ -21,7 +21,7 @@ class PluginDeactivatedHandler implements InvokableContract
                 // format for is_saas_sync (integer)
                 ['%s']
             );
-            // Reset the localStorage isAlreadySyncSuccess to false
+            // Set the localStorage isAlreadySyncSuccess to false
             update_option('rvx_reset_sync_flag', \true);
             (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 0, 'plugin_version' => $plugin_version ?? RVX_VERSION, 'wp_version' => get_bloginfo('version')]);
         }

@@ -1,6 +1,6 @@
 <?php
 
-
+namespace Rvx;
 
 use Rvx\RvxDivi\includes\modules\RvxTabs\DiviDesignTrait;
 class RVX_Builder_Module_Woocommerce_Reviews extends \ET_Builder_Module_Tabs
@@ -438,5 +438,5 @@ class RVX_Builder_Module_Woocommerce_Reviews extends \ET_Builder_Module_Tabs
         return 'default';
     }
 }
-
+\class_alias('Rvx\\RVX_Builder_Module_Woocommerce_Reviews', 'RVX_Builder_Module_Woocommerce_Reviews', \false);
 new RVX_Builder_Module_Woocommerce_Reviews();

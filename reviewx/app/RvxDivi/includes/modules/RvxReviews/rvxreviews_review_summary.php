@@ -1,7 +1,8 @@
 <?php
 
+namespace Rvx;
 
-
+\defined('ABSPATH') || die;
 /********** Review Summary ***********/
 $rvx_review_section_title_color = $this->props['rvx_review_section_title_color'];
 $rvx_review_section_title_font_size = $this->props['rvx_review_section_title_font_size'];

@@ -2,8 +2,8 @@
 
 namespace Rvx\RvxDivi;
 
-use Rvx\RvxDivi\includes\RvxTabs;
 use Rvx\RvxDivi\includes\RvxReviews;
+use Rvx\RvxDivi\includes\RvxTabs;
 class RvxDivi
 {
     public function __construct()

@@ -21,6 +21,7 @@ use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\Rest\Controllers\LogController;
 use Rvx\Rest\Controllers\CptController;
+use Rvx\Rest\Controllers\ImportJudgeMeController;
 use Rvx\Rest\Controllers\PingController;
 use Rvx\Rest\Middleware\AuthSaasMiddleware;
 Route::group(['prefix' => '/api/v1'], function () {
@@ -54,8 +55,16 @@ Route::group(['prefix' => '/api/v1'], function () {
     Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
     //ALl review shortcode
     Route::post('/storefront/all/reviews/short/code', [StoreFrontReviewController::class, 'getAllReviewForShortcode']);
+    // Judgeme API's
+    Route::get('/judgeme/status/detect', [ImportJudgeMeController::class, 'judgemeStatusDetect']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function () {
+    // Judgeme API's
+    Route::post('/judgeme/export/csv', [ImportJudgeMeController::class, 'judgemeCSVdownload']);
+    Route::post('/judgeme/upload/csv', [ImportJudgeMeController::class, 'judgemeCSVUpload']);
+    Route::post('/judgeme/import/chunk', [ImportJudgeMeController::class, 'judgemeImportChunk']);
+    Route::post('/judgeme/data/sync', [ImportJudgeMeController::class, 'judgemeDataSaasSync']);
+    Route::get('/judgeme/import/status', [ImportJudgeMeController::class, 'judgemeImportStatus']);
     /**
      * Reviews API
      */
@@ -204,10 +213,6 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::get('/sync/status', [DataSyncController::class, 'syncStatus']);
     Route::get('/site/sync/status', [SettingController::class, 'dataSyncStatus']);
     Route::get('/backend/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [ReviewController::class, 'getSingleProductAllReviews']);
-    /**
-     * Plugin meta data gather
-     */
-    Route::get('/ping', [PingController::class, 'ping']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class], function () {
     Route::get('/synced/data', [DataSyncController::class, 'syncedData']);
@@ -218,6 +223,10 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
      * Remove table and user information
      */
     Route::post('/user/credentials/remove', [SettingController::class, 'removeCredentials']);
+    /**
+     * Plugin meta data gather
+     */
+    Route::get('/ping', [PingController::class, 'ping']);
     /**
      * Review Reminder All request Settings
      */

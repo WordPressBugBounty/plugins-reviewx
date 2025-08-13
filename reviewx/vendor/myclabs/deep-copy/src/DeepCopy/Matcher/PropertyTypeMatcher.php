@@ -35,7 +35,9 @@ class PropertyTypeMatcher implements Matcher
         } catch (ReflectionException $exception) {
             return \false;
         }
-        $reflectionProperty->setAccessible(\true);
+        if (\PHP_VERSION_ID < 80100) {
+            $reflectionProperty->setAccessible(\true);
+        }
         // Uninitialized properties (for PHP >7.4)
         if (\method_exists($reflectionProperty, 'isInitialized') && !$reflectionProperty->isInitialized($object)) {
             // null instanceof $this->propertyType

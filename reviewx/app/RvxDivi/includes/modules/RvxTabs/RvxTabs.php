@@ -1,5 +1,6 @@
 <?php
 
+namespace Rvx;
 
 class RVX_Builder_Module_Woocommerce_Tabs extends \ET_Builder_Module_Tabs
 {
@@ -430,5 +431,5 @@ class RVX_Builder_Module_Woocommerce_Tabs extends \ET_Builder_Module_Tabs
         return 'default';
     }
 }
-
+\class_alias('Rvx\\RVX_Builder_Module_Woocommerce_Tabs', 'RVX_Builder_Module_Woocommerce_Tabs', \false);
 new RVX_Builder_Module_Woocommerce_Tabs();

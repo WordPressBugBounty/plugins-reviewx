@@ -70,6 +70,8 @@ class AuthController implements InvokableContract
             }
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
+            // Set the localStorage isAlreadySyncSuccess to false
+            update_option('rvx_reset_sync_flag', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();
@@ -111,6 +113,8 @@ class AuthController implements InvokableContract
             }
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
+            // Set the localStorage isAlreadySyncSuccess to false
+            update_option('rvx_reset_sync_flag', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();
@@ -192,6 +196,8 @@ class AuthController implements InvokableContract
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
             $this->removeUserSettingsFormLocal();
+            // Set the localStorage isAlreadySyncSuccess to false
+            update_option('rvx_reset_sync_flag', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();

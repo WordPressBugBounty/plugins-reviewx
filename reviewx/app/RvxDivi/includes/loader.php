@@ -1,5 +1,6 @@
 <?php
 
+namespace Rvx;
 
 if (!\class_exists('ET_Builder_Module_Tabs')) {
     return;
