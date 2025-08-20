@@ -7,7 +7,7 @@ Tested up to: 6.8
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.8
-Stable tag: 2.2.4
+Stable tag: 2.2.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -215,6 +215,10 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.2.5 - 08-19-2025 =
+- Fix: Minor bug fixes
+- Improved UI
+
 = 2.2.4 - 08-11-2025 =
 - Fix: Minor bug fixes of CSV Import
 - Added: Judge.me Reviews Migration tool

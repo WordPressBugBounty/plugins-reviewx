@@ -60,7 +60,7 @@ class JudgemeReviewsImport
             $curl_error = \curl_error($ch);
             \curl_close($ch);
             if ($http_code !== 200 || empty($csv_data)) {
-                return ['success' => \false, 'message' => 'Failed to download CSV. HTTP code: ' . $http_code . ($curl_error ? '. Curl error: ' . $curl_error : '')];
+                return ['success' => \false, 'message' => 'Failed to download CSV.'];
             }
             // Normalize line endings & strip UTF-8 BOM
             $csv_data = \str_replace(["\r\n", "\r"], "\n", $csv_data);
@@ -69,11 +69,11 @@ class JudgemeReviewsImport
             $lines = \explode("\n", $csv_data);
             if (\count($lines) <= 1) {
                 // means only header or empty
-                return ['success' => \false, 'message' => 'CSV file contains only headers and no data.'];
+                return ['success' => \false, 'message' => 'CSV file contains only headers and no reviews.'];
             }
             // Directly save CSV to file
             if (\file_put_contents($this->csvFilePath, $csv_data) === \false) {
-                return ['success' => \false, 'message' => 'Failed to save CSV file to ' . $this->csvFilePath];
+                return ['success' => \false, 'message' => 'Failed to save downloaded CSV file.'];
             }
             return ['success' => \true, 'message' => 'Judgeme Export CSV file downloaded successfully.'];
         } finally {
@@ -120,7 +120,7 @@ class JudgemeReviewsImport
         add_filter('comments_notify', '__return_false');
         // 1) Ensure we have the total count in transient
         $transient_ttl = 3 * HOUR_IN_SECONDS;
-        // 3 hours as requested
+        // 3 hours
         $total = \get_transient('rvx_judgeme_total_count');
         if ($total === \false) {
             $total = 0;
@@ -163,6 +163,11 @@ class JudgemeReviewsImport
             $processed++;
             $currentIndex++;
         }
+        // Prevent overcounting (cap if exceeds total)
+        if ($importedCount > $total) {
+            $importedCount = $total;
+            $failedCount = 0;
+        }
         // Persist counts (3 hours)
         set_transient('rvx_judgeme_imported_count', $importedCount, $transient_ttl);
         set_transient('rvx_judgeme_failed_count', $failedCount, $transient_ttl);
@@ -184,6 +189,8 @@ class JudgemeReviewsImport
         $failed = (int) \get_transient('rvx_judgeme_failed_count') ?: 0;
         $completed = (bool) get_option('rvx_judgeme_import', \false);
         $login_url = $this->generateJudgemeLoginURL() ?: 'https://app.judge.me';
+        // Cap imported to total to prevent overcount display
+        $imported = \min($imported, $total);
         return ['success' => $completed, 'total_reviews' => $total, 'total_imported' => $imported, 'total_failed' => $failed, 'judgeme_login' => $login_url];
     }
     public function rvxReviewsSync($request)
@@ -207,7 +214,7 @@ class JudgemeReviewsImport
         if (empty($this->judgemeDomain) || empty($this->judgemeToken)) {
             return '';
         }
-        $query = \http_build_query(['no_iframe' => 1, 'platform' => 'woocommerce', 'shop_domain' => $this->judgemeDomain]);
+        $query = \http_build_query(['no_iframe' => 1, 'shop_domain' => $this->judgemeDomain, 'platform' => 'woocommerce']);
         $hmac = \hash_hmac('sha256', "no_iframe=1&platform=woocommerce&shop_domain={$this->judgemeDomain}", $this->judgemeToken, \false);
         return 'https://app.judge.me/home?' . $query . '&hmac=' . $hmac;
     }
