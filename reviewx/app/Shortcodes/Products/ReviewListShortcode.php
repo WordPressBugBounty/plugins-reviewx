@@ -39,12 +39,12 @@ class ReviewListShortcode implements ShortcodeContract
     }
     public function productWiseReviewShow($ids, $isProduct) : array
     {
-        $attributes = ['ids' => $ids, 'type' => $isProduct ? 'product' : 'post', 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $attributes = ['ids' => $ids, 'type' => $isProduct ? 'product' : 'post', 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $attributes;
     }
     public function siteAllReviewShow($post_type, $rating, $per_page, $sort_by) : array
     {
-        $attributes = ['post_type' => $post_type, 'rating' => $rating, 'per_page' => $per_page, 'sort_by' => $sort_by, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $attributes = ['post_type' => $post_type, 'rating' => $rating, 'per_page' => $per_page, 'sort_by' => $sort_by, 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $attributes;
     }
 }

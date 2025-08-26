@@ -29,7 +29,7 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
     }
     public function reviewsWiseReviewShow($reviewsIds) : array
     {
-        $attributes = ['ids' => $reviewsIds, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $attributes = ['ids' => $reviewsIds, 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $attributes;
     }
 }

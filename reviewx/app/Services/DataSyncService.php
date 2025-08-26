@@ -13,6 +13,7 @@ use Rvx\Services\UserSyncService;
 use Rvx\Services\ProductSyncService;
 use Rvx\Services\ReviewSyncService;
 use Rvx\Services\CategorySyncService;
+use Rvx\Utilities\Helper;
 class DataSyncService extends Service
 {
     protected DataSyncHandler $dataSyncHandler;
@@ -68,7 +69,7 @@ class DataSyncService extends Service
                 $total_objects += $this->reviewSyncService->processReviewForSync($file, $post_type);
             }
             \fclose($file);
-            (new WebhookRequestApi())->finishedWebhook(['total_objects' => $total_objects, 'status' => 'finished', 'from' => $from, 'post_type' => $post_type, 'resource_url' => home_url() . '/wp-json/reviewx/api/v1/synced/data?post_type=' . $post_type]);
+            (new WebhookRequestApi())->finishedWebhook(['total_objects' => $total_objects, 'status' => 'finished', 'from' => $from, 'post_type' => $post_type, 'resource_url' => Helper::getRestAPIurl() . '/api/v1/synced/data?post_type=' . $post_type]);
             return \true;
         } catch (Exception $e) {
             return \false;

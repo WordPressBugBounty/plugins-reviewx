@@ -65,6 +65,11 @@ class OrderItemSyncService extends \Rvx\Services\Service
     public function syncOrderItem($file) : int
     {
         $orderItemCount = 0;
+        // Early exit if no valid orders to process
+        if (empty($this->validOrderIds)) {
+            // Helper::rvxLog(0, "No valid orders found, skipping order item sync");
+            return 0;
+        }
         // Step 1: Collect valid order items and their IDs
         $this->validOrdersMetaIds = [];
         $this->orderItems = [];
@@ -75,6 +80,11 @@ class OrderItemSyncService extends \Rvx\Services\Service
                 $this->orderItems[$orderItem->order_item_id] = $orderItem;
             }
         });
+        // Early exit if no valid order items found
+        if (empty($this->validOrdersMetaIds)) {
+            // Helper::rvxLog(0, "No valid order items found, skipping meta sync");
+            return 0;
+        }
         // Step 2: Fetch associated meta data for the collected order items
         $this->getOrderItemMeta();
         // Step 3: Format and write each order item to the file

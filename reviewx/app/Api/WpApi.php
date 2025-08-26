@@ -7,12 +7,13 @@ use Rvx\GuzzleHttp\Exception\RequestException;
 use Rvx\Utilities\Helper;
 class WpApi
 {
-    protected $baseUrl = '/wp-json/reviewx/api/v1';
-    protected $token = null;
-    protected $client;
+    protected string $baseUrl;
+    protected ?string $token = null;
+    protected Client $client;
     public function __construct($token = null)
     {
-        $this->baseUrl = site_url() . $this->baseUrl;
+        // Use get_rest_url instead of hardcoding wp-json
+        $this->baseUrl = Helper::getRestAPIurl() . '/api/v1';
         $this->token = Helper::getAuthToken();
         $this->client = new Client(['base_uri' => $this->baseUrl, 'timeout' => 10.0]);
     }
@@ -27,11 +28,9 @@ class WpApi
         $url = $this->prepareRoute($route);
         $headers = $this->prepareHeaders();
         try {
-            // Make the GET request
             $response = $this->client->request('GET', $url, ['headers' => $headers]);
-            return \json_decode($response->getBody(), \true);
+            return \json_decode((string) $response->getBody(), \true);
         } catch (RequestException $e) {
-            // Handle exception or log the error
             return $e->getMessage();
         }
     }
@@ -47,11 +46,9 @@ class WpApi
         $url = $this->prepareRoute($route);
         $headers = $this->prepareHeaders();
         try {
-            // Make the POST request
             $response = $this->client->request('POST', $url, ['headers' => $headers, 'json' => $payload]);
-            return \json_decode($response->getBody(), \true);
+            return \json_decode((string) $response->getBody(), \true);
         } catch (RequestException $e) {
-            // Handle exception or log the error
             return $e->getMessage();
         }
     }
@@ -63,7 +60,7 @@ class WpApi
      */
     public function prepareRoute(string $route) : string
     {
-        return $this->baseUrl . '/' . \ltrim($route, '/');
+        return \rtrim($this->baseUrl, '/') . '/' . \ltrim($route, '/');
     }
     /**
      * Prepare the authorization headers.

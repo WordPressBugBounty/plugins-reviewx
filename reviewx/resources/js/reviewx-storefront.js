@@ -16,9 +16,9 @@ function __reviewXState__() {
                 isVerified: false,
             },
             baseDomain: '',
+            baseRestUrl: '',
             formLevelData: {}
         },
-        // baseURL: `${location.origin}/wp-json/reviewx/api/v1/storefront`,
         newReview: {
             rating: 5,
             reviewer_email: '',
@@ -64,7 +64,8 @@ function __reviewXState__() {
             this.rvxAttributes = {
                 ...this.rvxAttributes,
                 ...rvxAttributes,
-                baseDomain:`${rvxAttributes.domain.baseDomain}/wp-json/reviewx/api/v1/storefront`
+                baseDomain:`${rvxAttributes.domain.baseDomain}/wp-json/reviewx/api/v1/storefront`,
+                baseRestUrl:`${rvxAttributes.domain.baseRestUrl}/api/v1/storefront`
             }
         },
         get isUserLoggedIn() {
@@ -112,7 +113,7 @@ function __reviewXState__() {
                 queryParams = this.generateQueryParams(newQuery)
             }
             try {
-                const url = `${this.rvxAttributes.baseDomain}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
+                const url = `${this.rvxAttributes.baseRestUrl}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
                 const data = await fetch(url);
                 const res = await data.json();
                 if (loadMoreReview && this.reviewsData?.data?.reviews?.length) {
@@ -137,7 +138,7 @@ function __reviewXState__() {
             const reviewListShortCodeIds = ids?.[0]
             if (!reviewListShortCodeIds) return
             try {
-                const url = `${this.rvxAttributes.baseDomain}/${reviewListShortCodeIds}/reviews`;
+                const url = `${this.rvxAttributes.baseRestUrl}/${reviewListShortCodeIds}/reviews`;
                 const data = await fetch(url);
                 const res = await data.json();
                 if (!res?.data?.reviews?.length) {
@@ -154,7 +155,7 @@ function __reviewXState__() {
         async fetchInitializeAllReviewListShortCodes(requestData) {
             this.fetchReviewsIsLoading = true;
             try {
-                const url = `${this.rvxAttributes.baseDomain}/all/reviews/short/code`;
+                const url = `${this.rvxAttributes.baseRestUrl}/all/reviews/short/code`;
                 const data = await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -182,7 +183,7 @@ function __reviewXState__() {
                 review_ids: reviewsShortCodeIds
             }
             try {
-                const url = `${this.rvxAttributes.baseDomain}/widgets/short/code/reviews`;
+                const url = `${this.rvxAttributes.baseRestUrl}/widgets/short/code/reviews`;
                 const data = await fetch(url, {
                     method: 'POST',
                     body: JSON.stringify(payload),
@@ -230,7 +231,7 @@ function __reviewXState__() {
                 queryParams = this.generateQueryParams(newQuery);
             }
             try {
-                const url = `${this.rvxAttributes.baseDomain}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
+                const url = `${this.rvxAttributes.baseRestUrl}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
                 const data = await fetch(url);
                 const res = await data.json();
                 
@@ -274,7 +275,7 @@ function __reviewXState__() {
                 queryParams = query;
             }
             try {
-                const url = `${this.rvxAttributes.baseDomain}/all/reviews/short/code`;
+                const url = `${this.rvxAttributes.baseRestUrl}/all/reviews/short/code`;
                 const data = await fetch(url, {
                     method: 'POST', // Use POST instead of GET
                     headers: {
@@ -349,7 +350,7 @@ function __reviewXState__() {
             this.fetchReviewsSettingsIsLoading = true;
             let postType = this.rvxAttributes?.product?.postType ? this.rvxAttributes?.product?.postType : 'product';
             try {
-                const data = await fetch(`${this.rvxAttributes.baseDomain}/wp/settings${'?cpt_type=' + postType}`);
+                const data = await fetch(`${this.rvxAttributes.baseRestUrl}/wp/settings${'?cpt_type=' + postType}`);
                 const res = await data.json();
                 this.reviewSettingsData = res;
                 this.layoutView = res?.data.setting?.widget_settings?.outline?.layout_type
@@ -375,7 +376,7 @@ function __reviewXState__() {
             // console.log('Fetching review Aggregation');
             this.fetchReviewsSettingsIsLoading = true;
             try {
-                const data = await fetch(`${this.rvxAttributes.baseDomain}/${productId}/insight`);
+                const data = await fetch(`${this.rvxAttributes.baseRestUrl}/${productId}/insight`);
                 const res = await data.json();
                 if (res.data?.aggregation) {
                     this.formatAggregations = [
@@ -478,7 +479,7 @@ function __reviewXState__() {
                 if (!siteKey || !grecaptcha) {
                     return reject('Recaptcha or site key is not defined');
                 }
-                const baseAPIEndPoint = this.rvxAttributes.baseDomain
+                const baseAPIEndPoint = this.rvxAttributes.baseRestUrl
                 grecaptcha.ready(function () {
                     grecaptcha.execute(siteKey, {action: 'submit'}).then(async function (token) {
                         try {
@@ -614,7 +615,7 @@ function __reviewXState__() {
             //     }
             // });
             try {
-                const data = await fetch(`${this.rvxAttributes.baseDomain}/reviews`, {
+                const data = await fetch(`${this.rvxAttributes.baseRestUrl}/reviews`, {
                     method: 'post',
                     body: payload,
                 })
@@ -710,7 +711,7 @@ function __reviewXState__() {
                         preference,
                     };
                     try {
-                        const res = await fetch(`${this.rvxAttributes.baseDomain}/reviews/${uid}/preference`, {
+                        const res = await fetch(`${this.rvxAttributes.baseRestUrl}/reviews/${uid}/preference`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

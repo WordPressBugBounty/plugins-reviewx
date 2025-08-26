@@ -204,6 +204,16 @@ class Helper
         }
         return $full_domain;
     }
+    public static function getRestAPIurl() : string
+    {
+        // If init hasn't fired yet → don't fallback
+        if (!did_action('init')) {
+            // Return fallback REST API URL
+            return site_url('/?rest_route=/reviewx');
+        }
+        // init has fired, return proper REST API URL
+        return get_rest_url(null, 'reviewx');
+    }
     public static function orderStatus($newStatus) : string
     {
         $statusMap = ['processing' => 'processing', 'pending' => 'pending', 'on-hold' => 'on_hold', 'completed' => 'completed', 'cancelled' => 'cancelled', 'refunded' => 'refunded', 'failed' => 'failed', 'checkout-draft' => 'draft', 'auto-draft' => 'auto_draft'];

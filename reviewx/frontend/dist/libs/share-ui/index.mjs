@@ -3978,7 +3978,7 @@ const b1 = [
   };
 }, M1 = ({ payload: e, name: t, headers: n, slug: r, queryParams: o, id: a }) => {
   var d;
-  const { url: i, method: l } = N1({ name: t, id: a, slug: r }), s = ((d = window == null ? void 0 : window.__rvxLocals) == null ? void 0 : d.rvx_full_domain_name) ?? location.origin, u = Nd(o), f = `${s}/wp-json/reviewx/api/v1`;
+  const { url: i, method: l } = N1({ name: t, id: a, slug: r }), s = ((d = window == null ? void 0 : window.__rvxLocals) == null ? void 0 : d.rvx_full_domain_api) ?? `${location.origin}/wp-json/reviewx`, u = Nd(o), f = `${s}/api/v1`;
   return Ct({
     baseURL: f,
     method: l,
@@ -21726,7 +21726,7 @@ const Xc = {
         qe(t.$slots, "content", {}, () => [
           $(Ot, { class: "!rvx-text-[12px]" }, {
             default: ee(() => n[0] || (n[0] = [
-              je("Upload Photo/Video")
+              je("Upload Photo / Video")
             ])),
             _: 1
           }),
@@ -21785,7 +21785,7 @@ const Xc = {
         }),
         $(Ot, { class: "!rvx-text-[12px]" }, {
           default: ee(() => u[1] || (u[1] = [
-            je("Upload Photo/Video")
+            je("Upload Photo / Video")
           ])),
           _: 1
         })

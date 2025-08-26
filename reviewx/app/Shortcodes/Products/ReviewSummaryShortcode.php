@@ -32,7 +32,7 @@ class ReviewSummaryShortcode implements ShortcodeContract
     public function productWiseReviewShow($id, $isProduct) : array
     {
         $post = get_post($id);
-        $attributes = ['product' => ['id' => $id], 'postTitle' => $post ? $post->post_title : \false, 'postType' => $post ? $post->post_type : '', 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $attributes = ['product' => ['id' => $id], 'postTitle' => $post ? $post->post_title : \false, 'postType' => $post ? $post->post_type : '', 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $attributes;
     }
 }

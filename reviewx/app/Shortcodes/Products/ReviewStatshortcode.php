@@ -35,7 +35,7 @@ class ReviewStatshortcode implements ShortcodeContract
     {
         // Retrieve the post object.
         $post = get_post($id);
-        $defaultData = ['product' => ['id' => $id], 'postTitle' => $post ? $post->post_title : \false, 'postType' => $post ? $post->post_type : '', 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $defaultData = ['product' => ['id' => $id], 'postTitle' => $post ? $post->post_title : \false, 'postType' => $post ? $post->post_type : '', 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $defaultData;
     }
 }

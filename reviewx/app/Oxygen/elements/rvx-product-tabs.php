@@ -95,8 +95,8 @@ class RvxProductTabs extends RvxOxyWooEl
         $reviewx_form->addOptionControl(array('type' => 'textfield', 'name' => 'Email address (Placeholder)', 'slug' => 'rvx_oxygen_placeholder_email_name', 'default' => 'Email Address'));
         // Form Text: Attachment (Text)
         $reviewx_form->addOptionControl(array('type' => 'textfield', 'name' => 'Attachment (Text)', 'slug' => 'rvx_oxygen_text_attachment_title', 'default' => 'Attachment'));
-        // Form Text: Upload Photo/Video (Placeholder)
-        $reviewx_form->addOptionControl(array('type' => 'textfield', 'name' => 'Upload Photo/Video (Text)', 'slug' => 'rvx_oxygen_placeholder_upload_photo', 'default' => 'Upload Photo/Video'));
+        // Form Text: Upload Photo / Video (Placeholder)
+        $reviewx_form->addOptionControl(array('type' => 'textfield', 'name' => 'Upload Photo / Video (Text)', 'slug' => 'rvx_oxygen_placeholder_upload_photo', 'default' => 'Upload Photo / Video'));
         // Form Text: Mark as Anonymous (Text)
         $reviewx_form->addOptionControl(array('type' => 'textfield', 'name' => 'Mark as Anonymous (Text)', 'slug' => 'rvx_oxygen_text_mark_as_anonymous', 'default' => 'Mark as Anonymous'));
         // Form Text: Recommended? (Text)

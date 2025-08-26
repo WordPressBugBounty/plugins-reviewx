@@ -2,6 +2,8 @@ function __rvxMediaUploadComponent__(){
     return {
         isDragging: false,
         multiple: true,
+        isPhotoReviewsAllowed: false,
+        isVideoReviewsAllowed: false,
         // accept: 'image/*,video/*',
         accept: 'image/*',
         disabled: false,
@@ -16,11 +18,22 @@ function __rvxMediaUploadComponent__(){
         maxFileSize: 10,  // Set max file size in MB (adjust as needed)
 
         init() {
-            // video_reviews_allowed
-            // console.log('this.reviewSettingsData?.data?.setting.review_settings?.video_reviews_allowed', this.reviewSettingsData?.data?.setting.review_settings.reviews?.video_reviews_allowed)
-            if(this.reviewSettingsData?.data?.setting.review_settings.reviews?.video_reviews_allowed){
+            this.isPhotoReviewsAllowed = this.reviewSettingsData?.data?.setting?.review_settings?.reviews?.photo_reviews_allowed ?? false;
+            this.isVideoReviewsAllowed = this.reviewSettingsData?.data?.setting?.review_settings?.reviews?.video_reviews_allowed ?? false;
+            // console.log('isPhotoReviewsAllowed:', this.isPhotoReviewsAllowed);
+            // console.log('isVideoReviewsAllowed:', this.isVideoReviewsAllowed);
+
+            if(this.isPhotoReviewsAllowed && !this.isVideoReviewsAllowed){
+                this.accept = 'image/*'
+            }
+            if(this.isVideoReviewsAllowed && !this.isPhotoReviewsAllowed){
+                this.accept = 'video/*'
+            }
+            if(this.isVideoReviewsAllowed && this.isPhotoReviewsAllowed){
                 this.accept = 'image/*,video/*'
             }
+            this.ready = true;
+            
             this.clearAll();  // Clear files on init
             this.$nextTick(() => {
                 this.notifyFiles();  // Notify parent components about the state of files

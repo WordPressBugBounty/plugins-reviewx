@@ -33,7 +33,6 @@ use Rvx\Handlers\ReplyCommentHandler;
 use Rvx\Handlers\RichSchema\WoocommerceRichSchemaHandler;
 use Rvx\Handlers\RvxInit\LoadTextDomainHandler;
 use Rvx\Handlers\RvxInit\PageBuilderHandler;
-use Rvx\Handlers\RvxInit\PermalinkStructureHandler;
 use Rvx\Handlers\RvxInit\RedirectReviewxHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\Handlers\RvxInit\ReviewXoldPluginDeactivateHandler;
@@ -66,7 +65,6 @@ class PluginServiceProvider extends ServiceProvider
     public function boot() : void
     {
         add_action('init', new ReviewXoldPluginDeactivateHandler(), 10);
-        add_action('init', new PermalinkStructureHandler(), 10);
         add_action('plugins_loaded', function () {
             // Instantiate and register this init hook only after WordPress is loaded
             add_action('init', [new LoadTextDomainHandler(), 'loadLanguage'], 10);

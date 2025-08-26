@@ -141,8 +141,8 @@
                         </p>
                     </div>
                     <div class="rvx-col-span-4">
-                    <textarea x-model="newReview.feedback" @input="checkValidity('isValidReviewFeedback')" :placeholder="rvxAttributes.formLevelData?.placeholder_review_title"
-                              class="rvx-review-form__title--textarea rvx-ui__textarea rvx-resize-none rvx-px-space12 rvx-py-[9px] rvx-rounded-md rvx-w-full focus:!rvx-outline-none rvx-font-nunito placeholder:rvx-text-neutral-400 focus:!rvx-ring focus:!rvx-ring-primary-20  rvx-text-[16px] rvx-h-[114px] !rvx-border !rvx-border-solid"
+                    <textarea x-model="newReview.feedback" @input="checkValidity('isValidReviewFeedback')" :placeholder="rvxAttributes.formLevelData?.placeholder_review_description"
+                              class="rvx-review-form__feedback--textarea rvx-ui__textarea rvx-resize-none rvx-px-space12 rvx-py-[9px] rvx-rounded-md rvx-w-full focus:!rvx-outline-none rvx-font-nunito placeholder:rvx-text-neutral-400 focus:!rvx-ring focus:!rvx-ring-primary-20  rvx-text-[16px] rvx-h-[114px] !rvx-border !rvx-border-solid"
                               :class="`${storeFrontValidation.isValidReviewFeedback ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
                     ></textarea>
                         <p x-show="storeFrontValidation.isValidReviewFeedback" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Review Feedback</p>
@@ -182,7 +182,7 @@
                     </div>
                 </div>
 
-                <div x-show="reviewSettingsData?.data?.setting?.review_settings?.reviews?.photo_reviews_allowed"
+                <div x-show="reviewSettingsData?.data?.setting?.review_settings?.reviews?.photo_reviews_allowed || reviewSettingsData?.data?.setting?.review_settings?.reviews?.video_reviews_allowed"
                     class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__attachment">
                     <div class="rvx-col-span-2 rvx-space-y-[20px]">
                         <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__attachment--name !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_attachment_title">
@@ -235,9 +235,6 @@
                         <label for="consent" class="rvx-font-normal rvx-review-form__consent--content" x-text="reviewSettingsData?.data.setting?.review_settings.reviews.show_consent_checkbox?.content"></label>
                     </div>
                 </div>
-
-
-
 
 
                 <div class="rvx-review-form__footer rvx-box-border">

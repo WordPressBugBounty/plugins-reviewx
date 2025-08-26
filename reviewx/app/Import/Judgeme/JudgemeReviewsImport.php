@@ -17,6 +17,7 @@ class JudgemeReviewsImport
     protected string $tmpDir;
     protected string $csvFilePath;
     protected bool $isSync = \true;
+    protected int $transientTtl = HOUR_IN_SECONDS;
     public function __construct($isSync = \true)
     {
         $this->cacheServices = new CacheServices();
@@ -26,6 +27,8 @@ class JudgemeReviewsImport
         $this->tmpDir = \sys_get_temp_dir();
         $this->csvFilePath = $this->tmpDir . '/judgeme-export.csv';
         $this->isSync = $isSync;
+        $this->transientTtl = 3 * HOUR_IN_SECONDS;
+        // 3 hours
     }
     public function judgemeStatusDetect($request) : array
     {
@@ -119,20 +122,18 @@ class JudgemeReviewsImport
         remove_action('comment_post', 'wp_notify_postauthor');
         add_filter('comments_notify', '__return_false');
         // 1) Ensure we have the total count in transient
-        $transient_ttl = 3 * HOUR_IN_SECONDS;
-        // 3 hours
         $total = \get_transient('rvx_judgeme_total_count');
         if ($total === \false) {
             $total = 0;
             foreach ($this->streamJudgemeCSV($csvPath) as $_) {
                 $total++;
             }
-            set_transient('rvx_judgeme_total_count', $total, $transient_ttl);
+            set_transient('rvx_judgeme_total_count', $total, $this->transientTtl);
         }
         // If there are no reviews, short-circuit and set counters
         if ((int) $total === 0) {
-            set_transient('rvx_judgeme_imported_count', 0, $transient_ttl);
-            set_transient('rvx_judgeme_failed_count', 0, $transient_ttl);
+            set_transient('rvx_judgeme_imported_count', 0, $this->transientTtl);
+            set_transient('rvx_judgeme_failed_count', 0, $this->transientTtl);
             add_action('comment_post', 'wp_notify_postauthor');
             remove_filter('comments_notify', '__return_false');
             return ['success' => \true, 'message' => 'No reviews found in CSV.', 'total_reviews' => 0, 'total_imported' => 0, 'total_failed' => 0, 'import_finished' => \true];
@@ -169,12 +170,14 @@ class JudgemeReviewsImport
             $failedCount = 0;
         }
         // Persist counts (3 hours)
-        set_transient('rvx_judgeme_imported_count', $importedCount, $transient_ttl);
-        set_transient('rvx_judgeme_failed_count', $failedCount, $transient_ttl);
+        set_transient('rvx_judgeme_imported_count', $importedCount, $this->transientTtl);
+        set_transient('rvx_judgeme_failed_count', $failedCount, $this->transientTtl);
         // Mark import completed if done
         if ($importedCount >= $total) {
             update_option('rvx_judgeme_import', \true);
         }
+        set_transient('rvx_judgeme_failed_count', 0, $this->transientTtl);
+        // update to `0`, even if few fails
         $this->cacheServices->removeCache();
         // Restore notifications
         add_action('comment_post', 'wp_notify_postauthor');
@@ -253,8 +256,7 @@ class JudgemeReviewsImport
     protected function importSingleReviewWithStatus(array $review) : array
     {
         try {
-            $this->importSingleReview($review);
-            return ['success' => \true];
+            return $this->importSingleReview($review);
         } catch (Throwable $e) {
             return ['success' => \false, 'error' => $e->getMessage()];
         }
@@ -263,11 +265,11 @@ class JudgemeReviewsImport
      * Insert a single review into WordPress as a comment + meta.
      * Uses a sha1 hash stored in comment meta to avoid duplicates reliably.
      */
-    protected function importSingleReview(array $review) : bool
+    protected function importSingleReview(array $review) : array
     {
         $product_id = (int) ($review['product_id'] ?? 0);
         if (!$product_id || get_post_type($product_id) !== 'product') {
-            return \false;
+            return ['success' => \false];
         }
         $comment_content = sanitize_text_field($review['body'] ?? '');
         $author = sanitize_text_field($review['reviewer_name'] ?? 'Anonymous');
@@ -279,22 +281,41 @@ class JudgemeReviewsImport
         // Create a stable hash for duplicate detection (product|email|body)
         $hashSource = \sprintf('%d|%s|%s', $product_id, $author_email, $comment_content);
         $hash = \sha1($hashSource);
+        $existing_comment_id = null;
         // Check existing by hash (fast and reliable if meta exists)
-        $existing_by_hash = get_comments(['post_id' => $product_id, 'meta_key' => 'rvx_judgeme_hash', 'meta_value' => $hash, 'count' => \true]);
-        if ($existing_by_hash) {
-            return \false;
-        }
-        // As a fallback, also check author_email + identical content (older method)
-        if ($author_email) {
-            $existing = get_comments(['post_id' => $product_id, 'author_email' => $author_email, 'search' => $comment_content, 'count' => \true]);
-            if ($existing) {
-                return \false;
+        $existing_by_hash = get_comments(['post_id' => $product_id, 'meta_key' => 'rvx_judgeme_hash', 'meta_value' => $hash, 'number' => 1]);
+        if (!empty($existing_by_hash)) {
+            $existing_comment_id = $existing_by_hash[0]->comment_ID;
+        } else {
+            // As a fallback, also check author_email + identical content (older method)
+            if ($author_email) {
+                $existing = get_comments(['post_id' => $product_id, 'author_email' => $author_email, 'parent' => 0, 'comment_type' => 'review', 'search' => $comment_content, 'number' => 1]);
+                if (!empty($existing)) {
+                    $existing_comment_id = $existing[0]->comment_ID;
+                    // Optionally, add the hash to this existing comment for future checks
+                    add_comment_meta($existing_comment_id, 'rvx_judgeme_hash', $hash, \true);
+                }
             }
         }
+        if ($existing_comment_id) {
+            // Review exists; now check if reply needs to be added
+            if (!empty($review['reply'])) {
+                $reply_content = sanitize_text_field($review['reply']);
+                // Check for existing reply by parent and content search
+                $existing_reply = get_comments(['parent' => $existing_comment_id, 'comment_type' => 'review', 'search' => $reply_content, 'number' => 1]);
+                if (empty($existing_reply)) {
+                    // No matching reply found; insert it
+                    wp_insert_comment(['comment_post_ID' => $product_id, 'comment_parent' => $existing_comment_id, 'comment_author' => 'Shop Owner', 'comment_content' => $reply_content, 'comment_type' => 'review', 'comment_approved' => 1, 'comment_date' => \gmdate('Y-m-d H:i:s', \strtotime($review['reply_date'] ?? $comment_date))]);
+                }
+            }
+            // If existing reply found, we skip (assume no update needed)
+            return ['success' => \true];
+        }
+        // No existing review; insert new one
         // Insert comment
         $comment_id = wp_insert_comment(['comment_post_ID' => $product_id, 'comment_author' => $author, 'comment_author_email' => $author_email, 'comment_content' => $comment_content, 'comment_type' => 'review', 'comment_approved' => 1, 'comment_author_IP' => $ip_address, 'comment_date' => $comment_date]);
         if (\is_wp_error($comment_id) || !$comment_id) {
-            return \false;
+            return ['success' => \false];
         }
         // Save rating and other meta
         add_comment_meta($comment_id, 'rating', $rating);
@@ -306,7 +327,7 @@ class JudgemeReviewsImport
         add_comment_meta($comment_id, 'reviewx_recommended', 1);
         add_comment_meta($comment_id, 'rvx_review_version', 'v2');
         add_comment_meta($comment_id, 'rvx_import_source', 'judgeme');
-        // Save our duplicate detection hash
+        // Save duplicate detection hash
         add_comment_meta($comment_id, 'rvx_judgeme_hash', $hash);
         // Insert reply if present
         if (!empty($review['reply'])) {
@@ -326,7 +347,7 @@ class JudgemeReviewsImport
                 add_comment_meta($comment_id, 'reviewx_attachments', $media_data);
             }
         }
-        return \true;
+        return ['success' => \true];
     }
     protected function downloadJudgemeMediaToLibrary(string $url, int $comment_id = 0) : array
     {

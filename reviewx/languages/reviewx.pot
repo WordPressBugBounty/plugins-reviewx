@@ -954,7 +954,7 @@ msgstr ""
 msgid "Upload Icon"
 msgstr ""
 
-msgid "Upload Photo/Video"
+msgid "Upload Photo / Video"
 msgstr ""
 
 msgid "Upload the CSV file below"
@@ -1923,7 +1923,7 @@ msgid "Attachment (Text)"
 msgstr ""
 
 #: app/Elementor/Elements/Data_Tabs.php:1238
-msgid "Upload Photo/Video (Placeholder)"
+msgid "Upload Photo / Video (Placeholder)"
 msgstr ""
 
 #: app/Elementor/Elements/Data_Tabs.php:1250
@@ -2046,7 +2046,7 @@ msgid "ReviewX Woo Review"
 msgstr ""
 
 #: app/Elementor/Elements/Review_Widget.php:1238
-msgid "Upload Photo/video (Placeholder)"
+msgid "Upload Photo / video (Placeholder)"
 msgstr ""
 
 #: app/Elementor/Traits/Addons.php:25

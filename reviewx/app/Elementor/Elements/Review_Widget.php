@@ -307,8 +307,8 @@ class Review_Widget extends Widget_Base
         $this->add_control('rvx_template_review_form_placeholder_email_name', ['label' => __('Email Address (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Email Address', 'selectors' => ['{{WRAPPER}} .rvx-review-form__title--textarea' => 'textContent: {{VALUE}};']]);
         // Form Text: Attachment (Text)
         $this->add_control('rvx_template_review_form_text_attachment_title', ['label' => __('Attachment (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Attachment', 'selectors' => ['{{WRAPPER}} .rvx-review-form__attachment--name' => 'textContent: {{VALUE}};']]);
-        // Form Text: Upload Photo/Video (Placeholder)
-        $this->add_control('rvx_template_review_form_placeholder_upload_photo', ['label' => __('Upload Photo/video (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Upload Photo/Video', 'selectors' => ['{{WRAPPER}} .rvx-review-form__attachment--upload--text' => 'textContent: {{VALUE}};']]);
+        // Form Text: Upload Photo / Video (Placeholder)
+        $this->add_control('rvx_template_review_form_placeholder_upload_photo', ['label' => __('Upload Photo / video (Placeholder)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Upload Photo / Video', 'selectors' => ['{{WRAPPER}} .rvx-review-form__attachment--upload--text' => 'textContent: {{VALUE}};']]);
         // Form Text: Mark as Anonymous (Text)
         $this->add_control('rvx_template_review_form_text_mark_as_anonymous', ['label' => __('Mark as Anonymous (Text)', 'reviewx'), 'type' => Controls_Manager::TEXT, 'default' => 'Mark as Anonymous', 'selectors' => ['{{WRAPPER}} .rvx-review-form__mark-anonymous' => 'textContent: {{VALUE}};']]);
         // Form Text: Recommended? (Text)

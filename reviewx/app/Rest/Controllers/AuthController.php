@@ -46,7 +46,13 @@ class AuthController implements InvokableContract
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 return Helper::saasResponse($response);
             }
-            $site_info = $this->prepareData($response->getApiData());
+            $apiData = $response->getApiData();
+            $validation = $this->validateSite($apiData);
+            if ($validation !== \true) {
+                return $validation;
+                // return error response
+            }
+            $site_info = $this->prepareData($apiData);
             $site = Site::where('uid', $site_info['uid'])->first();
             if (!$site) {
                 $site = Site::insert($site_info);
@@ -89,7 +95,13 @@ class AuthController implements InvokableContract
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 return Helper::saasResponse($response);
             }
-            $site_info = $this->prepareData($response->getApiData());
+            $apiData = $response->getApiData();
+            $validation = $this->validateSite($apiData);
+            if ($validation !== \true) {
+                return $validation;
+                // return error response
+            }
+            $site_info = $this->prepareData($apiData);
             $site = Site::where('uid', $site_info['uid'])->first();
             if (!$site) {
                 $site = Site::insert($site_info);
@@ -181,7 +193,13 @@ class AuthController implements InvokableContract
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 return Helper::saasResponse($response);
             }
-            $site_info = $this->prepareRegisterData($response->getApiData()['site']);
+            $apiData = $response->getApiData();
+            $validation = $this->validateSite($apiData);
+            if ($validation !== \true) {
+                return $validation;
+                // return error response
+            }
+            $site_info = $this->prepareRegisterData($apiData['site']);
             $site = Site::where('uid', $site_info['uid'])->first();
             if (!$site) {
                 $site = Site::insert($site_info);
@@ -233,6 +251,19 @@ class AuthController implements InvokableContract
                 return ["Success" => "Options Table Delete"];
             }
         }
+    }
+    /**
+     * Validate API response for required site data.
+     *
+     * @param array $apiData
+     * @return true|Response
+     */
+    private function validateSite(array $apiData) : bool|Response
+    {
+        if (!\is_array($apiData) && !isset($apiData['id']) && !isset($apiData['uid'])) {
+            return Helper::rvxApi(['error' => 'Invalid API response: site missing'])->fails('Invalid API response', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return \true;
     }
     protected function prepareRegisterData(array $site) : array
     {

@@ -881,7 +881,7 @@ msgstr ""
 msgid "Upload Icon"
 msgstr ""
 
-msgid "Upload Photo/Video"
+msgid "Upload Photo / Video"
 msgstr ""
 
 msgid "Upload the CSV file below"

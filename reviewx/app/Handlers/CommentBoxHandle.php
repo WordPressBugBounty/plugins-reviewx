@@ -35,7 +35,7 @@ class CommentBoxHandle
             $is_verified_customer = 0;
         }
         $user_name = $wpCurrentUser ? $wpCurrentUser->display_name : '';
-        $attributes = ['product' => ['id' => get_the_ID(), 'postType' => \strtolower(get_post_type())], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser ? $wpCurrentUser->ID : null, 'name' => $user_name, 'email' => $wpCurrentUser ? $wpCurrentUser->user_email : '', 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $attributes = ['product' => ['id' => get_the_ID(), 'postType' => \strtolower(get_post_type())], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser ? $wpCurrentUser->ID : null, 'name' => $user_name, 'email' => $wpCurrentUser ? $wpCurrentUser->user_email : '', 'isVerified' => $is_verified_customer], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return \json_encode($attributes);
     }
     public function commentBoxDefaultStyleForCustomPostType() : void
@@ -142,7 +142,7 @@ class CommentBoxHandle
                 $text_email_name = !empty($text_email_name) ? esc_html_e($text_email_name[1]) : __('Email address', 'reviewx');
                 $placeholder_email_name = !empty($placeholder_email_name) ? esc_html_e($placeholder_email_name[1]) : __('Email Address', 'reviewx');
                 $text_attachment_title = !empty($text_attachment_title) ? esc_html_e($text_attachment_title[1]) : __('Attachment', 'reviewx');
-                $placeholder_upload_photo = !empty($placeholder_upload_photo) ? esc_html_e($placeholder_upload_photo[1]) : __('Upload Photo/Video', 'reviewx');
+                $placeholder_upload_photo = !empty($placeholder_upload_photo) ? esc_html_e($placeholder_upload_photo[1]) : __('Upload Photo / Video', 'reviewx');
                 $text_mark_as_anonymous = !empty($text_mark_as_anonymous) ? esc_html_e($text_mark_as_anonymous[1]) : __('Mark as Anonymous', 'reviewx');
                 $text_recommended_title = !empty($text_recommended_title) ? esc_html_e($text_recommended_title[1]) : __('Recommendation?', ' reviewx');
                 // Define the default values, if no builder is active / available then use the default string / texts
@@ -155,7 +155,7 @@ class CommentBoxHandle
     private function rvxDefaultReviewFormLevelData()
     {
         // Define the default values, if no builder is active / available then use the default string / texts
-        $default_values = ['write_a_review' => __('Write a Review', 'reviewx'), 'text_rating_star_title' => __('Rating', 'reviewx'), 'text_review_title' => __('Review Title', 'reviewx'), 'placeholder_review_title' => __('Write Review Title', 'reviewx'), 'text_review_description' => __('Description', 'reviewx'), 'placeholder_review_description' => __('Write your description here', 'reviewx'), 'text_full_name' => __('Full name', 'reviewx'), 'placeholder_full_name' => __('Full Name', 'reviewx'), 'text_email_name' => __('Email address', 'reviewx'), 'placeholder_email_name' => __('Email Address', 'reviewx'), 'text_attachment_title' => __('Attachment', 'reviewx'), 'placeholder_upload_photo' => __('Upload Photo/Video', 'reviewx'), 'text_mark_as_anonymous' => __('Mark as Anonymous', 'reviewx'), 'text_recommended_title' => __('Recommendation?', 'reviewx')];
+        $default_values = ['write_a_review' => __('Write a Review', 'reviewx'), 'text_rating_star_title' => __('Rating', 'reviewx'), 'text_review_title' => __('Review Title', 'reviewx'), 'placeholder_review_title' => __('Write Review Title', 'reviewx'), 'text_review_description' => __('Description', 'reviewx'), 'placeholder_review_description' => __('Write your description here', 'reviewx'), 'text_full_name' => __('Full name', 'reviewx'), 'placeholder_full_name' => __('Full Name', 'reviewx'), 'text_email_name' => __('Email address', 'reviewx'), 'placeholder_email_name' => __('Email Address', 'reviewx'), 'text_attachment_title' => __('Attachment', 'reviewx'), 'placeholder_upload_photo' => __('Upload Photo / Video', 'reviewx'), 'text_mark_as_anonymous' => __('Mark as Anonymous', 'reviewx'), 'text_recommended_title' => __('Recommendation?', 'reviewx')];
         return \json_encode($default_values, \JSON_UNESCAPED_UNICODE);
     }
     /*

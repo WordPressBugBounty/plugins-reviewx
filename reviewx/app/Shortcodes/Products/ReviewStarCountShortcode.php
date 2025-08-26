@@ -21,7 +21,7 @@ class ReviewStarCountShortcode implements ShortcodeContract
     private function getReviewsData(int $id, bool $isProduct) : array
     {
         $post = get_post($id);
-        $defaultData = ['product' => ['id' => $id], 'starCount' => 0.0, 'reviewsCount' => 0, 'domain' => ['baseDomain' => Helper::domainSupport()]];
+        $defaultData = ['product' => ['id' => $id], 'starCount' => 0.0, 'reviewsCount' => 0, 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         if (!$post || $isProduct && $post->post_type !== 'product' || !$isProduct && $post->post_type === 'product') {
             return $defaultData;
         }
