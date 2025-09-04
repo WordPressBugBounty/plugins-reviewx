@@ -252,17 +252,12 @@ class AuthController implements InvokableContract
             }
         }
     }
-    /**
-     * Validate API response for required site data.
-     *
-     * @param array $apiData
-     * @return true|Response
-     */
-    private function validateSite(array $apiData) : bool|Response
+    private function validateSite(array $apiData): bool
     {
-        if (!\is_array($apiData) && !isset($apiData['id']) && !isset($apiData['uid'])) {
-            return Helper::rvxApi(['error' => 'Invalid API response: site missing'])->fails('Invalid API response', Response::HTTP_INTERNAL_SERVER_ERROR);
+        if ( !is_array($apiData) && !isset($apiData['id']) && !isset($apiData['uid']) ) {
+            return \false;
         }
+
         return \true;
     }
     protected function prepareRegisterData(array $site) : array
