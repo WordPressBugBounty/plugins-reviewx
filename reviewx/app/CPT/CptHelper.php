@@ -8,7 +8,7 @@ class CptHelper
 {
     public function enabledCPT() : array
     {
-        if (Client::getSync() !== \true) {
+        if (!Client::getSync()) {
             return [];
         }
         // Retrieve settings
@@ -29,7 +29,7 @@ class CptHelper
     }
     public function usedCPT($param = 'all')
     {
-        if (Client::getSync() !== \true) {
+        if (!Client::getSync()) {
             return [];
         }
         $data = (new CptController())->customPostTypes($param);
@@ -62,7 +62,7 @@ class CptHelper
     }
     public function cptSettings() : array
     {
-        if (Client::getSync() !== \true) {
+        if (!Client::getSync()) {
             return [];
         }
         // Retrieve settings with default as an empty array

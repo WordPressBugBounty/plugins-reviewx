@@ -24,11 +24,20 @@ class JudgemeReviewsImport
         $this->dataSyncService = new DataSyncService();
         $this->judgemeDomain = get_option('judgeme_domain');
         $this->judgemeToken = get_option('judgeme_shop_token');
-        $this->tmpDir = \sys_get_temp_dir();
-        $this->csvFilePath = $this->tmpDir . '/judgeme-export.csv';
         $this->isSync = $isSync;
         $this->transientTtl = 3 * HOUR_IN_SECONDS;
         // 3 hours
+        // Use System uploads dir
+        // $this->tmpDir = sys_get_temp_dir();
+        // Use WordPress uploads dir
+        $uploadDir = wp_upload_dir();
+        $reviewxDir = $uploadDir['basedir'] . '/reviewx';
+        if (!\file_exists($reviewxDir)) {
+            wp_mkdir_p($reviewxDir);
+            // creates recursively with correct perms
+        }
+        $this->tmpDir = $reviewxDir;
+        $this->csvFilePath = $this->tmpDir . '/judgeme-export.csv';
     }
     public function judgemeStatusDetect($request) : array
     {

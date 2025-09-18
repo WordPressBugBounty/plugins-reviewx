@@ -46,7 +46,7 @@ class CategorySync implements InvokableContract
     }
     public function catSync($payload)
     {
-        if (Client::getSync() == \false) {
+        if (!Client::getSync()) {
             $response = (new CategoryApi())->dataSync(['categories' => $payload]);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 \error_log("Sync Category not inserted: " . $response);

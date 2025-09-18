@@ -1241,11 +1241,11 @@ msgid "Rating Color"
 msgstr ""
 
 #: app/Elementor/Elements/Cpt_Widget.php:182
-msgid "Badget Background Color"
+msgid "Badge Background Color"
 msgstr ""
 
 #: app/Elementor/Elements/Cpt_Widget.php:193
-msgid "Badget Text Color"
+msgid "Badge Text Color"
 msgstr ""
 
 #: app/Elementor/Elements/Cpt_Widget.php:204
@@ -2568,7 +2568,7 @@ msgstr ""
 
 #: app/RvxDivi/includes/modules/RvxReviews/RvxReviews.php:534
 #: app/RvxDivi/includes/modules/RvxTabs/RvxTabs.php:535
-msgid "Avater Fallback Color"
+msgid "Avatar Fallback Color"
 msgstr ""
 
 #: app/RvxDivi/includes/modules/RvxReviews/RvxReviews.php:559
@@ -2628,7 +2628,7 @@ msgid "Verify Fail"
 msgstr ""
 
 #: app/Services/ReviewService.php:348
-msgid "Varify"
+msgid "Verify"
 msgstr ""
 
 #: app/Services/ReviewService.php:350

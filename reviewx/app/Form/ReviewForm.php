@@ -13,7 +13,7 @@ class ReviewForm
     }
     public static function post_type_support()
     {
-        if (Client::getSync() === \true) {
+        if (Client::getSync()) {
             // Retrieve settings
             $enabled_post_types = (new self())->cptHelper->enabledCPT();
             // Dynamically add comment support for enabled post types
@@ -26,7 +26,7 @@ class ReviewForm
     }
     public static function comments_template_init($default)
     {
-        if (Client::getSync() === \true) {
+        if (Client::getSync()) {
             // Retrieve settings
             $enabled_post_types = (new self())->cptHelper->enabledCPT();
             // Check if the current post type is enabled

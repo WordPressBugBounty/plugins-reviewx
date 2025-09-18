@@ -31,7 +31,7 @@ if ($has_orders) {
     }
     ?>
                 <?php 
-    if (Client::getSync() === \true) {
+    if (Client::getSync()) {
         ?>
                     <th class="woocommerce-orders-table__header woocommerce-orders-table__header-product-image">
                         <span class="nobr"><?php 
@@ -139,7 +139,7 @@ if ($has_orders) {
             }
             ?>
                         <?php 
-            if (Client::getSync() === \true) {
+            if (Client::getSync()) {
                 ?>
                             <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-product-image"
                                 data-title="<?php 

@@ -75,13 +75,10 @@ class Helper
     {
         return is_user_logged_in() ? 1 : 0;
     }
-    public static function getWpCurrentUser() : ?\WP_User
+    public static function getWpCurrentUser()
     {
-        $current_user = wp_get_current_user();
-        if (!$current_user instanceof \WP_User) {
-            return null;
-        }
-        return $current_user;
+        $user = wp_get_current_user();
+        return $user->ID > 0 ? $user : null;
     }
     public static function arrayGet($data, $accessor, $default = null)
     {

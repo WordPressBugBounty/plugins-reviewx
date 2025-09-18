@@ -252,12 +252,17 @@ class AuthController implements InvokableContract
             }
         }
     }
-    private function validateSite(array $apiData): bool
+    /**
+     * Validate API response for required site data.
+     *
+     * @param array $apiData
+     * @return bool
+     */
+    private function validateSite(array $apiData) : bool
     {
-        if ( !is_array($apiData) && !isset($apiData['id']) && !isset($apiData['uid']) ) {
+        if (!\is_array($apiData) && !isset($apiData['id']) && !isset($apiData['uid'])) {
             return \false;
         }
-
         return \true;
     }
     protected function prepareRegisterData(array $site) : array

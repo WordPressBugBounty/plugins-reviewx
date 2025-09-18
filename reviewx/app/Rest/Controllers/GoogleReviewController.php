@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+use Throwable;
 use Rvx\Services\GoogleReviewService;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
@@ -53,10 +54,12 @@ class GoogleReviewController implements InvokableContract
     {
         try {
             $response = $this->googleReviewService->googleReviewKey($request->get_params());
-            \delete_transient('google_reviews_cache');
+            \delete_transient('rvx_google_api_settings');
+            // When settings is changed remove the cache wpdb transient data
+            \delete_transient('rvx_google_reviews_cache');
             // When settings is changed remove the cache wpdb transient data
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
         }
     }
@@ -67,10 +70,12 @@ class GoogleReviewController implements InvokableContract
     {
         try {
             $response = $this->googleReviewService->googleReviewSetting($request->get_params());
-            \delete_transient('google_reviews_cache');
+            \delete_transient('rvx_google_api_settings');
+            // When settings is changed remove the cache wpdb transient data
+            \delete_transient('rvx_google_reviews_cache');
             // When settings is changed remove the cache wpdb transient data
             return Helper::saasResponse($response);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
         }
     }

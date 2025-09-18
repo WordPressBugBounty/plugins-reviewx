@@ -1,106 +1,74 @@
-<div x-data="{ 
-         title: '{{ title }}', // Set the title from Twig
-         showTitle: true // Default to true, will be evaluated in x-init
-     }"
-     id="review-star-container" 
-     class="rvx-container rvx-mx-auto"
-     x-init="
-         // Evaluate the title condition
-         showTitle = title !== 'false' && title.trim().toLowerCase() !== 'false';
-     ">
-    {# Use x-if to completely remove the h2 element if showTitle is false #}
-    <template x-if="showTitle">
+<div 
+    x-data="{
+        title: '{{ title }}',
+        info: '{{ info ?? 'default' }}'.trim().toLowerCase(),
+        average: parseFloat('{{ data.starCount }}') || 0,
+        totalRating: 5,
+        stars: [],
+        displayMap: {
+            'stars': ['stars'],
+            'rating': ['rating'],
+            'count': ['count'],
+            'text': ['text'],
+            'default': ['stars','rating','count','text'],
+            'stars_rating': ['stars','rating'],
+            'count_text': ['count','text'],
+            'rating_count': ['rating','count'],
+            'rating_count_text': ['rating','count','text'],
+            'stars_count': ['stars','count'],
+            'stars_count_text': ['stars','count','text'],
+        },
+        has(type) { return this.displayMap[this.info]?.includes(type) || false; },
+        init() {
+            const full = Math.floor(this.average);
+            const fraction = this.average - full;
+            const half = fraction >= 0.3 && fraction < 0.8 ? 1 : 0;
+            const roundUp = fraction >= 0.8 ? 1 : 0;
+            const totalFull = full + roundUp;
+            this.stars = [];
+            for (let i = 1; i <= this.totalRating; i++) {
+                if (i <= totalFull) this.stars.push('full');
+                else if (i === totalFull + 1 && half) this.stars.push('half');
+                else this.stars.push('empty');
+            }
+        }
+    }"
+    x-init="init()"
+    id="review-star-container" 
+    class="rvx-container rvx-mx-auto"
+>
+    <!-- Title -->
+    <template x-if="title && title !== 'false'">
         <h2 class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]" x-text="title"></h2>
     </template>
 
     <div id="rvx-review-star-count" class="rvx-flex rvx-gap-1 rvx-items-center">
-        <!-- The whole star display is wrapped in a relative container with group for hover -->
-        <div title="{{ data.starCount }} out of 5" class="rvx-relative rvx-group">
-            <!-- The star container: uses grid to show five icons with minimal spacing -->
-            <div id="star-container"
-                 data-star-average="{{ data.starCount }}"
-                 data-total-rating="5"
-                 class="rvx-grid rvx-grid-cols-5 rvx-gap-0">
+        <!-- Stars -->
+        <template x-if="has('stars')">
+            <div class="rvx-flex rvx-gap-0" style="margin-left:2px;margin-top:5px;" title="{{ data.starCount }} out of 5 stars">
+                <template x-for="(star,i) in stars" :key="i">
+                    <div>
+                        <svg x-show="star === 'full'" class="rvx-w-5 rvx-h-5 rvx-fill-current rvx-text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 488.282">
+                            <path fill="#FCCE08" d="M268.313 8.2l65.464 153.293 166.054 14.902c7.332.632 12.754 7.085 12.118 14.412a13.262 13.262 0 01-4.495 8.87v.006L381.835 309.374l37.159 162.59c1.646 7.181-2.848 14.336-10.03 15.981a13.308 13.308 0 01-10.273-1.84l-142.686-85.309-143.144 85.579c-6.312 3.777-14.492 1.716-18.274-4.602a13.278 13.278 0 01-1.554-9.809l-.016-.006 37.164-162.589L4.551 199.683c-5.536-4.845-6.103-13.263-1.252-18.804a13.281 13.281 0 019.313-4.527l165.611-14.859L243.73 8.119c2.887-6.777 10.722-9.933 17.493-7.052a13.31 13.31 0 017.09 7.133z"/>
+                        </svg>
+                        <svg x-show="star === 'half'" class="rvx-w-5 rvx-h-5 rvx-fill-current rvx-text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 489.217">
+                            <path fill="#FCCE08" d="M278.41 15.832l59.521 139.378 152.968 13.689c6.245.682 11.71 3.801 15.512 8.326 3.833 4.52 5.956 10.445 5.537 16.752l-.082.966c-.92 9.22-5.067 12.81-10.171 17.221-37.832 32.769-75.441 65.864-113.148 98.789l34.123 149.31a23.635 23.635 0 01-3.012 17.826c-6.983 11.214-21.979 14.531-33.038 7.284l-130.623-78.111-131.443 78.586a23.6 23.6 0 01-17.899 2.655 23.638 23.638 0 01-14.546-10.822c-3.114-5.201-4.122-11.503-2.768-17.418l34.112-149.316L8.094 210.227a23.58 23.58 0 01-8.042-16.219 23.627 23.627 0 015.801-17.134c4.122-4.835 10.206-7.722 16.534-8.068l151.666-13.596L234.21 14.365c2.552-6.007 7.329-10.418 12.96-12.691 9.272-3.719 20.501-1.121 26.88 6.607 1.927 2.329 3.188 4.793 4.36 7.551zm-22.428 5.946v361.888a10.84 10.84 0 015.609 1.544l136.982 81.887c.186.124.429.223.687.264.625.274 1.57-.31 1.875-.796l.041-.041c.238-.382.336-.894.222-1.395l-35.574-155.654c-.847-3.781.341-7.898 3.461-10.63 39.371-34.381 78.638-68.948 118.143-103.169 1.436-1.245 2.614-2.257 2.707-3.058.083-1.054-.574-1.901-1.643-1.993l-158.355-14.252c-4.128-.124-8.002-2.588-9.722-6.632L258.337 24.376c-.418-.992-.795-1.782-1.115-2.17-.439-.247-.703-.439-1.24-.428z"/>
+                        </svg>
+                        <svg x-show="star === 'empty'" class="rvx-w-5 rvx-h-5 rvx-fill-current rvx-text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 117.42">
+                            <path d="M66.71 3.55L81.1 37.26l36.58 3.28v-.01c1.55.13 2.91.89 3.85 2.01a5.663 5.663 0 011.32 4.13v.01a5.673 5.673 0 01-1.69 3.57c-.12.13-.25.25-.39.36L93.25 74.64l8.19 35.83c.35 1.53.05 3.06-.73 4.29a5.652 5.652 0 01-3.54 2.52l-.14.03c-.71.14-1.43.15-2.12.02v.01c-.75-.13-1.47-.42-2.11-.84l-.05-.03-31.3-18.71-31.55 18.86a5.664 5.664 0 01-7.79-1.96c-.38-.64-.62-1.33-.73-2.02-.1-.63-.09-1.27.02-1.89.02-.13.04-.27.08-.4l8.16-35.7c-9.24-8.07-18.74-16.1-27.83-24.3l-.08-.08a5.64 5.64 0 01-1.72-3.7c-.1-1.45.36-2.93 1.4-4.12l.12-.13.08-.08a5.668 5.668 0 013.77-1.72h.06l36.34-3.26 14.44-33.8c.61-1.44 1.76-2.5 3.11-3.05 1.35-.54 2.9-.57 4.34.04.69.29 1.3.71 1.8 1.22.53.53.94 1.15 1.22 1.82l.02.06zm10.19 37.2L61.85 5.51a.42.42 0 00-.09-.14.42.42 0 00-.14-.09.427.427 0 00-.35 0c-.1.04-.19.12-.24.24L45.98 40.75c-.37.86-1.18 1.49-2.18 1.58l-37.9 3.4c-.08.01-.16.02-.24.02-.06 0-.13.02-.18.05-.03.01-.05.03-.07.05l-.1.12c-.05.08-.07.17-.06.26.01.09.04.18.09.25.06.05.13.11.19.17l28.63 25c.77.61 1.17 1.62.94 2.65l-8.51 37.22-.03.14c-.01.06-.02.12-.01.17a.454.454 0 00.33.36c.12.03.24.02.34-.04l32.85-19.64c.8-.5 1.85-.54 2.72-.02L95.43 112c.08.04.16.09.24.14.05.03.1.05.16.06v.01c.04.01.09.01.14 0l.04-.01c.12-.03.22-.1.28-.2.06-.09.08-.21.05-.33L87.8 74.28a2.6 2.6 0 01.83-2.55l28.86-25.2c.04-.03.07-.08.1-.13.02-.04.03-.1.04-.17a.497.497 0 00-.09-.33.48.48 0 00-.3-.15v-.01c-.01 0-.03 0-.03-.01l-37.97-3.41c-1-.01-1.93-.6-2.34-1.57z" fill="#FCCE08"/>
+                        </svg>
+                    </div>
+                </template>
             </div>
-        </div>
-        <!-- Reviews count -->
-        <p class="rvx-text-[17.577px] rvx-font-normal rvx-leading-[28.562px] rvx-m-0  rvx-mb-[5px!important]">
-            ({{ data.reviewsCount }} reviews)
-        </p>
+        </template>
+
+        <!-- Numeric rating -->
+        <span x-show="has('rating')" class="rvx-text-[18px] rvx-font-normal">{{ data.starCount }}</span>
+
+        <!-- Review count -->
+        <span x-show="has('count')" class="rvx-text-[17px] rvx-font-normal">({{ data.reviewsCount }})</span>
+
+        <!-- Review text -->
+        <span x-show="has('text')" class="rvx-text-[17px] rvx-font-normal">Reviews</span>
     </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const container = document.getElementById("star-container");
-    if (!container) return;
-
-    // Read the average rating and total stars from the container's data attributes.
-    const average = parseFloat(container.getAttribute("data-star-average"));
-    const totalRating = parseInt(container.getAttribute("data-total-rating"), 10);
-
-    // Calculate full and half stars based on the provided logic.
-    const fullStars = Math.floor(average);
-    const hasHalfStar = (average % 1 >= 0.3 && average % 1 <= 0.7);
-
-    // Loop to create each star.
-    for (let i = 1; i <= totalRating; i++) {
-      let starType = 'empty';
-      if (i <= fullStars) {
-        starType = 'full';
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        starType = 'half';
-      }
-      
-      const starDiv = document.createElement("div");
-      
-      if (starType === 'full') {
-        // Full star SVG
-        starDiv.innerHTML = `
-            <svg
-            class="rvx-w-5 rvx-h-5 rvx-fill-current rvx-text-yellow-400"
-            xmlns="http://www.w3.org/2000/svg"
-            shape-rendering="geometricPrecision"
-            text-rendering="geometricPrecision"
-            image-rendering="optimizeQuality"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            viewBox="0 0 512 488.282">
-            <path fill="#FFD401" fill-rule="nonzero" d="M268.313 8.2l65.464 153.293 166.054 14.902c7.332.632 12.754 7.085 12.118 14.412a13.262 13.262 0 01-4.495 8.87v.006L381.835 309.374l37.159 162.59c1.646 7.181-2.848 14.336-10.03 15.981a13.308 13.308 0 01-10.273-1.84l-142.686-85.309-143.144 85.579c-6.312 3.777-14.492 1.716-18.274-4.602a13.278 13.278 0 01-1.554-9.809l-.016-.006 37.164-162.589L4.551 199.683c-5.536-4.845-6.103-13.263-1.252-18.804a13.281 13.281 0 019.313-4.527l165.611-14.859L243.73 8.119c2.887-6.777 10.722-9.933 17.493-7.052a13.31 13.31 0 017.09 7.133z"/>
-            </svg>
-          `;
-      } else if (starType === 'half') {
-        // Half star SVG with a gradient.
-        starDiv.innerHTML = `
-            <svg
-            class="rvx-w-5 rvx-h-5 rvx-fill-current rvx-text-yellow-400"
-            xmlns="http://www.w3.org/2000/svg"
-            shape-rendering="geometricPrecision"
-            text-rendering="geometricPrecision"
-            image-rendering="optimizeQuality"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            viewBox="0 0 512 489.217">
-            <path fill="#ffcf00" fill-rule="nonzero" d="M278.41 15.832l59.521 139.378 152.968 13.689c6.245.682 11.71 3.801 15.512 8.326 3.833 4.52 5.956 10.445 5.537 16.752l-.082.966c-.92 9.22-5.067 12.81-10.171 17.221-37.832 32.769-75.441 65.864-113.148 98.789l34.123 149.31a23.635 23.635 0 01-3.012 17.826c-6.983 11.214-21.979 14.531-33.038 7.284l-130.623-78.111-131.443 78.586a23.6 23.6 0 01-17.899 2.655 23.638 23.638 0 01-14.546-10.822c-3.114-5.201-4.122-11.503-2.768-17.418l34.112-149.316L8.094 210.227a23.58 23.58 0 01-8.042-16.219 23.627 23.627 0 015.801-17.134c4.122-4.835 10.206-7.722 16.534-8.068l151.666-13.596L234.21 14.365c2.552-6.007 7.329-10.418 12.96-12.691 9.272-3.719 20.501-1.121 26.88 6.607 1.927 2.329 3.188 4.793 4.36 7.551zm-22.428 5.946v361.888a10.84 10.84 0 015.609 1.544l136.982 81.887c.186.124.429.223.687.264.625.274 1.57-.31 1.875-.796l.041-.041c.238-.382.336-.894.222-1.395l-35.574-155.654c-.847-3.781.341-7.898 3.461-10.63 39.371-34.381 78.638-68.948 118.143-103.169 1.436-1.245 2.614-2.257 2.707-3.058.083-1.054-.574-1.901-1.643-1.993l-158.355-14.252c-4.128-.124-8.002-2.588-9.722-6.632L258.337 24.376c-.418-.992-.795-1.782-1.115-2.17-.439-.247-.703-.439-1.24-.428z"/>
-            </svg>
-        `;
-      } else {
-        // Empty star SVG
-        starDiv.innerHTML = `
-            <svg
-            class="rvx-w-5 rvx-h-5 rvx-fill-current rvx-text-yellow-400"
-            xmlns="http://www.w3.org/2000/svg"
-            shape-rendering="geometricPrecision"
-            text-rendering="geometricPrecision"
-            image-rendering="optimizeQuality"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            viewBox="0 0 122.88 117.42">
-            <path d="M66.71 3.55L81.1 37.26l36.58 3.28v-.01c1.55.13 2.91.89 3.85 2.01a5.663 5.663 0 011.32 4.13v.01a5.673 5.673 0 01-1.69 3.57c-.12.13-.25.25-.39.36L93.25 74.64l8.19 35.83c.35 1.53.05 3.06-.73 4.29a5.652 5.652 0 01-3.54 2.52l-.14.03c-.71.14-1.43.15-2.12.02v.01c-.75-.13-1.47-.42-2.11-.84l-.05-.03-31.3-18.71-31.55 18.86a5.664 5.664 0 01-7.79-1.96c-.38-.64-.62-1.33-.73-2.02-.1-.63-.09-1.27.02-1.89.02-.13.04-.27.08-.4l8.16-35.7c-9.24-8.07-18.74-16.1-27.83-24.3l-.08-.08a5.64 5.64 0 01-1.72-3.7c-.1-1.45.36-2.93 1.4-4.12l.12-.13.08-.08a5.668 5.668 0 013.77-1.72h.06l36.34-3.26 14.44-33.8c.61-1.44 1.76-2.5 3.11-3.05 1.35-.54 2.9-.57 4.34.04.69.29 1.3.71 1.8 1.22.53.53.94 1.15 1.22 1.82l.02.06zm10.19 37.2L61.85 5.51a.42.42 0 00-.09-.14.42.42 0 00-.14-.09.427.427 0 00-.35 0c-.1.04-.19.12-.24.24L45.98 40.75c-.37.86-1.18 1.49-2.18 1.58l-37.9 3.4c-.08.01-.16.02-.24.02-.06 0-.13.02-.18.05-.03.01-.05.03-.07.05l-.1.12c-.05.08-.07.17-.06.26.01.09.04.18.09.25.06.05.13.11.19.17l28.63 25c.77.61 1.17 1.62.94 2.65l-8.51 37.22-.03.14c-.01.06-.02.12-.01.17a.454.454 0 00.33.36c.12.03.24.02.34-.04l32.85-19.64c.8-.5 1.85-.54 2.72-.02L95.43 112c.08.04.16.09.24.14.05.03.1.05.16.06v.01c.04.01.09.01.14 0l.04-.01c.12-.03.22-.1.28-.2.06-.09.08-.21.05-.33L87.8 74.28a2.6 2.6 0 01.83-2.55l28.86-25.2c.04-.03.07-.08.1-.13.02-.04.03-.1.04-.17a.497.497 0 00-.09-.33.48.48 0 00-.3-.15v-.01c-.01 0-.03 0-.03-.01l-37.97-3.41c-1-.01-1.93-.6-2.34-1.57z" fill="#ffcf00"/>
-        </svg>
-        `;
-      }
-      container.appendChild(starDiv);
-    }
-  });
-</script>

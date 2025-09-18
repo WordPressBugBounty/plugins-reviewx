@@ -18,7 +18,7 @@ class UpgradeDBSettings
      */
     public function run_upgrade()
     {
-        if (Client::getSync() !== \true) {
+        if (!Client::getSync()) {
             return;
         }
         if (get_option('_rvx_db_upgrade_216', \false) === \true) {

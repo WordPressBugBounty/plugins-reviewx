@@ -175,7 +175,7 @@ class PluginServiceProvider extends ServiceProvider
          * Woocommerce Template Modify
          */
         add_filter('woocommerce_locate_template', new WoocommerceLocateTemplateHandler(), 10, 3);
-        //Woocommerce Avater
+        //Woocommerce Avatar
         add_action('woocommerce_edit_account_form', new WcEditAccountForm(), 10);
         // add_action('woocommerce_save_account_details_errors', new WcAccountDetailsError(), 10, 1);
         add_action('woocommerce_save_account_details', new WcAccountDetails(), 20, 1);

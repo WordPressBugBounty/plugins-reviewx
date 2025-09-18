@@ -1,19 +1,19 @@
 <div id="google-reviews-container" class="rvx-container rvx-mx-auto" 
      x-data="{ 
-         title: '{{ title|default('Google Reviews') }}', // Set the title from Twig
-         loadMore: '{{ loadMore|default('true') }}', // Set loadMore from Twig
-         showTitle: true, // Default to true, will be evaluated in x-init
+         rawTitle: '{{ title }}', // Set the title from Twig
+         loadMore: '{{ loadMore }}', // Set loadMore from Twig
          showLoadMore: true // Default to true, will be evaluated in x-init
      }" 
      x-init="
          // Evaluate conditions on initialization
-         showTitle = title !== 'false' && title.trim().toLowerCase() !== 'false';
          showLoadMore = loadMore !== 'false' && loadMore.trim().toLowerCase() !== 'false';
      ">
-
-    <template x-if="showTitle">
-        <h2 class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]" x-text="title"></h2>
-    </template>
+    
+    <h2 x-show="rawTitle !== 'false'"
+        x-cloak
+        class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]"
+        x-text="rawTitle">
+    </h2>
 
     <div id="review-list" class="rvx-grid rvx-gap-6"></div>
 
@@ -63,14 +63,14 @@
     // Retrieve and process parameters
     // ----------------------------
     // loadMore: expected to be true or false.
-    const loadMoreRaw = {{ loadMore|default(true)|json_encode|raw }};
+    const loadMoreRaw = {{ loadMore|json_encode|raw }};
     const loadMoreEnabled = getBooleanParam(loadMoreRaw);
 
     // reviewLimit: determines how many reviews to show initially
-    let reviewLimit = {{ reviewLimit|default(3)|json_encode|raw }};
+    let reviewLimit = {{ reviewLimit|json_encode|raw }};
 
     // Truncate limit for the review feedback.
-    const truncateParamRaw = {{ truncateLimit|default(300)|json_encode|raw }};
+    const truncateParamRaw = {{ truncateLimit|json_encode|raw }};
     const truncateLimit = getNumericParam(truncateParamRaw);
 
     // Attempt to get the load more button element.
@@ -224,7 +224,7 @@
     if (loadMoreEnabled && loadMoreBtn) {
       loadMoreBtn.addEventListener("click", function () {
         // Increase reviewLimit by the same amount set in Twig (e.g., 3)
-        reviewLimit += {{ reviewLimit|default(3)|json_encode|raw }};
+        reviewLimit += {{ reviewLimit|json_encode|raw }};
         renderReviews();
       });
     }

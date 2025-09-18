@@ -2,6 +2,7 @@
 
 namespace Rvx\Shortcodes\Products;
 
+use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
 use Rvx\WPDrill\Facades\View;
@@ -10,6 +11,10 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
     public function render(array $attrs, string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'review_ids' => null], $attrs);
+        // Check if both product_id and post_id are provided.
+        if (!Client::getSync()) {
+            return '<div class="warning">Error: Please complete the synchronization process of ReviewX.</div>';
+        }
         // If review_ids is not provided, return an error.
         if (empty($attrs['review_ids'])) {
             return '<div class="warning">Error: Please provide "review_ids" in the shortcode.</div>';

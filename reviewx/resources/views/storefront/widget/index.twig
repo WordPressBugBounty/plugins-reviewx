@@ -11,7 +11,10 @@
     }
 </style>
 <div id="rvx-storefront-widget"
-     x-data="__reviewXState__()"
+          x-data="{
+         ...__reviewXState__(),
+         isRvxUserLoggedIn: '{{ user_is_logged_in }}'
+     }"
      x-init="await initialize({data: '{{ data }}', formLevelData: '{{ formLevelData }}'})"
      @notify-attachment="notifyAttachmentAdded($event.detail.reviewAttachFiles)"
      @notify-close-success-modal="showReviewSuccessModal = false"
@@ -50,19 +53,21 @@
         </div>
     </template>
 
-
-    {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
-
-
     <template x-if="!haveReviews && !fetchReviewsIsLoading" x-cloak>
         <div class="rvx-bg-neutral-100 rvx-py-[64px] rvx-px-space24 rvx-rounded-md rvx-text-center">
             {% include "storefront/widget/Components/EmptyPlaceholder.twig" %}
         </div>
     </template>
 
+    {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
+
     <div x-show="!fetchReviewsIsLoading || !fetchReviewsSettingsIsLoading" x-cloak>
         {% if not requireSignIn or (requireSignIn and user_is_logged_in) %}
-            {% include "storefront/widget/Features/ReviewForm/index.twig" %}
+            {% if not wooVerificationRequired or (wooVerificationRequired and user_is_logged_in and isVerifiedCustomer) %}
+                {% include "storefront/widget/Features/ReviewForm/index.twig" %}
+            {% else %}
+                {% include "storefront/widget/Components/UnVerifyUserPlaceholder.twig" %}
+            {% endif %}
         {% else %}
             <div class="rvx-grid rvx-place-content-center rvx-rounded-md rvx-mt-space20 rvx-p-space6 rvx-bg-neutral-200 rvx-h-[186px]">
                 <p class="rvx-text-gray-600">
@@ -82,7 +87,6 @@
                 {% endif %}
             </div>
         {% endif %}
-        {% include "storefront/widget/Components/UnVerifyUserPlaceholder.twig" %}
     </div>
 
 </div>

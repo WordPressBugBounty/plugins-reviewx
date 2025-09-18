@@ -39,6 +39,7 @@ Route::group(['prefix' => '/api/v1'], function () {
      * Store Front
      */
     Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/reviews', [StoreFrontReviewController::class, 'getWidgetReviewsForProduct']);
+    Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/reviews/shortcode', [StoreFrontReviewController::class, 'getWidgetReviewsListShortcode']);
     Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/insight', [StoreFrontReviewController::class, 'getWidgetInsight']);
     Route::post('/storefront/reviews', [StoreFrontReviewController::class, 'saveWidgetReviewsForProduct']);
     Route::post('/storefront/request/review/email/attachments/items', [StoreFrontReviewController::class, 'requestReviewEmailAttachment']);
@@ -54,7 +55,7 @@ Route::group(['prefix' => '/api/v1'], function () {
     //wp setting get form db
     Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
     //ALl review shortcode
-    Route::post('/storefront/all/reviews/short/code', [StoreFrontReviewController::class, 'getAllReviewForShortcode']);
+    Route::post('/storefront/all/reviews/shortcode', [StoreFrontReviewController::class, 'getWidgetAllReviewsListForSite']);
     // Judgeme API's
     Route::get('/judgeme/status/detect', [ImportJudgeMeController::class, 'judgemeStatusDetect']);
 });

@@ -248,6 +248,42 @@ class ReviewsApi extends \Rvx\Api\BaseApi
         }
         return $this->get($callableRoute);
     }
+    /**
+     * @param $request
+     * @return Response
+     * @throws Exception
+     */
+    public function getWidgetAllReviewsForSiteApi($request, $site_id) : Response
+    {
+        $query_params = $request->get_params();
+        unset($query_params['site_id']);
+        $callableRoute = "/storefront/{$site_id}/all/reviews/shortcode";
+        $query_string = \http_build_query($query_params);
+        if ($query_string) {
+            $callableRoute .= '?' . $query_string;
+        }
+        return $this->get($callableRoute);
+    }
+    /**
+     * @param $request
+     * @return Response
+     * @throws Exception
+     */
+    public function getWidgetReviewsListShortcodeApi($request) : Response
+    {
+        $query_params = $request->get_params();
+        unset($query_params['product_id']);
+        $productId = $request->get_param('product_id');
+        $siteUid = Client::getUid();
+        $post = Post::find($productId);
+        $productWpUniqueId = $siteUid . '-' . $post->ID;
+        $query_string = \http_build_query($query_params);
+        $callableRoute = "/storefront/{$siteUid}/widgets/products/{$productWpUniqueId}/reviews/shortcode";
+        if ($query_string) {
+            $callableRoute .= '?' . $query_string;
+        }
+        return $this->get($callableRoute);
+    }
     public function getSingleProductAllReviews($productId) : Response
     {
         $siteUid = Client::getUid();
@@ -366,14 +402,5 @@ class ReviewsApi extends \Rvx\Api\BaseApi
     public function reviewRequestStoreItem(array $data, $uid) : Response
     {
         return $this->withJson($data)->post('storefront/request-review/email/' . $uid . '/store/items');
-    }
-    public function getAllReviewForShortcode($data)
-    {
-        $query_string = \http_build_query($data);
-        $site_id = Client::getSiteId();
-        if (!empty($query_string)) {
-            return $this->get('storefront/' . $site_id . '/reviews?' . $query_string);
-        }
-        return $this->get('storefront/' . $site_id . '/reviews');
     }
 }

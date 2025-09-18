@@ -7,6 +7,7 @@ use Rvx\Services\Api\LoginService;
 use Rvx\Services\ReviewService;
 use Rvx\Services\CacheServices;
 use Rvx\Services\SettingService;
+use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 use Throwable;
 use Rvx\WPDrill\Contracts\InvokableContract;
@@ -82,6 +83,91 @@ class StoreFrontReviewController implements InvokableContract
         } else {
             return $this->dataGetFormSaas($request);
         }
+    }
+    public function getAllReviewsDataFromSaas($request, $site_id)
+    {
+        $response = $this->reviewService->getWidgetAllReviewsForSite($request, $site_id);
+        if ($response->getStatusCode() !== Response::HTTP_OK) {
+            return \false;
+        }
+        return $response->getApiData();
+    }
+    public function getWidgetAllReviewsListForSite($request)
+    {
+        $site_id = Client::getUid();
+        $post_type = $request['post_type'] ?? 'all';
+        $postMata = \get_transient("rvx_{$site_id}_{$post_type}_reviews");
+        if ($post_type === 'all') {
+            $post_type = null;
+        }
+        if (!$postMata) {
+            return $this->getAllReviewsFromSaas($request, $site_id, $post_type);
+        }
+        if ($request->get_param("cursor") || $request->get_param("rating") || $request->get_param("sort_by") || $request->get_param("attachment")) {
+            $response = $this->reviewService->getWidgetAllReviewsForSite($request, $site_id);
+            return Helper::saasResponse($response);
+        }
+        if ($this->is_valid_data($postMata)) {
+            $response = ["reviews" => $postMata["reviews"], "meta" => $postMata["meta"]];
+            if ($response) {
+                return Helper::rest($response)->success("Success");
+            }
+            return Helper::rest()->fails("Fails");
+        }
+        // invalid cached data → reset and fetch fresh
+        $this->resetSiteWiseTransientMeta($site_id, $post_type);
+        return $this->getAllReviewsFromSaas($request, $site_id, $post_type);
+    }
+    public function resetSiteWiseTransientMeta($site_id, $post_type)
+    {
+        global $wpdb;
+        $post_type = $post_type != null ? $post_type : 'all';
+        $review_key = "rvx_{$site_id}_{$post_type}_reviews";
+        // Prepare and execute the deletion query
+        $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s", $review_key));
+    }
+    public function getWidgetReviewsListShortcode($request)
+    {
+        $productId = $request['product_id'];
+        // mismatch in review count → reset + fetch
+        if ($this->reviewCountDifferent($productId)) {
+            \delete_transient("rvx_{$productId}_latest_reviews");
+            return $this->dataGetFormSaas($request);
+        }
+        $postMeta = \get_transient("rvx_{$productId}_latest_reviews");
+        // no cache → fetch
+        if (!$postMeta) {
+            return $this->dataGetFormSaas($request);
+        }
+        // cache count mismatch → reset + fetch
+        if (\count($postMeta['reviews']) !== $this->insightReviewCount($productId)) {
+            \delete_transient("rvx_{$productId}_latest_reviews");
+            return $this->dataGetFormSaas($request);
+        }
+        // request has filters → always fetch fresh
+        if ($request->get_param('cursor') || $request->get_param('rating') || $request->get_param('sortBy') || $request->get_param('attachment')) {
+            $response = $this->reviewService->getWidgetReviewsListShortcode($request);
+            return Helper::saasResponse($response);
+        }
+        // cached data valid → return
+        if ($this->is_valid_data($postMeta)) {
+            return Helper::rest(['reviews' => $postMeta['reviews'], 'meta' => $postMeta['meta']])->success('Success');
+        }
+        // invalid cached data → reset + fetch
+        $this->loginService->resetProductWisePostMeta($productId);
+        return $this->dataGetFormSaas($request);
+    }
+    public function getAllReviewsFromSaas($request, $site_id, $post_type)
+    {
+        $latestReviews = $this->getAllReviewsDataFromSaas($request, $site_id);
+        if (!$latestReviews) {
+            return Helper::rvxApi(["error" => "Fails"])->fails("failed");
+        }
+        $reviews = Helper::arrayGet($latestReviews, "reviews");
+        if (\count($reviews) > 0) {
+            $this->reviewService->setAllReviewsMetaTransient($site_id, $post_type, $latestReviews);
+        }
+        return ["data" => $latestReviews];
     }
     public function dataGetFormSaas($request)
     {
@@ -305,35 +391,4 @@ class StoreFrontReviewController implements InvokableContract
             return $apiResponse;
         }
     }
-    public function getAllReviewForShortcode($request)
-    {
-        try {
-            $cursor = $request->get_param('cursor');
-            $params = $request->get_params();
-            $cache_key = 'rvx_shortcode_reviews_' . \md5(\serialize($params));
-            $domainKeyRemove = \array_diff_key($params, ['domain' => '']);
-            $paramiterDifferent = $this->cacheService->clearShortcodesCache(get_option('_rvx_review_attributes_' . \md5(\serialize($domainKeyRemove))), $domainKeyRemove);
-            if ($paramiterDifferent == \false) {
-                \delete_transient($cache_key);
-            }
-            $cached = \get_transient($cache_key);
-            if ($cached && !$cursor) {
-                return Helper::rest(['reviews' => $cached['reviews'], 'meta' => $cached['meta']])->success("Success");
-            }
-            $resp = $this->reviewService->getAllReviewForShortcode($params);
-            if ($resp->getStatusCode() === Response::HTTP_OK) {
-                // Update to use the unique cache key
-                set_transient($cache_key, $resp->getApiData(), HOUR_IN_SECONDS);
-                update_option('_rvx_review_attributes_' . \md5(\serialize($domainKeyRemove)), ['rating' => $request->get_param('rating'), 'sort_by' => $request->get_param('sortBy'), 'post_type' => $request->get_param('post_type')]);
-            }
-            return Helper::saasResponse($resp);
-        } catch (Throwable $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('All Review Item Fails', $e->getCode());
-        }
-    }
-    // private function cacheAllReviewShortcode($data)
-    // {
-    //     delete_transient('rvx_shortcode_all_reviews');
-    //     set_transient('rvx_shortcode_all_reviews', $data, 86400);
-    // }
 }

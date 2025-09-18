@@ -160,6 +160,14 @@ class ReviewSyncService extends \Rvx\Services\Service
     private function criteriaMappingWC($commentId, $metaValue)
     {
         $metaValue = maybe_unserialize($metaValue) ?? 0;
+        // If $metaValue is not an array or scalar numeric, default to 0
+        if (!\is_array($metaValue) && !\is_numeric($metaValue)) {
+            $metaValue = 0;
+        }
+        // If it's a scalar, treat as single rating and wrap in array for consistency
+        if (\is_numeric($metaValue)) {
+            $metaValue = [$metaValue];
+        }
         // Predefined keys a to j (10 keys)
         $keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
         $newArray = [];
@@ -216,7 +224,8 @@ class ReviewSyncService extends \Rvx\Services\Service
             }
         }
         // Update the 'rating' comment meta with the new format
-        $currentRating = (float) \round(get_comment_meta($commentId, 'rating', \true), 2);
+        $ratingValue = get_comment_meta($commentId, 'rating', \true);
+        $currentRating = (float) \round(\is_numeric($ratingValue) ? (float) $ratingValue : 0, 2);
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
         $critriaAllowed = $this->migrationData->rvx_retrieve_old_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
@@ -254,7 +263,8 @@ class ReviewSyncService extends \Rvx\Services\Service
         $newCriteria = $metaValue;
         // Start with existing metaValue if valid
         // Update the 'rating' comment meta with the new format
-        $currentRating = (float) \round(get_comment_meta($commentId, 'rating', \true), 2);
+        $ratingValue = get_comment_meta($commentId, 'rating', \true);
+        $currentRating = (float) \round(\is_numeric($ratingValue) ? (float) $ratingValue : 0, 2);
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
         $critriaAllowed = $this->migrationData->rvx_retrieve_saas_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {

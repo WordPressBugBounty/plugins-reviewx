@@ -122,27 +122,15 @@ class SettingService extends \Rvx\Services\Service
         $data = ["setting" => ["review_settings" => $review_settings, "widget_settings" => $widget_settings]];
         return $data ?? [];
     }
-    public function wooCommerceVerificationRating()
+    public function wooCommerceVerificationRating() : array
     {
-        if ("no" === get_option('woocommerce_review_rating_verification_label', 'no')) {
-            $data = ['active' => \false];
-            return $data;
-        }
-        if ("yes" === get_option('woocommerce_review_rating_verification_label', 'no')) {
-            $data = ['active' => \true];
-            return $data;
-        }
+        $value = get_option('woocommerce_review_rating_verification_label', 'no');
+        return ['active' => $value === 'yes'];
     }
-    public function wooVerificationRatingRequired()
+    public function wooVerificationRatingRequired() : array
     {
-        if ("no" === get_option('woocommerce_review_rating_verification_required', 'no')) {
-            $data = ['active' => \false];
-            return $data;
-        }
-        if ("yes" === get_option('woocommerce_review_rating_verification_required', 'no')) {
-            $data = ['active' => \true];
-            return $data;
-        }
+        $value = get_option('woocommerce_review_rating_verification_required', 'no');
+        return ['active' => $value === 'yes'];
     }
     public function wooCommerceVerificationRatingUpdate($data)
     {

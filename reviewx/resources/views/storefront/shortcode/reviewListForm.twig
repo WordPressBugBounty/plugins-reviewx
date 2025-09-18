@@ -1,0 +1,119 @@
+<style>
+    #rvx-storefront-widget p {
+        margin: 0;
+    }
+    #rvx-storefront-widget .rvx-review-info p {
+        margin-bottom: 5px;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+
+<div id="rvx-storefront-widget"
+     x-data="{
+         ...__reviewXState__(),
+         rawTitle: '{{ title }}',
+         isRvxUserLoggedIn: '{{ user_is_logged_in }}',
+     }"
+     x-init="
+        await initializeReviewsListShortcode({data: '{{ data }}', formLevelData: '{{ formLevelData }}', attributes: '{{ attributes|json_encode() }}' });
+     "
+     @notify-attachment="notifyAttachmentAdded($event.detail.reviewAttachFiles)"
+     @notify-close-success-modal="showReviewSuccessModal = false"
+     @notify-like-dislike="await fetchReviewsListShortcode({productId: rvxAttributes.product.id})">
+
+    <h2 x-show="rawTitle !== 'false'"
+        x-cloak
+        class="rvx-text-1xl rvx-font-bold rvx-mb-[10px!important] rvx-mt-[5px!important]"
+        x-text="rawTitle">
+    </h2>
+
+    {% if attributes.graph == "on" %}
+
+        <div x-show="fetchReviewsSettingsIsLoading" class="rvx-mb-space16">
+            {% include "storefront/widget/Components/Skeleton/SummarySkeleton.twig" %}
+        </div>
+        
+        <template x-if="!fetchReviewsSettingsIsLoading" x-cloak>
+            <div class="rvx-mt-6">
+                {% include "storefront/widget/Features/Aggregations/index.twig" %}
+
+                {% include "storefront/widget/Components/RecommendedBanner.twig" %}
+
+                <div class="rvx-w-full rvx-h-[2px] rvx-bg-neutral-100 rvx-rounded-full" :class="`${!reviewSettingsData?.data?.setting?.review_settings?.reviews?.multicriteria?.enable ? 'rvx-mb-space40' : 'rvx-mb-space12'}`"></div>
+
+                {% include "storefront/widget/Features/MultriCriteriaAggregation/index.twig" %}
+            </div>
+        </template>
+        
+    {% endif %}
+
+    {% if attributes.filter == "on" %}
+
+        <template x-if="haveReviews || isFiltering">
+            <div>
+                {% include 'storefront/widget/Features/Reviews/Filter/ReviewFilterShortcode.twig' %}
+            </div>
+        </template>
+
+    {% endif %}
+
+    {% if attributes.list == "on" %}
+
+        <template x-if="fetchReviewsIsLoading">
+                {% include "storefront/widget/Components/Skeleton/ReviewListSkeleton.twig" %}
+        </template>
+
+        <template x-if="haveReviews && !fetchReviewsIsLoading && !fetchReviewsSettingsIsLoading" x-cloak>
+            <div>
+                {% include "storefront/widget/Features/Reviews/ReviewsLayout.twig" %}
+
+                {% include "storefront/widget/Features/Reviews/Modals/ReviewDetailModal.twig" %}
+            </div>
+        </template>
+
+        <template x-if="!haveReviews && !fetchReviewsIsLoading" x-cloak>
+            <div class="rvx-bg-neutral-100 rvx-py-[64px] rvx-px-space24 rvx-rounded-md rvx-text-center">
+                {% include "storefront/widget/Components/EmptyPlaceholder.twig" %}
+            </div>
+        </template>
+
+    {% endif %}
+
+    {% if attributes.form == "on" %}
+
+        {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
+
+        <div x-show="!fetchReviewsIsLoading || !fetchReviewsSettingsIsLoading" x-cloak>
+            {% if not requireSignIn or (requireSignIn and user_is_logged_in) %}
+                {% if not wooVerificationRequired or (wooVerificationRequired and user_is_logged_in and isVerifiedCustomer) %}
+                    {% include "storefront/widget/Features/ReviewForm/index.twig" %}
+                {% else %}
+                    {% include "storefront/widget/Components/UnVerifyUserPlaceholder.twig" %}
+                {% endif %}
+            {% else %}
+                <div class="rvx-grid rvx-place-content-center rvx-rounded-md rvx-mt-space20 rvx-p-space6 rvx-bg-neutral-200 rvx-h-[186px]">
+                    <p class="rvx-text-gray-600">
+                        Please 
+                        <a href="{{ login_url }}" class="rvx-text-blue-500 hover:rvx-text-blue-700 rvx-font-semibold rvx-underline">
+                            log in
+                        </a> 
+                        to submit a review.
+                    </p>
+                    {% if registration_enabled %}
+                        <p class="rvx-text-gray-600">
+                            Don't have an account? 
+                            <a href="{{ register_url }}" class="rvx-text-green-500 hover:rvx-text-green-700 rvx-font-semibold rvx-underline">
+                                Register here
+                            </a>.
+                        </p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+    {% endif %}
+    
+</div>

@@ -497,6 +497,14 @@ class ReviewService extends \Rvx\Services\Service
     {
         return (new ReviewsApi())->getWidgetReviewsForProductApi($request);
     }
+    public function getWidgetAllReviewsForSite($request, $site_id)
+    {
+        return (new ReviewsApi())->getWidgetAllReviewsForSiteApi($request, $site_id);
+    }
+    public function getWidgetReviewsListShortcode($request)
+    {
+        return (new ReviewsApi())->getWidgetReviewsListShortcodeApi($request);
+    }
     public function settingMeta($request)
     {
         try {
@@ -845,6 +853,12 @@ class ReviewService extends \Rvx\Services\Service
     {
         return ['message' => "Thank you for sharing your review"];
     }
+    public function setAllReviewsMetaTransient($site_id, $post_type, $latest_reviews)
+    {
+        $post_type = $post_type != null ? $post_type : 'all';
+        set_transient("rvx_{$site_id}_{$post_type}_reviews", wp_slash($latest_reviews), 86400);
+        // Expires in 1 days
+    }
     public function postMetaReviewInsert($id, $latest_reviews)
     {
         set_transient("rvx_{$id}_latest_reviews", wp_slash($latest_reviews), 604800);
@@ -883,9 +897,5 @@ class ReviewService extends \Rvx\Services\Service
             return \true;
         }
         return \false;
-    }
-    public function getAllReviewForShortcode($data)
-    {
-        return (new ReviewsApi())->getAllReviewForShortcode($data);
     }
 }

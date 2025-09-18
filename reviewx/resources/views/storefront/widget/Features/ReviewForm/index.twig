@@ -41,221 +41,218 @@
         box-shadow: none;
     }
 </style>
-{#rvxAttributes.settings?.isVerified === 'no'#}
-<template x-if="haveAddReviewAbility">
-    <div id="rvx-review-form__wrapper"
-        class="rvx-max-w-[548px] rvx-mx-auto rvx-rounded-md rvx-p-space24 rvx-bg-neutral-100 rvx-mt-space40">
-        <form class="rvx-mb-0 rvx-review-form" @submit.prevent="reviewSubmitHandler()">
-            <h2
-                class="!rvx-text-[24px] rvx-text-neutral-800 rvx-font-nunito rvx-font-semibold rvx-leading-[38px] !rvx-m-0 rvx-review-form__title !rvx-block" x-text="rvxAttributes.formLevelData?.write_a_review">
-            </h2>
-            <div class="rvx-h-[1px] rvx-bg-neutral-300 rvx-mb-space16 rvx-mt-space8 rvx-review-form__line"></div>
 
 
-            <div class="rvx-space-y-[20px] rvx-review-form__inner">
-                <div class="rvx-flex rvx-items-center rvx-gap-space16 rvx-review-form__product">
-                    <div class="">
-                        <img class="!rvx-size-[64px] rvx-object-cover rvx-rounded-md rvx-bg-white rvx-review-form__product--image"
-                            :src="`${reviewAggregationData?.data?.product?.image ?? 'https://cdn.reviewx.io/product_placeholder.jpg'}`"
-                            :alt="`${reviewAggregationData?.data?.product?.title ?? ''}`" />
-                    </div>
-                    <h2 x-text="truncateString(reviewAggregationData?.data?.product.title ?? '', 20)"
-                        class="first:!rvx-block !rvx-block !rvx-text-[24px] rvx-font-nunito rvx-text-neutral-800 !rvx-m-0 rvx-font-semibold rvx-leading-[38px] rvx-review-form__product--title">
-                    </h2>
+<div id="rvx-review-form__wrapper"
+    class="rvx-max-w-[548px] rvx-mx-auto rvx-rounded-md rvx-p-space24 rvx-bg-neutral-100 rvx-mt-space40">
+    <form class="rvx-mb-0 rvx-review-form" @submit.prevent="reviewSubmitHandler()">
+        <h2
+            class="!rvx-text-[24px] rvx-text-neutral-800 rvx-font-nunito rvx-font-semibold rvx-leading-[38px] !rvx-m-0 rvx-review-form__title !rvx-block" x-text="rvxAttributes.formLevelData?.write_a_review">
+        </h2>
+        <div class="rvx-h-[1px] rvx-bg-neutral-300 rvx-mb-space16 rvx-mt-space8 rvx-review-form__line"></div>
+
+
+        <div class="rvx-space-y-[20px] rvx-review-form__inner">
+            <div class="rvx-flex rvx-items-center rvx-gap-space16 rvx-review-form__product">
+                <div class="">
+                    <img class="!rvx-size-[64px] rvx-object-cover rvx-rounded-md rvx-bg-white rvx-review-form__product--image"
+                        :src="`${reviewAggregationData?.data?.product?.image ?? 'https://cdn.reviewx.io/product_placeholder.jpg'}`"
+                        :alt="`${reviewAggregationData?.data?.product?.title ?? ''}`" />
                 </div>
+                <h2 x-text="truncateString(reviewAggregationData?.data?.product.title ?? '', 40)"
+                    class="first:!rvx-block !rvx-block !rvx-text-[24px] rvx-font-nunito rvx-text-neutral-800 !rvx-m-0 rvx-font-semibold rvx-leading-[38px] rvx-review-form__product--title">
+                </h2>
+            </div>
 
-                <template
-                    x-if="reviewSettingsData?.data.setting?.review_settings.reviews.multicriteria.enable && multiCriteriaRatings.length">
-                    <div class="rvx-space-y-[20px] rvx-review-form__multicriteria">
-                        <template x-for="(rating, index) in multiCriteriaRatings" :key="rating.key">
-                            <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px]">
-                                <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                                    <p x-text="rating.name"
-                                        class="rvx-font-semibold rvx-text-neutral-800 !rvx-font-nunito rvx-review-form__multicriteria--name rvx-text-[16px]">
-                                    </p>
-                                </div>
-                                <div class="rvx-col-span-4 rvx-flex rvx-gap-space5 rvx-items-center">
-                                    <div x-data="__rvxMultiCriteriaRatingComponent__(rating, index)"
-                                        class="review rvx-flex rvx-gap-2 rvx-mb-2">
-                                        {% for i in 1..5 %}
-                                        <svg @click="selectCriteriaStars({{ i }})" class="rvx-cursor-pointer"
-                                            :class="getCriteriaStarsClass({{ i }})"
-                                            :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code ?? 'none'"
-                                            width="24px" height="24px" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24">
-                                            <path
-                                                d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
-                                        </svg>
-                                        {% endfor %}
-                                    </div>
+            <template
+                x-if="reviewSettingsData?.data.setting?.review_settings.reviews.multicriteria.enable && multiCriteriaRatings.length">
+                <div class="rvx-space-y-[20px] rvx-review-form__multicriteria">
+                    <template x-for="(rating, index) in multiCriteriaRatings" :key="rating.key">
+                        <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px]">
+                            <div class="rvx-col-span-2 rvx-space-y-[20px]">
+                                <p x-text="rating.name"
+                                    class="rvx-font-semibold rvx-text-neutral-800 !rvx-font-nunito rvx-review-form__multicriteria--name rvx-text-[16px]">
+                                </p>
+                            </div>
+                            <div class="rvx-col-span-4 rvx-flex rvx-gap-space5 rvx-items-center">
+                                <div x-data="__rvxMultiCriteriaRatingComponent__(rating, index)"
+                                    class="review rvx-flex rvx-gap-2 rvx-mb-2">
+                                    {% for i in 1..5 %}
+                                    <svg @click="selectCriteriaStars({{ i }})" class="rvx-cursor-pointer"
+                                        :class="getCriteriaStarsClass({{ i }})"
+                                        :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code ?? 'none'"
+                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24">
+                                        <path
+                                            d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                    </svg>
+                                    {% endfor %}
                                 </div>
                             </div>
-                        </template>
-                    </div>
-                </template>
-
-                <template x-if="!reviewSettingsData?.data.setting?.review_settings.reviews.multicriteria.enable">
-                    <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__rating">
-                        <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                            <p class="rvx-font-semibold !rvx-text-neutral-800 rvx-review-form__rating--name !rvx-font-nunito rvx-text-[16px]"  x-text="rvxAttributes.formLevelData?.text_rating_star_title">
-
-                            </p>
                         </div>
-                        <div class="rvx-col-span-4">
-                            <div x-data="__rvxStarRatingComponent__()" class="review rvx-flex rvx-gap-2 rvx-mb-2">
-                                {% for i in 1..5 %}
-                                <svg @click="selectStars({{ i }})" class="rvx-cursor-pointer"
-                                    :class="getStarClass({{ i }})"
-                                    :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code ?? 'none'"
-                                    width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
-                                </svg>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </template>
+                    </template>
+                </div>
+            </template>
 
-
-                <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__title"
-                    x-show="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_titles">
+            <template x-if="!reviewSettingsData?.data.setting?.review_settings.reviews.multicriteria.enable">
+                <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__rating">
                     <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                        <p class="rvx-text-[16px] !rvx-font-nunito rvx-font-semibold rvx-text-neutral-800 rvx-review-form__title--name"  x-text="rvxAttributes.formLevelData?.text_review_title">
+                        <p class="rvx-font-semibold !rvx-text-neutral-800 rvx-review-form__rating--name !rvx-font-nunito rvx-text-[16px]"  x-text="rvxAttributes.formLevelData?.text_rating_star_title">
 
                         </p>
                     </div>
                     <div class="rvx-col-span-4">
-                        <input x-model="newReview.title" @input="checkValidity('isValidReviewTitle')" :placeholder="rvxAttributes.formLevelData?.placeholder_review_title" id="review-title"
-                               class="rvx-review-form__title--input rvx-ui__input rvx-font-nunito rvx-w-full !rvx-py-[9px] !rvx-px-[12px] !rvx-leading-[0] !rvx-text-[16px] focus:!rvx-outline-none focus:!rvx-ring focus:!rvx-ring-primary-20 rvx-border rvx-border-solid rvx-rounded-md placeholder:rvx-text-neutral-400"
-                               :class="`${storeFrontValidation.isValidReviewTitle ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
+                        <div x-data="__rvxStarRatingComponent__()" class="review rvx-flex rvx-gap-2 rvx-mb-2">
+                            {% for i in 1..5 %}
+                            <svg @click="selectStars({{ i }})" class="rvx-cursor-pointer"
+                                :class="getStarClass({{ i }})"
+                                :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code ?? 'none'"
+                                width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                            </svg>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+
+            <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__title"
+                x-show="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_titles">
+                <div class="rvx-col-span-2 rvx-space-y-[20px]">
+                    <p class="rvx-text-[16px] !rvx-font-nunito rvx-font-semibold rvx-text-neutral-800 rvx-review-form__title--name"  x-text="rvxAttributes.formLevelData?.text_review_title">
+
+                    </p>
+                </div>
+                <div class="rvx-col-span-4">
+                    <input x-model="newReview.title" @input="checkValidity('isValidReviewTitle')" :placeholder="rvxAttributes.formLevelData?.placeholder_review_title" id="review-title"
+                            class="rvx-review-form__title--input rvx-ui__input rvx-font-nunito rvx-w-full !rvx-py-[9px] !rvx-px-[12px] !rvx-leading-[0] !rvx-text-[16px] focus:!rvx-outline-none focus:!rvx-ring focus:!rvx-ring-primary-20 rvx-border rvx-border-solid rvx-rounded-md placeholder:rvx-text-neutral-400"
+                            :class="`${storeFrontValidation.isValidReviewTitle ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
+                    />
+                    <p x-show="storeFrontValidation.isValidReviewTitle" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Review Title</p>
+                </div>
+
+            </div>
+
+            <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__description">
+                <div class="rvx-col-span-2 rvx-space-y-[20px]">
+                    <p class="rvx-text-[16px] rvx-font-semibold rvx-text-neutral-800 rvx-review-form__description--title !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_review_description">
+                    </p>
+                </div>
+                <div class="rvx-col-span-4">
+                <textarea x-model="newReview.feedback" @input="checkValidity('isValidReviewFeedback')" :placeholder="rvxAttributes.formLevelData?.placeholder_review_description"
+                            class="rvx-review-form__feedback--textarea rvx-ui__textarea rvx-resize-none rvx-px-space12 rvx-py-[9px] rvx-rounded-md rvx-w-full focus:!rvx-outline-none rvx-font-nunito placeholder:rvx-text-neutral-400 focus:!rvx-ring focus:!rvx-ring-primary-20  rvx-text-[16px] rvx-h-[114px] !rvx-border !rvx-border-solid"
+                            :class="`${storeFrontValidation.isValidReviewFeedback ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
+                ></textarea>
+                    <p x-show="storeFrontValidation.isValidReviewFeedback" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Review Feedback</p>
+                </div>
+            </div>
+
+            <template x-if="!isRvxUserLoggedIn">
+                <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__user">
+                    <div class="rvx-col-span-2 rvx-space-y-[20px]">
+                        <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__user--name !rvx-font-nunito" x-text="rvxAttributes.formLevelData?.text_full_name">
+                        </p>
+                    </div>
+                    <div class="rvx-col-span-4">
+                        <!--                    -->
+                        <input x-model="newReview.reviewer_name" @input="checkValidity('isValidReviewerName')" :placeholder="rvxAttributes.formLevelData?.placeholder_full_name" id="full-name"
+                                class="rvx-review-form__user--input rvx-ui__input rvx-w-full !rvx-py-[9px] !rvx-px-[12px] !rvx-leading-[0] !rvx-text-[16px] focus:!rvx-outline-none focus:!rvx-ring focus:!rvx-ring-primary-20  rvx-border rvx-border-solid rvx-rounded-md rvx-font-nunito placeholder:rvx-text-neutral-400"
+                                :class="`${storeFrontValidation.isValidReviewerName ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
                         />
-                        <p x-show="storeFrontValidation.isValidReviewTitle" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Review Title</p>
-                    </div>
-
-                </div>
-
-                <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__description">
-                    <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                        <p class="rvx-text-[16px] rvx-font-semibold rvx-text-neutral-800 rvx-review-form__description--title !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_review_description">
-                        </p>
-                    </div>
-                    <div class="rvx-col-span-4">
-                    <textarea x-model="newReview.feedback" @input="checkValidity('isValidReviewFeedback')" :placeholder="rvxAttributes.formLevelData?.placeholder_review_description"
-                              class="rvx-review-form__feedback--textarea rvx-ui__textarea rvx-resize-none rvx-px-space12 rvx-py-[9px] rvx-rounded-md rvx-w-full focus:!rvx-outline-none rvx-font-nunito placeholder:rvx-text-neutral-400 focus:!rvx-ring focus:!rvx-ring-primary-20  rvx-text-[16px] rvx-h-[114px] !rvx-border !rvx-border-solid"
-                              :class="`${storeFrontValidation.isValidReviewFeedback ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
-                    ></textarea>
-                        <p x-show="storeFrontValidation.isValidReviewFeedback" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Review Feedback</p>
+                        <p x-show="storeFrontValidation.isValidReviewerName" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Your Name</p>
                     </div>
                 </div>
-
-                <template x-if="!isUserLoggedIn">
-                    <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__user">
-                        <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                            <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__user--name !rvx-font-nunito" x-text="rvxAttributes.formLevelData?.text_full_name">
-                            </p>
-                        </div>
-                        <div class="rvx-col-span-4">
-                            <!--                    -->
-                            <input x-model="newReview.reviewer_name" @input="checkValidity('isValidReviewerName')" :placeholder="rvxAttributes.formLevelData?.placeholder_full_name" id="full-name"
-                                   class="rvx-review-form__user--input rvx-ui__input rvx-w-full !rvx-py-[9px] !rvx-px-[12px] !rvx-leading-[0] !rvx-text-[16px] focus:!rvx-outline-none focus:!rvx-ring focus:!rvx-ring-primary-20  rvx-border rvx-border-solid rvx-rounded-md rvx-font-nunito placeholder:rvx-text-neutral-400"
-                                   :class="`${storeFrontValidation.isValidReviewerName ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
-                            />
-                            <p x-show="storeFrontValidation.isValidReviewerName" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Your Name</p>
-                        </div>
-                    </div>
-                </template>
+            </template>
 
 
-                <div x-show="!isUserLoggedIn" class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__email">
-                    <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                        <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__email--name !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_email_name">
-                        </p>
-                    </div>
-                    <div class="rvx-col-span-4">
-                        <input x-model="newReview.reviewer_email" @input="checkValidity('isValidReviewerEmail')" :placeholder="rvxAttributes.formLevelData?.placeholder_email_name" id="email-address"
-                               type="email"
-                               class="rvx-review-form__email--input rvx-ui__input rvx-w-full !rvx-py-[9px] !rvx-px-[12px] !rvx-leading-[0] !rvx-text-[16px] focus:!rvx-outline-none focus:!rvx-ring focus:!rvx-ring-primary-20 !rvx-border-neutral-500 rvx-border !rvx-border-solid !rvx-rounded-md rvx-font-nunito placeholder:rvx-text-neutral-400 !rvx-shadow-none"
-                               :class="`${storeFrontValidation.isValidReviewerEmail ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
-                        />
-                        <p x-show="storeFrontValidation.isValidReviewerEmail" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Your Email</p>
-                    </div>
+            <div x-show="!isRvxUserLoggedIn" class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__email">
+                <div class="rvx-col-span-2 rvx-space-y-[20px]">
+                    <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__email--name !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_email_name">
+                    </p>
                 </div>
+                <div class="rvx-col-span-4">
+                    <input x-model="newReview.reviewer_email" @input="checkValidity('isValidReviewerEmail')" :placeholder="rvxAttributes.formLevelData?.placeholder_email_name" id="email-address"
+                            type="email"
+                            class="rvx-review-form__email--input rvx-ui__input rvx-w-full !rvx-py-[9px] !rvx-px-[12px] !rvx-leading-[0] !rvx-text-[16px] focus:!rvx-outline-none focus:!rvx-ring focus:!rvx-ring-primary-20 !rvx-border-neutral-500 rvx-border !rvx-border-solid !rvx-rounded-md rvx-font-nunito placeholder:rvx-text-neutral-400 !rvx-shadow-none"
+                            :class="`${storeFrontValidation.isValidReviewerEmail ? '!rvx-border-danger' : '!rvx-border-neutral-500'}`"
+                    />
+                    <p x-show="storeFrontValidation.isValidReviewerEmail" class="!rvx-text-[12px] rvx-text-danger rvx-mt-space5 !rvx-font-nunito">Please Insert Your Email</p>
+                </div>
+            </div>
 
-                <div x-show="reviewSettingsData?.data?.setting?.review_settings?.reviews?.photo_reviews_allowed || reviewSettingsData?.data?.setting?.review_settings?.reviews?.video_reviews_allowed"
-                    class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__attachment">
+            <template x-if="reviewSettingsData?.data?.setting?.review_settings?.reviews?.photo_reviews_allowed || reviewSettingsData?.data?.setting?.review_settings?.reviews?.video_reviews_allowed">
+                <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__attachment">
                     <div class="rvx-col-span-2 rvx-space-y-[20px]">
                         <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__attachment--name !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_attachment_title">
-
                         </p>
                     </div>
-
-                    <div  class="rvx-col-span-4" >
+                    <div class="rvx-col-span-4">
                         <div class="rvx-review-form__attachment--inner">
                             {% include "storefront/widget/Features/ReviewForm/MediaUpload.twig" %}
                         </div>
                     </div>
                 </div>
+            </template>
 
-                <div x-show="reviewSettingsData?.data?.setting?.review_settings?.reviews?.anonymous_reviews_allowed" class="rvx-grid rvx-grid-cols-6">
-                    <div class="rvx-col-span-2"></div>
-                    <div class="rvx-col-span-4 rvx-flex rvx-gap-space8 rvx-items-center">
-                        <input id="is_anonymous" x-model="newReview.is_anonymous" type="checkbox" />
-                        <label for="is_anonymous" x-text="rvxAttributes.formLevelData?.text_mark_as_anonymous" class="rvx-font-normal rvx-review-form__mark-anonymous !rvx-font-nunito">
-                        </label>
-                    </div>
+            <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__recommended"
+                x-show="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_recommendations">
+                <div class="rvx-col-span-2 rvx-space-y-[20px]">
+                    <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__recommended--name !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_recommended_title">
+
+                    </p>
                 </div>
-
-                <div class="rvx-grid rvx-grid-cols-6 rvx-gap-[26px] rvx-review-form__recommended"
-                    x-show="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_recommendations">
-                    <div class="rvx-col-span-2 rvx-space-y-[20px]">
-                        <p class="rvx-font-semibold rvx-text-neutral-800 rvx-review-form__recommended--name !rvx-font-nunito"  x-text="rvxAttributes.formLevelData?.text_recommended_title">
-
-                        </p>
+                <div x-show="reviewSettingsData?.data.setting?.review_settings.reviews.allow_recommendations"
+                    class="rvx-col-span-4 rvx-flex rvx-gap-space8">
+                    <div class="rvx-flex rvx-items-center rvx-gap-space5">
+                        <input x-model="newReview.is_recommended" id="recommended-yes" value="true" type="radio">
+                        <label for="recommended-yes" class="rvx-m-0 !rvx-font-nunito">{{__('Yes', 'reviewx')}}</label>
                     </div>
-                    <div x-show="reviewSettingsData?.data.setting?.review_settings.reviews.allow_recommendations"
-                        class="rvx-col-span-4 rvx-flex rvx-gap-space8">
-                        <div class="rvx-flex rvx-items-center rvx-gap-space5">
-                            <input x-model="newReview.is_recommended" id="recommended-yes" value="true" type="radio">
-                            <label for="recommended-yes" class="rvx-m-0 !rvx-font-nunito">{{__('Yes', 'reviewx')}}</label>
-                        </div>
-                        <div class="rvx-flex rvx-items-center rvx-gap-space5">
-                            <input x-model="newReview.is_recommended" id="recommended-no" value="false" type="radio">
-                            <label for="recommended-no" class="rvx-m-0 !rvx-font-nunito">{{__('No', 'reviewx')}}</label>
-                        </div>
+                    <div class="rvx-flex rvx-items-center rvx-gap-space5">
+                        <input x-model="newReview.is_recommended" id="recommended-no" value="false" type="radio">
+                        <label for="recommended-no" class="rvx-m-0 !rvx-font-nunito">{{__('No', 'reviewx')}}</label>
                     </div>
-                </div>
-
-
-                <div x-show="reviewSettingsData?.data.setting?.review_settings.reviews.show_consent_checkbox?.enabled" class="rvx-grid rvx-grid-cols-6">
-                    <div class="rvx-col-span-2"></div>
-                    <div class="rvx-col-span-4 rvx-flex rvx-gap-space8 rvx-items-center">
-{#                        @change="checkValidity('isAcceptConsent')"#}
-                        <input id="consent" x-model="newReview.consent" type="checkbox" />
-                        <label for="consent" class="rvx-font-normal rvx-review-form__consent--content" x-text="reviewSettingsData?.data.setting?.review_settings.reviews.show_consent_checkbox?.content"></label>
-                    </div>
-                </div>
-
-
-                <div class="rvx-review-form__footer rvx-box-border">
-                    <p x-show="storeFrontValidation.isNotRobot" class="!rvx-text-[12px] rvx-text-center rvx-text-danger rvx-mb-space5">Failed reCAPTCHA validation.</p>
-                    <p x-show="storeFrontValidation.reviewSubmitFailed" class="!rvx-text-[12px] rvx-text-center rvx-text-danger rvx-mb-space5">Failed to Submit Review.</p>
-                    <p x-show="storeFrontValidation.isAcceptConsent" class="!rvx-text-[12px] rvx-text-center rvx-text-danger rvx-mb-space5">Before Submit Review Please Accept Consent.</p>
-                    <button type="submit" :disabled="isReviewSubmitting"
-                        class="rvx-w-full rvx-text-[16px] rvx-text-neutral-700 !rvx-leading-[24px] rvx-font-semibold rvx-flex rvx-justify-content-center rvx-items-center rvx-gap-2 rvx-whitespace-nowrap rvx-tracking-wide rvx-transition hover:rvx-opacity-75 focus-visible:rvx-outline focus-visible:rvx-outline-2 focus-visible:rvx-outline-offset-2 focus-visible:rvx-outline-black active:rvx-opacity-100 active:rvx-outline-offset-0 disabled:rvx-opacity-75 rvx-cursor-pointer disabled:rvx-cursor-not-allowed rvx-border-none rvx-review-form__submit--button !rvx-max-w-full !rvx-font-nunito !rvx-capitalize rvx-mb-0"
-                        :style="`background: ${reviewSettingsData?.data?.setting?.widget_settings?.brand_color_code}; color: ${reviewSettingsData?.data?.setting?.widget_settings?.button_font_color_code};`">
-                        <svg x-show="isReviewSubmitting" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            class="rvx-size-5 rvx-animate-spin motion-reduce:rvx-animate-none rvx-review-form__submit--button--spin" :fill="`${reviewSettingsData?.data?.setting?.widget_settings?.button_font_color_code}`">
-                            <path opacity="0.25"
-                                d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" />
-                            <path
-                                d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
-                        </svg>
-                        {{__('Submit Review', 'reviewx')}}
-                    </button>
                 </div>
             </div>
-        </form>
-    </div>
-</template>
+
+            <div x-show="reviewSettingsData?.data?.setting?.review_settings?.reviews?.anonymous_reviews_allowed" class="rvx-grid rvx-grid-cols-6">
+                <div class="rvx-col-span-2"></div>
+                <div class="rvx-col-span-4 rvx-flex rvx-gap-space8 rvx-items-center">
+                    <input id="is_anonymous" x-model="newReview.is_anonymous" type="checkbox" />
+                    <label for="is_anonymous" x-text="rvxAttributes.formLevelData?.text_mark_as_anonymous" class="rvx-font-normal rvx-review-form__mark-anonymous !rvx-font-nunito">
+                    </label>
+                </div>
+            </div>
+
+            <div x-show="reviewSettingsData?.data.setting?.review_settings.reviews.show_consent_checkbox?.enabled" class="rvx-grid rvx-grid-cols-6">
+                <div class="rvx-col-span-2"></div>
+                <div class="rvx-col-span-4 rvx-flex rvx-gap-space8 rvx-items-center">
+{#                        @change="checkValidity('isAcceptConsent')"#}
+                    <input id="consent" x-model="newReview.consent" type="checkbox" />
+                    <label for="consent" class="rvx-font-normal rvx-review-form__consent--content" x-text="reviewSettingsData?.data.setting?.review_settings.reviews.show_consent_checkbox?.content"></label>
+                </div>
+            </div>
+
+
+            <div class="rvx-review-form__footer rvx-box-border">
+                <p x-show="storeFrontValidation.isNotRobot" class="!rvx-text-[12px] rvx-text-center rvx-text-danger rvx-mb-space5">Failed reCAPTCHA validation.</p>
+                <p x-show="storeFrontValidation.reviewSubmitFailed" class="!rvx-text-[12px] rvx-text-center rvx-text-danger rvx-mb-space5">Failed to Submit Review.</p>
+                <p x-show="storeFrontValidation.isAcceptConsent" class="!rvx-text-[12px] rvx-text-center rvx-text-danger rvx-mb-space5">Before Submit Review Please Accept Consent.</p>
+                <button type="submit" :disabled="isReviewSubmitting"
+                    class="rvx-w-full rvx-text-[16px] rvx-text-neutral-700 !rvx-leading-[24px] rvx-font-semibold rvx-flex rvx-justify-content-center rvx-items-center rvx-gap-2 rvx-whitespace-nowrap rvx-tracking-wide rvx-transition hover:rvx-opacity-75 focus-visible:rvx-outline focus-visible:rvx-outline-2 focus-visible:rvx-outline-offset-2 focus-visible:rvx-outline-black active:rvx-opacity-100 active:rvx-outline-offset-0 disabled:rvx-opacity-75 rvx-cursor-pointer disabled:rvx-cursor-not-allowed rvx-border-none rvx-review-form__submit--button !rvx-max-w-full !rvx-font-nunito !rvx-capitalize rvx-mb-0"
+                    :style="`background: ${reviewSettingsData?.data?.setting?.widget_settings?.brand_color_code}; color: ${reviewSettingsData?.data?.setting?.widget_settings?.button_font_color_code};`">
+                    <svg x-show="isReviewSubmitting" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        class="rvx-size-5 rvx-animate-spin motion-reduce:rvx-animate-none rvx-review-form__submit--button--spin" :fill="`${reviewSettingsData?.data?.setting?.widget_settings?.button_font_color_code}`">
+                        <path opacity="0.25"
+                            d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" />
+                        <path
+                            d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" />
+                    </svg>
+                    {{__('Submit Review', 'reviewx')}}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

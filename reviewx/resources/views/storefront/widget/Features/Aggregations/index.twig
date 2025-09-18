@@ -15,13 +15,18 @@
                     /5
                 </span>
             </div>
-            <template x-if="haveDisplayBadgeShowAbility">
+            <template 
+                x-if="reviewSettingsData?.data?.setting?.widget_settings?.display_badges 
+                    && Number(reviewAggregationData?.data?.aggregation?.total_avg_review) >= 4">
                 <div
-                     class="rvx-rating-badge rvx-bg-green-500 rvx-flex rvx-items-center rvx-rounded-sm rvx-w-[123px]"
-                     style="clip-path: polygon(0 0, 100% 0%, 88% 100%, 0% 100%)">
-                    <span class="material-symbols-rounded rvx-fill-white rvx-text-white rvx-rating-badge__icon">{{__('grade', 'reviewx')}}</span>
+                    class="rvx-rating-badge rvx-bg-green-500 rvx-flex rvx-items-center rvx-rounded-sm rvx-w-[123px]"
+                    style="clip-path: polygon(0 0, 100% 0%, 88% 100%, 0% 100%)">
+                    <span class="material-symbols-rounded rvx-fill-white rvx-text-white rvx-rating-badge__icon">
+                        {{__('grade', 'reviewx')}}
+                    </span>
                     <span class="rvx-rating-badge__text rvx-text-white !rvx-text-[15.38px] rvx-font-nunito rvx-font-normal rvx-leading-[24.168px]">
-                    {{__('Very Good', 'reviewx')}}</span>
+                        {{__('Very Good', 'reviewx')}}
+                    </span>
                 </div>
             </template>
         </div>

@@ -12,4 +12,9 @@ return function (Plugin $plugin) {
     Shortcode::add('rvx-stats', \Rvx\Shortcodes\Products\ReviewStatshortcode::class);
     Shortcode::add('rvx-star-count', \Rvx\Shortcodes\Products\ReviewStarCountShortcode::class);
     Shortcode::add('rvx-google-review', \Rvx\Shortcodes\GoogleReviewLIst::class);
+    Shortcode::add('rvx-review-form', \Rvx\Shortcodes\Products\ReviewListFormShortcode::class);
+    // main for [rvx-woo-reviews]
+    Shortcode::add('rvx-woo-reviews', \Rvx\Shortcodes\Products\WooReviewsFormShortcode::class);
+    // used [rvx-review-form] into this
+    // Shortcode::add('rvx_user_avatar', \Rvx\Shortcodes\Users\UserAvatarShortcode::class); // future implementation
 };

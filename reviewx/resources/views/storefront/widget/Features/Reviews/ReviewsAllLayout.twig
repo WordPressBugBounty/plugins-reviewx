@@ -1,0 +1,42 @@
+
+<style>
+    .rvx-masonry-layout {
+        columns: 4 240px;
+        column-gap: 16px;
+    }
+    .rvx-columns-box {
+        -moz-column-break-inside: avoid;
+        break-inside: avoid;
+        display: inline-block; /* Prevents breaking */
+        width: 100%; /* Ensures full width in column */
+    }
+    .rvx-review-card{
+        margin-bottom: 16px;
+    }
+    .rvx-review-wrapper .rvx-review-card:last-child {
+        margin-bottom: 0;
+    }
+
+</style>
+
+<div
+    :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(240px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
+    <template x-for="review in reviewsAllData?.data?.reviews">
+        <div class="rvx-rounded-md rvx-shadow-100 rvx-bg-neutral-100 rvx-columns-box rvx-review-card" :class="`${(layoutView === 'masonry' || layoutView === 'grid') ? '' : 'rvx-py-space16 rvx-pl-space16 rvx-pr-[47px]'} ${review?.is_highlighted ? 'rvx-bg-primary-10 rvx-border rvx-border-l-4 rvx-border-primary-50 rvx-border-solid'  : 'rvx-bg-neutral-100'}`">
+            {% include 'storefront/widget/Features/Reviews/ReviewAllCard.twig' %}
+        </div>
+    </template>
+</div>
+
+<div x-show="isLoadMoreAllReviews" class="rvx-my-space24" >
+    {% include "storefront/widget/Components/Skeleton/LoadMoreReviewListSkeleton.twig" %}
+</div>
+<div x-show="!isLoadMoreAllReviews && reviewsAllData?.data?.meta.next_cursor" class="rvx-grid rvx-place-content-center rvx-mt-space20">
+    <button
+        class="rvx-border-neutral-600 rvx-text-neutral-800 hover:rvx-border-neutral-600 hover:rvx-text-white rvx-rounded-lg !rvx-border rvx-border-solid rvx-py-[9px] rvx-px-space16 rvx-leading-[22px] rvx-cursor-pointer rvx-font-nunito rvx-text-normal rvx-font-semibold focus:rvx-bg-transparent rvx-bg-transparent disabled:!rvx-cursor-not-allowed"
+        @click="loadMoreReviewAllHandler"
+        :loader="fetchReviewsIsLoading"
+        :disabled="fetchReviewsIsLoading">
+        {{__('Load More Reviews', 'reviewx')}}
+    </button>
+</div>

@@ -2,6 +2,7 @@
 
 namespace Rvx\Shortcodes\Products;
 
+use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
 use Rvx\WPDrill\Facades\View;
@@ -11,6 +12,10 @@ class ReviewSummaryShortcode implements ShortcodeContract
     {
         // Define default attributes to accept both product_id and post_id.
         $attrs = shortcode_atts(['title' => null, 'product_id' => null, 'post_id' => null], $attrs);
+        // Check if both product_id and post_id are provided.
+        if (!Client::getSync()) {
+            return '<div class="warning">Error: Please complete the synchronization process of ReviewX.</div>';
+        }
         // If both IDs are provided, return an error.
         if (!empty($attrs['product_id']) && !empty($attrs['post_id'])) {
             return '<div class="warning">Error: Please use only one of "product_id" or "post_id" in the shortcode.</div>';

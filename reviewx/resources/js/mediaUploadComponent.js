@@ -62,7 +62,7 @@ function __rvxMediaUploadComponent__(){
         // File upload (input and drop) handling
         onUpload(event) {
             const target = event.target;
-            console.log('target.files', target?.files)
+            // console.log('target.files', target?.files)
             if (target.files) {
                 this.handleFiles(target.files);
                 this.notifyFiles()

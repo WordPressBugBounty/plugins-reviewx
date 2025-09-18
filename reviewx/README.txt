@@ -7,7 +7,7 @@ Tested up to: 6.8
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.8
-Stable tag: 2.2.7
+Stable tag: 2.2.8
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -199,7 +199,6 @@ https://youtu.be/D4Qy54U5Dhc
 [ReviewX Review & Tutorial - Best Free WooCommerce Reviews Plugin? (With 50% Discount & LTD)](https://www.youtube.com/watch?v=D4Qy54U5Dhc)
 
 
-
 🚀 Backed By A Trusted Team
 
 This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/), a dedicated team for WordPress store owners, trusted by 10,000+ happy users.
@@ -221,6 +220,13 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.2.8 - 09-17-2025 =
+- Fix: 15+ Minor Bug fixes
+- Improved UI
+- Improved Performance
+- Add: Added Features
+- Refactored: 5 Shortcodes
+
 = 2.2.7 - 09-04-2025 =
 - Fix: Minor bug fixes
 
