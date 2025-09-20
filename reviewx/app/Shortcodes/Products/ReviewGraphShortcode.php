@@ -8,7 +8,7 @@ use Rvx\WPDrill\Contracts\ShortcodeContract;
 use Rvx\WPDrill\Facades\View;
 class ReviewGraphShortcode implements ShortcodeContract
 {
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'product_id' => null, 'post_id' => null], $attrs);
         // Check if both product_id and post_id are provided.

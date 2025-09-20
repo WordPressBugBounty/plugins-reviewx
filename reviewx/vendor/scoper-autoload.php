@@ -38,34 +38,23 @@ humbug_phpscoper_expose_class('RVX_Builder_Module_Woocommerce_Tabs', 'Rvx\RVX_Bu
 humbug_phpscoper_expose_class('create_sites_table', 'Rvx\create_sites_table');
 humbug_phpscoper_expose_class('FlattedString', 'Rvx\FlattedString');
 humbug_phpscoper_expose_class('Flatted', 'Rvx\Flatted');
-humbug_phpscoper_expose_class('__TwigTemplate_920bcf1079ade6a1b0eeef962ba28b84', 'Rvx\__TwigTemplate_920bcf1079ade6a1b0eeef962ba28b84');
-humbug_phpscoper_expose_class('__TwigTemplate_8a418eb53cafeb6bcc75513d0c31f17f', 'Rvx\__TwigTemplate_8a418eb53cafeb6bcc75513d0c31f17f');
-humbug_phpscoper_expose_class('__TwigTemplate_507d43e80bcfab41c5a7a6dda2f808ed', 'Rvx\__TwigTemplate_507d43e80bcfab41c5a7a6dda2f808ed');
-humbug_phpscoper_expose_class('__TwigTemplate_8af4af43b4b6f6ba0fa9f2ff8812a4df', 'Rvx\__TwigTemplate_8af4af43b4b6f6ba0fa9f2ff8812a4df');
 humbug_phpscoper_expose_class('__TwigTemplate_b3aa88ef6832f8eae9f56ecd811e5143', 'Rvx\__TwigTemplate_b3aa88ef6832f8eae9f56ecd811e5143');
 humbug_phpscoper_expose_class('__TwigTemplate_239caa0304ff6e7ac8648a52705b9943', 'Rvx\__TwigTemplate_239caa0304ff6e7ac8648a52705b9943');
 humbug_phpscoper_expose_class('__TwigTemplate_457f4a361f915d94cd43ef4ae893cb60', 'Rvx\__TwigTemplate_457f4a361f915d94cd43ef4ae893cb60');
-humbug_phpscoper_expose_class('__TwigTemplate_ed7ed32fc5359aa975f12f4ea1f6f4de', 'Rvx\__TwigTemplate_ed7ed32fc5359aa975f12f4ea1f6f4de');
-humbug_phpscoper_expose_class('__TwigTemplate_7f1d5f07c8a2dd47170e57c2f6ab4483', 'Rvx\__TwigTemplate_7f1d5f07c8a2dd47170e57c2f6ab4483');
 humbug_phpscoper_expose_class('__TwigTemplate_1bb492e97f906e168ab4b22486c6830c', 'Rvx\__TwigTemplate_1bb492e97f906e168ab4b22486c6830c');
 humbug_phpscoper_expose_class('__TwigTemplate_d3595f9b3375b9f44b44d3441237d9b7', 'Rvx\__TwigTemplate_d3595f9b3375b9f44b44d3441237d9b7');
 humbug_phpscoper_expose_class('__TwigTemplate_78c9b1acb54be40ecac206c896f6c1dc', 'Rvx\__TwigTemplate_78c9b1acb54be40ecac206c896f6c1dc');
 humbug_phpscoper_expose_class('__TwigTemplate_0059eabb0c785abaf87e15f6e8e1ef40', 'Rvx\__TwigTemplate_0059eabb0c785abaf87e15f6e8e1ef40');
 humbug_phpscoper_expose_class('__TwigTemplate_75b21e26881b07c12b5c55a62c75c13a', 'Rvx\__TwigTemplate_75b21e26881b07c12b5c55a62c75c13a');
-humbug_phpscoper_expose_class('__TwigTemplate_99b9f4a6ad27fb4deae1c9af611c2614', 'Rvx\__TwigTemplate_99b9f4a6ad27fb4deae1c9af611c2614');
 humbug_phpscoper_expose_class('__TwigTemplate_940f819de4024328855bfc2ccead3569', 'Rvx\__TwigTemplate_940f819de4024328855bfc2ccead3569');
 humbug_phpscoper_expose_class('__TwigTemplate_da74d41d76237ee7d4be61e2e8453651', 'Rvx\__TwigTemplate_da74d41d76237ee7d4be61e2e8453651');
 humbug_phpscoper_expose_class('__TwigTemplate_fc7c39789c53600b5cad3012e83698d3', 'Rvx\__TwigTemplate_fc7c39789c53600b5cad3012e83698d3');
-humbug_phpscoper_expose_class('__TwigTemplate_1d18cadcceec7f8d9f6c6054fa88ee9d', 'Rvx\__TwigTemplate_1d18cadcceec7f8d9f6c6054fa88ee9d');
 humbug_phpscoper_expose_class('__TwigTemplate_6cddbc4f9e01304ee9c8fc921bc9a737', 'Rvx\__TwigTemplate_6cddbc4f9e01304ee9c8fc921bc9a737');
-humbug_phpscoper_expose_class('__TwigTemplate_995afe3a080c13f9c85ddcd7fbadbc0c', 'Rvx\__TwigTemplate_995afe3a080c13f9c85ddcd7fbadbc0c');
 humbug_phpscoper_expose_class('__TwigTemplate_c808ce15f05ac1aee550c926f345daff', 'Rvx\__TwigTemplate_c808ce15f05ac1aee550c926f345daff');
-humbug_phpscoper_expose_class('__TwigTemplate_6e2aa4b9a0fbfb382d618a2f2f3a736b', 'Rvx\__TwigTemplate_6e2aa4b9a0fbfb382d618a2f2f3a736b');
 humbug_phpscoper_expose_class('__TwigTemplate_4b271387c9440f0c02a1066a7fb70864', 'Rvx\__TwigTemplate_4b271387c9440f0c02a1066a7fb70864');
 humbug_phpscoper_expose_class('__TwigTemplate_6013bca88e16c2d738097020f9bd775f', 'Rvx\__TwigTemplate_6013bca88e16c2d738097020f9bd775f');
-humbug_phpscoper_expose_class('__TwigTemplate_c845e82f030da4edf77237a9c0caae28', 'Rvx\__TwigTemplate_c845e82f030da4edf77237a9c0caae28');
+humbug_phpscoper_expose_class('__TwigTemplate_45d4dd43cbffa5502bc989ab9b17f54bf19b88ca5967082ae44a475549d80e51', 'Rvx\__TwigTemplate_45d4dd43cbffa5502bc989ab9b17f54bf19b88ca5967082ae44a475549d80e51');
 humbug_phpscoper_expose_class('__TwigTemplate_c2a7f2effe3c5f1dc6fad2c0c199abcd', 'Rvx\__TwigTemplate_c2a7f2effe3c5f1dc6fad2c0c199abcd');
-humbug_phpscoper_expose_class('__TwigTemplate_c80276227422cee688a765de6e29f323', 'Rvx\__TwigTemplate_c80276227422cee688a765de6e29f323');
 humbug_phpscoper_expose_class('__TwigTemplate_1458e6b649f7c90b07e305ec5cc61468', 'Rvx\__TwigTemplate_1458e6b649f7c90b07e305ec5cc61468');
 humbug_phpscoper_expose_class('__TwigTemplate_66c9b6128cdaf3718d3de5367975e5e9', 'Rvx\__TwigTemplate_66c9b6128cdaf3718d3de5367975e5e9');
 humbug_phpscoper_expose_class('__TwigTemplate_32ceabdbd1419583617d0b83bb2deee2', 'Rvx\__TwigTemplate_32ceabdbd1419583617d0b83bb2deee2');
@@ -75,7 +64,6 @@ humbug_phpscoper_expose_class('__TwigTemplate_1c5b861de4b7ad54ddcd33fd2e3c9dfe',
 humbug_phpscoper_expose_class('__TwigTemplate_daed95326b989e6a39f6769e7e905d6b', 'Rvx\__TwigTemplate_daed95326b989e6a39f6769e7e905d6b');
 humbug_phpscoper_expose_class('__TwigTemplate_fc3d861de15a619cc90c95e3adf97373', 'Rvx\__TwigTemplate_fc3d861de15a619cc90c95e3adf97373');
 humbug_phpscoper_expose_class('__TwigTemplate_74142a4a11c4a2ec103efe96b541f172', 'Rvx\__TwigTemplate_74142a4a11c4a2ec103efe96b541f172');
-humbug_phpscoper_expose_class('__TwigTemplate_f6690ef1168e9c112decf36e6020f7f6', 'Rvx\__TwigTemplate_f6690ef1168e9c112decf36e6020f7f6');
 humbug_phpscoper_expose_class('__TwigTemplate_c446e7ba1369be90ea05d2036b0b600e', 'Rvx\__TwigTemplate_c446e7ba1369be90ea05d2036b0b600e');
 humbug_phpscoper_expose_class('__TwigTemplate_e221bfe39363639db4e1611bc0e8395e', 'Rvx\__TwigTemplate_e221bfe39363639db4e1611bc0e8395e');
 humbug_phpscoper_expose_class('__TwigTemplate_8fd621bb4b240e4d35a24457cd616851', 'Rvx\__TwigTemplate_8fd621bb4b240e4d35a24457cd616851');
@@ -83,34 +71,22 @@ humbug_phpscoper_expose_class('__TwigTemplate_4094aaeefd6b6a9abded6410faaa2349',
 humbug_phpscoper_expose_class('__TwigTemplate_d07b7fcd97d78e07176d0be72d5de1de', 'Rvx\__TwigTemplate_d07b7fcd97d78e07176d0be72d5de1de');
 humbug_phpscoper_expose_class('__TwigTemplate_1fd2a13ddd3c76b8c9334939160e3418', 'Rvx\__TwigTemplate_1fd2a13ddd3c76b8c9334939160e3418');
 humbug_phpscoper_expose_class('__TwigTemplate_741a9f54cd3337b1916b4e7ab1e138cc', 'Rvx\__TwigTemplate_741a9f54cd3337b1916b4e7ab1e138cc');
-humbug_phpscoper_expose_class('__TwigTemplate_482b92871974d1e666831a19b14038ed', 'Rvx\__TwigTemplate_482b92871974d1e666831a19b14038ed');
 humbug_phpscoper_expose_class('__TwigTemplate_c72b8ee8b1c1b27dd70f6ff5930b19e9', 'Rvx\__TwigTemplate_c72b8ee8b1c1b27dd70f6ff5930b19e9');
 humbug_phpscoper_expose_class('__TwigTemplate_20735546fe4f557581d78ed7c9c94cce', 'Rvx\__TwigTemplate_20735546fe4f557581d78ed7c9c94cce');
-humbug_phpscoper_expose_class('__TwigTemplate_821954496946f0e7df32257e22ec45db', 'Rvx\__TwigTemplate_821954496946f0e7df32257e22ec45db');
 humbug_phpscoper_expose_class('__TwigTemplate_e7504fa68d60493e88e7b09c2f766e68', 'Rvx\__TwigTemplate_e7504fa68d60493e88e7b09c2f766e68');
-humbug_phpscoper_expose_class('__TwigTemplate_b9b8874ede0e40b312394445ea3d0d61', 'Rvx\__TwigTemplate_b9b8874ede0e40b312394445ea3d0d61');
-humbug_phpscoper_expose_class('__TwigTemplate_e66dea2c50c057f3e633e9ca3dc4d3fc', 'Rvx\__TwigTemplate_e66dea2c50c057f3e633e9ca3dc4d3fc');
 humbug_phpscoper_expose_class('__TwigTemplate_be5279772162c0d709e392a632fed17a', 'Rvx\__TwigTemplate_be5279772162c0d709e392a632fed17a');
-humbug_phpscoper_expose_class('__TwigTemplate_6e2929b3dbe606bc3cbde11a3721b071', 'Rvx\__TwigTemplate_6e2929b3dbe606bc3cbde11a3721b071');
-humbug_phpscoper_expose_class('__TwigTemplate_6010f2d918792fa50c0412afdec73748', 'Rvx\__TwigTemplate_6010f2d918792fa50c0412afdec73748');
-humbug_phpscoper_expose_class('__TwigTemplate_16f302dcd1d1f5cf8077341397111613', 'Rvx\__TwigTemplate_16f302dcd1d1f5cf8077341397111613');
 humbug_phpscoper_expose_class('__TwigTemplate_9ff81afc1d69aeeac33d63c0c45cfab2', 'Rvx\__TwigTemplate_9ff81afc1d69aeeac33d63c0c45cfab2');
-humbug_phpscoper_expose_class('__TwigTemplate_6ab29cc361ef5d8472ae7b68a574bb62', 'Rvx\__TwigTemplate_6ab29cc361ef5d8472ae7b68a574bb62');
 humbug_phpscoper_expose_class('__TwigTemplate_a81857f2cfd868811c83ef9f5b20aa32', 'Rvx\__TwigTemplate_a81857f2cfd868811c83ef9f5b20aa32');
 humbug_phpscoper_expose_class('__TwigTemplate_144223b9c20dd047da1c25566dfc348a', 'Rvx\__TwigTemplate_144223b9c20dd047da1c25566dfc348a');
-humbug_phpscoper_expose_class('__TwigTemplate_1ba5e21b69f81f5ceb239af4791eb2b1', 'Rvx\__TwigTemplate_1ba5e21b69f81f5ceb239af4791eb2b1');
+humbug_phpscoper_expose_class('__TwigTemplate_bab78d5000034e4eb149bd1c8a4f5b68', 'Rvx\__TwigTemplate_bab78d5000034e4eb149bd1c8a4f5b68');
 humbug_phpscoper_expose_class('__TwigTemplate_7389f2bc564f4b588bad534f295cb300', 'Rvx\__TwigTemplate_7389f2bc564f4b588bad534f295cb300');
 humbug_phpscoper_expose_class('__TwigTemplate_5e6f23397cfea861224dbecb6fa69fb6', 'Rvx\__TwigTemplate_5e6f23397cfea861224dbecb6fa69fb6');
 humbug_phpscoper_expose_class('__TwigTemplate_15ba98ab46c9f59bba69869c02428371', 'Rvx\__TwigTemplate_15ba98ab46c9f59bba69869c02428371');
-humbug_phpscoper_expose_class('__TwigTemplate_d71109ca94144378187f274ad3aca299', 'Rvx\__TwigTemplate_d71109ca94144378187f274ad3aca299');
 humbug_phpscoper_expose_class('__TwigTemplate_6af25037e00f408291672b9c00736db8', 'Rvx\__TwigTemplate_6af25037e00f408291672b9c00736db8');
-humbug_phpscoper_expose_class('__TwigTemplate_ee26448375adbfd9dc3446089cea15dd', 'Rvx\__TwigTemplate_ee26448375adbfd9dc3446089cea15dd');
-humbug_phpscoper_expose_class('__TwigTemplate_2efcfb854c5207b3607ce3a5077460ed', 'Rvx\__TwigTemplate_2efcfb854c5207b3607ce3a5077460ed');
 humbug_phpscoper_expose_class('__TwigTemplate_5739f5e3998e7c1988cd96b6310ee051', 'Rvx\__TwigTemplate_5739f5e3998e7c1988cd96b6310ee051');
 humbug_phpscoper_expose_class('__TwigTemplate_0dfbdf0a69819db9483fd2858376ea67', 'Rvx\__TwigTemplate_0dfbdf0a69819db9483fd2858376ea67');
 humbug_phpscoper_expose_class('__TwigTemplate_86f00237cb4fa092d26e17be09fad04e', 'Rvx\__TwigTemplate_86f00237cb4fa092d26e17be09fad04e');
-humbug_phpscoper_expose_class('__TwigTemplate_06d4efb1435d194b74ada6193a764045', 'Rvx\__TwigTemplate_06d4efb1435d194b74ada6193a764045');
-humbug_phpscoper_expose_class('ComposerAutoloaderInit8b68b4163022a20e358906a813ba7a61', 'Rvx\ComposerAutoloaderInit8b68b4163022a20e358906a813ba7a61');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit4d01ae5ec083a3f2e093f32c3cae35e7', 'Rvx\ComposerAutoloaderInit4d01ae5ec083a3f2e093f32c3cae35e7');
 humbug_phpscoper_expose_class('Normalizer', 'Rvx\Normalizer');
 humbug_phpscoper_expose_class('JsonException', 'Rvx\JsonException');
 humbug_phpscoper_expose_class('Attribute', 'Rvx\Attribute');
@@ -197,6 +173,7 @@ if (!function_exists('hrtime')) { function hrtime() { return \Rvx\hrtime(...func
 if (!function_exists('is_admin')) { function is_admin() { return \Rvx\is_admin(...func_get_args()); } }
 if (!function_exists('is_countable')) { function is_countable() { return \Rvx\is_countable(...func_get_args()); } }
 if (!function_exists('is_oxygen_edit_page')) { function is_oxygen_edit_page() { return \Rvx\is_oxygen_edit_page(...func_get_args()); } }
+if (!function_exists('load_plugin_textdomain')) { function load_plugin_textdomain() { return \Rvx\load_plugin_textdomain(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \Rvx\mb_check_encoding(...func_get_args()); } }
 if (!function_exists('mb_chr')) { function mb_chr() { return \Rvx\mb_chr(...func_get_args()); } }
 if (!function_exists('mb_convert_case')) { function mb_convert_case() { return \Rvx\mb_convert_case(...func_get_args()); } }
@@ -245,6 +222,7 @@ if (!function_exists('media_handle_sideload')) { function media_handle_sideload(
 if (!function_exists('normalizer_is_normalized')) { function normalizer_is_normalized() { return \Rvx\normalizer_is_normalized(...func_get_args()); } }
 if (!function_exists('normalizer_normalize')) { function normalizer_normalize() { return \Rvx\normalizer_normalize(...func_get_args()); } }
 if (!function_exists('oxygen_vsb_register_condition')) { function oxygen_vsb_register_condition() { return \Rvx\oxygen_vsb_register_condition(...func_get_args()); } }
+if (!function_exists('plugin_basename')) { function plugin_basename() { return \Rvx\plugin_basename(...func_get_args()); } }
 if (!function_exists('plugin_dir_path')) { function plugin_dir_path() { return \Rvx\plugin_dir_path(...func_get_args()); } }
 if (!function_exists('plugin_dir_url')) { function plugin_dir_url() { return \Rvx\plugin_dir_url(...func_get_args()); } }
 if (!function_exists('plugins_url')) { function plugins_url() { return \Rvx\plugins_url(...func_get_args()); } }

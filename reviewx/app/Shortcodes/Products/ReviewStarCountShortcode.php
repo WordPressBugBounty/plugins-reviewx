@@ -9,7 +9,7 @@ use Rvx\WPDrill\Contracts\ShortcodeContract;
 use Rvx\WPDrill\Facades\View;
 class ReviewStarCountShortcode implements ShortcodeContract
 {
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => 'false', 'product_id' => null, 'post_id' => null, 'info' => 'default'], $attrs);
         // Ensure ReviewX sync is complete

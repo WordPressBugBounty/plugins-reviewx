@@ -10,7 +10,7 @@ use Rvx\WPDrill\Facades\View;
 class ReviewListShortcode implements ShortcodeContract
 {
     protected $reviewFormHelper;
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'post_type' => null, 'post_id' => null, 'product_id' => null, 'sort_by' => null, 'attachment' => null, 'rating' => null, 'filter' => 'on'], $attrs);
         // Check if both product_id and post_id are provided.

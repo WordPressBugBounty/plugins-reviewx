@@ -8,7 +8,7 @@ use Rvx\WPDrill\Contracts\ShortcodeContract;
 use Rvx\WPDrill\Facades\View;
 class ReviewStatshortcode implements ShortcodeContract
 {
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         // Set default attributes to include both product_id and post_id.
         $attrs = shortcode_atts(['title' => null, 'product_id' => null, 'post_id' => null], $attrs);

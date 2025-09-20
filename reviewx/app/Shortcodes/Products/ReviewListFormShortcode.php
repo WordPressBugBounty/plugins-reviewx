@@ -10,7 +10,7 @@ use Rvx\WPDrill\Facades\View;
 class ReviewListFormShortcode implements ShortcodeContract
 {
     protected ReviewFormHelper $reviewFormHelper;
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'post_id' => null, 'product_id' => null, 'graph' => 'off', 'filter' => 'off', 'list' => 'off', 'form' => 'on', 'designer_id' => null], $attrs);
         // Validate attributes (early exit on errors)
@@ -58,11 +58,13 @@ class ReviewListFormShortcode implements ShortcodeContract
     }
     private function resolveTitle(?string $attrTitle, string $postTitle) : string
     {
-        return match (\true) {
-            $attrTitle === 'false' => 'false',
-            $attrTitle === 'true', empty($attrTitle) => $postTitle,
-            default => esc_html($attrTitle),
-        };
+        if ($attrTitle === 'false') {
+            return 'false';
+        }
+        if ($attrTitle === 'true' || empty($attrTitle)) {
+            return $postTitle;
+        }
+        return esc_html($attrTitle);
     }
     private function attributesData(array $attrs) : array
     {
@@ -76,7 +78,7 @@ class ReviewListFormShortcode implements ShortcodeContract
         }
         // Case 2: If no ID provided, use current singular post
         if (is_singular() && empty($attrs['post_id']) && empty($attrs['product_id'])) {
-            $type = ['id' => $post?->ID ?? 0, 'postType' => $post?->post_type ? \strtolower($post->post_type) : 'rvx_no_post_type', 'postTitle' => $post?->post_title ? esc_html($post->post_title) : ''];
+            $type = ['id' => $post ? (int) $post->ID : 0, 'postType' => $post && $post->post_type ? \strtolower($post->post_type) : 'rvx_no_post_type', 'postTitle' => $post && $post->post_title ? esc_html($post->post_title) : ''];
         }
         // Validate if post type is enabled in ReviewX
         $enabledPostTypes = $this->reviewFormHelper->rvxEnabledPostTypes();
@@ -89,6 +91,6 @@ class ReviewListFormShortcode implements ShortcodeContract
         if (\class_exists('WooCommerce') && is_singular('product') && 'product' === get_post_type()) {
             $isVerifiedCustomer = Helper::verifiedCustomer($userId);
         }
-        return ['postTypeEnabled' => $postTypeEnabled, 'product' => $type, 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser?->ID, 'name' => $wpCurrentUser?->display_name ?? '', 'email' => $wpCurrentUser?->user_email ?? '', 'isVerified' => $isVerifiedCustomer], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
+        return ['postTypeEnabled' => $postTypeEnabled, 'product' => $type, 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser ? (int) $wpCurrentUser->ID : 0, 'name' => $wpCurrentUser && $wpCurrentUser->display_name ? $wpCurrentUser->display_name : '', 'email' => $wpCurrentUser && $wpCurrentUser->user_email ? $wpCurrentUser->user_email : '', 'isVerified' => $isVerifiedCustomer], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
     }
 }

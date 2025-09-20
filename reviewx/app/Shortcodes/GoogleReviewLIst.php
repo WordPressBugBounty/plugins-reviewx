@@ -16,7 +16,7 @@ class GoogleReviewLIst implements ShortcodeContract
         $this->googleReview = new GoogleReviewApi();
         $this->googleReviewService = new GoogleReviewService();
     }
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'id' => null, 'truncate' => '300', 'limit' => '3', 'loadmore' => 'false', 'cache' => null], $attrs);
         // Check if both product_id and post_id are provided.

@@ -31,7 +31,6 @@ use Rvx\Handlers\Product\ProductUntrashHandler;
 use Rvx\Handlers\ProductDeleteHandler;
 use Rvx\Handlers\ReplyCommentHandler;
 use Rvx\Handlers\RichSchema\WoocommerceRichSchemaHandler;
-use Rvx\Handlers\RvxInit\LoadTextDomainHandler;
 use Rvx\Handlers\RvxInit\PageBuilderHandler;
 use Rvx\Handlers\RvxInit\RedirectReviewxHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
@@ -65,10 +64,6 @@ class PluginServiceProvider extends ServiceProvider
     public function boot() : void
     {
         add_action('init', new ReviewXoldPluginDeactivateHandler(), 10);
-        add_action('plugins_loaded', function () {
-            // Instantiate and register this init hook only after WordPress is loaded
-            add_action('init', [new LoadTextDomainHandler(), 'loadLanguage'], 10);
-        });
         add_action('activated_plugin', new RedirectReviewxHandler(), 15, 1);
         add_action('plugins_loaded', new PageBuilderHandler(), 20);
         // add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);

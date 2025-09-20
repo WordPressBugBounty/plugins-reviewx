@@ -6,7 +6,7 @@ use Rvx\Utilities\Auth\Client;
 use Rvx\WPDrill\Contracts\ShortcodeContract;
 class WooReviewsFormShortcode implements ShortcodeContract
 {
-    public function render(array $attrs, string $content = null) : string
+    public function render(array $attrs, ?string $content = null) : string
     {
         $attrs = shortcode_atts(['title' => null, 'post_id' => null, 'product_id' => null, 'graph' => 'on', 'filter' => 'on', 'list' => 'on', 'form' => 'on'], $attrs);
         // Check if both product_id and post_id are provided.
