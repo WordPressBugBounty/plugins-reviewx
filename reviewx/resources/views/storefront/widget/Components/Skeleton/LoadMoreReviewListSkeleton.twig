@@ -5,7 +5,7 @@
     }
 </style>
 
-<div :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(240px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
+<div :class="`${layoutView === 'masonry' && 'rvx-masonry-layout' } ${layoutView === 'grid' && 'rvx-grid rvx-grid-cols-[repeat(auto-fill,minmax(320px,1fr))] rvx-gap-space12'} ${layoutView === 'list' && 'rvx-space-y-space12'} rvx-review-wrapper`">
     <template x-for="loader in 4">
         <div class="rvx-flex rvx-animate-pulse rvx-space-x-4 rvx-bg-neutral-100 rvx-p-space16 rvx-rounded-md rvx-columns-box">
             <div class="rvx-flex-1 rvx-space-y-6 rvx-py-1">

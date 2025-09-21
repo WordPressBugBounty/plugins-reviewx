@@ -7,7 +7,7 @@ Tested up to: 6.8
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 9.8
-Stable tag: 2.2.9
+Stable tag: 2.2.10
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -220,6 +220,13 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.2.10 - 09-21-2025 =
+- Improved Front-end Review Card Design
+- Improved Front-end Review Summary Design
+- Improved Front-end Short-codes Design
+- Improved Front-end Mobile Responsiveness
+- Added PHP 7.4.x to PHP 8.3.x compatibility
+
 = 2.2.9 - 09-18-2025 =
 - Added complete PHP 7.4.x to PHP 8.2.x compatability
 

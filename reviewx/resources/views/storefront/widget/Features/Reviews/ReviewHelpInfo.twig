@@ -6,10 +6,10 @@
 <div class="rvx-flex rvx-items-center rvx-gap-space8 rvx-font-nunito" :class="`${reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled ? 'rvx-justify-between' : 'rvx-justify-end'}`">
     <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.enabled">
         <div x-data="reviewHelpInfoComponent()"
-             class="rvx-flex rvx-items-center rvx-gap-space8 rvx-review-footer">
+             class="rvx-flex rvx-items-center rvx-gap-space8 rvx-review-footer" style="padding-top:8px;padding-bottom:2px;">
             <p class="!rvx-text-[14px] !rvx-text-neutral-600 rvx-review-footer__text">  {{__('Was this helpful', 'reviewx')}}</p>
             <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.options.allow_likes">
-                <p class="!rvx-text-[14px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
+                <p class="!rvx-text-[15px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
                     <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 1 })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
                             <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />
@@ -26,7 +26,7 @@
 
             <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.options.allow_dislikes">
                 <div class="rvx-gap-[3px] rvx-flex rvx-items-center">
-                    <p class="!rvx-text-[14px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
+                    <p class="!rvx-text-[15px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
                         <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 1 })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
                                 <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />

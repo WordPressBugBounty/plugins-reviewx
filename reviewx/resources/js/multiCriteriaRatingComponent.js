@@ -1,11 +1,5 @@
 function __rvxMultiCriteriaRatingComponent__(rating, index) {
     return {
-        // selectedStars: rating.rating, // Initialize with the rating for this criterion
-        // selectCriteriaStars(star) {
-        //     this.selectedStars = star;
-        //     rating.rating = star;
-        // },
-
         selectedStars: 5, // Set initially selected stars
         selectCriteriaStars(star) {
             this.selectedStars = star;

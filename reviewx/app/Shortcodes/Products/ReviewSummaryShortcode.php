@@ -25,7 +25,15 @@ class ReviewSummaryShortcode implements ShortcodeContract
         $id = $isProduct ? (int) $attrs['product_id'] : (int) $attrs['post_id'];
         // Prepare the data.
         $data = $this->productWiseReviewShow($id, $isProduct);
-        return View::render('storefront/shortcode/reviewSummary', ['title' => $attrs['title'] ?: $data['postTitle'], 'data' => \json_encode($data)]);
+        // Title handling
+        if ($attrs['title'] === 'false') {
+            $title = 'false';
+        } elseif ($attrs['title'] === 'true' || empty($attrs['title'])) {
+            $title = $data['postTitle'];
+        } else {
+            $title = esc_html($attrs['title']);
+        }
+        return View::render('storefront/shortcode/reviewSummary', ['title' => $title, 'data' => \json_encode($data)]);
     }
     /**
      * Build the data structure for the review summary.

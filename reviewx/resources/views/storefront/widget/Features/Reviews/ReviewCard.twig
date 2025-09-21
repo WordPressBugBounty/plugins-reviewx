@@ -1,50 +1,48 @@
-<div class="rvx-cursor-pointer rvx-review-inner rvx-p-space16">
-    <template x-if="layoutView === 'masonry' && review?.attachments?.length">
-        <div class="rvx-relative">
-            <img x-show="getFileType(review.attachments[0]).isImage" :src="review.attachments[0]" alt="test" class="!rvx-w-full !rvx-max-h-[166px] !rvx-h-[166px] rvx-object-cover !rvx-rounded-t-lg rvx-rounded-none" />
-            <video x-show="getFileType(review.attachments[0]).isVideo" width="100%" height="200">
-                <source :src="review.attachments[0]">
-            </video>
-            <template x-if="isHaveMultipleAttachment(review.attachments.length, 1)">
-                <div class="rvx-flex rvx-items-center rvx-gap-space5 rvx-bg-[#212121B2] rvx-rounded-md rvx-p-space5 rvx-absolute rvx-top-[10px] rvx-right-[10px] rvx-text-white rvx-cursor-pointer">
-                    <span class="!rvx-text-[10px]">
-                        +
-                        <span x-text="review.attachments.length - 1 "></span>
-                    </span>
-                    <span class="material-symbols-rounded rvx-text-[16px]">photo_library</span>
-                </div>
-            </template>
-        </div>
-    </template>
+<template x-if="layoutView === 'masonry' && review?.attachments?.length">
+    <div class="rvx-relative">
+        <img x-show="getFileType(review.attachments[0]).isImage" :src="review.attachments[0]" alt="test" class="!rvx-w-full !rvx-max-h-[166px] !rvx-h-[166px] rvx-object-cover !rvx-rounded-t-lg rvx-rounded-none" />
+        <video x-show="getFileType(review.attachments[0]).isVideo" width="100%" height="200">
+            <source :src="review.attachments[0]">
+        </video>
+        <template x-if="isHaveMultipleAttachment(review.attachments.length, 1)">
+            <div class="rvx-flex rvx-items-center rvx-gap-space5 rvx-bg-[#212121B2] rvx-rounded-md rvx-p-space5 rvx-absolute rvx-top-[10px] rvx-right-[10px] rvx-text-white rvx-cursor-pointer">
+                <span class="!rvx-text-[10px]">
+                    +
+                    <span x-text="review.attachments.length - 1 "></span>
+                </span>
+                <span class="material-symbols-rounded rvx-text-[16px]">photo_library</span>
+            </div>
+        </template>
+    </div>
+</template>
 
+<div class="rvx-cursor-pointer rvx-review-inner rvx-p-space16">
     <div class="rvx-review-card__body !rvx-break-words rvx-space-y-space12" @click="selectedReviewDetailsHandler(review)">
         {% include 'storefront/widget/Features/Reviews/ReviewerInfo.twig' %}
 
         <div class="rvx-font-nunito rvx-review-info">
             <!-- Review Info -->
-                <p class="!rvx-text-[12px] rvx-text-neutral-600 rvx-review-info__date" x-text="review.created_at">
+                <p class="!rvx-text-[12px] rvx-text-neutral-500 rvx-review-info__date" x-text="review.created_at">
                 </p>
                 <p x-show="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_titles"
-                   class="!rvx-text-[16px] rvx-text-neutral-900 rvx-font-semibold rvx-leading-[24px] rvx-review-info__title" x-text="review.title">
+                   class="!rvx-text-[16px] rvx-text-neutral-800 rvx-font-semibold rvx-leading-[28px] rvx-mb-space12 rvx-review-info__title" x-text="review.title">
                 </p>
             <div class="rvx-space-y-space12">
                 <!-- feedback -->
-                <p class="!rvx-text-[14px] rvx-leading-[22px] rvx-text-neutral-700 rvx-font-normal rvx-review-info__feedback"
+                <p class="!rvx-text-[16px] rvx-leading-[32px] rvx-text-neutral-700 rvx-mb-space12 rvx-review-info__feedback"
                    x-text="layoutView === 'list' ? review.feedback : layoutView === 'grid' ? truncateString(review.feedback, 184) : truncateString(review.feedback, 300)"></p>
 
                 <!-- feedback images -->
                 <template x-if="layoutView !== 'masonry' && review.attachments?.length">
-                    <div class="rvx-flex rvx-gap-space16 rvx-flex-wrap rvx-review-info__images">
-                        <div class="rvx-flex rvx-gap-space16 rvx-flex-wrap rvx-review-info__images">
-                            <template x-for="file in review.attachments">
-                                <div>
-                                    <img x-show="getFileType(file).isImage" :src="file" alt="test" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`" />
-                                    <video x-show="getFileType(file).isVideo" width="80" height="80" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`">
-                                        <source :src="file">
-                                    </video>
-                                </div>
-                            </template>
-                        </div>
+                    <div class="rvx-flex rvx-gap-space16 rvx-mb-space12 rvx-flex-wrap rvx-review-info__images">
+                        <template x-for="file in review.attachments">
+                            <div>
+                                <img x-show="getFileType(file).isImage" :src="file" alt="test" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`" />
+                                <video x-show="getFileType(file).isVideo" width="80" height="80" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`">
+                                    <source :src="file">
+                                </video>
+                            </div>
+                        </template>
                     </div>
                 </template>
 

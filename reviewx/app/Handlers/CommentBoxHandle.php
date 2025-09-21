@@ -26,15 +26,18 @@ class CommentBoxHandle
     {
         $wpCurrentUser = Helper::getWpCurrentUser();
         $userId = get_current_user_id();
-        $userInfo = ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser?->ID, 'name' => $wpCurrentUser?->display_name ?? '', 'email' => $wpCurrentUser?->user_email ?? '', 'isVerified' => 0];
         // WooCommerce verification
         if (\class_exists('WooCommerce') && is_singular('product') && get_post_type() === 'product') {
             $userInfo['isVerified'] = Helper::verifiedCustomer($userId);
+        }
+        $isVerifiedCustomer = 0;
+        if (\class_exists('WooCommerce') && is_singular('product') && 'product' === get_post_type()) {
+            $isVerifiedCustomer = Helper::verifiedCustomer($userId);
         }
         // Post type enable check
         $enabledPostTypes = $this->reviewFormHelper->rvxEnabledPostTypes();
         $currentPostType = \strtolower(get_post_type());
         $postTypeEnabled = !empty($enabledPostTypes[$currentPostType]) && \strtolower($enabledPostTypes[$currentPostType]) === $currentPostType;
-        return ['postTypeEnabled' => $postTypeEnabled, 'product' => ['id' => get_the_ID(), 'postType' => $currentPostType], 'userInfo' => $userInfo, 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
+        return ['postTypeEnabled' => $postTypeEnabled, 'product' => ['id' => get_the_ID(), 'postType' => $currentPostType], 'userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser ? (int) $wpCurrentUser->ID : 0, 'name' => $wpCurrentUser && $wpCurrentUser->display_name ? $wpCurrentUser->display_name : '', 'email' => $wpCurrentUser && $wpCurrentUser->user_email ? $wpCurrentUser->user_email : '', 'isVerified' => $isVerifiedCustomer], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
     }
 }

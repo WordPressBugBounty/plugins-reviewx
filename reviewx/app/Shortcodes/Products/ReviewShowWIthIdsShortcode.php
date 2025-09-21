@@ -10,7 +10,7 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
 {
     public function render(array $attrs, ?string $content = null) : string
     {
-        $attrs = shortcode_atts(['title' => null, 'review_ids' => null], $attrs);
+        $attrs = shortcode_atts(['title' => 'false', 'review_ids' => null], $attrs);
         // Check if both product_id and post_id are provided.
         if (!Client::getSync()) {
             return '<div class="warning">Error: Please complete the synchronization process of ReviewX.</div>';
@@ -28,7 +28,7 @@ class ReviewShowWIthIdsShortcode implements ShortcodeContract
             // Send multiple product IDs to the JavaScript variable
             $data = $this->reviewsWiseReviewShow($productIdArray);
             // Return the view (empty or simplified, as no review data is required)
-            return View::render('storefront/shortcode/reviewShowWIthIds', ['title' => $attrs['title'] ?: \false, 'data' => \json_encode($data)]);
+            return View::render('storefront/shortcode/reviewShowWIthIds', ['title' => $attrs['title'], 'data' => \json_encode($data)]);
         }
         return '';
     }

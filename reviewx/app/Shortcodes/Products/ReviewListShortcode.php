@@ -37,7 +37,7 @@ class ReviewListShortcode implements ShortcodeContract
                 return '<div class="warning notice notice-error"><b>Error:</b> This post type isn\'t enabled in ReviewX.</div>';
             }
             $title = !isset($attrs['title']) || $attrs['title'] === 'false' ? 'false' : esc_html($attrs['title']);
-            return View::render('storefront/shortcode/reviewList', ['title' => $title ?: \false, 'data' => $data]);
+            return View::render('storefront/shortcode/reviewList', ['title' => $title, 'data' => $data]);
         }
         return '<div class="warning notice notice-error"><b>Error:</b> Please, make sure you have provided necessary parameter\'(s) in the shortcode. Please, follow documentation.</div>';
     }

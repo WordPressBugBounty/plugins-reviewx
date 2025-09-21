@@ -49,16 +49,16 @@ class SettingController
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 // Update Review Settings
                 $review_settings = $response->getApiData()['review_settings'];
-                if ($review_settings['reviews']['show_verified_badge'] === \true) {
+                if (!empty($review_settings['reviews']['show_verified_badge']) && $review_settings['reviews']['show_verified_badge'] === \true) {
                     update_option('woocommerce_review_rating_verification_label', 'yes');
                 }
-                if ($review_settings['reviews']['show_verified_badge'] === \false) {
+                if (!empty($review_settings['reviews']['show_verified_badge']) && $review_settings['reviews']['show_verified_badge'] === \false) {
                     update_option('woocommerce_review_rating_verification_label', 'no');
                 }
-                if ($review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \true) {
+                if (!empty($review_settings['reviews']['review_submission_policy']['options']['verified_customer']) && $review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \true) {
                     update_option('woocommerce_review_rating_verification_required', 'yes');
                 }
-                if ($review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
+                if (!empty($review_settings['reviews']['review_submission_policy']['options']['verified_customer']) && $review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
                     update_option('woocommerce_review_rating_verification_required', 'no');
                 }
                 $this->settingService->updateReviewSettings($review_settings, $request['post_type']);

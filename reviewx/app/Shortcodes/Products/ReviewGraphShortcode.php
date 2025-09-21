@@ -23,7 +23,15 @@ class ReviewGraphShortcode implements ShortcodeContract
         $isProduct = !empty($attrs['product_id']);
         $id = $isProduct ? (int) $attrs['product_id'] : (int) $attrs['post_id'];
         $data = $this->productWiseReviewShow($id, $isProduct);
-        return View::render('storefront/shortcode/reviewGraph', ['title' => $attrs['title'] ?: $data['postTitle'], 'data' => \json_encode($data)]);
+        // Title handling
+        if ($attrs['title'] === 'false') {
+            $title = 'false';
+        } elseif ($attrs['title'] === 'true' || empty($attrs['title'])) {
+            $title = $data['postTitle'];
+        } else {
+            $title = esc_html($attrs['title']);
+        }
+        return View::render('storefront/shortcode/reviewGraph', ['title' => $title, 'data' => \json_encode($data)]);
     }
     public function productWiseReviewShow($id, bool $isProduct) : array
     {

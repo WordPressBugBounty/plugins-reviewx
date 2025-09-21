@@ -4,13 +4,34 @@ namespace Rvx\Handlers;
 
 class DataSyncHandler
 {
+    // public function wc_data_exists_in_db(): bool
+    // {
+    //     global $wpdb;
+    //     $query = "
+    //         (SELECT 'product' AS type
+    //         FROM {$wpdb->posts}
+    //         WHERE post_type = 'product'
+    //         LIMIT 1)
+    //         UNION ALL
+    //         (SELECT 'shop_order' AS type
+    //         FROM {$wpdb->posts}
+    //         WHERE post_type = 'shop_order'
+    //         LIMIT 1)
+    //         UNION ALL
+    //         (SELECT 'taxonomy' AS type
+    //         FROM {$wpdb->term_taxonomy}
+    //         WHERE taxonomy IN ('product_cat', 'product_tag')
+    //         LIMIT 1)
+    //     ";
+    //     $results = $wpdb->get_col($query);
+    //     return !empty($results);
+    // }
     public function wc_data_exists_in_db() : bool
     {
         global $wpdb;
-        // Use UNION ALL to reduce multiple queries to a single call
-        $query = "\n            SELECT 'product' AS type FROM {$wpdb->posts} WHERE post_type = 'product' LIMIT 1\n            UNION ALL\n            SELECT 'shop_order' FROM {$wpdb->posts} WHERE post_type = 'shop_order' LIMIT 1\n            UNION ALL\n            SELECT 'taxonomy' FROM {$wpdb->term_taxonomy} WHERE taxonomy IN ('product_cat', 'product_tag') LIMIT 1\n        ";
-        $results = $wpdb->get_col($query);
-        return !empty($results);
+        $query = "\n            SELECT \n                (EXISTS(SELECT 1 FROM {$wpdb->posts} WHERE post_type = 'product' LIMIT 1)) AS has_product,\n                (EXISTS(SELECT 1 FROM {$wpdb->posts} WHERE post_type = 'shop_order' LIMIT 1)) AS has_order,\n                (EXISTS(SELECT 1 FROM {$wpdb->term_taxonomy} WHERE taxonomy IN ('product_cat', 'product_tag') LIMIT 1)) AS has_taxonomy\n        ";
+        $row = $wpdb->get_row($query, ARRAY_A);
+        return \in_array(1, $row, \true);
     }
     public function getProductTaxonomies() : array
     {

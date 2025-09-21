@@ -8,38 +8,27 @@ use Rvx\Models\Post;
 use Rvx\Utilities\Auth\Client;
 class ReviewsApi extends \Rvx\Api\BaseApi
 {
-    /**
-     * @return Response
-     * @throws Exception
-     */
     public function getReviews($data) : Response
     {
         if (!empty($data)) {
-            if (\is_numeric($_GET['product'])) {
-                \parse_str($data, $query_params);
+            \parse_str($data, $query_params);
+            if (isset($query_params['product']) && \is_numeric($query_params['product'])) {
                 $query_params['product'] = Client::getUid() . '-' . $query_params['product'];
-                $newParam = \http_build_query($query_params);
-                return $this->get('reviews?' . $newParam);
             }
-            return $this->get('reviews?' . $data);
+            return $this->get('reviews?' . \http_build_query($query_params));
         }
         return $this->get('reviews');
     }
-    /**
-     * @return Response
-     */
     public function reviewList($data) : Response
     {
         if (!empty($data)) {
-            if (\is_numeric(isset($_GET['product']))) {
-                \parse_str($data, $query_params);
+            \parse_str($data, $query_params);
+            if (isset($query_params['product']) && \is_numeric($query_params['product'])) {
                 $query_params['product'] = Client::getUid() . '-' . $query_params['product'];
-                $newParam = \http_build_query($query_params);
-                return $this->get('/reviews/list?' . $newParam);
             }
-            return $this->get('/reviews/list?' . $data);
+            return $this->get('reviews/list?' . \http_build_query($query_params));
         }
-        return $this->get('/reviews/list');
+        return $this->get('reviews/list');
     }
     /**
      * @param $id

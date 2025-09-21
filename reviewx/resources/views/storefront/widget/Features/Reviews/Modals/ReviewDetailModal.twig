@@ -15,7 +15,7 @@
                  x-transition:leave="rvx-ease-in rvx-duration-200"
                  x-transition:leave-start="rvx-opacity-100 rvx-translate-y-0 sm:rvx-scale-100"
                  x-transition:leave-end="rvx-opacity-0 rvx-translate-y-4 sm:rvx-translate-y-0 sm:rvx-scale-95"
-                 class="rvx-relative  rvx-rounded-lg rvx-w-[300px] md:rvx-w-[871px] rvx-h-[557px] rvx-max-h-[557px] rvx-shadow-xl">
+                 class="rvx-relative  rvx-rounded-lg rvx-w-[360px] md:rvx-w-[980px] rvx-h-[557px] rvx-max-h-[557px] rvx-shadow-xl">
                 <div class="rvx-w-full rvx-h-full rvx-relative">
                     <div class="rvx-grid rvx-grid-cols-12 rvx-rounded-lg rvx-h-full">
                             <div class="rvx-col-span-12 md:rvx-col-span-5 rvx-bg-[#EFEFEF] rvx-grid rvx-place-items-center rvx-rounded-t-lg sm:rvx-rounded-t-none md:rvx-rounded-l-lg">
@@ -126,36 +126,42 @@
                                             reviewAverage: Number(selectedReviewDetails.rating),
                                             totalRating: 5
                                         }" class="review rvx-flex rvx-gap-2 rvx-mb-2">
+
                                                 <template x-for="star in totalRating" :key="star">
                                                     <div>
                                                         <!-- Full star -->
                                                         <template x-if="isFullStar(star, reviewAverage)">
-                                                            <svg class="rvx-review-form__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                            <svg class="rvx-reviewer__star-active" width="20px" height="20px" viewBox="0 0 24 24">
+                                                                <path :fill="reviewSettingsData?.data?.setting?.widget_settings?.star_color_code" 
+                                                                    d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
                                                             </svg>
                                                         </template>
 
-                                                        <!-- Half star -->
+                                                        <!-- Partial star -->
                                                         <template x-if="isHalfStar(star, reviewAverage)">
-                                                            <svg class="rvx-review-form__star-active-half" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+                                                            <svg class="rvx-reviewer__star-half" width="20" height="20" viewBox="0 0 24 24">
                                                                 <defs>
-                                                                    <linearGradient id="grad">
-                                                                        <stop offset="50%" :stop-color="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" />
-                                                                        <stop offset="50%" stop-color="grey" />
+                                                                    <linearGradient :id="`grad-${star}`">
+                                                                        <!-- dynamic offset -->
+                                                                        <stop :offset="`${Math.floor(((reviewAverage - (star-1)) * 100))}%`" 
+                                                                            :stop-color="reviewSettingsData?.data?.setting?.widget_settings?.star_color_code" />
+                                                                        <stop :offset="`${Math.floor(((reviewAverage - (star-1)) * 100))}%`" 
+                                                                            stop-color="grey" />
                                                                     </linearGradient>
                                                                 </defs>
-                                                                <path fill="url(#grad)" d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
+                                                                <path :fill="`url(#grad-${star})`" d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
                                                             </svg>
                                                         </template>
 
                                                         <!-- Empty star -->
                                                         <template x-if="isFullEmptyStar(star, reviewAverage)">
-                                                            <svg class="rvx-review-details-modal__star-inactive" fill="none" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <svg class="rvx-reviewer__star-inactive rvx-fill-neutral-600" fill="none" width="20px" height="20px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
                                                             </svg>
                                                         </template>
                                                     </div>
                                                 </template>
+
                                             </div>
                                         </template>
                                     </div>
@@ -178,7 +184,7 @@
                                                         <div>
                                                             <!-- Full star -->
                                                             <template x-if="isFullStar(star, rating.rating)">
-                                                                <svg class="rvx-review-details-modal__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <svg class="rvx-review-details-modal__star-active" :fill="reviewSettingsData?.data?.setting?.widget_settings?.star_color_code" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M22,10.1c0.1-0.5-0.3-1.1-0.8-1.1l-5.7-0.8L12.9,3c-0.1-0.2-0.2-0.3-0.4-0.4C12,2.3,11.4,2.5,11.1,3L8.6,8.2L2.9,9C2.6,9,2.4,9.1,2.3,9.3c-0.4,0.4-0.4,1,0,1.4l4.1,4l-1,5.7c0,0.2,0,0.4,0.1,0.6c0.3,0.5,0.9,0.7,1.4,0.4l5.1-2.7l5.1,2.7c0.1,0.1,0.3,0.1,0.5,0.1v0c0.1,0,0.1,0,0.2,0c0.5-0.1,0.9-0.6,0.8-1.2l-1-5.7l4.1-4C21.9,10.5,22,10.3,22,10.1z" />
                                                                 </svg>
                                                             </template>
@@ -188,7 +194,7 @@
                                                                 <svg class="rvx-review-details-modal__star-active-half" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
                                                                     <defs>
                                                                         <linearGradient id="grad">
-                                                                            <stop offset="50%" :stop-color="reviewSettingsData?.data?.setting?.widget_settings.star_color_code" />
+                                                                            <stop offset="50%" :stop-color="reviewSettingsData?.data?.setting?.widget_settings?.star_color_code" />
                                                                             <stop offset="50%" stop-color="grey" />
                                                                         </linearGradient>
                                                                     </defs>
@@ -213,8 +219,8 @@
                             <!-- Review info -->
                             <div class="rvx-font-nunito rvx-h-[270px] rvx-overflow-y-auto">
                                 <!-- Product Info -->
-                                <div class="rvx-flex rvx-justify-between rvx-items-center rvx-gap-space12">
-                                    <p class="!rvx-text-[20px] rvx-text-neutral-800 rvx-font-semibold rvx-leading-[32px]"
+                                <div class="rvx-flex rvx-justify-between rvx-items-center rvx-gap-space12 rvx-mb-space12">
+                                    <p class="!rvx-text-[20px] rvx-text-neutral-800 rvx-font-semibold rvx-leading-[32px] rvx-review-info__title"
                                        x-text="selectedReviewDetails.title">
                                     </p>
 
@@ -223,7 +229,7 @@
                                 </div>
 
                                 <!-- feedback -->
-                                <p class="!rvx-text-[14px] rvx-leading-[22px] rvx-font-normal"
+                                <p class="!rvx-text-[16px] rvx-leading-[22px] rvx-text-neutral-700 rvx-review-info__feedback"
                                    x-text="selectedReviewDetails.feedback">
                                 </p>
 
@@ -360,7 +366,7 @@
     </template>
 <script>
     function reviewDetailsModal({ selectedReviewDetails }) {
-        console.log('selectedReviewDetails', selectedReviewDetails)
+        {# console.log('selectedReviewDetails', selectedReviewDetails) #}
         return {
             selectedReviewDetails,
             currentPreviewImage: selectedReviewDetails?.attachments[0] || null,

@@ -1,5 +1,5 @@
 <div x-show="review?.reply" class="rvx-mb-space20 rvx-review-owner-replay">
-    <div class="rvx-flex rvx-items-center rvx-gap-space5">
+    <div class="rvx-flex rvx-items-center rvx-gap-space5 rvx-mt-space8 rvx-mb-space8">
             <span class="material-symbols-rounded rvx-text-[20px] rvx-review-owner-replay__icon">
                  {{__('reply', 'reviewx')}}
               </span>
@@ -7,9 +7,9 @@
         <div x-show="review?.shop_icon_url" class="rvx-flex rvx-justify-center rvx-items-center rvx-bg-white rvx-border-solid !rvx-border-[1px] !rvx-border-neutral-300 rvx-rounded-full rvx-size-[24px]">
             <img :src="review.shop_icon_url" alt="store icon" width="16" height="16">
         </div>
-        <p class="!rvx-text-[14px] rvx-font-semibold rvx-text-neutral-800 rvx-leading-[22px] rvx-review-owner-replay__owner-name">
+        <p class="!rvx-text-[16px] rvx-font-semibold rvx-text-neutral-700 rvx-leading-[22px] rvx-review-owner-replay__owner-name">
               {{__('Shop owner', 'reviewx')}}
-            <span class="rvx-font-normal rvx-leading-[22px] rvx-review-owner-replay__text">  {{__('replied', 'reviewx')}}
+            <span class="rvx-leading-[22px] rvx-text-neutral-400 rvx-font-normal rvx-review-owner-replay__text">  {{__('replied', 'reviewx')}}
                 </span>
             <span class="rvx-font-normal rvx-leading-[22px] rvx-ml-space5 rvx-review-owner-replay__date"
                   x-text="review.replied_at"></span>

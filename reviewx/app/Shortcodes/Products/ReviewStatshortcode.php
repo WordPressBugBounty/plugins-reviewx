@@ -25,8 +25,16 @@ class ReviewStatshortcode implements ShortcodeContract
         $id = $isProduct ? (int) $attrs['product_id'] : (int) $attrs['post_id'];
         // Retrieve data related to review stats.
         $data = $this->getReviewStatsData($id, $isProduct);
+        // Title handling
+        if ($attrs['title'] === 'false') {
+            $title = 'false';
+        } elseif ($attrs['title'] === 'true' || empty($attrs['title'])) {
+            $title = $data['postTitle'];
+        } else {
+            $title = esc_html($attrs['title']);
+        }
         // If no title is provided, use the post title from the data.
-        return View::render('storefront/shortcode/reviewStats', ['title' => !empty($attrs['title']) ? $attrs['title'] : $data['postTitle'], 'postType' => !empty($data['postType']) ? $data['postType'] : '', 'data' => \json_encode($data)]);
+        return View::render('storefront/shortcode/reviewStats', ['title' => $title, 'postType' => !empty($data['postType']) ? $data['postType'] : '', 'data' => \json_encode($data)]);
     }
     /**
      * Retrieve review stats data based on an ID and its type (product or post).
