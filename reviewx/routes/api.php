@@ -115,6 +115,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
      */
     Route::get('/insight/reviews', [DashboardController::class, 'insight']);
     Route::get('/insight/review/request/email', [DashboardController::class, 'requestEmail']);
+    Route::get('/insight/reviewx/user', [DashboardController::class, 'requestUserData']);
     Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
     /**
      * Review Settings
@@ -221,9 +222,10 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
     Route::post('/reviews/bulk/action/product/meta', [ReviewController::class, 'bulkActionProductMeta']);
     /**
-     * Remove table and user information
+     * Remove/Update table and user/site information
      */
     Route::post('/user/credentials/remove', [SettingController::class, 'removeCredentials']);
+    Route::post('/user/credentials/update', [SettingController::class, 'updateSiteData']);
     /**
      * Plugin meta data gather
      */

@@ -3738,6 +3738,11 @@ const b1 = [
     method: "get"
   },
   {
+    name: "reviewx-user-insight",
+    url: "insight/reviewx/user",
+    method: "get"
+  },
+  {
     name: "dashboard-chart",
     url: "/dashboard/chart",
     method: "get"

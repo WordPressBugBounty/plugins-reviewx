@@ -72,6 +72,7 @@ class WpApi
         $headers = ['Content-Type' => 'application/json'];
         if ($this->token) {
             $headers['Authorization'] = 'Bearer ' . $this->token;
+            $headers['X-url'] = home_url();
         }
         return $headers;
     }

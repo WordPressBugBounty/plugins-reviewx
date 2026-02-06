@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+use WC_Coupon;
 use Exception;
 use Rvx\Api\DiscountApi;
 class DiscountService extends \Rvx\Services\Service
@@ -16,7 +17,7 @@ class DiscountService extends \Rvx\Services\Service
     private function setBasicCouponData($data)
     {
         $coupon_data = ['code' => sanitize_text_field($data['code']), 'discount_type' => sanitize_text_field($data['discount_type']), 'amount' => sanitize_text_field($data['amount'])];
-        $coupon = new \Rvx\WC_Coupon();
+        $coupon = new WC_Coupon();
         $coupon->set_props($coupon_data);
         return $coupon;
     }
@@ -47,7 +48,7 @@ class DiscountService extends \Rvx\Services\Service
     public function deleteDiscount($couponId)
     {
         try {
-            $coupon = new \Rvx\WC_Coupon($couponId);
+            $coupon = new WC_Coupon($couponId);
             $coupon->delete(\true);
             // true for force delete
             return \true;

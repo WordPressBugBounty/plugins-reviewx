@@ -48,54 +48,90 @@ class JudgemeReviewsImport
     }
     public function judgemeCSVdownload($request) : array
     {
-        if (empty($this->judgemeDomain) || empty($this->judgemeToken)) {
-            return ['success' => \false, 'message' => 'Judge.me credentials are missing.'];
-        }
-        $login_url = $this->generateJudgemeLoginURL();
-        $export_url = 'https://app.judge.me/reviews/export?export_mode=published&from_settings=true';
-        if (empty($login_url)) {
-            return ['success' => \false, 'message' => 'Login URL could not be generated.'];
-        }
-        $cookie_file = \tempnam($this->tmpDir, 'judgeme_cookie_');
-        try {
-            // Step 1: Authenticate (gets and stores session cookies)
-            $ch = \curl_init($login_url);
-            \curl_setopt_array($ch, [\CURLOPT_RETURNTRANSFER => \true, \CURLOPT_FOLLOWLOCATION => \true, \CURLOPT_COOKIEJAR => $cookie_file, \CURLOPT_COOKIEFILE => $cookie_file]);
-            \curl_exec($ch);
-            // hits login URL, stores auth cookies in $cookie_file
-            \curl_close($ch);
-            // Step 2: Download CSV using the same cookies
-            $ch = \curl_init($export_url);
-            \curl_setopt_array($ch, [\CURLOPT_RETURNTRANSFER => \true, \CURLOPT_FOLLOWLOCATION => \true, \CURLOPT_COOKIEJAR => $cookie_file, \CURLOPT_COOKIEFILE => $cookie_file, \CURLOPT_USERAGENT => 'Mozilla/5.0']);
-            $csv_data = \curl_exec($ch);
-            $http_code = \curl_getinfo($ch, \CURLINFO_HTTP_CODE);
-            $curl_error = \curl_error($ch);
-            \curl_close($ch);
-            if ($http_code !== 200 || empty($csv_data)) {
-                return ['success' => \false, 'message' => 'Failed to download CSV.'];
-            }
-            // Normalize line endings & strip UTF-8 BOM
-            $csv_data = \str_replace(["\r\n", "\r"], "\n", $csv_data);
-            $csv_data = \preg_replace('/^\\xEF\\xBB\\xBF/', '', $csv_data);
-            // Check if CSV has only header (no data rows)
-            $lines = \explode("\n", $csv_data);
-            if (\count($lines) <= 1) {
-                // means only header or empty
-                return ['success' => \false, 'message' => 'CSV file contains only headers and no reviews.'];
-            }
-            // Directly save CSV to file
-            if (\file_put_contents($this->csvFilePath, $csv_data) === \false) {
-                return ['success' => \false, 'message' => 'Failed to save downloaded CSV file.'];
-            }
-            return ['success' => \true, 'message' => 'Judgeme Export CSV file downloaded successfully.'];
-        } finally {
-            if (\file_exists($cookie_file)) {
-                @\unlink($cookie_file);
-            }
-        }
+        return ['success' => \false, 'message' => 'Judgeme CSV download can\'t be automatted anymore! Please try uploading CSV manually.'];
+        // $cookie_file = tempnam($this->tmpDir, 'judgeme_cookie_');
+        // $csvPath = $this->getCsvFilePath();
+        // if (file_exists($csvPath)) {
+        //     if (file_exists($cookie_file)) {
+        //         @unlink($cookie_file);
+        //     }
+        //     return [
+        //         'success' => true,
+        //         'message' => 'Judgeme Export CSV file already exists.',
+        //     ];
+        // }
+        // if (empty($this->judgemeDomain) || empty($this->judgemeToken)) {
+        //     return ['success' => false, 'message' => 'Judge.me credentials are missing.'];
+        // }
+        // $login_url = $this->generateJudgemeLoginURL();
+        // $export_url = 'https://app.judge.me/reviews/export?export_mode=published&from_settings=true';
+        // if (empty($login_url)) {
+        //     return ['success' => false, 'message' => 'Login URL could not be generated.'];
+        // }
+        // try {
+        //     // Step 1: Authenticate (gets and stores session cookies)
+        //     $ch = curl_init($login_url);
+        //     curl_setopt_array($ch, [
+        //         CURLOPT_RETURNTRANSFER => true,
+        //         CURLOPT_FOLLOWLOCATION => true,
+        //         CURLOPT_COOKIEJAR => $cookie_file,
+        //         CURLOPT_COOKIEFILE => $cookie_file,
+        //     ]);
+        //     curl_exec($ch); // hits login URL, stores auth cookies in $cookie_file
+        //     curl_close($ch);
+        //     // Step 2: Download CSV using the same cookies
+        //     $ch = curl_init($export_url);
+        //     curl_setopt_array($ch, [
+        //         CURLOPT_RETURNTRANSFER => true,
+        //         CURLOPT_FOLLOWLOCATION => true,
+        //         CURLOPT_COOKIEJAR => $cookie_file,
+        //         CURLOPT_COOKIEFILE => $cookie_file,
+        //         CURLOPT_USERAGENT => 'Mozilla/5.0'
+        //     ]);
+        //     $csv_data = curl_exec($ch);
+        //     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        //     $curl_error = curl_error($ch);
+        //     curl_close($ch);
+        //     if ($http_code !== 200 || empty($csv_data)) {
+        //         return [
+        //             'success' => false,
+        //             'message' => 'Failed to download CSV.'
+        //         ];
+        //     }
+        //     // Normalize line endings & strip UTF-8 BOM
+        //     $csv_data = str_replace(["\r\n", "\r"], "\n", $csv_data);
+        //     $csv_data = preg_replace('/^\xEF\xBB\xBF/', '', $csv_data);
+        //     // Check if CSV has only header (no data rows)
+        //     $lines = explode("\n", $csv_data);
+        //     if (count($lines) <= 1) { // means only header or empty
+        //         return [
+        //             'success' => false,
+        //             'message' => 'CSV file contains only headers and no reviews.'
+        //         ];
+        //     }
+        //     // Directly save CSV to file
+        //     if (file_put_contents($this->csvFilePath, $csv_data) === false) {
+        //         return [
+        //             'success' => false,
+        //             'message' => 'Failed to save downloaded CSV file.'
+        //         ];
+        //     }
+        //     return [
+        //         'success' => true,
+        //         'message' => 'Judgeme Export CSV file downloaded successfully.'
+        //     ];
+        // } finally {
+        //     if (file_exists($cookie_file)) {
+        //         @unlink($cookie_file);
+        //     }
+        // }
     }
     public function judgemeCSVUpload($request) : array
     {
+        $csvPath = $this->getCsvFilePath();
+        if (\file_exists($csvPath)) {
+            return ['success' => \true, 'message' => 'Judgeme Export CSV file already exists.', 'csv_exists' => \true];
+        }
         if (empty($this->judgemeDomain) || empty($this->judgemeToken)) {
             return ['success' => \false, 'message' => 'Judge.me credentials are missing.'];
         }
@@ -212,7 +248,8 @@ class JudgemeReviewsImport
         $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
         if ($uid) {
             $wpdb->update($rvxSites, ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
-            update_option('rvx_reset_sync_flag', \true);
+            // Set the localStorage isAlreadySyncSuccess
+            set_transient('rvx_reset_sync_flag', \true);
             (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => RVX_VERSION, 'wp_version' => get_bloginfo('version')]);
             $dataResponse = $this->dataSyncService->dataSync('default', 'product');
             if (!$dataResponse) {

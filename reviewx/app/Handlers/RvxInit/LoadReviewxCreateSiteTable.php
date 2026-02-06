@@ -7,7 +7,7 @@ class LoadReviewxCreateSiteTable
     /**
      * Invokes the process to ensure the table exists.
      */
-    public function __invoke()
+    public function init()
     {
         if (!$this->is_table_exists()) {
             $this->create_table();

@@ -358,9 +358,9 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $defferentIds = $this->cacheService->clearShortcodesCache(get_option('_rvx_reviews_ids'), $request->get_params());
             if ($defferentIds == \false) {
-                \delete_transient('_rvx_shortcode_transient');
+                \delete_transient('rvx_shortcode_transient');
             }
-            $transient_key = '_rvx_shortcode_transient';
+            $transient_key = 'rvx_shortcode_transient';
             $resp = \get_transient($transient_key);
             if ($resp !== \false) {
                 $data = ['reviews' => $resp['reviews'], 'meta' => $resp['meta']];

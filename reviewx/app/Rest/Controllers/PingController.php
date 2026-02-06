@@ -3,6 +3,7 @@
 namespace Rvx\Rest\Controllers;
 
 use Exception;
+use WP_REST_Response;
 use Rvx\Services\PingService;
 use Rvx\Utilities\Helper;
 class PingController
@@ -13,14 +14,14 @@ class PingController
         $this->pingService = new PingService();
     }
     /**
-     * Ping from sass and (cached for 7 days) return site info.
+     * Ping from sass and (cached for 2 hours) return site info.
      *
-     * @return \WP_REST_Response
+     * @return WP_REST_Response
      */
-    public function ping() : \WP_REST_Response
+    public function ping() : WP_REST_Response
     {
-        // Cache time-to-live: 7 days
-        $cache_duration = 86400 * 7;
+        // Cache time-to-live: 2 hours
+        $cache_duration = 3600 * 2;
         try {
             // Try to get cache
             $data = \get_transient('rvx_ping_cache');

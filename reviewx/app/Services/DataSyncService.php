@@ -12,13 +12,13 @@ use Rvx\Services\OrderItemSyncService;
 use Rvx\Services\UserSyncService;
 use Rvx\Services\ProductSyncService;
 use Rvx\Services\ReviewSyncService;
-use Rvx\Services\CategorySyncService;
+// use Rvx\Services\CategorySyncService;
 use Rvx\Utilities\Helper;
 class DataSyncService extends Service
 {
     protected DataSyncHandler $dataSyncHandler;
     protected UserSyncService $userSyncService;
-    protected CategorySyncService $categorySyncService;
+    // protected CategorySyncService $categorySyncService;
     protected ProductSyncService $productSyncService;
     protected ReviewSyncService $reviewSyncService;
     protected OrderService $orderService;
@@ -27,7 +27,7 @@ class DataSyncService extends Service
     {
         $this->dataSyncHandler = new DataSyncHandler();
         $this->userSyncService = new UserSyncService();
-        $this->categorySyncService = new CategorySyncService();
+        // $this->categorySyncService = new CategorySyncService();
         $this->productSyncService = new ProductSyncService();
         $this->reviewSyncService = new ReviewSyncService();
         $this->orderService = new OrderService();
@@ -56,8 +56,8 @@ class DataSyncService extends Service
                 // Product Sync Data for *Login or Register*
                 $total_objects += $this->userSyncService->syncUser($file);
                 if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
-                    $syncedCaterories = new CategorySyncService();
-                    $total_objects += $syncedCaterories->syncCategory($file);
+                    // $syncedCaterories = new CategorySyncService();
+                    // $total_objects += $syncedCaterories->syncCategory($file);
                     $total_objects += $this->productSyncService->processProductForSync($file, $post_type);
                     $total_objects += $this->reviewSyncService->processReviewForSync($file, $post_type);
                     $total_objects += $this->orderItemSyncService->syncOrder($file);
@@ -107,17 +107,17 @@ class DataSyncService extends Service
         }
         if ("categories" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
-                $syncedCaterories = new CategorySyncService();
-                $totalLines += $syncedCaterories->syncCategory($file);
-                $processProduct = new ProductSyncService($syncedCaterories);
-                $totalLines += $processProduct->processProductForSync($file);
+                // $syncedCaterories = new CategorySyncService();
+                // $totalLines += $syncedCaterories->syncCategory($file);
+                $processProduct = new ProductSyncService();
+                $totalLines += $processProduct->processProductForSync($file, 'product');
                 update_option('rvx_sync_number', $totalLines);
             }
         }
         if ("reviews" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
                 $totalLines = get_option('rvx_sync_number');
-                $totalLines += (new ReviewSyncService())->processReviewForSync($file);
+                $totalLines += (new ReviewSyncService())->processReviewForSync($file, 'product');
                 update_option('rvx_sync_number', $totalLines);
             }
         }

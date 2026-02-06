@@ -6,6 +6,7 @@ use Exception;
 use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Services\CacheServices;
+use WP_Screen;
 class WooReviewTableHandler
 {
     protected $cacheServices;
@@ -15,15 +16,17 @@ class WooReviewTableHandler
     }
     public function __invoke($new_status, $old_status, $comment)
     {
-        $screen = \get_current_screen();
-        if ($screen instanceof \Rvx\Handlers\WP_Screen || $screen->id == 'edit-comments') {
-            $comment_id = $comment->comment_ID;
-            $this->handleAction($new_status, $old_status, $comment_id);
-        }
-        if (wp_doing_ajax()) {
-            $comment_id = $comment->comment_ID;
-            $this->handleAction($new_status, $old_status, $comment_id);
-        }
+        add_action('init', function () use($new_status, $old_status, $comment) {
+            $screen = \get_current_screen();
+            if ($screen instanceof WP_Screen || $screen->id == 'edit-comments') {
+                $comment_id = $comment->comment_ID;
+                $this->handleAction($new_status, $old_status, $comment_id);
+            }
+            if (wp_doing_ajax()) {
+                $comment_id = $comment->comment_ID;
+                $this->handleAction($new_status, $old_status, $comment_id);
+            }
+        });
     }
     public function handleAction($new_status, $old_status, $comment_id)
     {

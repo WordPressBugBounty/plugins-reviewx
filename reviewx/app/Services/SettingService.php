@@ -176,7 +176,7 @@ class SettingService extends \Rvx\Services\Service
         update_option('rvx_all_setting_data', $payload_json);
         return ['message' => __('Settings saved successfully'), 'data' => $data['settings']];
     }
-    public function removeCredentials()
+    public function removeCredentials($requestData)
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'rvx_sites';
@@ -185,7 +185,89 @@ class SettingService extends \Rvx\Services\Service
         if ($wpdb->last_error) {
             return ['message' => 'Error: ' . $wpdb->last_error];
         }
-        return ['message' => 'Table truncated successfully', 'result' => $result];
+        return ['message' => 'Site Table deleted successfully', 'result' => $result];
+    }
+    public function updateSiteData($requestHeaders)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'rvx_sites';
+        // --- Extract headers (headers come as arrays) ---
+        $user_email = isset($requestHeaders['x_user_email'][0]) ? sanitize_email($requestHeaders['x_user_email'][0]) : '';
+        $user_name = isset($requestHeaders['x_user_name'][0]) ? sanitize_text_field($requestHeaders['x_user_name'][0]) : '';
+        $site_uid = isset($requestHeaders['x_site_uid'][0]) ? sanitize_text_field($requestHeaders['x_site_uid'][0]) : '';
+        // $site_id    = isset($requestHeaders['x_site_id'][0])    ? intval($requestHeaders['x_site_id'][0])                 : 0;
+        // $domain     = isset($requestHeaders['x_domain'][0])     ? sanitize_text_field($requestHeaders['x_domain'][0])     : '';
+        // --- Validation: must provide at least one field to update ---
+        if (empty($user_email) && empty($user_name)) {
+            // error_log('[ReviewX] updateSiteData: Missing X-User-Email and X-User-Name in request headers.');
+            return ['status' => 'fail', 'message' => 'Missing X-User-Email and X-User-Name in request headers.'];
+        }
+        // --- Decide which identifier to use for WHERE (preferred order: uid, site_id, domain) ---
+        $where = [];
+        $where_fmt = [];
+        if (!empty($site_uid)) {
+            $where = ['uid' => $site_uid];
+            $where_fmt = ['%s'];
+        } else {
+            // No identifier provided — refuse to do a global update for safety
+            // error_log('[ReviewX] updateSiteData: No site identifier provided (x_site_uid, x_site_id or x_domain). Aborting to avoid global update.');
+            return ['status' => 'fail', 'message' => 'Missing site identifier. Provide x_site_uid, x_site_id or x_domain in request headers.'];
+        }
+        // --- Prepare data to update ---
+        $data = [];
+        $format = [];
+        if (!empty($user_email)) {
+            $data['email'] = $user_email;
+            $format[] = '%s';
+        }
+        if (!empty($user_name)) {
+            $data['name'] = $user_name;
+            $format[] = '%s';
+        }
+        if (empty($data)) {
+            return ['status' => 'fail', 'message' => 'No valid update fields provided.'];
+        }
+        // error_log('[ReviewX] updateSiteData: Target WHERE: ' . print_r($where, true) . ' — Updating: ' . print_r($data, true));
+        // --- Fetch existing row to detect no-op updates and to ensure the row exists ---
+        $where_keys = \array_keys($where);
+        // Build a safe WHERE clause and prepare values
+        $where_clauses = [];
+        $where_values = [];
+        foreach ($where as $col => $val) {
+            $where_clauses[] = "{$col} = %s";
+            $where_values[] = (string) $val;
+        }
+        $where_sql = \implode(' AND ', $where_clauses);
+        $select_sql = $wpdb->prepare("SELECT * FROM {$table_name} WHERE {$where_sql} LIMIT 1", $where_values);
+        $existing = $wpdb->get_row($select_sql, ARRAY_A);
+        if (null === $existing) {
+            // error_log('[ReviewX] updateSiteData: No site row found for identifier: ' . print_r($where, true));
+            return ['status' => 'fail', 'message' => 'No site found matching provided identifier.', 'where' => $where];
+        }
+        // Compare values — if identical, return success (no change needed)
+        $is_same = \true;
+        foreach ($data as $col => $val) {
+            $existing_val = isset($existing[$col]) ? (string) $existing[$col] : '';
+            if ($existing_val !== (string) $val) {
+                $is_same = \false;
+                break;
+            }
+        }
+        if ($is_same) {
+            return ['status' => 'success', 'message' => 'No changes required — data already up to date.', 'data' => $data, 'where' => $where];
+        }
+        // --- Perform the update using $wpdb->update (safe) ---
+        $updated = $wpdb->update($table_name, $data, $where, $format, $where_fmt);
+        if ($wpdb->last_error) {
+            // error_log('[ReviewX] updateSiteData: DB error - ' . $wpdb->last_error);
+            return ['status' => 'error', 'message' => 'Database error: ' . $wpdb->last_error];
+        }
+        // $updated can be: false (error), 0 (no rows changed), >0 (rows updated)
+        if ($updated === \false) {
+            return ['status' => 'error', 'message' => 'Failed to update site data.'];
+        }
+        $rows = $wpdb->rows_affected;
+        return ['status' => 'success', 'message' => $rows > 0 ? "Site data updated successfully ({$rows} row(s) affected)." : 'No rows were changed.', 'data' => $data, 'where' => $where];
     }
     public function getLocalSettings($post_type)
     {

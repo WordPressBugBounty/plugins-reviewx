@@ -67,7 +67,7 @@ class ReviewSyncService extends \Rvx\Services\Service
                 $reviewCount++;
             }
         });
-        Helper::rvxLog($reviewCount, "Review Done");
+        // Helper::rvxLog($reviewCount, "Review Done");
         return $reviewCount;
     }
     public function processReview($comment) : array
@@ -85,7 +85,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         } else {
             $status = $this->getCommentStatus($comment);
         }
-        return ['rid' => 'rid://Review/' . (int) $comment->comment_ID, 'product_id' => (int) $comment->comment_post_ID, 'wp_id' => (int) $comment->comment_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'rating' => isset($this->reviewMetaRating[$comment->comment_ID]) ? (int) $this->reviewMetaRating[$comment->comment_ID] : 0, 'reviewer_email' => $comment->comment_author_email ?? null, 'reviewer_name' => $comment->comment_author ?? null, 'title' => isset($this->reviewMetaTitle[$comment->comment_ID]) ? $this->reviewMetaTitle[$comment->comment_ID] : null, 'feedback' => $comment->comment_content ?? null, 'verified' => !empty($this->reviewMetaVerified[$comment->comment_ID]), 'attachments' => $this->reviewMetaAttachmentsAll[$comment->comment_ID] ?? [], 'is_recommended' => !empty($this->reviewMetaRecommended[$comment->comment_ID]), 'is_anonymous' => !empty($this->reviewMetaAnonymous[$comment->comment_ID]), 'status' => $status, 'reply' => $reply, 'trashed_at' => $trashed_at, 'created_at' => Helper::validateReturnDate($comment->comment_date_gmt) ?? null, 'customer_id' => $comment->user_id ?? null, 'ip' => $comment->comment_author_IP ?? null, 'criterias' => $this->reviewMultiCriteriasRating[$comment->comment_ID] ?? null];
+        return ['rid' => 'rid://Review/' . (int) $comment->comment_ID, 'product_id' => (int) $comment->comment_post_ID, 'wp_id' => (int) $comment->comment_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'rating' => isset($this->reviewMetaRating[$comment->comment_ID]) ? (float) \round($this->reviewMetaRating[$comment->comment_ID], 2) : (float) 0.0, 'reviewer_email' => $comment->comment_author_email ?? null, 'reviewer_name' => $comment->comment_author ?? null, 'title' => isset($this->reviewMetaTitle[$comment->comment_ID]) ? $this->reviewMetaTitle[$comment->comment_ID] : null, 'feedback' => $comment->comment_content ?? null, 'verified' => !empty($this->reviewMetaVerified[$comment->comment_ID]), 'attachments' => $this->reviewMetaAttachmentsAll[$comment->comment_ID] ?? [], 'is_recommended' => !empty($this->reviewMetaRecommended[$comment->comment_ID]), 'is_anonymous' => !empty($this->reviewMetaAnonymous[$comment->comment_ID]), 'status' => $status, 'reply' => $reply, 'trashed_at' => $trashed_at, 'created_at' => Helper::validateReturnDate($comment->comment_date_gmt) ?? null, 'customer_id' => $comment->user_id ?? null, 'ip' => $comment->comment_author_IP ?? null, 'criterias' => $this->reviewMultiCriteriasRating[$comment->comment_ID] ?? null];
     }
     public function syncReviewMata() : void
     {
@@ -225,7 +225,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         }
         // Update the 'rating' comment meta with the new format
         $ratingValue = get_comment_meta($commentId, 'rating', \true);
-        $currentRating = (float) \round(\is_numeric($ratingValue) ? (float) $ratingValue : 0, 2);
+        $currentRating = (float) \is_numeric($ratingValue) ? (float) \round($ratingValue, 2) : (float) 0.0;
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
         $critriaAllowed = $this->migrationData->rvx_retrieve_old_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
@@ -264,7 +264,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         // Start with existing metaValue if valid
         // Update the 'rating' comment meta with the new format
         $ratingValue = get_comment_meta($commentId, 'rating', \true);
-        $currentRating = (float) \round(\is_numeric($ratingValue) ? (float) $ratingValue : 0, 2);
+        $currentRating = (float) \is_numeric($ratingValue) ? (float) \round($ratingValue, 2) : (float) 0.0;
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
         $critriaAllowed = $this->migrationData->rvx_retrieve_saas_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {

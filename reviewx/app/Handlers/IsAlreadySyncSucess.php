@@ -4,17 +4,22 @@ namespace Rvx\Handlers;
 
 class IsAlreadySyncSucess
 {
-    public function __construct()
+    public function resetSyncFlag()
     {
         add_action('admin_footer', function () {
-            if (get_option('rvx_reset_sync_flag')) {
-                ?>
-                <script>
-                    localStorage.setItem('isAlreadySyncSuccess', 'false');
-                </script>
-                <?php 
-                delete_option('rvx_reset_sync_flag');
+            if (!\get_transient('rvx_reset_sync_flag')) {
+                return;
             }
+            ?>
+            <script>
+                try {
+                    localStorage.setItem('isAlreadySyncSuccess', 'false');
+                } catch (e) {
+                    console.warn('ReviewX: Unable to access localStorage');
+                }
+            </script>
+            <?php 
+            \delete_transient('rvx_reset_sync_flag');
         });
     }
 }

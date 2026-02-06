@@ -2,6 +2,8 @@
 
 namespace Rvx\CPT;
 
+use WP_Post;
+use Rvx\CPT\CptHelper;
 class CptAverageRating
 {
     /**
@@ -49,7 +51,7 @@ class CptAverageRating
     {
         // Check the post type.
         $post_type = get_post_type($post_id);
-        $enabled_post_types = (new \Rvx\CPT\CptHelper())->usedCPT('used');
+        $enabled_post_types = (new CptHelper())->usedCPT('used');
         unset($enabled_post_types['product']);
         // Unset Product
         if (!isset($enabled_post_types[$post_type])) {
@@ -67,6 +69,7 @@ class CptAverageRating
             $average_rating = \round(\array_sum($ratings) / \count($ratings), 2);
             // Store the average rating as post meta, ensuring it's a float.
             update_post_meta($post_id, 'rvx_avg_rating', (float) $average_rating);
+            update_post_meta($post_id, 'rating', (float) $average_rating);
         } else {
             // No ratings found, set the meta key to 0.00.
             update_post_meta($post_id, 'rvx_avg_rating', (float) $average_rating);
@@ -76,7 +79,7 @@ class CptAverageRating
      * Hook into the post save action to add the rvx_avg_rating meta key.
      *
      * @param int $post_id The post ID.
-     * @param \WP_Post $post The post object.
+     * @param WP_Post $post The post object.
      */
     public static function rvx_avg_rating_on_save($post_id, $post)
     {
@@ -86,7 +89,7 @@ class CptAverageRating
         }
         // Check the post type.
         $post_type = get_post_type($post_id);
-        $enabled_post_types = (new \Rvx\CPT\CptHelper())->usedCPT('used');
+        $enabled_post_types = (new CptHelper())->usedCPT('used');
         unset($enabled_post_types['product']);
         // Unset Product
         if (!isset($enabled_post_types[$post_type])) {
@@ -96,6 +99,7 @@ class CptAverageRating
         if (!get_post_meta($post_id, 'rvx_avg_rating', \true)) {
             // Add the rvx_avg_rating meta key with an initial value (0.00)
             update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
+            update_post_meta($post_id, 'rating', (float) 0.0);
         }
     }
 }

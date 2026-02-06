@@ -33,6 +33,9 @@ class ReviewService extends \Rvx\Services\Service
             $wpCommentData = $this->prepareWpCommentData($request);
             $commentId = $this->storeReviewMeta($request, $wpCommentData);
             $appReviewData = $this->prepareAppReviewData($request->get_params(), $commentId);
+            // Ensure SaaS payload rating equals the exact value stored in WP DB
+            $storedRating = get_comment_meta($commentId, 'rating', \true);
+            $appReviewData['rating'] = \is_numeric($storedRating) ? (float) \round($storedRating, 2) : (float) 0.0;
             $reviewApi = new ReviewsApi();
             $res = $reviewApi->create($appReviewData);
             if ($res->getStatusCode() !== Response::HTTP_OK) {
@@ -104,7 +107,7 @@ class ReviewService extends \Rvx\Services\Service
             if ($criterias !== null && $isAllowedMultiCriteria === \true) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
             } else {
-                $wcAverageRating = $data->get_params()['rating'];
+                $wcAverageRating = \round($data->get_params()['rating'], 2);
             }
             $commentId = wp_insert_comment($wpCommentData);
             if (!\is_wp_error($commentId)) {
@@ -145,7 +148,7 @@ class ReviewService extends \Rvx\Services\Service
      */
     public function prepareAppReviewData(array $payloadData, int $commentId) : array
     {
-        $data = ['wp_id' => $commentId, 'product_wp_unique_id' => Client::getUid() . '-' . $payloadData['wp_post_id'] ?? null, 'wp_post_id' => $payloadData['wp_post_id'] ?? null, 'reviewer_email' => sanitize_text_field($payloadData['reviewer_email'] ?? null), 'reviewer_name' => sanitize_text_field($payloadData['reviewer_name'] ?? null), 'rating' => (float) \round(sanitize_text_field($payloadData['rating'] ?? 1.0), 2), 'feedback' => \strip_tags($payloadData['feedback'] ?? null), 'is_verified' => Helper::arrayGet($payloadData, 'verified'), 'auto_publish' => Helper::arrayGet($payloadData, 'status'), 'created_at' => current_time('mysql', \true), 'title' => \strip_tags($payloadData['title'] ?? null), 'attachments' => isset($payloadData['attachments']) ? $payloadData['attachments'] : []];
+        $data = ['wp_id' => $commentId, 'product_wp_unique_id' => Client::getUid() . '-' . $payloadData['wp_post_id'] ?? null, 'wp_post_id' => $payloadData['wp_post_id'] ?? null, 'reviewer_email' => sanitize_text_field($payloadData['reviewer_email'] ?? null), 'reviewer_name' => sanitize_text_field($payloadData['reviewer_name'] ?? null), 'rating' => (float) sanitize_text_field(\round($payloadData['rating'], 2) ?? 0.0), 'feedback' => \strip_tags($payloadData['feedback'] ?? null), 'is_verified' => Helper::arrayGet($payloadData, 'verified'), 'auto_publish' => Helper::arrayGet($payloadData, 'status'), 'created_at' => current_time('mysql', \true), 'title' => \strip_tags($payloadData['title'] ?? null), 'attachments' => isset($payloadData['attachments']) ? $payloadData['attachments'] : []];
         $data = \array_merge($data, $payloadData);
         $criterias = Helper::arrayGet($data, 'criterias');
         if ($criterias) {
@@ -654,9 +657,9 @@ class ReviewService extends \Rvx\Services\Service
             $total_rating = \array_sum($data['criterias']);
             $rating_count = \count($data['criterias']);
             // Count of valid values
-            $data['rating'] = $rating_count > 0 ? (float) \round($total_rating / $rating_count, 2) : (float) 1.0;
+            $data['rating'] = $rating_count > 0 ? (float) \round($total_rating / $rating_count, 2) : (float) 0.0;
         } else {
-            $data['rating'] = $request['rating'] ? (float) \round($request['rating'], 2) : (float) 1.0;
+            $data['rating'] = $request['rating'] ? (float) \round($request['rating'], 2) : (float) 0.0;
         }
         return $data;
     }
@@ -800,7 +803,7 @@ class ReviewService extends \Rvx\Services\Service
                     $wcAverageRating = $this->calculateAverageRating($criterias);
                     $modified_criteria = \json_encode($criterias);
                 } else {
-                    $wcAverageRating = (float) \round(sanitize_text_field($data['reviews'][$index]['rating']) ?? 1.0, 2);
+                    $wcAverageRating = (float) sanitize_text_field(\round($data['reviews'][$index]['rating'], 2)) ?? 0.0;
                     $modified_criteria = null;
                 }
                 $commentId = wp_insert_comment($comment);
@@ -829,7 +832,7 @@ class ReviewService extends \Rvx\Services\Service
     {
         // Ensure $criterias is an array; default to an empty array if it's null or not an array
         if (!\is_array($criterias)) {
-            return (float) 1.0;
+            return (float) 0.0;
             // Fallback value
         }
         // Normalize all values to float
@@ -846,7 +849,7 @@ class ReviewService extends \Rvx\Services\Service
         // Sum of all valid values
         $count = \count($values);
         // Count of valid values
-        return $count > 0 ? (float) \round($total / $count, 2) : (float) 1.0;
+        return $count > 0 ? (float) \round($total / $count, 2) : (float) 0.0;
         // Calculate the average and round up
     }
     public function thanksMessage($request)
@@ -856,13 +859,13 @@ class ReviewService extends \Rvx\Services\Service
     public function setAllReviewsMetaTransient($site_id, $post_type, $latest_reviews)
     {
         $post_type = $post_type != null ? $post_type : 'all';
-        set_transient("rvx_{$site_id}_{$post_type}_reviews", wp_slash($latest_reviews), 86400);
-        // Expires in 1 days
+        set_transient("rvx_{$site_id}_{$post_type}_reviews", wp_slash($latest_reviews), 3600);
+        // Expires in 1 hour
     }
     public function postMetaReviewInsert($id, $latest_reviews)
     {
-        set_transient("rvx_{$id}_latest_reviews", wp_slash($latest_reviews), 604800);
-        // Expires in 7 days
+        set_transient("rvx_{$id}_latest_reviews", wp_slash($latest_reviews), 3600);
+        // Expires in 1 hour
     }
     public function allReviewApproveCount() : int
     {
@@ -878,7 +881,7 @@ class ReviewService extends \Rvx\Services\Service
     }
     public function saasStatusReviewCount()
     {
-        $data = \get_transient('reviews_data_list');
+        $data = \get_transient('rvx_reviews_data_list');
         if (\is_array($data)) {
             return $data['count'];
         }

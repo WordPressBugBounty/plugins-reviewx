@@ -7,6 +7,7 @@ use Rvx\Api\OrderApi;
 use Rvx\WPDrill\Response;
 use Rvx\Utilities\Helper;
 use Rvx\Utilities\Auth\Client;
+use Exception;
 class OrderCreateHandler
 {
     public function __invoke($order_id)
@@ -28,7 +29,7 @@ class OrderCreateHandler
                 return \false;
             }
             return \true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return \false;
         }
     }

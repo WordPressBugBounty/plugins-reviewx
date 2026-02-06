@@ -3,11 +3,11 @@ Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujans
 Donate link: https://reviewx.io
 Tags: woocommerce reviews, product reviews, customer reviews, review reminder, google reviews
 Requires at least: 5.0
-Tested up to: 6.8
+Tested up to: 6.9
 WC requires at least: 3.1
 Requires PHP: 7.4
-WC tested up to: 9.8
-Stable tag: 2.2.10
+WC tested up to: 10.4
+Stable tag: 2.3.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -67,9 +67,9 @@ Whether you’re looking to boost customer engagement or improve product credibi
 
 **📐 [Elementor Integration](https://reviewx.io/docs/how-to-use-reviewx-product-data-tabs-elementor-widget/)**: Love using Elementor? We’ve got you covered. Use our widget to design your WooCommerce reviews section right from the Elementor editor, customizing everything from colors to icons.
 
-**📐 [Oxygen Builder Integration](https://reviewx.io/docs/how-to-use-reviewx-woo-review-oxygen-builder-elements/)**: Prefer Oxygen Builder? No problem. Use our widget to design and customize your product review plugin section easily.
+**📐 [Oxygen Builder Integration](https://reviewx.io/docs/how-to-use-reviewx-woo-review-oxygen-builder-elements/)**: Prefer Oxygen Builder? No problem. Use our shortcode to display your product reviews section easily.
 
-**📐 [Divi Builder Integration](https://reviewx.io/docs/how-to-use-reviewx-woo-review-tab-divi-builder-module/)**: If Divi is your go-to, you can also design and customize your customer review plugin page with our Divi builder widget. Tweak colors, backgrounds, and fonts to your liking.
+**📐 [Divi Builder Integration](https://reviewx.io/docs/how-to-use-reviewx-woo-review-tab-divi-builder-module/)**: If Divi is your go-to, use our shortcode to display your product reviews section easily.
 
 **🌪️ [Extensive Filtering](https://reviewx.io/docs/extensive-filtering/)**: Let your customers find exactly the customer reviews they want with smart filtering options. They can sort by photo reviews, text, ratings, and more.
 
@@ -220,6 +220,26 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.3.1 - 01-15-2026 =
+- Regular Update
+- Improved Plugin Activation
+- Fix: 2 Bug fixes
+
+= 2.3.0 - 12-22-2025 =
+- Regular Update
+- Improved Security
+- Improved Data Accuracy
+- Fix: 20+ Bug fixes
+
+= 2.2.12 - 10-15-2025 =
+- Regular Update
+- Fix: Bug fixes
+
+= 2.2.11 - 10-07-2025 =
+- Fix: Fixed Divi Builder Issue
+- Fix: Product and CPT Schema Issue
+- Fix: Minor bug fixes
+
 = 2.2.10 - 09-21-2025 =
 - Improved Front-end Review Card Design
 - Improved Front-end Review Summary Design

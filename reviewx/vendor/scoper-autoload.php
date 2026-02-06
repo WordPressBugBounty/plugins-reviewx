@@ -29,92 +29,154 @@ if (!function_exists('humbug_phpscoper_expose_class')) {
     }
 }
 humbug_phpscoper_expose_class('Cpt_Widgets', 'Rvx\Cpt_Widgets');
-humbug_phpscoper_expose_class('RVX_Oxygen_Criteria_Graph', 'Rvx\RVX_Oxygen_Criteria_Graph');
-humbug_phpscoper_expose_class('RVX_Oxygen_Review_List', 'Rvx\RVX_Oxygen_Review_List');
-humbug_phpscoper_expose_class('RVX_Oxygen_Stats', 'Rvx\RVX_Oxygen_Stats');
-humbug_phpscoper_expose_class('RVX_Oxygen_Summary', 'Rvx\RVX_Oxygen_Summary');
-humbug_phpscoper_expose_class('RVX_Builder_Module_Woocommerce_Reviews', 'Rvx\RVX_Builder_Module_Woocommerce_Reviews');
-humbug_phpscoper_expose_class('RVX_Builder_Module_Woocommerce_Tabs', 'Rvx\RVX_Builder_Module_Woocommerce_Tabs');
 humbug_phpscoper_expose_class('create_sites_table', 'Rvx\create_sites_table');
 humbug_phpscoper_expose_class('FlattedString', 'Rvx\FlattedString');
 humbug_phpscoper_expose_class('Flatted', 'Rvx\Flatted');
-humbug_phpscoper_expose_class('__TwigTemplate_0d4b4eb9c42b6c468060e507b3888122d8215c5a719d67b21c4a491e1d1356e4', 'Rvx\__TwigTemplate_0d4b4eb9c42b6c468060e507b3888122d8215c5a719d67b21c4a491e1d1356e4');
+humbug_phpscoper_expose_class('__TwigTemplate_e618600f32e1983c1852fe9d50be0c4d', 'Rvx\__TwigTemplate_e618600f32e1983c1852fe9d50be0c4d');
+humbug_phpscoper_expose_class('__TwigTemplate_9b617b34afe5b9c996fff80ed20aac3d', 'Rvx\__TwigTemplate_9b617b34afe5b9c996fff80ed20aac3d');
+humbug_phpscoper_expose_class('__TwigTemplate_759e44c0ded97e4ce5173fb2f5a9c561', 'Rvx\__TwigTemplate_759e44c0ded97e4ce5173fb2f5a9c561');
 humbug_phpscoper_expose_class('__TwigTemplate_eca0ffbcf23af39d3876c365bc1843d5', 'Rvx\__TwigTemplate_eca0ffbcf23af39d3876c365bc1843d5');
+humbug_phpscoper_expose_class('__TwigTemplate_b3aa88ef6832f8eae9f56ecd811e5143', 'Rvx\__TwigTemplate_b3aa88ef6832f8eae9f56ecd811e5143');
+humbug_phpscoper_expose_class('__TwigTemplate_239caa0304ff6e7ac8648a52705b9943', 'Rvx\__TwigTemplate_239caa0304ff6e7ac8648a52705b9943');
+humbug_phpscoper_expose_class('__TwigTemplate_457f4a361f915d94cd43ef4ae893cb60', 'Rvx\__TwigTemplate_457f4a361f915d94cd43ef4ae893cb60');
 humbug_phpscoper_expose_class('__TwigTemplate_c0976ddfb63e2ad6664af6d11344ef5b', 'Rvx\__TwigTemplate_c0976ddfb63e2ad6664af6d11344ef5b');
+humbug_phpscoper_expose_class('__TwigTemplate_1bb492e97f906e168ab4b22486c6830c', 'Rvx\__TwigTemplate_1bb492e97f906e168ab4b22486c6830c');
+humbug_phpscoper_expose_class('__TwigTemplate_4d79397a8320a28b4712f090bbdc424f', 'Rvx\__TwigTemplate_4d79397a8320a28b4712f090bbdc424f');
+humbug_phpscoper_expose_class('__TwigTemplate_455c1cf8fb14111fbf2e7b5361a1e80a', 'Rvx\__TwigTemplate_455c1cf8fb14111fbf2e7b5361a1e80a');
 humbug_phpscoper_expose_class('__TwigTemplate_6355998dc5d7891e307e2080cbc3fde814c943f679b99f591fb2282b419002d5', 'Rvx\__TwigTemplate_6355998dc5d7891e307e2080cbc3fde814c943f679b99f591fb2282b419002d5');
+humbug_phpscoper_expose_class('__TwigTemplate_3d162ef9fc8e4aa3caed8474c53d1a62', 'Rvx\__TwigTemplate_3d162ef9fc8e4aa3caed8474c53d1a62');
 humbug_phpscoper_expose_class('__TwigTemplate_fad0e045638986972d11876d85c62f79', 'Rvx\__TwigTemplate_fad0e045638986972d11876d85c62f79');
 humbug_phpscoper_expose_class('__TwigTemplate_0fc69443c49684ac6c7d56fe060468c9', 'Rvx\__TwigTemplate_0fc69443c49684ac6c7d56fe060468c9');
+humbug_phpscoper_expose_class('__TwigTemplate_ea1dd57c3217469ca70a779a64e15019', 'Rvx\__TwigTemplate_ea1dd57c3217469ca70a779a64e15019');
+humbug_phpscoper_expose_class('__TwigTemplate_d3595f9b3375b9f44b44d3441237d9b7', 'Rvx\__TwigTemplate_d3595f9b3375b9f44b44d3441237d9b7');
+humbug_phpscoper_expose_class('__TwigTemplate_78c9b1acb54be40ecac206c896f6c1dc', 'Rvx\__TwigTemplate_78c9b1acb54be40ecac206c896f6c1dc');
 humbug_phpscoper_expose_class('__TwigTemplate_e2bcf7505d58e4e9c7e1f0e16bcc26be1ee6fb64a4b6cd10553c02f90ef76e39', 'Rvx\__TwigTemplate_e2bcf7505d58e4e9c7e1f0e16bcc26be1ee6fb64a4b6cd10553c02f90ef76e39');
 humbug_phpscoper_expose_class('__TwigTemplate_0d44195c330cfc5b2dc62b30977c3cc9', 'Rvx\__TwigTemplate_0d44195c330cfc5b2dc62b30977c3cc9');
-humbug_phpscoper_expose_class('__TwigTemplate_9f526d46c534644119f537802e7d30a15f0a17a69e1aa80534abad0fdc4b4476', 'Rvx\__TwigTemplate_9f526d46c534644119f537802e7d30a15f0a17a69e1aa80534abad0fdc4b4476');
-humbug_phpscoper_expose_class('__TwigTemplate_7b8b2d672be6d6959453ec3192e61f3e2383d88c0ed4fff850fc2cf3192b6610', 'Rvx\__TwigTemplate_7b8b2d672be6d6959453ec3192e61f3e2383d88c0ed4fff850fc2cf3192b6610');
 humbug_phpscoper_expose_class('__TwigTemplate_42fe6b71db6ed530a225337c843179ba', 'Rvx\__TwigTemplate_42fe6b71db6ed530a225337c843179ba');
+humbug_phpscoper_expose_class('__TwigTemplate_0059eabb0c785abaf87e15f6e8e1ef40', 'Rvx\__TwigTemplate_0059eabb0c785abaf87e15f6e8e1ef40');
+humbug_phpscoper_expose_class('__TwigTemplate_7addcc1790b9f025b691aef82054d776', 'Rvx\__TwigTemplate_7addcc1790b9f025b691aef82054d776');
+humbug_phpscoper_expose_class('__TwigTemplate_5dc33597aebad4670cf34534ba8484bf', 'Rvx\__TwigTemplate_5dc33597aebad4670cf34534ba8484bf');
+humbug_phpscoper_expose_class('__TwigTemplate_75b21e26881b07c12b5c55a62c75c13a', 'Rvx\__TwigTemplate_75b21e26881b07c12b5c55a62c75c13a');
+humbug_phpscoper_expose_class('__TwigTemplate_940f819de4024328855bfc2ccead3569', 'Rvx\__TwigTemplate_940f819de4024328855bfc2ccead3569');
 humbug_phpscoper_expose_class('__TwigTemplate_e4f4a3a95806955bb5081f4df5343578', 'Rvx\__TwigTemplate_e4f4a3a95806955bb5081f4df5343578');
 humbug_phpscoper_expose_class('__TwigTemplate_34a9d4b4f89b5849330634f192ad51dc0d50187be847d38b61d2de1662ef7168', 'Rvx\__TwigTemplate_34a9d4b4f89b5849330634f192ad51dc0d50187be847d38b61d2de1662ef7168');
 humbug_phpscoper_expose_class('__TwigTemplate_35a38af6301a9942cb8f1a99d3d7d30c', 'Rvx\__TwigTemplate_35a38af6301a9942cb8f1a99d3d7d30c');
+humbug_phpscoper_expose_class('__TwigTemplate_da74d41d76237ee7d4be61e2e8453651', 'Rvx\__TwigTemplate_da74d41d76237ee7d4be61e2e8453651');
 humbug_phpscoper_expose_class('__TwigTemplate_d041bb1b1a044f0d10426a1e961071d3f5311273fe776539119b4975b45875f4', 'Rvx\__TwigTemplate_d041bb1b1a044f0d10426a1e961071d3f5311273fe776539119b4975b45875f4');
-humbug_phpscoper_expose_class('__TwigTemplate_695d6fc5c8615a99775bbf3411530ce60faead7ee27ce7fedcd8d476b59a7139', 'Rvx\__TwigTemplate_695d6fc5c8615a99775bbf3411530ce60faead7ee27ce7fedcd8d476b59a7139');
 humbug_phpscoper_expose_class('__TwigTemplate_165a2e49178c4e94043e3c964a60c86f', 'Rvx\__TwigTemplate_165a2e49178c4e94043e3c964a60c86f');
 humbug_phpscoper_expose_class('__TwigTemplate_5e1d68ba3915c36f892890374eccfa7a', 'Rvx\__TwigTemplate_5e1d68ba3915c36f892890374eccfa7a');
+humbug_phpscoper_expose_class('__TwigTemplate_fc7c39789c53600b5cad3012e83698d3', 'Rvx\__TwigTemplate_fc7c39789c53600b5cad3012e83698d3');
+humbug_phpscoper_expose_class('__TwigTemplate_6cddbc4f9e01304ee9c8fc921bc9a737', 'Rvx\__TwigTemplate_6cddbc4f9e01304ee9c8fc921bc9a737');
+humbug_phpscoper_expose_class('__TwigTemplate_c808ce15f05ac1aee550c926f345daff', 'Rvx\__TwigTemplate_c808ce15f05ac1aee550c926f345daff');
 humbug_phpscoper_expose_class('__TwigTemplate_e6d24f777a7c39bea7a3d43aceabe214', 'Rvx\__TwigTemplate_e6d24f777a7c39bea7a3d43aceabe214');
+humbug_phpscoper_expose_class('__TwigTemplate_4b271387c9440f0c02a1066a7fb70864', 'Rvx\__TwigTemplate_4b271387c9440f0c02a1066a7fb70864');
+humbug_phpscoper_expose_class('__TwigTemplate_1e223731a516463a4cb13ac58b1a58c657a3a4fe969982e68519022040585257', 'Rvx\__TwigTemplate_1e223731a516463a4cb13ac58b1a58c657a3a4fe969982e68519022040585257');
 humbug_phpscoper_expose_class('__TwigTemplate_b46abd28d58529ff9d4727b83f3694fd', 'Rvx\__TwigTemplate_b46abd28d58529ff9d4727b83f3694fd');
+humbug_phpscoper_expose_class('__TwigTemplate_ebe4cf05bd8b38b41e29aefecfe46aa29e3b0e2395ebac38aa84888dde7c1d76', 'Rvx\__TwigTemplate_ebe4cf05bd8b38b41e29aefecfe46aa29e3b0e2395ebac38aa84888dde7c1d76');
 humbug_phpscoper_expose_class('__TwigTemplate_3d51d5114bc2eb900850537a2465ed08f92304e136006119d565fef7672ce571', 'Rvx\__TwigTemplate_3d51d5114bc2eb900850537a2465ed08f92304e136006119d565fef7672ce571');
 humbug_phpscoper_expose_class('__TwigTemplate_ef65619d28dbbc8fc5ad647bb9e352de', 'Rvx\__TwigTemplate_ef65619d28dbbc8fc5ad647bb9e352de');
 humbug_phpscoper_expose_class('__TwigTemplate_9d63fc74e52abc9b57d7b9d3d66ea5ce', 'Rvx\__TwigTemplate_9d63fc74e52abc9b57d7b9d3d66ea5ce');
+humbug_phpscoper_expose_class('__TwigTemplate_6013bca88e16c2d738097020f9bd775f', 'Rvx\__TwigTemplate_6013bca88e16c2d738097020f9bd775f');
 humbug_phpscoper_expose_class('__TwigTemplate_7bb017baf1b2217008687d976fcb34fab1971681c8910953b373f8fa0ab508ef', 'Rvx\__TwigTemplate_7bb017baf1b2217008687d976fcb34fab1971681c8910953b373f8fa0ab508ef');
+humbug_phpscoper_expose_class('__TwigTemplate_322d362e63cfd578f1e81f1785e35793', 'Rvx\__TwigTemplate_322d362e63cfd578f1e81f1785e35793');
+humbug_phpscoper_expose_class('__TwigTemplate_ed7358c394d600c6525f39578b1f46cd', 'Rvx\__TwigTemplate_ed7358c394d600c6525f39578b1f46cd');
+humbug_phpscoper_expose_class('__TwigTemplate_382c886538565fcbbf3c4ede83ced034', 'Rvx\__TwigTemplate_382c886538565fcbbf3c4ede83ced034');
 humbug_phpscoper_expose_class('__TwigTemplate_af028af539660e92d1ef4a79b46c3195', 'Rvx\__TwigTemplate_af028af539660e92d1ef4a79b46c3195');
 humbug_phpscoper_expose_class('__TwigTemplate_b4b5292cdb4ecf33427dd43d30e1519e', 'Rvx\__TwigTemplate_b4b5292cdb4ecf33427dd43d30e1519e');
+humbug_phpscoper_expose_class('__TwigTemplate_fc78d94ab72f5798d7dccf18f08f411b', 'Rvx\__TwigTemplate_fc78d94ab72f5798d7dccf18f08f411b');
 humbug_phpscoper_expose_class('__TwigTemplate_e29c97fe77580a294ae4dda0ad0b3ee6ca634201ce1568435661c5bbf5994d53', 'Rvx\__TwigTemplate_e29c97fe77580a294ae4dda0ad0b3ee6ca634201ce1568435661c5bbf5994d53');
 humbug_phpscoper_expose_class('__TwigTemplate_cb5f4289975519f9f038c554217cfcdd', 'Rvx\__TwigTemplate_cb5f4289975519f9f038c554217cfcdd');
-humbug_phpscoper_expose_class('__TwigTemplate_45d4dd43cbffa5502bc989ab9b17f54bf19b88ca5967082ae44a475549d80e51', 'Rvx\__TwigTemplate_45d4dd43cbffa5502bc989ab9b17f54bf19b88ca5967082ae44a475549d80e51');
+humbug_phpscoper_expose_class('__TwigTemplate_c2a7f2effe3c5f1dc6fad2c0c199abcd', 'Rvx\__TwigTemplate_c2a7f2effe3c5f1dc6fad2c0c199abcd');
+humbug_phpscoper_expose_class('__TwigTemplate_1458e6b649f7c90b07e305ec5cc61468', 'Rvx\__TwigTemplate_1458e6b649f7c90b07e305ec5cc61468');
 humbug_phpscoper_expose_class('__TwigTemplate_68359be9a7b411d0699c0e99be9ea997', 'Rvx\__TwigTemplate_68359be9a7b411d0699c0e99be9ea997');
+humbug_phpscoper_expose_class('__TwigTemplate_c2214797255116be5bbd6104684422ce', 'Rvx\__TwigTemplate_c2214797255116be5bbd6104684422ce');
+humbug_phpscoper_expose_class('__TwigTemplate_66c9b6128cdaf3718d3de5367975e5e9', 'Rvx\__TwigTemplate_66c9b6128cdaf3718d3de5367975e5e9');
 humbug_phpscoper_expose_class('__TwigTemplate_660cc95a4436cecf6ab6ff8f0f2d938a', 'Rvx\__TwigTemplate_660cc95a4436cecf6ab6ff8f0f2d938a');
-humbug_phpscoper_expose_class('__TwigTemplate_ad36a520952f5d9c30a219a215149af527352ade679353414d52e4e41ba5f251', 'Rvx\__TwigTemplate_ad36a520952f5d9c30a219a215149af527352ade679353414d52e4e41ba5f251');
+humbug_phpscoper_expose_class('__TwigTemplate_32ceabdbd1419583617d0b83bb2deee2', 'Rvx\__TwigTemplate_32ceabdbd1419583617d0b83bb2deee2');
+humbug_phpscoper_expose_class('__TwigTemplate_f5cd3b1ef581c56336b53ac077dd4ebe', 'Rvx\__TwigTemplate_f5cd3b1ef581c56336b53ac077dd4ebe');
+humbug_phpscoper_expose_class('__TwigTemplate_1ae7c22bed553d6f5f0358f6c66c914d', 'Rvx\__TwigTemplate_1ae7c22bed553d6f5f0358f6c66c914d');
+humbug_phpscoper_expose_class('__TwigTemplate_bf25f53ccb1ad4f02b052e6244a1b078', 'Rvx\__TwigTemplate_bf25f53ccb1ad4f02b052e6244a1b078');
 humbug_phpscoper_expose_class('__TwigTemplate_9f74ff5b3336836f33f6dd636d4ad71f', 'Rvx\__TwigTemplate_9f74ff5b3336836f33f6dd636d4ad71f');
-humbug_phpscoper_expose_class('__TwigTemplate_c8b5faa0fe882ee4d63de8443cfd22d73d28d0557f61a72d0f12b81548943516', 'Rvx\__TwigTemplate_c8b5faa0fe882ee4d63de8443cfd22d73d28d0557f61a72d0f12b81548943516');
+humbug_phpscoper_expose_class('__TwigTemplate_1c5b861de4b7ad54ddcd33fd2e3c9dfe', 'Rvx\__TwigTemplate_1c5b861de4b7ad54ddcd33fd2e3c9dfe');
 humbug_phpscoper_expose_class('__TwigTemplate_60a4032ef9bdee03ee9417c056390d3bc6e0fad0edef0bdcc0e446e99666917c', 'Rvx\__TwigTemplate_60a4032ef9bdee03ee9417c056390d3bc6e0fad0edef0bdcc0e446e99666917c');
+humbug_phpscoper_expose_class('__TwigTemplate_daed95326b989e6a39f6769e7e905d6b', 'Rvx\__TwigTemplate_daed95326b989e6a39f6769e7e905d6b');
 humbug_phpscoper_expose_class('__TwigTemplate_8f4b53b0025c5468317c69196cb6bb5a', 'Rvx\__TwigTemplate_8f4b53b0025c5468317c69196cb6bb5a');
+humbug_phpscoper_expose_class('__TwigTemplate_fc3d861de15a619cc90c95e3adf97373', 'Rvx\__TwigTemplate_fc3d861de15a619cc90c95e3adf97373');
+humbug_phpscoper_expose_class('__TwigTemplate_74142a4a11c4a2ec103efe96b541f172', 'Rvx\__TwigTemplate_74142a4a11c4a2ec103efe96b541f172');
+humbug_phpscoper_expose_class('__TwigTemplate_d00f4f16ed4ee34b5511df367e4cb7f9', 'Rvx\__TwigTemplate_d00f4f16ed4ee34b5511df367e4cb7f9');
 humbug_phpscoper_expose_class('__TwigTemplate_a2d2377bf5ab810f32b97e5b651e402bf601f44332e13a180b1de5944ea0dfe2', 'Rvx\__TwigTemplate_a2d2377bf5ab810f32b97e5b651e402bf601f44332e13a180b1de5944ea0dfe2');
-humbug_phpscoper_expose_class('__TwigTemplate_30b3c45d4eb7f7d23df5b31c0c647df83c958d2778fcffdd4fd2d7763014fdd5', 'Rvx\__TwigTemplate_30b3c45d4eb7f7d23df5b31c0c647df83c958d2778fcffdd4fd2d7763014fdd5');
 humbug_phpscoper_expose_class('__TwigTemplate_409a11fe8d0d6970827240d297c3fd35', 'Rvx\__TwigTemplate_409a11fe8d0d6970827240d297c3fd35');
+humbug_phpscoper_expose_class('__TwigTemplate_d091a4d194ad946387b2a1f94e666885', 'Rvx\__TwigTemplate_d091a4d194ad946387b2a1f94e666885');
 humbug_phpscoper_expose_class('__TwigTemplate_2ed0334020c2a6e80fbc58450b48f62147f10224616e675f42b79962757d2482', 'Rvx\__TwigTemplate_2ed0334020c2a6e80fbc58450b48f62147f10224616e675f42b79962757d2482');
+humbug_phpscoper_expose_class('__TwigTemplate_c446e7ba1369be90ea05d2036b0b600e', 'Rvx\__TwigTemplate_c446e7ba1369be90ea05d2036b0b600e');
+humbug_phpscoper_expose_class('__TwigTemplate_e221bfe39363639db4e1611bc0e8395e', 'Rvx\__TwigTemplate_e221bfe39363639db4e1611bc0e8395e');
+humbug_phpscoper_expose_class('__TwigTemplate_f77732f46b7c5cd011e774b1c67cc91a6b2413d8e4d8e6d13e2f8e5b0c1706ca', 'Rvx\__TwigTemplate_f77732f46b7c5cd011e774b1c67cc91a6b2413d8e4d8e6d13e2f8e5b0c1706ca');
 humbug_phpscoper_expose_class('__TwigTemplate_4e87c7c352b09e802cacdce22c7c0773', 'Rvx\__TwigTemplate_4e87c7c352b09e802cacdce22c7c0773');
 humbug_phpscoper_expose_class('__TwigTemplate_b1b1bd2ca41b1815922442c4a55e283bb8ba1dd1cea1c349c92fb473af02b842', 'Rvx\__TwigTemplate_b1b1bd2ca41b1815922442c4a55e283bb8ba1dd1cea1c349c92fb473af02b842');
+humbug_phpscoper_expose_class('__TwigTemplate_7c295d1c60a33cde58c1073314197110', 'Rvx\__TwigTemplate_7c295d1c60a33cde58c1073314197110');
 humbug_phpscoper_expose_class('__TwigTemplate_adc12db80a6850e05121dd7803d974718257bbf905c70ea1c2ab8d4a1992e9ca', 'Rvx\__TwigTemplate_adc12db80a6850e05121dd7803d974718257bbf905c70ea1c2ab8d4a1992e9ca');
 humbug_phpscoper_expose_class('__TwigTemplate_94b58a9214a64e5cb6a3d03c73d53f78', 'Rvx\__TwigTemplate_94b58a9214a64e5cb6a3d03c73d53f78');
 humbug_phpscoper_expose_class('__TwigTemplate_ae8f3c561777439fbbd7c70b314d8a7f', 'Rvx\__TwigTemplate_ae8f3c561777439fbbd7c70b314d8a7f');
+humbug_phpscoper_expose_class('__TwigTemplate_8fd621bb4b240e4d35a24457cd616851', 'Rvx\__TwigTemplate_8fd621bb4b240e4d35a24457cd616851');
 humbug_phpscoper_expose_class('__TwigTemplate_3a5064f8e3aa59973ba320b6b132c67a', 'Rvx\__TwigTemplate_3a5064f8e3aa59973ba320b6b132c67a');
+humbug_phpscoper_expose_class('__TwigTemplate_4094aaeefd6b6a9abded6410faaa2349', 'Rvx\__TwigTemplate_4094aaeefd6b6a9abded6410faaa2349');
 humbug_phpscoper_expose_class('__TwigTemplate_e0908b491beff41b3f0d5b7d6e12671f', 'Rvx\__TwigTemplate_e0908b491beff41b3f0d5b7d6e12671f');
 humbug_phpscoper_expose_class('__TwigTemplate_8da10b139c269fb2fdd20f1f61e8b9131fbc02d5dcabd8084f705e09736335f9', 'Rvx\__TwigTemplate_8da10b139c269fb2fdd20f1f61e8b9131fbc02d5dcabd8084f705e09736335f9');
+humbug_phpscoper_expose_class('__TwigTemplate_d07b7fcd97d78e07176d0be72d5de1de', 'Rvx\__TwigTemplate_d07b7fcd97d78e07176d0be72d5de1de');
 humbug_phpscoper_expose_class('__TwigTemplate_9cb6bbd646602d425bbf93bdbae9d458', 'Rvx\__TwigTemplate_9cb6bbd646602d425bbf93bdbae9d458');
-humbug_phpscoper_expose_class('__TwigTemplate_6398fffb006f107714d7c294b38282b9', 'Rvx\__TwigTemplate_6398fffb006f107714d7c294b38282b9');
+humbug_phpscoper_expose_class('__TwigTemplate_1fd2a13ddd3c76b8c9334939160e3418', 'Rvx\__TwigTemplate_1fd2a13ddd3c76b8c9334939160e3418');
+humbug_phpscoper_expose_class('__TwigTemplate_741a9f54cd3337b1916b4e7ab1e138cc', 'Rvx\__TwigTemplate_741a9f54cd3337b1916b4e7ab1e138cc');
+humbug_phpscoper_expose_class('__TwigTemplate_c72b8ee8b1c1b27dd70f6ff5930b19e9', 'Rvx\__TwigTemplate_c72b8ee8b1c1b27dd70f6ff5930b19e9');
 humbug_phpscoper_expose_class('__TwigTemplate_4e5f630a801df11cedd1bc42d7ff54c1', 'Rvx\__TwigTemplate_4e5f630a801df11cedd1bc42d7ff54c1');
+humbug_phpscoper_expose_class('__TwigTemplate_20735546fe4f557581d78ed7c9c94cce', 'Rvx\__TwigTemplate_20735546fe4f557581d78ed7c9c94cce');
 humbug_phpscoper_expose_class('__TwigTemplate_d70871d2f9a5aba0975afd2651e86300', 'Rvx\__TwigTemplate_d70871d2f9a5aba0975afd2651e86300');
+humbug_phpscoper_expose_class('__TwigTemplate_e7504fa68d60493e88e7b09c2f766e68', 'Rvx\__TwigTemplate_e7504fa68d60493e88e7b09c2f766e68');
+humbug_phpscoper_expose_class('__TwigTemplate_be5279772162c0d709e392a632fed17a', 'Rvx\__TwigTemplate_be5279772162c0d709e392a632fed17a');
 humbug_phpscoper_expose_class('__TwigTemplate_a8769375510309da22aeb09b73195a6e', 'Rvx\__TwigTemplate_a8769375510309da22aeb09b73195a6e');
+humbug_phpscoper_expose_class('__TwigTemplate_43e7be0be5b80f21b0bec9324eacf40e', 'Rvx\__TwigTemplate_43e7be0be5b80f21b0bec9324eacf40e');
 humbug_phpscoper_expose_class('__TwigTemplate_e523b67afc1c222da17ccda0dfd7d91e', 'Rvx\__TwigTemplate_e523b67afc1c222da17ccda0dfd7d91e');
+humbug_phpscoper_expose_class('__TwigTemplate_238fb99c3d0cf497d6f5a545a1831fba', 'Rvx\__TwigTemplate_238fb99c3d0cf497d6f5a545a1831fba');
+humbug_phpscoper_expose_class('__TwigTemplate_9ff81afc1d69aeeac33d63c0c45cfab2', 'Rvx\__TwigTemplate_9ff81afc1d69aeeac33d63c0c45cfab2');
 humbug_phpscoper_expose_class('__TwigTemplate_00d4cfe517568af62f30f37665f1dd665c802cac8051eadb7641ad301222c101', 'Rvx\__TwigTemplate_00d4cfe517568af62f30f37665f1dd665c802cac8051eadb7641ad301222c101');
 humbug_phpscoper_expose_class('__TwigTemplate_cd60ea788ca77ee7b5366f01905a66bdf50fdb2ca43ddbbc31faca3a8a59cb3e', 'Rvx\__TwigTemplate_cd60ea788ca77ee7b5366f01905a66bdf50fdb2ca43ddbbc31faca3a8a59cb3e');
+humbug_phpscoper_expose_class('__TwigTemplate_7bbce0d605484d0c55e586d5b996453f', 'Rvx\__TwigTemplate_7bbce0d605484d0c55e586d5b996453f');
 humbug_phpscoper_expose_class('__TwigTemplate_5cc82105bc04d520440473ce6b862512', 'Rvx\__TwigTemplate_5cc82105bc04d520440473ce6b862512');
 humbug_phpscoper_expose_class('__TwigTemplate_29cfe57a5e14457425c172c6c65d9da6', 'Rvx\__TwigTemplate_29cfe57a5e14457425c172c6c65d9da6');
+humbug_phpscoper_expose_class('__TwigTemplate_a81857f2cfd868811c83ef9f5b20aa32', 'Rvx\__TwigTemplate_a81857f2cfd868811c83ef9f5b20aa32');
+humbug_phpscoper_expose_class('__TwigTemplate_ee1d36355a47c0d81258dff4dcef651b', 'Rvx\__TwigTemplate_ee1d36355a47c0d81258dff4dcef651b');
 humbug_phpscoper_expose_class('__TwigTemplate_f957964c966696545f973cd5664a6c2b2d037af3a98e9e6f0ef72f8484869c5c', 'Rvx\__TwigTemplate_f957964c966696545f973cd5664a6c2b2d037af3a98e9e6f0ef72f8484869c5c');
 humbug_phpscoper_expose_class('__TwigTemplate_3bd427b77e912b3acd934330a2d9b65760a63ad2acf38c8d5ed2a033d0ff9fa9', 'Rvx\__TwigTemplate_3bd427b77e912b3acd934330a2d9b65760a63ad2acf38c8d5ed2a033d0ff9fa9');
+humbug_phpscoper_expose_class('__TwigTemplate_144223b9c20dd047da1c25566dfc348a', 'Rvx\__TwigTemplate_144223b9c20dd047da1c25566dfc348a');
+humbug_phpscoper_expose_class('__TwigTemplate_7389f2bc564f4b588bad534f295cb300', 'Rvx\__TwigTemplate_7389f2bc564f4b588bad534f295cb300');
+humbug_phpscoper_expose_class('__TwigTemplate_5e6f23397cfea861224dbecb6fa69fb6', 'Rvx\__TwigTemplate_5e6f23397cfea861224dbecb6fa69fb6');
 humbug_phpscoper_expose_class('__TwigTemplate_97d37e10223551845fb07a01ffa4b3c2da6f5c128627e83b577b79515bfc40b0', 'Rvx\__TwigTemplate_97d37e10223551845fb07a01ffa4b3c2da6f5c128627e83b577b79515bfc40b0');
 humbug_phpscoper_expose_class('__TwigTemplate_1d495462a687e69ede677b5b01ffc091', 'Rvx\__TwigTemplate_1d495462a687e69ede677b5b01ffc091');
 humbug_phpscoper_expose_class('__TwigTemplate_c75bdd9bd36d430ea7eb39f538653790cabb6e54fb061c1d4657ee3ecc6ea30d', 'Rvx\__TwigTemplate_c75bdd9bd36d430ea7eb39f538653790cabb6e54fb061c1d4657ee3ecc6ea30d');
 humbug_phpscoper_expose_class('__TwigTemplate_a44376f6a382b843f44b0906e1000d0e', 'Rvx\__TwigTemplate_a44376f6a382b843f44b0906e1000d0e');
+humbug_phpscoper_expose_class('__TwigTemplate_215f6085a132a93aef69c5332181157e', 'Rvx\__TwigTemplate_215f6085a132a93aef69c5332181157e');
 humbug_phpscoper_expose_class('__TwigTemplate_c53182174ab782694c49ed6274c43c3e', 'Rvx\__TwigTemplate_c53182174ab782694c49ed6274c43c3e');
+humbug_phpscoper_expose_class('__TwigTemplate_15ba98ab46c9f59bba69869c02428371', 'Rvx\__TwigTemplate_15ba98ab46c9f59bba69869c02428371');
 humbug_phpscoper_expose_class('__TwigTemplate_c950f38a15a29035f128d7c1b00bbd3e', 'Rvx\__TwigTemplate_c950f38a15a29035f128d7c1b00bbd3e');
 humbug_phpscoper_expose_class('__TwigTemplate_bfc43027ae55eced0036138cece99078', 'Rvx\__TwigTemplate_bfc43027ae55eced0036138cece99078');
+humbug_phpscoper_expose_class('__TwigTemplate_e98d8131d71d618240889aeb081aa6ba', 'Rvx\__TwigTemplate_e98d8131d71d618240889aeb081aa6ba');
+humbug_phpscoper_expose_class('__TwigTemplate_3ba4dbaa2640e3cd09b54bf5c547cbb8', 'Rvx\__TwigTemplate_3ba4dbaa2640e3cd09b54bf5c547cbb8');
+humbug_phpscoper_expose_class('__TwigTemplate_6af25037e00f408291672b9c00736db8', 'Rvx\__TwigTemplate_6af25037e00f408291672b9c00736db8');
 humbug_phpscoper_expose_class('__TwigTemplate_ed557026a3b2d4b61996287ee75480f7', 'Rvx\__TwigTemplate_ed557026a3b2d4b61996287ee75480f7');
+humbug_phpscoper_expose_class('__TwigTemplate_fe3922f9824ce65df5e99dc48d75a3fc', 'Rvx\__TwigTemplate_fe3922f9824ce65df5e99dc48d75a3fc');
 humbug_phpscoper_expose_class('__TwigTemplate_8613ad7c343c9fe010d60eb02e578cd5', 'Rvx\__TwigTemplate_8613ad7c343c9fe010d60eb02e578cd5');
 humbug_phpscoper_expose_class('__TwigTemplate_7c1e100cd718cc509a54bcf5fce8e46d', 'Rvx\__TwigTemplate_7c1e100cd718cc509a54bcf5fce8e46d');
+humbug_phpscoper_expose_class('__TwigTemplate_2190e05746768d230964e9f2fed34041', 'Rvx\__TwigTemplate_2190e05746768d230964e9f2fed34041');
+humbug_phpscoper_expose_class('__TwigTemplate_4b73c3da78f56ccff00cc7c0646d5cb47ed0b352551b3206099bbc755112e11b', 'Rvx\__TwigTemplate_4b73c3da78f56ccff00cc7c0646d5cb47ed0b352551b3206099bbc755112e11b');
 humbug_phpscoper_expose_class('__TwigTemplate_e3197b9e2acd715c0fa75a2dd287b88c', 'Rvx\__TwigTemplate_e3197b9e2acd715c0fa75a2dd287b88c');
 humbug_phpscoper_expose_class('__TwigTemplate_9f22e95e26d701ca4d362aed29384d12cdf35192fe133ee4fa8de13486359117', 'Rvx\__TwigTemplate_9f22e95e26d701ca4d362aed29384d12cdf35192fe133ee4fa8de13486359117');
+humbug_phpscoper_expose_class('__TwigTemplate_5739f5e3998e7c1988cd96b6310ee051', 'Rvx\__TwigTemplate_5739f5e3998e7c1988cd96b6310ee051');
 humbug_phpscoper_expose_class('__TwigTemplate_41ebe8d33e07a65abf81325034643169', 'Rvx\__TwigTemplate_41ebe8d33e07a65abf81325034643169');
+humbug_phpscoper_expose_class('__TwigTemplate_0dfbdf0a69819db9483fd2858376ea67', 'Rvx\__TwigTemplate_0dfbdf0a69819db9483fd2858376ea67');
+humbug_phpscoper_expose_class('__TwigTemplate_86f00237cb4fa092d26e17be09fad04e', 'Rvx\__TwigTemplate_86f00237cb4fa092d26e17be09fad04e');
 humbug_phpscoper_expose_class('__TwigTemplate_dd0907daf5aee37df88b4812cf47fc5a', 'Rvx\__TwigTemplate_dd0907daf5aee37df88b4812cf47fc5a');
-humbug_phpscoper_expose_class('__TwigTemplate_7f55b337b141a1e31ac2ed9a33e0e560', 'Rvx\__TwigTemplate_7f55b337b141a1e31ac2ed9a33e0e560');
 humbug_phpscoper_expose_class('__TwigTemplate_beb7cba3e7bbbc5eda26343f4131bbfd', 'Rvx\__TwigTemplate_beb7cba3e7bbbc5eda26343f4131bbfd');
-humbug_phpscoper_expose_class('ComposerAutoloaderInit4d01ae5ec083a3f2e093f32c3cae35e7', 'Rvx\ComposerAutoloaderInit4d01ae5ec083a3f2e093f32c3cae35e7');
+humbug_phpscoper_expose_class('__TwigTemplate_ab094495982562986fdb30ea01d216c8', 'Rvx\__TwigTemplate_ab094495982562986fdb30ea01d216c8');
+humbug_phpscoper_expose_class('ComposerAutoloaderInit632a0b14b16749d6f455934f4ce21156', 'Rvx\ComposerAutoloaderInit632a0b14b16749d6f455934f4ce21156');
 humbug_phpscoper_expose_class('Normalizer', 'Rvx\Normalizer');
 humbug_phpscoper_expose_class('JsonException', 'Rvx\JsonException');
 humbug_phpscoper_expose_class('Attribute', 'Rvx\Attribute');
@@ -127,16 +189,10 @@ humbug_phpscoper_expose_class('ReturnTypeWillChange', 'Rvx\ReturnTypeWillChange'
 
 // Function aliases. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md#function-aliases
-if (!function_exists('WC')) { function WC() { return \Rvx\WC(...func_get_args()); } }
 if (!function_exists('__')) { function __() { return \Rvx\__(...func_get_args()); } }
 if (!function_exists('_wpdrill')) { function _wpdrill() { return \Rvx\_wpdrill(...func_get_args()); } }
 if (!function_exists('_x')) { function _x() { return \Rvx\_x(...func_get_args()); } }
-if (!function_exists('absint')) { function absint() { return \Rvx\absint(...func_get_args()); } }
 if (!function_exists('activate_plugin')) { function activate_plugin() { return \Rvx\activate_plugin(...func_get_args()); } }
-if (!function_exists('add_action')) { function add_action() { return \Rvx\add_action(...func_get_args()); } }
-if (!function_exists('add_filter')) { function add_filter() { return \Rvx\add_filter(...func_get_args()); } }
-if (!function_exists('add_shortcode')) { function add_shortcode() { return \Rvx\add_shortcode(...func_get_args()); } }
-if (!function_exists('apply_filters')) { function apply_filters() { return \Rvx\apply_filters(...func_get_args()); } }
 if (!function_exists('array_is_list')) { function array_is_list() { return \Rvx\array_is_list(...func_get_args()); } }
 if (!function_exists('array_key_first')) { function array_key_first() { return \Rvx\array_key_first(...func_get_args()); } }
 if (!function_exists('array_key_last')) { function array_key_last() { return \Rvx\array_key_last(...func_get_args()); } }
@@ -155,7 +211,6 @@ if (!function_exists('ctype_xdigit')) { function ctype_xdigit() { return \Rvx\ct
 if (!function_exists('current_user_can')) { function current_user_can() { return \Rvx\current_user_can(...func_get_args()); } }
 if (!function_exists('deactivate_plugins')) { function deactivate_plugins() { return \Rvx\deactivate_plugins(...func_get_args()); } }
 if (!function_exists('do_action')) { function do_action() { return \Rvx\do_action(...func_get_args()); } }
-if (!function_exists('do_shortcode')) { function do_shortcode() { return \Rvx\do_shortcode(...func_get_args()); } }
 if (!function_exists('enum_exists')) { function enum_exists() { return \Rvx\enum_exists(...func_get_args()); } }
 if (!function_exists('esc_attr')) { function esc_attr() { return \Rvx\esc_attr(...func_get_args()); } }
 if (!function_exists('esc_attr_e')) { function esc_attr_e() { return \Rvx\esc_attr_e(...func_get_args()); } }
@@ -163,29 +218,13 @@ if (!function_exists('esc_html')) { function esc_html() { return \Rvx\esc_html(.
 if (!function_exists('esc_html__')) { function esc_html__() { return \Rvx\esc_html__(...func_get_args()); } }
 if (!function_exists('esc_html_e')) { function esc_html_e() { return \Rvx\esc_html_e(...func_get_args()); } }
 if (!function_exists('esc_url')) { function esc_url() { return \Rvx\esc_url(...func_get_args()); } }
-if (!function_exists('et_builder_i18n')) { function et_builder_i18n() { return \Rvx\et_builder_i18n(...func_get_args()); } }
-if (!function_exists('et_builder_tb_enabled')) { function et_builder_tb_enabled() { return \Rvx\et_builder_tb_enabled(...func_get_args()); } }
-if (!function_exists('et_builder_wc_need_overwrite_global')) { function et_builder_wc_need_overwrite_global() { return \Rvx\et_builder_wc_need_overwrite_global(...func_get_args()); } }
-if (!function_exists('et_core_is_builder_used_on_current_request')) { function et_core_is_builder_used_on_current_request() { return \Rvx\et_core_is_builder_used_on_current_request(...func_get_args()); } }
-if (!function_exists('et_fb_woocommerce_tabs')) { function et_fb_woocommerce_tabs() { return \Rvx\et_fb_woocommerce_tabs(...func_get_args()); } }
-if (!function_exists('et_is_woocommerce_plugin_active')) { function et_is_woocommerce_plugin_active() { return \Rvx\et_is_woocommerce_plugin_active(...func_get_args()); } }
-if (!function_exists('et_pb_is_pagebuilder_used')) { function et_pb_is_pagebuilder_used() { return \Rvx\et_pb_is_pagebuilder_used(...func_get_args()); } }
-if (!function_exists('et_pb_multi_view_options')) { function et_pb_multi_view_options() { return \Rvx\et_pb_multi_view_options(...func_get_args()); } }
-if (!function_exists('et_theme_builder_overrides_layout')) { function et_theme_builder_overrides_layout() { return \Rvx\et_theme_builder_overrides_layout(...func_get_args()); } }
-if (!function_exists('et_theme_builder_wc_placeholders')) { function et_theme_builder_wc_placeholders() { return \Rvx\et_theme_builder_wc_placeholders(...func_get_args()); } }
-if (!function_exists('et_theme_builder_wc_reset_global_objects')) { function et_theme_builder_wc_reset_global_objects() { return \Rvx\et_theme_builder_wc_reset_global_objects(...func_get_args()); } }
-if (!function_exists('et_theme_builder_wc_set_global_objects')) { function et_theme_builder_wc_set_global_objects() { return \Rvx\et_theme_builder_wc_set_global_objects(...func_get_args()); } }
 if (!function_exists('fdiv')) { function fdiv() { return \Rvx\fdiv(...func_get_args()); } }
 if (!function_exists('get_current_user_id')) { function get_current_user_id() { return \Rvx\get_current_user_id(...func_get_args()); } }
 if (!function_exists('get_debug_type')) { function get_debug_type() { return \Rvx\get_debug_type(...func_get_args()); } }
 if (!function_exists('get_option')) { function get_option() { return \Rvx\get_option(...func_get_args()); } }
 if (!function_exists('get_plugins')) { function get_plugins() { return \Rvx\get_plugins(...func_get_args()); } }
 if (!function_exists('get_post')) { function get_post() { return \Rvx\get_post(...func_get_args()); } }
-if (!function_exists('get_post_meta')) { function get_post_meta() { return \Rvx\get_post_meta(...func_get_args()); } }
-if (!function_exists('get_post_type')) { function get_post_type() { return \Rvx\get_post_type(...func_get_args()); } }
 if (!function_exists('get_resource_id')) { function get_resource_id() { return \Rvx\get_resource_id(...func_get_args()); } }
-if (!function_exists('get_stylesheet_directory')) { function get_stylesheet_directory() { return \Rvx\get_stylesheet_directory(...func_get_args()); } }
-if (!function_exists('get_template_directory')) { function get_template_directory() { return \Rvx\get_template_directory(...func_get_args()); } }
 if (!function_exists('getallheaders')) { function getallheaders() { return \Rvx\getallheaders(...func_get_args()); } }
 if (!function_exists('grapheme_extract')) { function grapheme_extract() { return \Rvx\grapheme_extract(...func_get_args()); } }
 if (!function_exists('grapheme_stripos')) { function grapheme_stripos() { return \Rvx\grapheme_stripos(...func_get_args()); } }
@@ -198,10 +237,7 @@ if (!function_exists('grapheme_strstr')) { function grapheme_strstr() { return \
 if (!function_exists('grapheme_substr')) { function grapheme_substr() { return \Rvx\grapheme_substr(...func_get_args()); } }
 if (!function_exists('has_action')) { function has_action() { return \Rvx\has_action(...func_get_args()); } }
 if (!function_exists('hrtime')) { function hrtime() { return \Rvx\hrtime(...func_get_args()); } }
-if (!function_exists('is_admin')) { function is_admin() { return \Rvx\is_admin(...func_get_args()); } }
 if (!function_exists('is_countable')) { function is_countable() { return \Rvx\is_countable(...func_get_args()); } }
-if (!function_exists('is_oxygen_edit_page')) { function is_oxygen_edit_page() { return \Rvx\is_oxygen_edit_page(...func_get_args()); } }
-if (!function_exists('load_plugin_textdomain')) { function load_plugin_textdomain() { return \Rvx\load_plugin_textdomain(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \Rvx\mb_check_encoding(...func_get_args()); } }
 if (!function_exists('mb_chr')) { function mb_chr() { return \Rvx\mb_chr(...func_get_args()); } }
 if (!function_exists('mb_convert_case')) { function mb_convert_case() { return \Rvx\mb_convert_case(...func_get_args()); } }
@@ -249,25 +285,16 @@ if (!function_exists('mb_ucfirst')) { function mb_ucfirst() { return \Rvx\mb_ucf
 if (!function_exists('media_handle_sideload')) { function media_handle_sideload() { return \Rvx\media_handle_sideload(...func_get_args()); } }
 if (!function_exists('normalizer_is_normalized')) { function normalizer_is_normalized() { return \Rvx\normalizer_is_normalized(...func_get_args()); } }
 if (!function_exists('normalizer_normalize')) { function normalizer_normalize() { return \Rvx\normalizer_normalize(...func_get_args()); } }
-if (!function_exists('oxygen_vsb_register_condition')) { function oxygen_vsb_register_condition() { return \Rvx\oxygen_vsb_register_condition(...func_get_args()); } }
-if (!function_exists('plugin_basename')) { function plugin_basename() { return \Rvx\plugin_basename(...func_get_args()); } }
 if (!function_exists('plugin_dir_path')) { function plugin_dir_path() { return \Rvx\plugin_dir_path(...func_get_args()); } }
-if (!function_exists('plugin_dir_url')) { function plugin_dir_url() { return \Rvx\plugin_dir_url(...func_get_args()); } }
 if (!function_exists('plugins_url')) { function plugins_url() { return \Rvx\plugins_url(...func_get_args()); } }
 if (!function_exists('preg_last_error_msg')) { function preg_last_error_msg() { return \Rvx\preg_last_error_msg(...func_get_args()); } }
 if (!function_exists('qarray')) { function qarray() { return \Rvx\qarray(...func_get_args()); } }
-if (!function_exists('remove_action')) { function remove_action() { return \Rvx\remove_action(...func_get_args()); } }
-if (!function_exists('rvx_fb_current_page_params')) { function rvx_fb_current_page_params() { return \Rvx\rvx_fb_current_page_params(...func_get_args()); } }
-if (!function_exists('rvx_fb_current_page_woocommerce_components')) { function rvx_fb_current_page_woocommerce_components() { return \Rvx\rvx_fb_current_page_woocommerce_components(...func_get_args()); } }
 if (!function_exists('sanitize_html_class')) { function sanitize_html_class() { return \Rvx\sanitize_html_class(...func_get_args()); } }
-if (!function_exists('sanitize_text_field')) { function sanitize_text_field() { return \Rvx\sanitize_text_field(...func_get_args()); } }
 if (!function_exists('setproctitle')) { function setproctitle() { return \Rvx\setproctitle(...func_get_args()); } }
 if (!function_exists('setup_postdata')) { function setup_postdata() { return \Rvx\setup_postdata(...func_get_args()); } }
-if (!function_exists('shortcode_atts')) { function shortcode_atts() { return \Rvx\shortcode_atts(...func_get_args()); } }
 if (!function_exists('str_contains')) { function str_contains() { return \Rvx\str_contains(...func_get_args()); } }
 if (!function_exists('str_ends_with')) { function str_ends_with() { return \Rvx\str_ends_with(...func_get_args()); } }
 if (!function_exists('str_starts_with')) { function str_starts_with() { return \Rvx\str_starts_with(...func_get_args()); } }
-if (!function_exists('trailingslashit')) { function trailingslashit() { return \Rvx\trailingslashit(...func_get_args()); } }
 if (!function_exists('trigger_deprecation')) { function trigger_deprecation() { return \Rvx\trigger_deprecation(...func_get_args()); } }
 if (!function_exists('twig_array_batch')) { function twig_array_batch() { return \Rvx\twig_array_batch(...func_get_args()); } }
 if (!function_exists('twig_array_column')) { function twig_array_column() { return \Rvx\twig_array_column(...func_get_args()); } }
@@ -318,7 +345,6 @@ if (!function_exists('twig_trim_filter')) { function twig_trim_filter() { return
 if (!function_exists('twig_upper_filter')) { function twig_upper_filter() { return \Rvx\twig_upper_filter(...func_get_args()); } }
 if (!function_exists('twig_urlencode_filter')) { function twig_urlencode_filter() { return \Rvx\twig_urlencode_filter(...func_get_args()); } }
 if (!function_exists('twig_var_dump')) { function twig_var_dump() { return \Rvx\twig_var_dump(...func_get_args()); } }
-if (!function_exists('update_post_meta')) { function update_post_meta() { return \Rvx\update_post_meta(...func_get_args()); } }
 if (!function_exists('wc_format_datetime')) { function wc_format_datetime() { return \Rvx\wc_format_datetime(...func_get_args()); } }
 if (!function_exists('wc_get_account_orders_actions')) { function wc_get_account_orders_actions() { return \Rvx\wc_get_account_orders_actions(...func_get_args()); } }
 if (!function_exists('wc_get_account_orders_columns')) { function wc_get_account_orders_columns() { return \Rvx\wc_get_account_orders_columns(...func_get_args()); } }
@@ -327,10 +353,7 @@ if (!function_exists('wc_get_order')) { function wc_get_order() { return \Rvx\wc
 if (!function_exists('wc_get_order_status_name')) { function wc_get_order_status_name() { return \Rvx\wc_get_order_status_name(...func_get_args()); } }
 if (!function_exists('wc_get_product')) { function wc_get_product() { return \Rvx\wc_get_product(...func_get_args()); } }
 if (!function_exists('wc_print_notice')) { function wc_print_notice() { return \Rvx\wc_print_notice(...func_get_args()); } }
-if (!function_exists('wp_doing_ajax')) { function wp_doing_ajax() { return \Rvx\wp_doing_ajax(...func_get_args()); } }
 if (!function_exists('wp_get_attachment_image')) { function wp_get_attachment_image() { return \Rvx\wp_get_attachment_image(...func_get_args()); } }
 if (!function_exists('wp_kses_post')) { function wp_kses_post() { return \Rvx\wp_kses_post(...func_get_args()); } }
-if (!function_exists('wp_parse_args')) { function wp_parse_args() { return \Rvx\wp_parse_args(...func_get_args()); } }
-if (!function_exists('wp_verify_nonce')) { function wp_verify_nonce() { return \Rvx\wp_verify_nonce(...func_get_args()); } }
 
 return $loader;

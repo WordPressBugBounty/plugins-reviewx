@@ -6,7 +6,7 @@ class WidgetCustomizeOutputCSSHandler
 {
     public function __invoke() : void
     {
-        if (!\function_exists('Rvx\\is_oxygen_edit_page') && !\function_exists('Rvx\\et_core_is_builder_used_on_current_request') && !did_action('elementor/loaded')) {
+        if (!did_action('elementor/loaded')) {
             $this->rvx_load_customizer_output_css();
         }
     }

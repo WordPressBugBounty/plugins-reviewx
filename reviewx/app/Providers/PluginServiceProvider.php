@@ -32,7 +32,6 @@ use Rvx\Handlers\ProductDeleteHandler;
 use Rvx\Handlers\ReplyCommentHandler;
 use Rvx\Handlers\RichSchema\WoocommerceRichSchemaHandler;
 use Rvx\Handlers\RvxInit\PageBuilderHandler;
-use Rvx\Handlers\RvxInit\RedirectReviewxHandler;
 use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
 use Rvx\Handlers\RvxInit\ReviewXoldPluginDeactivateHandler;
 use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
@@ -50,6 +49,8 @@ use Rvx\Handlers\WoocommerceSettingsSaveHandler;
 use Rvx\Handlers\WooReviewTableHandler;
 use Rvx\Models\Site;
 use Rvx\Utilities\Auth\ClientManager;
+use Rvx\Utilities\Auth\WpUserManager;
+use Rvx\Utilities\Auth\WpUser;
 use Rvx\WPDrill\ServiceProvider;
 // use Rvx\Handlers\WcTemplates\WcAccountDetailsError;
 class PluginServiceProvider extends ServiceProvider
@@ -60,12 +61,24 @@ class PluginServiceProvider extends ServiceProvider
             $site = Site::first();
             return new ClientManager($site);
         });
+        $this->plugin->bind(WpUserManager::class, function () {
+            return new WpUserManager();
+        });
     }
     public function boot() : void
     {
+        add_action('plugins_loaded', function () {
+            if (is_admin() && \get_transient('rvx_reset_sync_flag')) {
+                (new \Rvx\Handlers\IsAlreadySyncSucess())->resetSyncFlag();
+            }
+            require_once ABSPATH . 'wp-admin/includes/image.php';
+        }, 15);
+        add_action('rest_api_init', function () {
+            WpUser::setLoggedInStatus(is_user_logged_in());
+            WpUser::setAbility(is_user_logged_in() && (current_user_can('manage_options') || current_user_can('edit_others_posts') || current_user_can('manage_woocommerce')) ? \true : \false);
+        }, 5);
         add_action('init', new ReviewXoldPluginDeactivateHandler(), 10);
-        add_action('activated_plugin', new RedirectReviewxHandler(), 15, 1);
-        add_action('plugins_loaded', new PageBuilderHandler(), 20);
+        add_action('init', new PageBuilderHandler(), 20);
         // add_action('upgrader_process_complete', new ResetProductMetaHandler(), 5, 2);
         add_action('upgrader_process_complete', new UpgradeReviewxDeactiveProHandler(), 10, 2);
         // add_action('admin_notices', [new ReviewxAdminNoticeHandler(), 'adminNoticeHandler']);
@@ -131,26 +144,33 @@ class PluginServiceProvider extends ServiceProvider
          * CPT comments / reviews
          */
         add_action('wp_insert_comment', function ($comment_id, $comment) {
-            if ($comment) {
+            if ($comment && $comment->comment_post_ID) {
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
             }
-        }, 10, 2);
-        add_action('comment_post', [CptAverageRating::class, 'handle_comment_rating'], 10, 2);
-        add_action('comment_post', [CptAverageRating::class, 'handle_comment_rating'], 10, 3);
-        add_action('get_comments_number', [new CptCommentsLinkMeta(), 'replace_total_comments_count'], 10, 2);
+        }, 999, 2);
+        add_action('comment_post', [CptAverageRating::class, 'handle_comment_rating'], 999, 3);
+        add_action('get_comments_number', [new CptCommentsLinkMeta(), 'replace_total_comments_count'], 999, 2);
         add_action('edit_comment', function ($comment_id) {
             $comment = get_comment($comment_id);
-            if ($comment) {
+            if ($comment && $comment->comment_post_ID) {
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
             }
-        });
-        add_action('wp_set_comment_status', [CptAverageRating::class, 'handle_comment_status_change'], 10, 2);
-        add_action('save_post', [CptAverageRating::class, 'update_average_rating'], 10, 2);
+        }, 999);
+        add_action('wp_set_comment_status', [CptAverageRating::class, 'handle_comment_status_change'], 999, 2);
+        add_action('save_post', [CptAverageRating::class, 'update_average_rating'], 999, 3);
+        add_action('deleted_comment', function ($comment_id) {
+            $comment = get_comment($comment_id);
+            if ($comment && $comment->comment_post_ID) {
+                CptAverageRating::update_average_rating($comment->comment_post_ID);
+            }
+        }, 999);
         /**
-         * CPT Rich Schema
-         * Hook into WordPress frontend to add schema to the post head.
+         * Rich Schema
          */
-        add_action('wp_head', [CptRichSchemaHandler::class, 'addCustomRichSchema'], 10);
+        if (!is_admin()) {
+            add_action('wp_head', [CptRichSchemaHandler::class, 'addCustomRichSchema'], 10, 2);
+            add_action('woocommerce_structured_data_product', new WoocommerceRichSchemaHandler(), 10, 2);
+        }
         /**
          * Woocommerce Comment status
          */
@@ -162,10 +182,6 @@ class PluginServiceProvider extends ServiceProvider
          * Woocommerce Edit Comment/Review
          */
         add_action('edit_comment', new WooCommerceReviewEditForm(), 10, 2);
-        /**
-         * Woocommerce Rich Schema
-         */
-        add_action('woocommerce_structured_data_product', new WoocommerceRichSchemaHandler(), 10, 2);
         /**
          * Woocommerce Template Modify
          */
@@ -186,5 +202,9 @@ class PluginServiceProvider extends ServiceProvider
          */
         add_action('init', [ReviewForm::class, 'post_type_support']);
         add_filter('comments_template', [ReviewForm::class, 'comments_template_init'], \PHP_INT_MAX);
+        // Load plugin textdomain
+        add_action('init', function () {
+            load_plugin_textdomain('reviewx', \false, \dirname(plugin_basename(__FILE__)) . '/languages');
+        }, 15, 5);
     }
 }

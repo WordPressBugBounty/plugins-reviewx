@@ -3,12 +3,12 @@
 namespace Rvx;
 
 /**
- * Plugin Name:       ReviewX – Multi-Criteria Rating & Reviews
- * Plugin URI:        https://reviewx.io
- * Description:       Advanced Multi-Criteria Rating & Reviews for WooCommerce. Turn customer reviews into sales by leveraging reviews with multiple criteria, reminder emails, Google reviews, review schemas, and incentives like discounts.
- * Version:           2.2.10
- * Author:            ReviewX
- * Author URI:        https://reviewx.io
+ * Plugin Name: ReviewX – Multi-Criteria Rating & Reviews
+ * Plugin URI:  https://reviewx.io
+ * Description: Advanced Multi-Criteria Rating & Reviews for WooCommerce. Turn customer reviews into sales by leveraging reviews with multiple criteria, reminder emails, Google reviews, review schemas, and incentives like discounts.
+ * Version:     2.3.1
+ * Author:      ReviewX
+ * Author URI:  https://reviewx.io
  * Text Domain: reviewx
  * Domain Path: /languages
  * @package     ReviewX
@@ -20,7 +20,7 @@ namespace Rvx;
 @\ini_set('display_errors', 0);
 // don't call the file directly
 \defined('ABSPATH') || die;
-\define('RVX_VERSION', '2.2.10');
+\define('RVX_VERSION', '2.3.1');
 \define('RVX_DIR_PATH', plugin_dir_path(__FILE__));
 \define('RVX_DIR_NAME', \basename(\RVX_DIR_PATH));
 \define('RVX_PREFIX', 'rvx_');
@@ -32,16 +32,7 @@ if (\php_sapi_name() === 'cli') {
 }
 // Load Composer
 require __DIR__ . '/vendor/autoload.php';
-// Execute when plugin loaded/activated before running anything else
-(new \Rvx\Handlers\RvxInit\LoadReviewxCreateSiteTable())->__invoke();
-// ReviewX Boot loader
+// Boot ReviewX
 \call_user_func(function ($bootstrap) {
     $bootstrap(__FILE__);
 }, require __DIR__ . '/bootstrap/boot.php');
-// LocalStorage is reset when the sync flag is set
-new \Rvx\Handlers\IsAlreadySyncSucess();
-require_once \ABSPATH . 'wp-admin/includes/image.php';
-// Load plugin textdomain
-add_action('init', function () {
-    load_plugin_textdomain('reviewx', \false, \dirname(plugin_basename(__FILE__)) . '/languages');
-});

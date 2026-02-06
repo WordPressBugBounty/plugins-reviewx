@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+use WP_REST_Request;
 use Rvx\CPT\CptHelper;
 use Rvx\Models\Site;
 use Rvx\Services\DataSyncService;
@@ -35,6 +36,7 @@ class DataSyncController
     public function syncStatus()
     {
         \header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+        \header("Pragma: no-cache");
         \header("Pragma: no-cache");
         $response = $this->dataSyncService->syncStatus();
         if (!empty($response->getApiData()['sync_stats']) && $response->getApiData()['sync_stats'] === 1) {
@@ -74,7 +76,7 @@ class DataSyncController
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
         }
     }
-    public function syncedData(\WP_REST_Request $request)
+    public function syncedData(WP_REST_Request $request)
     {
         $post_type = $request->get_param('post_type') ?? 'product';
         // Sanitize just in case:

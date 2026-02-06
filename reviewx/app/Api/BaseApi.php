@@ -35,6 +35,6 @@ class BaseApi extends AbstractApi
      */
     public function getDefaultHeaders() : array
     {
-        return ['Authorization' => 'Bearer ' . Helper::getAuthToken(), 'Accept' => 'application/json', 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => wp_get_theme()->get('Name'), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Wp-Version' => get_bloginfo("version"), 'X-Reviewx-Version' => RVX_VERSION, 'X-Environment' => Helper::plugin()->isProduction() ? 'production' : 'development'];
+        return ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-url' => home_url(), 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => wp_get_theme()->get('Name'), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Wp-Version' => get_bloginfo("version"), 'X-Reviewx-Version' => RVX_VERSION, 'X-Environment' => Helper::plugin()->isProduction() ? 'production' : 'development'];
     }
 }

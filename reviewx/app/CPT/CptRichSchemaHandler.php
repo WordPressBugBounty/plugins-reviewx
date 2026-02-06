@@ -2,89 +2,101 @@
 
 namespace Rvx\CPT;
 
+use Rvx\Services\SettingService;
 use WP_Post;
+/**
+ * Handles rich schema generation for non-product post types (CPTs, pages, posts, etc.).
+ */
 class CptRichSchemaHandler
 {
     /**
-     * Process and add rich schema data to custom post type markup.
+     * Build structured data for a given post.
      *
-     * @param array   $markup    Existing schema markup.
-     * @param WP_Post $post      WordPress post object (could be any post type).
-     * @return array Updated schema markup.
+     * @param array   $markup Existing markup (unused).
+     * @param WP_Post $post   Post object.
+     * @return array
      */
     public function schemaHandler($markup, $post) : array
     {
-        // Fetch the average rating for this post (if it exists)
-        $averageRating = (float) get_post_meta($post->ID, 'rvx_avg_rating', \true);
-        // Fetch all approved comments (reviews) for the post (non-product post types)
-        $reviews = get_comments(['post_id' => $post->ID, 'status' => 'approve', 'type' => 'comment']);
-        // Initialize review count
-        $reviewCount = 0;
-        $markup = [];
-        if (!empty($reviews)) {
-            //$markup['review'] = [];
-            foreach ($reviews as $review) {
-                // Skip comment replies by checking if it's a reply to another comment
-                if ($review->comment_parent > 0) {
-                    continue;
-                    // Skip replies
-                }
-                // Increment review count for actual reviews
-                $reviewCount++;
-                // Get post type dynamically
-                $postType = get_post_type($post);
-                // Add review data to the markup array
-                $markup['review'][] = ['@type' => 'Review', 'author' => ['@type' => 'Person', 'name' => $review->comment_author], 'reviewRating' => ['@type' => 'Rating', 'ratingValue' => (float) get_comment_meta($review->comment_ID, 'rating', \true)], 'datePublished' => get_comment_date('c', $review), 'description' => $review->comment_content, 'itemReviewed' => [
-                    '@type' => \ucfirst($postType),
-                    // Dynamically set the post type name
-                    'name' => $post->post_title,
-                    // The post being reviewed
-                    'url' => get_permalink($post),
-                ]];
+        // Guard conditions.
+        if (is_admin() || empty($post) || !isset($post->ID)) {
+            return $markup;
+        }
+        $postType = get_post_type($post);
+        if (empty($postType) || $postType === 'product') {
+            return $markup;
+            // Skip WooCommerce products.
+        }
+        // Temporarily remove Divi filter
+        $divi_callback = 'et_theme_builder_wc_set_review_metadata';
+        $divi_removed = \false;
+        if (\function_exists('has_filter')) {
+            $priority = \has_filter('get_comment_metadata', $divi_callback);
+            if ($priority !== \false) {
+                remove_filter('get_comment_metadata', $divi_callback, (int) $priority);
+                $divi_removed = \true;
             }
         }
-        // Add aggregate rating if reviews exist and have an average rating
-        if ($reviewCount > 0 && $averageRating > 0) {
-            $markup['aggregateRating'] = ['@type' => 'AggregateRating', 'ratingValue' => $averageRating, 'reviewCount' => $reviewCount, 'itemReviewed' => [
-                '@type' => \ucfirst($postType),
-                // Dynamically set the post type name
-                'name' => $post->post_title,
-                // The post being reviewed
-                'url' => get_permalink($post),
-            ]];
+        // Define schema type mappings.
+        $schemaTypeMap = ['post' => 'BlogPosting', 'page' => 'Article', 'job' => 'JobPosting', 'job_listing' => 'JobPosting', 'book' => 'Book', 'movie' => 'Movie', 'event' => 'Event', 'recipe' => 'Recipe', 'course' => 'Course', 'season' => 'CreativeWorkSeason', 'series' => 'CreativeWorkSeries', 'software' => 'SoftwareApplication', 'application' => 'SoftwareApplication', 'app' => 'SoftwareApplication', 'music' => 'MusicRecording', 'game' => 'Game', 'howto' => 'HowTo', 'episode' => 'Episode', 'business' => 'LocalBusiness'];
+        // Do not use 'CreativeWork' as a fallback for reviews, use 'BlogPosting' or 'Article' instead.
+        $schemaType = $schemaTypeMap[$postType] ?? 'Article';
+        $reviewableTypes = ['Book', 'Movie', 'Recipe', 'Course', 'CreativeWorkSeason', 'CreativeWorkSeries', 'SoftwareApplication', 'MusicRecording', 'MediaObject', 'Game', 'HowTo', 'Episode', 'LocalBusiness'];
+        // Start with the base markup for the main item.
+        $markup = ['@context' => 'https://schema.org/', '@type' => $schemaType, 'name' => $post->post_title, 'url' => get_permalink($post)];
+        // Only attach review data to supported types.
+        if (\in_array($schemaType, $reviewableTypes, \true)) {
+            $reviews = get_comments(['post_id' => $post->ID, 'status' => 'approve', 'type__in' => ['comment', 'review']]);
+            if (!empty($reviews)) {
+                $reviewCount = 0;
+                $averageRating = 0.0;
+                $reviewItems = [];
+                foreach ($reviews as $review) {
+                    if (!empty($review->comment_parent)) {
+                        continue;
+                        // Skip replies.
+                    }
+                    $rating = get_comment_meta($review->comment_ID, 'rating', \true);
+                    $ratingValue = $rating !== '' ? (float) $rating : null;
+                    if ($ratingValue !== null && $ratingValue > 0) {
+                        $reviewCount++;
+                        $averageRating += $ratingValue;
+                        $reviewItems[] = ['@type' => 'Review', 'author' => ['@type' => 'Person', 'name' => $review->comment_author], 'reviewRating' => ['@type' => 'Rating', 'ratingValue' => $ratingValue], 'datePublished' => get_comment_date('c', $review), 'reviewBody' => $review->comment_content];
+                    }
+                }
+                if ($reviewCount > 0 && $averageRating > 0) {
+                    $trueAverage = \round($averageRating / $reviewCount, 1);
+                    // Nest AggregateRating and individual Reviews correctly.
+                    $markup['aggregateRating'] = ['@type' => 'AggregateRating', 'ratingValue' => $trueAverage, 'reviewCount' => $reviewCount];
+                    $markup['review'] = $reviewItems;
+                }
+            }
         }
-        // Include schema type for non-product posts (adjusted for non-product scenario)
-        $markup['@context'] = 'https://schema.org/';
-        // $markup['@type'] = ucfirst(get_post_type($post)); // Dynamically set the post type name
-        // $markup['@id'] = get_permalink($post);
-        // $markup['name'] = $post->post_title;
-        // $markup['url'] = get_permalink($post);
-        // $markup['description'] = wp_trim_words($post->post_content, 20); // Adjust length if needed
-        // $markup['image'] = get_the_post_thumbnail_url($post->ID, 'full') ?: ''; // Optional: If the post has an image
+        // Restore Divi filter.
+        if ($divi_removed) {
+            add_filter('get_comment_metadata', $divi_callback, $priority ?? 10, 4);
+        }
         return $markup;
     }
     /**
-     * Adds custom schema to the head of the page for non-product post types.
+     * Outputs the schema in the page head for all eligible non-product post types.
      */
-    public static function addCustomRichSchema()
+    public static function addCustomRichSchema() : void
     {
-        // List of post types to target
-        $enabled_post_types = (new \Rvx\CPT\CptHelper())->enabledCPT();
-        unset($enabled_post_types['product']);
-        // Unset Product
-        $post_type = get_post_type();
-        if (!empty($enabled_post_types[$post_type]) && $enabled_post_types[$post_type] !== $post_type) {
+        // Bail early if not on frontend or not singular.
+        if (is_admin() || !is_singular() || \function_exists('is_product') && \is_product()) {
             return;
         }
-        // Only run on single post.
-        if (is_singular()) {
-            global $post;
-            // Instantiate the class
-            $handler = new self();
-            // Process the schema for the current post
-            $markup = $handler->schemaHandler([], $post);
-            // Output the schema markup inside a script tag in the page head
-            echo '<script type="application/ld+json">' . \json_encode($markup, \JSON_UNESCAPED_UNICODE) . '</script>';
+        global $post;
+        if (empty($post) || !isset($post->ID)) {
+            return;
+        }
+        $handler = new self();
+        $markup = $handler->schemaHandler([], $post);
+        if (!empty($markup)) {
+            echo "\n<!-- ReviewX Rich Schema for {$post->post_type} -->\n";
+            echo '<script type="application/ld+json">' . wp_json_encode($markup, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES) . '</script>';
+            echo "\n<!-- /ReviewX Rich Schema -->\n";
         }
     }
 }

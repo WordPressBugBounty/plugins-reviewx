@@ -4,6 +4,7 @@ namespace Rvx\Rest\Controllers;
 
 use Rvx\Services\DashboardServices;
 use Rvx\Utilities\Helper;
+use Throwable;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\Response;
 class DashboardController implements InvokableContract
@@ -37,6 +38,18 @@ class DashboardController implements InvokableContract
     {
         $resp = $this->dashboardServices->requestEmail();
         return Helper::getApiResponse($resp);
+    }
+    /**
+     * @return \WPDrill\Response
+     */
+    public function requestUserData()
+    {
+        try {
+            $response = $this->dashboardServices->requestUserData();
+            return Helper::rvxApi($response)->success('Site data Retrieved Successfully');
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Site data Retrieval Failed', $e->getCode());
+        }
     }
     /**
      * @param $request

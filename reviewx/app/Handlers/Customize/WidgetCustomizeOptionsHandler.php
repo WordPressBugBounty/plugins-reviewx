@@ -7,7 +7,7 @@ class WidgetCustomizeOptionsHandler
 {
     public function __invoke($wp_customize) : void
     {
-        //if (!function_exists('is_oxygen_edit_page') && !function_exists('et_core_is_builder_used_on_current_request') && !did_action('elementor/loaded')) {
+        //if (!did_action('elementor/loaded')) {
         $this->rvx_customizer_options_data($wp_customize);
         //}
     }

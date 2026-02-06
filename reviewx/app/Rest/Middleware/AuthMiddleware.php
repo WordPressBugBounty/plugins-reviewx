@@ -2,63 +2,51 @@
 
 namespace Rvx\Rest\Middleware;
 
+use Exception;
+use WP_REST_Request;
+use Rvx\Utilities\Auth\WpUser;
+use Rvx\Utilities\Auth\Client;
 use Rvx\Firebase\JWT\JWT;
 use Rvx\Firebase\JWT\Key;
-use Rvx\Utilities\Auth\Client;
-use Throwable;
 class AuthMiddleware
 {
     /**
+     * Determine if the current request is authorized.
+     *
+     * Authorization is granted if:
+     * User is logged in AND has sufficient capabilities.
+     * Or if user has a valid JWT Bearer token
+     *
+     * @param WP_REST_Request $request
      * @return bool
      */
-    public function handle(\WP_REST_Request $request) : bool
+    public function handle(WP_REST_Request $request) : bool
     {
-        $userCap = $this->userAccessibility();
-        $role = ['administrator', 'editor', 'shop_manager'];
-        if (Client::getUid() && $userCap && !empty(\array_intersect($userCap, $role))) {
+        // Validate by WP User
+        if (WpUser::isLoggedIn() && WpUser::can()) {
             return \true;
         }
-        //if auth user cookie is not present, it will try to authenticate using JWT token
-        $bearer = $request->get_header('Authorization');
-        if (!$bearer) {
+        // Validate by Bearer Token
+        $clientUid = Client::getUid();
+        $secret = Client::getSecret();
+        if (empty($clientUid) || empty($secret)) {
             return \false;
         }
-        $token = \explode(' ', $bearer);
-        if (\count($token) !== 2) {
+        $headers = $request->get_headers();
+        $authHeader = isset($headers['authorization'][0]) ? \trim($headers['authorization'][0]) : '';
+        if (!$authHeader || !\preg_match('/Bearer\\s+(.*)$/i', $authHeader, $matches)) {
             return \false;
         }
+        $token = $matches[1];
         try {
-            $token = $token[1];
-            $response = JWT::decode($token, new Key(Client::getSecret(), 'HS256'));
-            if ($response->uid === Client::getUid()) {
-                return \true;
+            $decoded = JWT::decode($token, new Key($secret, 'HS256'));
+            // Check UID binding
+            if (empty($decoded->uid) || $decoded->uid !== $clientUid) {
+                return \false;
             }
-        } catch (Throwable $e) {
+            return \true;
+        } catch (Exception $e) {
             return \false;
         }
-        return \false;
-    }
-    public function userAccessibility()
-    {
-        global $wpdb;
-        if (empty($_COOKIE[LOGGED_IN_COOKIE])) {
-            return \false;
-        }
-        $cookie_parts = \explode('|', $_COOKIE[LOGGED_IN_COOKIE]);
-        if (\count($cookie_parts) < 2) {
-            return \false;
-        }
-        $username = sanitize_text_field($cookie_parts[0]);
-        $user_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->users} WHERE user_login = %s", $username));
-        $meta_key = $wpdb->prefix . 'capabilities';
-        $user_roles = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM {$wpdb->usermeta} WHERE user_id = %d AND meta_key = %s", $user_id, $meta_key));
-        if (!$user_roles) {
-            return \false;
-        }
-        $user_roles = maybe_unserialize($user_roles);
-        if (\is_array($user_roles)) {
-            return \array_keys($user_roles);
-        }
-        return \false;
     }
 }

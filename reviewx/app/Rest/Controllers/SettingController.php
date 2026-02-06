@@ -148,13 +148,22 @@ class SettingController
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
         }
     }
-    public function removeCredentials()
+    public function removeCredentials($request)
     {
         try {
-            $response = $this->settingService->removeCredentials();
+            $response = $this->settingService->removeCredentials($request->get_headers());
             return $response;
         } catch (Throwable $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Sites Table Data deletion failed', $e->getCode());
+        }
+    }
+    public function updateSiteData($request)
+    {
+        try {
+            $response = $this->settingService->updateSiteData($request->get_headers());
+            return $response;
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Sites Table Data update failed', $e->getCode());
         }
     }
 }

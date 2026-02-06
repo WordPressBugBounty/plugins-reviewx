@@ -2,7 +2,6 @@
 
 namespace Rvx\Services;
 
-use Exception;
 class CacheServices extends \Rvx\Services\Service
 {
     public function allReviewApproveCount() : int
@@ -19,7 +18,7 @@ class CacheServices extends \Rvx\Services\Service
     }
     public function saasStatusReviewCount()
     {
-        $data = \get_transient('reviews_data_list');
+        $data = \get_transient('rvx_reviews_data_list');
         if (\is_array($data)) {
             return $data['count'];
         }
@@ -41,14 +40,14 @@ class CacheServices extends \Rvx\Services\Service
     }
     public function removeCache()
     {
-        \delete_transient('reviews_data_list');
-        \delete_transient('review_approve_data');
-        \delete_transient('review_pending_data');
-        \delete_transient('review_spam_data');
-        \delete_transient('review_trash_data');
-        \delete_transient('reviewx_aggregation');
-        \delete_transient('review_shortcode');
-        \delete_transient('_rvx_shortcode_transient');
+        \delete_transient('rvx_reviews_data_list');
+        \delete_transient('rvx_review_approve_data');
+        \delete_transient('rvx_review_pending_data');
+        \delete_transient('rvx_review_spam_data');
+        \delete_transient('rvx_review_trash_data');
+        \delete_transient('rvx_admin_aggregation');
+        \delete_transient('rvx_review_shortcode');
+        \delete_transient('rvx_shortcode_transient');
         \delete_transient('rvx_shortcode_all_reviews');
     }
     public function clearShortcodesCache($arrayFirst, $arraySecond)

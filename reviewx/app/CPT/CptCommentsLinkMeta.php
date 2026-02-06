@@ -2,12 +2,13 @@
 
 namespace Rvx\CPT;
 
+use Rvx\CPT\CptHelper;
 class CptCommentsLinkMeta
 {
     protected $cptHelper;
     public function __construct()
     {
-        $this->cptHelper = new \Rvx\CPT\CptHelper();
+        $this->cptHelper = new CptHelper();
     }
     /**
      * Modify the comment count output with custom review logic
