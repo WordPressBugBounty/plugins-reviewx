@@ -2,12 +2,15 @@
 
 namespace Rvx\Providers;
 
-use Rvx\CPT\CommentsRatingColumn;
 use Rvx\CPT\CptAverageRating;
 use Rvx\CPT\CptCommentsLinkMeta;
 use Rvx\CPT\CptRichSchemaHandler;
+// use Rvx\CPT\CommentsRatingColumn;
 use Rvx\CPT\Shared\CommentsReviewsMetaBoxRemover;
+use Rvx\CPT\Shared\CommentsReviewsFilter;
 use Rvx\CPT\Shared\CommentsReviewsRowActionRemover;
+use Rvx\CPT\Shared\WooReviewsRedirectHandler;
+use Rvx\CPT\Shared\CommentEditBlockHandler;
 use Rvx\CPT\Shared\CptPostHandler;
 use Rvx\CPT\Shared\PostsRatingColumn;
 use Rvx\Form\ReviewForm;
@@ -124,16 +127,26 @@ class PluginServiceProvider extends ServiceProvider
          * CPT Posts - Create/Update
          */
         add_action('save_post', new CptPostHandler(), 10, 3);
+        // Ensure rating is calculated BEFORE sync (priority 9 < 10)
+        add_action('save_post', [CptAverageRating::class, 'update_average_rating'], 9, 3);
         // add_action('transition_post_status', new ProductHandler(), 10, 3);
         // add_action('woocommerce_update_product', new ProductUpdateHandler());
         // Remove Comment / Review Meta box from Add/Edit page (post/product)
         add_action('add_meta_boxes', [new CommentsReviewsMetaBoxRemover(), 'removeCommentsReviewsMetaBox'], 99);
         // Remove the 'comment_row_actions' filter
         add_filter('comment_row_actions', [new CommentsReviewsRowActionRemover(), 'removeCommentsReviewsRowActions'], 999, 2);
+        // Filter comments for ReviewX-enabled post types from WP Comments admin page
+        add_action('pre_get_comments', [new CommentsReviewsFilter(), 'filterCommentsForReviewxPostTypes'], 10);
+        // WooCommerce Reviews page redirect notice and filtering (Products -> Reviews)
+        add_action('admin_notices', [new WooReviewsRedirectHandler(), 'displayRedirectNotice']);
+        add_filter('comments_clauses', [new WooReviewsRedirectHandler(), 'filterWooReviewsClauses'], 100, 2);
+        // Block editing of comments/reviews for ReviewX-enabled post types on WP Comment Edit page
+        add_action('admin_notices', [new CommentEditBlockHandler(), 'displayEditBlockedNotice']);
+        add_action('admin_init', [new CommentEditBlockHandler(), 'maybeRedirectFromEditPage']);
         // Add the new column for rating
-        add_filter('manage_edit-comments_columns', [new CommentsRatingColumn(), 'addRatingColumn']);
+        // add_filter('manage_edit-comments_columns', [new CommentsRatingColumn(), 'addRatingColumn']);
         // Populate the new column with rating data
-        add_action('manage_comments_custom_column', [new CommentsRatingColumn(), 'populateRatingColumn'], 10, 2);
+        // add_action('manage_comments_custom_column', [new CommentsRatingColumn(), 'populateRatingColumn'], 10, 2);
         // Add sorting functionality to comments (ReviewX Rating) Column
         //add_filter('manage_edit-comments_sortable_columns', [new CommentsRatingColumn(), 'makeRatingColumnSortable']);
         // add_action('pre_get_comments', [new CommentsRatingColumn(), 'sortCommentsByRating']);
@@ -145,23 +158,63 @@ class PluginServiceProvider extends ServiceProvider
          */
         add_action('wp_insert_comment', function ($comment_id, $comment) {
             if ($comment && $comment->comment_post_ID) {
+                // 1. Update average rating locally
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
+                // 2. Sync updated post data to SaaS
+                $post = get_post($comment->comment_post_ID);
+                if ($post) {
+                    (new CptPostHandler())->__invoke($post->ID, $post, \true);
+                }
             }
         }, 999, 2);
-        add_action('comment_post', [CptAverageRating::class, 'handle_comment_rating'], 999, 3);
+        add_action('comment_post', function ($comment_id, $comment_approved, $comment) {
+            // 1. Update average rating locally
+            CptAverageRating::handle_comment_rating($comment_id, $comment_approved, $comment);
+            // 2. Sync updated post data to SaaS if we have a comment object
+            if ($comment) {
+                $post_id = $comment->comment_post_ID;
+                $post = get_post($post_id);
+                if ($post) {
+                    (new CptPostHandler())->__invoke($post->ID, $post, \true);
+                }
+            }
+        }, 999, 3);
         add_action('get_comments_number', [new CptCommentsLinkMeta(), 'replace_total_comments_count'], 999, 2);
         add_action('edit_comment', function ($comment_id) {
             $comment = get_comment($comment_id);
             if ($comment && $comment->comment_post_ID) {
+                // 1. Update average rating locally
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
+                // 2. Sync updated post data to SaaS
+                $post = get_post($comment->comment_post_ID);
+                if ($post) {
+                    (new CptPostHandler())->__invoke($post->ID, $post, \true);
+                }
             }
         }, 999);
-        add_action('wp_set_comment_status', [CptAverageRating::class, 'handle_comment_status_change'], 999, 2);
-        add_action('save_post', [CptAverageRating::class, 'update_average_rating'], 999, 3);
+        add_action('wp_set_comment_status', function ($comment_id, $status) {
+            // 1. Update average rating locally
+            CptAverageRating::handle_comment_status_change($comment_id, $status);
+            // 2. Sync updated post data to SaaS
+            $comment = get_comment($comment_id);
+            if ($comment) {
+                $post = get_post($comment->comment_post_ID);
+                if ($post) {
+                    (new CptPostHandler())->__invoke($post->ID, $post, \true);
+                }
+            }
+        }, 999, 2);
+        // Removed redundant save_post hook for CptAverageRating as it's now registered above with correct priority
         add_action('deleted_comment', function ($comment_id) {
             $comment = get_comment($comment_id);
             if ($comment && $comment->comment_post_ID) {
+                // 1. Update average rating locally
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
+                // 2. Sync updated post data to SaaS
+                $post = get_post($comment->comment_post_ID);
+                if ($post) {
+                    (new CptPostHandler())->__invoke($post->ID, $post, \true);
+                }
             }
         }, 999);
         /**
@@ -206,5 +259,16 @@ class PluginServiceProvider extends ServiceProvider
         add_action('init', function () {
             load_plugin_textdomain('reviewx', \false, \dirname(plugin_basename(__FILE__)) . '/languages');
         }, 15, 5);
+        // Defer localization until scripts are enqueued
+        add_action('admin_enqueue_scripts', [$this, 'localizeScripts'], 20);
+        add_action('wp_enqueue_scripts', [$this, 'localizeScripts'], 20);
+    }
+    public function localizeScripts() : void
+    {
+        $locals = ['rvx_localization_data_for_admin' => \Rvx\Utilities\Helper::prepareLangArray(), 'rvx_full_domain_name' => \Rvx\Utilities\Helper::domainSupport(), 'rvx_full_domain_api' => \Rvx\Utilities\Helper::getRestAPIurl()];
+        // Localize for admin handles if they exist
+        wp_localize_script('rvx_user_access_script', 'rvx_locals', $locals);
+        // Localize for frontend handles if needed
+        wp_localize_script('reviewx-storefront', 'rvx_locals', $locals);
     }
 }

@@ -52,9 +52,7 @@ class CptAverageRating
         // Check the post type.
         $post_type = get_post_type($post_id);
         $enabled_post_types = (new CptHelper())->usedCPT('used');
-        unset($enabled_post_types['product']);
-        // Unset Product
-        if (!isset($enabled_post_types[$post_type])) {
+        if (!isset($enabled_post_types[$post_type]) && $post_type !== 'product') {
             return;
         }
         global $wpdb;
@@ -65,14 +63,35 @@ class CptAverageRating
             $average_rating = 0.0;
         }
         if (!empty($ratings)) {
-            // Calculate the average rating using only parent comments.
-            $average_rating = \round(\array_sum($ratings) / \count($ratings), 2);
-            // Store the average rating as post meta, ensuring it's a float.
+            // Calculate the count and average rating using only parent comments.
+            $count = \count($ratings);
+            $average_rating = \round(\array_sum($ratings) / $count, 2);
+            // Calculate individual star counts
+            $starCounts = \array_count_values(\array_map('intval', $ratings));
+            // Store the average rating and count as post meta
             update_post_meta($post_id, 'rvx_avg_rating', (float) $average_rating);
             update_post_meta($post_id, 'rating', (float) $average_rating);
+            update_post_meta($post_id, 'rvx_total_reviews', (int) $count);
+            // Store individual star counts
+            for ($i = 1; $i <= 5; $i++) {
+                update_post_meta($post_id, "rvx_star_count_{$i}", (int) ($starCounts[$i] ?? 0));
+            }
+            if ($post_type === 'product') {
+                update_post_meta($post_id, '_wc_average_rating', (float) $average_rating);
+                update_post_meta($post_id, '_wc_review_count', (int) $count);
+            }
         } else {
-            // No ratings found, set the meta key to 0.00.
-            update_post_meta($post_id, 'rvx_avg_rating', (float) $average_rating);
+            // No ratings found, set the meta keys to 0.
+            update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
+            update_post_meta($post_id, 'rating', (float) 0.0);
+            update_post_meta($post_id, 'rvx_total_reviews', 0);
+            for ($i = 1; $i <= 5; $i++) {
+                update_post_meta($post_id, "rvx_star_count_{$i}", 0);
+            }
+            if ($post_type === 'product') {
+                update_post_meta($post_id, '_wc_average_rating', (float) 0.0);
+                update_post_meta($post_id, '_wc_review_count', 0);
+            }
         }
     }
     /**
@@ -90,9 +109,7 @@ class CptAverageRating
         // Check the post type.
         $post_type = get_post_type($post_id);
         $enabled_post_types = (new CptHelper())->usedCPT('used');
-        unset($enabled_post_types['product']);
-        // Unset Product
-        if (!isset($enabled_post_types[$post_type])) {
+        if (!isset($enabled_post_types[$post_type]) && $post_type !== 'product') {
             return;
         }
         // Check if the rvx_avg_rating key already exists

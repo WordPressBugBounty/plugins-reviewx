@@ -25,6 +25,17 @@ class ProductController implements InvokableContract
     public function selectable($request)
     {
         $resp = $this->productService->getSelectProduct($request->get_params());
+        if ($resp->getStatusCode() === Response::HTTP_OK) {
+            $data = $resp->getApiData();
+            if (isset($data['products']) && \is_array($data['products'])) {
+                foreach ($data['products'] as &$product) {
+                    if (isset($product['wp_id'])) {
+                        $product['post_type'] = get_post_type($product['wp_id']);
+                    }
+                }
+            }
+            return Helper::rest($data)->success($resp()->message, $resp->getStatusCode());
+        }
         return Helper::getApiResponse($resp);
     }
 }

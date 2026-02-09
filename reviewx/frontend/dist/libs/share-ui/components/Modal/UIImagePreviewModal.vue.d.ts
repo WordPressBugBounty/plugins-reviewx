@@ -3,6 +3,7 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     modalWrapperClass?: string | undefined;
     modalClass?: string | undefined;
     images: string[];
+    initialIndex?: number | undefined;
 }>>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
     close: () => void;
 }, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<__VLS_TypePropsToRuntimeProps<{
@@ -10,6 +11,7 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     modalWrapperClass?: string | undefined;
     modalClass?: string | undefined;
     images: string[];
+    initialIndex?: number | undefined;
 }>>> & Readonly<{
     onClose?: (() => any) | undefined;
 }>, {}, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>, {

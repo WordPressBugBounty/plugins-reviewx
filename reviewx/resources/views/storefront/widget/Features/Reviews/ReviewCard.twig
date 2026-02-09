@@ -37,8 +37,8 @@
                     <div class="rvx-flex rvx-gap-space16 rvx-mb-space12 rvx-flex-wrap rvx-review-info__images">
                         <template x-for="file in review.attachments">
                             <div>
-                                <img x-show="getFileType(file).isImage" :src="file" alt="test" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`" />
-                                <video x-show="getFileType(file).isVideo" width="80" height="80" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`">
+                                <img @click.stop="selectedReviewDetailsHandler(review, file)" x-show="getFileType(file).isImage" :src="file" alt="test" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`" />
+                                <video @click.stop="selectedReviewDetailsHandler(review, file)" x-show="getFileType(file).isVideo" width="80" height="80" class="rvx-col-span-4 !rvx-rounded-md rvx-object-cover" :class="`${layoutView === 'grid' ? '!rvx-size-[48px]' : '!rvx-size-[80px]'}`">
                                     <source :src="file">
                                 </video>
                             </div>

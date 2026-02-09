@@ -5,6 +5,7 @@ namespace Rvx\CPT\Shared;
 use Rvx\Api\ProductApi;
 use Rvx\CPT\CptHelper;
 use Rvx\Utilities\Auth\Client;
+use Rvx\Utilities\TransactionManager;
 use Rvx\WPDrill\Response;
 class CptPostHandler
 {
@@ -29,33 +30,34 @@ class CptPostHandler
         if ($post_status === 'trash') {
             return;
         }
-        // Check if the meta key 'rvx_sync_status' exists
+        // WP Independent Sync: We execute logic, but SaaS failure MUST NOT roll back WP.
         $is_new_sync = get_post_meta($post_id, 'rvx_sync_new_status', \true);
         if (!$is_new_sync) {
-            // Handle new post/product
-            $isSaved = $this->createHandler($post_id, $post);
-            // Mark as processed to avoid treating it as a new post again
-            if ($isSaved[0]) {
+            // Handle new post/product sync
+            $response = $this->createHandler($post_id, $post);
+            if ($response->getStatusCode() === Response::HTTP_OK) {
                 $this->enableCommentsReviews($post_id);
                 update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
-            }
-            if ($isSaved[1] !== 200) {
-                // Handle post/product update
-                $isSaved = $this->updateHandler($post_id, $post);
-                // Mark as processed to avoid treating it as a new post again
-                if ($isSaved[0]) {
+            } else {
+                // If creation failed, try update as a fallback sync
+                $response = $this->updateHandler($post_id, $post);
+                if ($response->getStatusCode() === Response::HTTP_OK) {
                     $this->enableCommentsReviews($post_id);
                     update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
                     update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
+                } else {
+                    \error_log("CptPostHandler Create/Update Sync Failed for ID {$post_id}: " . $response->getBody());
                 }
             }
         } else {
-            // Handle post/product update
-            $isSaved = $this->updateHandler($post_id, $post);
-            if ($isSaved[0]) {
+            // Handle existing post/product update sync
+            $response = $this->updateHandler($post_id, $post);
+            if ($response->getStatusCode() === Response::HTTP_OK) {
                 $this->enableCommentsReviews($post_id);
                 update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
                 update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
+            } else {
+                \error_log("CptPostHandler Update Sync Failed for ID {$post_id}: " . $response->getBody());
             }
         }
     }
@@ -67,15 +69,7 @@ class CptPostHandler
             // Public -> custom post type
             $payload = $this->createPostData($post_id, $post);
         }
-        $response = (new ProductApi())->create($payload);
-        // error_log('Create Response: ' .print_r($response, true));
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log("Post Creation Failed: " . \print_r($response, \true));
-        }
-        if ($response->getStatusCode() === Response::HTTP_OK) {
-            return [\true, $response->getStatusCode()];
-        }
-        return [\false, $response->getStatusCode()];
+        return (new ProductApi())->create($payload);
     }
     public function updateHandler($post_id, $post)
     {
@@ -86,15 +80,7 @@ class CptPostHandler
             $payload = $this->updatedPostData($post_id, $post);
         }
         $uid = Client::getUid() . '-' . $post_id;
-        $response = (new ProductApi())->update($payload, $uid);
-        // error_log( 'Update Response: ' .print_r($response, true));
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log("Post Update Failed: " . \print_r($response, \true));
-        }
-        if ($response->getStatusCode() === Response::HTTP_OK) {
-            return [\true, $response->getStatusCode()];
-        }
-        return [\false, $response->getStatusCode()];
+        return (new ProductApi())->update($payload, $uid);
     }
     private function createProductData($product_id, $post)
     {
@@ -123,7 +109,7 @@ class CptPostHandler
         if (empty($discounted_price)) {
             $discounted_price = $price;
         }
-        return ["wp_id" => $product_id, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($product_id), "description" => isset($post->short_description) ? \htmlspecialchars($post->short_description, \ENT_QUOTES, 'UTF-8') : null, "price" => $price, "discounted_price" => $discounted_price, "slug" => $post->post_name, "image" => $product_images[0] ?? (string) '', "status" => $this->postStatus($post->post_status), "post_type" => $post->post_type, "total_reviews" => (int) $product->get_review_count(), "avg_rating" => (float) $product->get_average_rating(), "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => $this->getCategoryIds($product_id)];
+        return ["wp_id" => $product_id, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($product_id), "description" => isset($post->short_description) ? \htmlspecialchars($post->short_description, \ENT_QUOTES, 'UTF-8') : null, "price" => $price, "discounted_price" => $discounted_price, "slug" => $post->post_name, "image" => $product_images[0] ?? (string) '', "status" => $this->postStatus($post->post_status), "post_type" => $post->post_type, "total_reviews" => (int) $this->getReviewCount($product_id), "avg_rating" => (float) $this->getAverageRating($product_id), "stars" => $this->getStarCounts($product_id), "category_wp_unique_ids" => $this->getCategoryIds($product_id)];
     }
     private function updatedProductData($product_id, $post)
     {
@@ -152,7 +138,7 @@ class CptPostHandler
         if (empty($discounted_price)) {
             $discounted_price = $price;
         }
-        return ["wp_id" => $product_id, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($product_id), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => (float) $price, "discounted_price" => (float) $discounted_price, "slug" => $post->post_name, "image" => $product_images[0] ?? (string) '', "status" => $this->postStatus($post->post_status), "post_type" => $post->post_type, "total_reviews" => (int) $product->get_review_count(), "avg_rating" => (float) $product->get_average_rating(), "category_wp_unique_ids" => $this->getCategoryIds($product_id)];
+        return ["wp_id" => $product_id, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($product_id), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => (float) $price, "discounted_price" => (float) $discounted_price, "slug" => $post->post_name, "image" => $product_images[0] ?? (string) '', "status" => $this->postStatus($post->post_status), "post_type" => $post->post_type, "total_reviews" => (int) $this->getReviewCount($product_id), "avg_rating" => (float) $this->getAverageRating($product_id), "category_wp_unique_ids" => $this->getCategoryIds($product_id)];
     }
     private function createPostData($post_id, $post)
     {
@@ -160,11 +146,8 @@ class CptPostHandler
         if (empty($image_url)) {
             $image_url = '';
         }
-        $average_rating = get_post_meta($post->ID, 'rvx_avg_rating', \true);
-        if (empty($average_rating)) {
-            $average_rating = 0.0;
-        }
-        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => (float) $average_rating, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
+        // $average_rating calculated via helper in return array
+        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) $this->getReviewCount($post->ID), "avg_rating" => (float) $this->getAverageRating($post->ID), "stars" => $this->getStarCounts($post->ID), "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
         return $data;
     }
     private function updatedPostData($post_id, $post)
@@ -173,11 +156,8 @@ class CptPostHandler
         if (empty($image_url)) {
             $image_url = '';
         }
-        $average_rating = get_post_meta($post->ID, 'rvx_avg_rating', \true);
-        if (empty($average_rating)) {
-            $average_rating = 0.0;
-        }
-        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => (float) $average_rating, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
+        // $average_rating calculated via helper in return array
+        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) $this->getReviewCount($post->ID), "avg_rating" => (float) $this->getAverageRating($post->ID), "stars" => $this->getStarCounts($post->ID), "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
         return $data;
     }
     private function postStatus($status)
@@ -227,6 +207,15 @@ class CptPostHandler
         }
         return $parent_category_ids;
     }
+    private function getStarCounts($post_id)
+    {
+        $check = get_post_meta($post_id, 'rvx_star_count_1', \true);
+        // Backward compatibility: If meta doesn't exist, calculate it now.
+        if ($check === '' || $check === \false) {
+            \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
+        }
+        return ["one" => (int) get_post_meta($post_id, 'rvx_star_count_1', \true), "two" => (int) get_post_meta($post_id, 'rvx_star_count_2', \true), "three" => (int) get_post_meta($post_id, 'rvx_star_count_3', \true), "four" => (int) get_post_meta($post_id, 'rvx_star_count_4', \true), "five" => (int) get_post_meta($post_id, 'rvx_star_count_5', \true)];
+    }
     private function enableCommentsReviews($post_id)
     {
         global $wpdb;
@@ -259,5 +248,25 @@ class CptPostHandler
         // Clear WordPress cache for this post
         clean_post_cache($post_id);
         return \true;
+    }
+    private function getReviewCount($post_id)
+    {
+        $count = get_post_meta($post_id, 'rvx_total_reviews', \true);
+        // Backward compatibility: If meta doesn't exist, calculate it now.
+        if ($count === '' || $count === \false) {
+            \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
+            $count = get_post_meta($post_id, 'rvx_total_reviews', \true);
+        }
+        return (int) $count;
+    }
+    private function getAverageRating($post_id)
+    {
+        $rating = get_post_meta($post_id, 'rvx_avg_rating', \true);
+        // Backward compatibility: If meta doesn't exist, calculate it now.
+        if ($rating === '' || $rating === \false) {
+            \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
+            $rating = get_post_meta($post_id, 'rvx_avg_rating', \true);
+        }
+        return (float) ($rating ?: 0.0);
     }
 }

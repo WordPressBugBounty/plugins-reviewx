@@ -359,22 +359,12 @@ class JudgemeReviewsImport
         }
         // No existing review; insert new one
         // Insert comment
-        $comment_id = wp_insert_comment(['comment_post_ID' => $product_id, 'comment_author' => $author, 'comment_author_email' => $author_email, 'comment_content' => $comment_content, 'comment_type' => 'review', 'comment_approved' => 1, 'comment_author_IP' => $ip_address, 'comment_date' => $comment_date]);
+        $comment_id = wp_insert_comment(['comment_post_ID' => $product_id, 'comment_author' => $author, 'comment_author_email' => $author_email, 'comment_content' => $comment_content, 'comment_type' => 'review', 'comment_approved' => 1, 'comment_author_IP' => $ip_address, 'comment_date' => $comment_date, 'comment_meta' => ['rating' => $rating, 'reviewx_title' => $title, 'verified' => 1, 'is_recommended' => 1, 'reviewx_recommended' => 1, 'rvx_review_version' => 'v2', 'rvx_import_source' => 'judgeme', 'rvx_judgeme_hash' => $hash]]);
         if (\is_wp_error($comment_id) || !$comment_id) {
             return ['success' => \false];
         }
-        // Save rating and other meta
-        add_comment_meta($comment_id, 'rating', $rating);
-        if (!empty($title)) {
-            add_comment_meta($comment_id, 'reviewx_title', $title);
-        }
-        add_comment_meta($comment_id, 'verified', 1);
-        add_comment_meta($comment_id, 'is_recommended', 1);
-        add_comment_meta($comment_id, 'reviewx_recommended', 1);
-        add_comment_meta($comment_id, 'rvx_review_version', 'v2');
-        add_comment_meta($comment_id, 'rvx_import_source', 'judgeme');
-        // Save duplicate detection hash
-        add_comment_meta($comment_id, 'rvx_judgeme_hash', $hash);
+        // Explicitly trigger aggregation
+        \Rvx\CPT\CptAverageRating::update_average_rating($product_id);
         // Insert reply if present
         if (!empty($review['reply'])) {
             wp_insert_comment(['comment_post_ID' => $product_id, 'comment_parent' => $comment_id, 'comment_author' => 'Shop Owner', 'comment_content' => sanitize_text_field($review['reply']), 'comment_type' => 'review', 'comment_approved' => 1, 'comment_date' => \gmdate('Y-m-d H:i:s', \strtotime($review['reply_date'] ?? $comment_date))]);

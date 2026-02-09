@@ -48,17 +48,8 @@ class OrderItemSyncService extends \Rvx\Services\Service
         $endDate = (new DateTime())->format('Y-m-d H:i:s');
         DB::table('wc_order_stats')->whereBetween('date_created', $startDate, $endDate)->chunk(100, function ($orderStats) {
             foreach ($orderStats as $orderStat) {
-                $data = [];
-                if ($orderStat->date_completed) {
-                    $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status) ?? null;
-                    $data['fulfilled_at'] = $orderStat->date_completed ?? null;
-                }
-                if (!$orderStat->date_completed && $orderStat->date_paid) {
-                    $data['fulfillment_status'] = Helper::rvxGetOrderStatus($orderStat->status) ?? null;
-                    $data['fulfilled_at'] = $orderStat->date_paid ?? null;
-                }
-                $this->orderFullfillmentStatusRelation[(int) $orderStat->order_id] = $data['fulfillment_status'] ?? null;
-                $this->orderFullfillmentAtRelation[(int) $orderStat->order_id] = $data['fulfilled_at'] ?? null;
+                $this->orderFullfillmentStatusRelation[(int) $orderStat->order_id] = Helper::orderItemStatus(Helper::rvxGetOrderStatus($orderStat->status));
+                $this->orderFullfillmentAtRelation[(int) $orderStat->order_id] = $orderStat->date_completed ?? $orderStat->date_paid ?? null;
             }
         });
     }
@@ -102,7 +93,7 @@ class OrderItemSyncService extends \Rvx\Services\Service
     public function formatOrderItem($orderItem) : array
     {
         $productId = (int) ($orderItem->product_id ?? 0);
-        return ['rid' => 'rid://LineItem/' . (int) $orderItem->order_item_id, 'wp_id' => (int) $orderItem->order_item_id, 'order_id' => (int) $orderItem->order_id, 'product_wp_unique_id' => Client::getUid() . '-' . $productId, 'name' => $orderItem->order_item_name ?? null, 'quantity' => (int) ($orderItem->quantity ?? 0), 'price' => Helper::formatToTwoDecimalPlaces($orderItem->price ?? 0.0), 'review_id' => null, 'site_id' => Client::getSiteId(), 'fulfillment_status' => $this->orderFullfillmentStatusRelation[(int) $orderItem->order_id] ?? null, 'fulfilled_at' => !empty($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) ? Helper::validateReturnDate($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) : null, 'reviewed_at' => null];
+        return ['rid' => 'rid://LineItem/' . (int) $orderItem->order_item_id, 'wp_id' => (int) $orderItem->order_item_id, "wp_unique_id" => Client::getUid() . '-' . (int) $orderItem->order_item_id, 'order_id' => (int) $orderItem->order_id, 'product_wp_unique_id' => Client::getUid() . '-' . $productId, 'name' => $orderItem->order_item_name ?? null, 'quantity' => (int) ($orderItem->quantity ?? 0), 'price' => Helper::formatToTwoDecimalPlaces($orderItem->price ?? 0.0), 'review_id' => null, 'site_id' => Client::getSiteId(), 'fulfillment_status' => $this->orderFullfillmentStatusRelation[(int) $orderItem->order_id] ?? null, 'fulfilled_at' => !empty($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) ? Helper::validateReturnDate($this->orderFullfillmentAtRelation[(int) $orderItem->order_id]) : null, 'reviewed_at' => null];
     }
     public function getOrderItemMeta() : void
     {

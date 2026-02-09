@@ -128,11 +128,6 @@ return [
         ['handle' => 'rvx_user_access_script', 'objectName' => 'rvxUserAccess', 'data' => [
            'rvx_user_settings_access' => json_decode($rvx_user_access_script),
        ]],
-       ['handle' => 'rvx_user_access_script', 'objectName' => 'rvx_locals', 'data' => [
-        'rvx_localization_data_for_admin' => Helper::prepareLangArray(),
-           'rvx_full_domain_name' => Helper::domainSupport(),
-           'rvx_full_domain_api' => Helper::getRestAPIurl(),
-    ]],
     ],
        
         'styles' => []

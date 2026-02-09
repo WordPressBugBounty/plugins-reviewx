@@ -268,8 +268,8 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function insightReviewCount($id) : int
     {
-        if (metadata_exists('post', $id, '_rvx_latest_reviews_insight')) {
-            $data = \get_transient("rvx_{$id}_latest_reviews_insight");
+        $data = \get_transient("rvx_{$id}_latest_reviews_insight");
+        if ($data) {
             $reviewAggregation = \json_decode($data, \true);
             return $reviewAggregation['aggregation']['total_reviews'] ?? 0;
         }
@@ -319,7 +319,10 @@ class StoreFrontReviewController implements InvokableContract
     {
         $reviewData = Helper::arrayGet($request->get_params(), "review");
         $aggregationData = Helper::arrayGet($request->get_params(), "aggregation");
-        $productId = $aggregationData["product_wp_id"];
+        $productId = Helper::arrayGet($aggregationData, "product_wp_id");
+        if (!$productId) {
+            return;
+        }
         $this->storeReviewMeta($productId, $reviewData);
         $this->storeAggregationMeta($productId, $aggregationData);
     }

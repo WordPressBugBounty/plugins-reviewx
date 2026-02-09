@@ -5,6 +5,7 @@ namespace Rvx\Handlers;
 use Rvx\Api\OrderApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
+use Rvx\Utilities\TransactionManager;
 use Rvx\WPDrill\Response;
 class OrderStatusChangedHandler
 {
@@ -19,18 +20,22 @@ class OrderStatusChangedHandler
             }
             $payload = $this->prepareData($order, $new_status, $old_status);
             $uid = Client::getUid() . '-' . $order_id;
-            $response = (new OrderApi())->changeStatus($payload, $uid);
+            // WP Operation: Save meta locally. This must happen.
             $this->orderDataSave($order_id, $payload);
+            // SaaS Operation: Attempt sync, but don't block return.
+            $response = (new OrderApi())->changeStatus($payload, $uid);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                return \false;
+                \error_log("Order Status Change Sync Failed for ID {$order_id}: " . $response->getBody());
             }
         }
         if (isset($_GET['page']) && $_GET['page'] === 'wc-orders') {
             $payload = $this->bulkOrderPrepare($order_id, $old_status, $new_status, $order);
-            $response = (new OrderApi())->changeBulkStatus($payload);
+            // WP Operation: Save meta locally.
             $this->orderDataSave($order_id, $payload);
+            // SaaS Operation: Attempt sync.
+            $response = (new OrderApi())->changeBulkStatus($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                return \false;
+                \error_log("Bulk Order Status Sync Failed: " . $response->getBody());
             }
         }
     }
@@ -42,13 +47,16 @@ class OrderStatusChangedHandler
     {
         $orderStatusToTimestampKey = $this->orderStatusToTimestampKey($new_status);
         $current_time = \wp_date('Y-m-d H:i:s');
-        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_created()->getTimestamp())) : null;
-        $updated_at = \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_modified()->getTimestamp())) ?? \wp_date('Y-m-d H:i:s');
-        $orderStatusData = ["status" => Helper::orderStatus($new_status)];
+        $date_created = $order->get_date_created();
+        $created_at = $date_created ? \wp_date('Y-m-d H:i:s', $date_created->getTimestamp()) : null;
+        $date_modified = $order->get_date_modified();
+        $updated_at = $date_modified ? \wp_date('Y-m-d H:i:s', $date_modified->getTimestamp()) : \wp_date('Y-m-d H:i:s');
+        $order_state = $this->wooOrderState($order, $new_status, $old_status);
+        $orderStatusData = ["status" => Helper::orderStatus($new_status), "paid_at" => $order_state['paid_at'] ?? null];
         if ($orderStatusToTimestampKey !== 'any') {
             $orderStatusData[$orderStatusToTimestampKey] = $current_time;
         }
-        $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), 'created_at' => $created_at, 'updated_at' => $updated_at];
+        $orderData = ["wp_id" => (int) $order->get_id(), "customer_wp_unique_id" => Client::getUid() . '-' . (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), 'created_at' => $created_at, 'updated_at' => $updated_at];
         $modifiedOrder = \array_merge($orderData, $orderStatusData);
         return ['order' => $modifiedOrder, 'order_items' => $this->orderItems($order, $orderStatusToTimestampKey, $orderStatusData, $new_status, $old_status)];
     }
@@ -58,13 +66,15 @@ class OrderStatusChangedHandler
         $order_id = $order->get_id();
         $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
         $wpWcOrderStats = $wpdb->get_row($query);
-        if ($old_status !== $new_status) {
-            $fulfilled_at = $wpWcOrderStats->date_completed ?? \wp_date('Y-m-d H:i:s');
+        $fulfilled_at = $wpWcOrderStats && $wpWcOrderStats->date_completed ? \wp_date('Y-m-d H:i:s', \strtotime($wpWcOrderStats->date_completed)) : null;
+        $paid_at = $wpWcOrderStats && $wpWcOrderStats->date_paid ? \wp_date('Y-m-d H:i:s', \strtotime($wpWcOrderStats->date_paid)) : null;
+        if ($new_status === 'completed' && !$fulfilled_at) {
+            $fulfilled_at = \wp_date('Y-m-d H:i:s');
         }
-        $data = [];
-        $data['fulfillment_status'] = Helper::orderStatus($order->get_status()) ?? null;
-        $data['fulfilled_at'] = $fulfilled_at ?? null;
-        return $data;
+        if ($new_status === 'processing' && !$paid_at) {
+            $paid_at = \wp_date('Y-m-d H:i:s');
+        }
+        return ['fulfillment_status' => Helper::orderItemStatus($new_status) ?? null, 'fulfilled_at' => $fulfilled_at, 'paid_at' => $paid_at];
     }
     public function orderItems($order, $orderStatusToTimestampKey, $orderStatusData, $new_status, $old_status) : array
     {
@@ -74,11 +84,7 @@ class OrderStatusChangedHandler
         foreach ($order_items as $order_item) {
             $product = $order_item->get_product();
             if ($product) {
-                if ('completed' == $orderStatusData['status']) {
-                    $item_data = ["wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), 'fulfillment_status' => $data['fulfillment_status'] ?? null, 'fulfilled_at' => $data['fulfilled_at'] ?? null];
-                } else {
-                    $item_data = ["wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), 'fulfillment_status' => $orderStatusData['status'], 'fulfilled_at' => $orderStatusData[$orderStatusToTimestampKey]];
-                }
+                $item_data = ["wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), 'fulfillment_status' => $data['fulfillment_status'] ?? null, 'fulfilled_at' => $data['fulfilled_at'] ?? null];
                 $items_data[] = $item_data;
             }
         }

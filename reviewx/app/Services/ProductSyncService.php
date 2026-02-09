@@ -16,6 +16,7 @@ class ProductSyncService extends \Rvx\Services\Service
     protected $postMetaSalePriceRelation;
     protected $postMetaThumbnaiRelation;
     protected $postMetaAttachmentsRelation;
+    protected $postMetaStarCountsRelation;
     protected $productids;
     protected $postAttachmentRelation;
     protected CategorySyncService $syncedCategories;
@@ -37,13 +38,13 @@ class ProductSyncService extends \Rvx\Services\Service
     public function syncProductsMeta($post_type)
     {
         // Base meta keys
-        $dbTableKeys = ['rvx_avg_rating', 'rating', '_thumbnail_id'];
+        $dbTableKeys = ['rvx_avg_rating', 'rating', '_thumbnail_id', 'rvx_total_reviews', 'rvx_star_count_1', 'rvx_star_count_2', 'rvx_star_count_3', 'rvx_star_count_4', 'rvx_star_count_5'];
         // Add product-specific keys
         if ($post_type === 'product') {
             $dbTableKeys = \array_merge($dbTableKeys, ['_price', '_sale_price', '_wc_review_count', '_wc_average_rating', '_wc_rating_count']);
         }
         // Define relation targets by meta key
-        $relationMap = ['_price' => 'postMetaPriceRelation', '_sale_price' => 'postMetaSalePriceRelation', '_wc_review_count' => 'postMetaReviewsCountRelation', '_wc_rating_count' => 'postMetaRatingCountPercentageRelation', '_thumbnail_id' => 'postMetaThumbnaiRelation'];
+        $relationMap = ['_price' => 'postMetaPriceRelation', '_sale_price' => 'postMetaSalePriceRelation', '_wc_review_count' => 'postMetaReviewsCountRelation', '_wc_rating_count' => 'postMetaRatingCountPercentageRelation', '_thumbnail_id' => 'postMetaThumbnaiRelation', 'rvx_total_reviews' => 'postMetaReviewsCountRelation'];
         try {
             DB::table('postmeta')->whereIn('meta_key', $dbTableKeys)->chunk(100, function ($allPostMeta) use($relationMap) {
                 foreach ($allPostMeta as $meta) {
@@ -53,6 +54,13 @@ class ProductSyncService extends \Rvx\Services\Service
                     // Direct assignment using map
                     if (isset($relationMap[$key])) {
                         $this->{$relationMap[$key]}[$pid] = $value;
+                        continue;
+                    }
+                    // Collect Star Counts for CPT
+                    if (\strpos($key, 'rvx_star_count_') === 0) {
+                        $starIndex = \str_replace('rvx_star_count_', '', $key);
+                        // 1, 2, 3...
+                        $this->postMetaStarCountsRelation[$pid][$starIndex] = $value;
                         continue;
                     }
                     // --- Rating Prioritization Logic ---
@@ -100,12 +108,36 @@ class ProductSyncService extends \Rvx\Services\Service
     {
         $reviewsCount = isset($this->postMetaReviewsCountRelation[$product->ID]) ? (int) $this->postMetaReviewsCountRelation[$product->ID] : 0;
         $ratingCount = $this->postMetaRatingCountPercentageRelation[$product->ID] ?? [];
-        // Ensure WooCommerce serialized rating count is converted to array
-        if (\is_string($ratingCount)) {
-            $decoded = @\unserialize($ratingCount);
-            $ratingCount = \is_array($decoded) ? $decoded : [];
+        // Handle CPT Star Counts (from rvx_ meta)
+        if ($product->post_type !== 'product') {
+            // Self-Healing: If star data is missing, calculate it NOW.
+            if (!isset($this->postMetaStarCountsRelation[$product->ID])) {
+                \Rvx\CPT\CptAverageRating::update_average_rating($product->ID);
+                // Fetch fresh data immediately
+                $freshStars = [];
+                for ($i = 1; $i <= 5; $i++) {
+                    $freshStars[$i] = (int) get_post_meta($product->ID, "rvx_star_count_{$i}", \true);
+                }
+                $this->postMetaStarCountsRelation[$product->ID] = $freshStars;
+                $freshTotal = (int) get_post_meta($product->ID, 'rvx_total_reviews', \true);
+                $this->postMetaReviewsCountRelation[$product->ID] = $freshTotal;
+                $freshAvg = (float) get_post_meta($product->ID, 'rvx_avg_rating', \true);
+                $this->postMetaAverageRatingRelation[$product->ID] = $freshAvg;
+            }
+            $cptStars = $this->postMetaStarCountsRelation[$product->ID];
+            // Format to match what ratingCountsConverter expects or construct directly
+            $ratingCounts = ["one" => (int) ($cptStars[1] ?? 0), "two" => (int) ($cptStars[2] ?? 0), "three" => (int) ($cptStars[3] ?? 0), "four" => (int) ($cptStars[4] ?? 0), "five" => (int) ($cptStars[5] ?? 0)];
+            // Refresh total reviews count from relation if it was updated
+            $reviewsCount = isset($this->postMetaReviewsCountRelation[$product->ID]) ? (int) $this->postMetaReviewsCountRelation[$product->ID] : $reviewsCount;
+        } else {
+            // Default WooCommerce logic
+            // Ensure WooCommerce serialized rating count is converted to array
+            if (\is_string($ratingCount)) {
+                $decoded = @\unserialize($ratingCount);
+                $ratingCount = \is_array($decoded) ? $decoded : [];
+            }
+            $ratingCounts = $this->ratingCountsConverter($ratingCount);
         }
-        $ratingCounts = $this->ratingCountsConverter($ratingCount);
         return ['rid' => 'rid://Product/' . (int) $product->ID, "post_type" => $product->post_type ?? null, "wp_id" => (int) ($product->ID ?? 0), "title" => isset($product->post_title) ? \htmlspecialchars($product->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => $product->guid ?? '', "description" => $product->post_excerpt ?? null, "price" => isset($this->postMetaPriceRelation[$product->ID]) ? Helper::formatToTwoDecimalPlaces($this->postMetaPriceRelation[$product->ID]) : 0, "discounted_price" => isset($this->postMetaSalePriceRelation[$product->ID]) ? Helper::formatToTwoDecimalPlaces($this->postMetaSalePriceRelation[$product->ID]) : 0, "slug" => $product->post_name ?? '', "status" => $this->productStatus($product->post_status ?? ''), "total_reviews" => $reviewsCount, "avg_rating" => isset($this->postMetaAverageRatingRelation[$product->ID]) ? Helper::formatToTwoDecimalPlaces($this->postMetaAverageRatingRelation[$product->ID]) : 0, "stars" => ["one" => $ratingCounts["one"], "two" => $ratingCounts["two"], "three" => $ratingCounts["three"], "four" => $ratingCounts["four"], "five" => $ratingCounts["five"]], "one_stars" => $ratingCounts["one"], "two_stars" => $ratingCounts["two"], "three_stars" => $ratingCounts["three"], "four_stars" => $ratingCounts["four"], "five_stars" => $ratingCounts["five"], "modified_date" => Helper::validateReturnDate($product->post_modified) ?? null, "image" => $productImage, "category_ids" => isset($this->postTermRelation[(int) $product->ID]) && \is_array($this->postTermRelation[(int) $product->ID]) ? \array_map('intval', $this->postTermRelation[(int) $product->ID]) : []];
     }
     private function ratingCountsConverter(array $ratingCount) : array

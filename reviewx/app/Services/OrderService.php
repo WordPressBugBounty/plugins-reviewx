@@ -4,6 +4,7 @@ namespace Rvx\Services;
 
 use Rvx\Api\OrderApi;
 use Rvx\Utilities\Auth\Client;
+use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Response;
 class OrderService extends \Rvx\Services\Service
 {
@@ -28,11 +29,14 @@ class OrderService extends \Rvx\Services\Service
     {
         $status = $order->get_status();
         $status_mapping = $this->orderStatusArray();
-        $created_at = $order->get_date_created() ? \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_created()->getTimestamp())) : null;
-        $updated_at = \wp_date('Y-m-d H:i:s', \strtotime($order->get_date_modified()->getTimestamp())) ?? \wp_date('Y-m-d H:i:s');
+        $date_created = $order->get_date_created();
+        $created_at = $date_created ? \wp_date('Y-m-d H:i:s', $date_created->getTimestamp()) : null;
+        $date_modified = $order->get_date_modified();
+        $updated_at = $date_modified ? \wp_date('Y-m-d H:i:s', $date_modified->getTimestamp()) : \wp_date('Y-m-d H:i:s');
         // Get the order state, ensure a fallback if 'date_paid' doesn't exist
-        $paid_at = $this->wooOrderState($order->get_id()) ?? null;
-        $orderData = ["wp_id" => (int) $order->get_id(), "customer_id" => (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), "status" => $order->get_status(), "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "paid_at" => $paid_at, "created_at" => $created_at, "updated_at" => $updated_at];
+        $order_state = $this->wooOrderState($order->get_id());
+        $paid_at = $order_state['date_paid'] ?? null;
+        $orderData = ["wp_id" => (int) $order->get_id(), "customer_wp_unique_id" => Client::getUid() . '-' . (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), "status" => Helper::orderStatus($order->get_status()), "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "paid_at" => $paid_at, "created_at" => $created_at, "updated_at" => $updated_at];
         if (isset($status_mapping[$status])) {
             $orderData[$status_mapping[$status]] = \wp_date('Y-m-d H:i:s');
         }
@@ -48,8 +52,9 @@ class OrderService extends \Rvx\Services\Service
         $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
         $results = $wpdb->get_row($query);
         if ($results) {
-            return ['date_paid' => \wp_date('Y-m-d H:i:s', \strtotime($results->date_paid)) ?? null, 'date_completed' => \wp_date('Y-m-d H:i:s', \strtotime($results->date_completed)) ?? null];
+            return ['date_paid' => !empty($results->date_paid) && \strtotime($results->date_paid) ? \wp_date('Y-m-d H:i:s', \strtotime($results->date_paid)) : null, 'date_completed' => !empty($results->date_completed) && \strtotime($results->date_completed) ? \wp_date('Y-m-d H:i:s', \strtotime($results->date_completed)) : null];
         }
+        return ['date_paid' => null, 'date_completed' => null];
     }
     public function orderItems($order, $orderData = [])
     {
@@ -59,12 +64,12 @@ class OrderService extends \Rvx\Services\Service
         foreach ($order_items as $order_item) {
             $product = $order_item->get_product();
             if ($product) {
-                $item_data = ["wp_id" => (int) $order_item->get_id(), "wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), "product_wp_unique_id" => Client::getUid() . '-' . (int) $product->get_id(), "review_id" => null, "site_id" => Client::getSiteId(), "name" => $product->get_name(), "quantity" => $order_item->get_quantity(), "price" => (float) $product->get_price(), "reviewed_at" => null, "fulfillment_status" => $order->get_status()];
+                $item_data = ["wp_id" => (int) $order_item->get_id(), "wp_unique_id" => Client::getUid() . '-' . (int) $order_item->get_id(), "product_wp_unique_id" => Client::getUid() . '-' . (int) $product->get_id(), "review_id" => null, "site_id" => Client::getSiteId(), "name" => $product->get_name(), "quantity" => $order_item->get_quantity(), "price" => (float) $product->get_price(), "reviewed_at" => null, "fulfillment_status" => Helper::orderItemStatus($order->get_status())];
                 if ($order->get_status() !== 'completed') {
                     $item_data['fulfilled_at'] = \wp_date('Y-m-d H:i:s');
                 }
                 if ($order->get_status() == 'completed') {
-                    $item_data['fulfilled_at'] = \wp_date('Y-m-d H:i:s', \strtotime($date['date_completed']));
+                    $item_data['fulfilled_at'] = !empty($date['date_completed']) && \strtotime($date['date_completed']) ? \wp_date('Y-m-d H:i:s', \strtotime($date['date_completed'])) : \wp_date('Y-m-d H:i:s');
                 }
                 $items_data[] = $item_data;
             }

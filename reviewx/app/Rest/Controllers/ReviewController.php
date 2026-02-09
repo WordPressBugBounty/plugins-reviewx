@@ -53,6 +53,21 @@ class ReviewController implements InvokableContract
         if ($resp->getStatusCode() === Response::HTTP_OK) {
             $this->storeVisibilityReview($resp->getApiData(), $isVisible);
         }
+        return $this->enrichReviewList($resp);
+    }
+    private function enrichReviewList($resp)
+    {
+        if ($resp->getStatusCode() === Response::HTTP_OK) {
+            $data = $resp->getApiData();
+            if (isset($data['reviews']) && \is_array($data['reviews'])) {
+                foreach ($data['reviews'] as &$review) {
+                    if (isset($review['wp_post_id'])) {
+                        $review['post_type'] = get_post_type($review['wp_post_id']);
+                    }
+                }
+                return Helper::rest($data)->success($resp()->message, $resp->getStatusCode());
+            }
+        }
         return Helper::getApiResponse($resp);
     }
     public function reviewList($request)
@@ -68,7 +83,7 @@ class ReviewController implements InvokableContract
                 $filterParams = ['page', 'rating', 'date', 'reviewer', 'search', 'product', 'category', 'oldest_first', 'newest_first'];
                 if (\array_intersect_key(\array_flip($filterParams), $params)) {
                     $resp = $this->reviewService->reviewList($params);
-                    return Helper::getApiResponse($resp);
+                    return $this->enrichReviewList($resp);
                 } elseif ($approve) {
                     $response = ['count' => $approve['count'], 'reviews' => $approve['reviews'], 'meta' => $approve['meta']];
                     return Helper::rest($response)->success("Success");
@@ -86,11 +101,11 @@ class ReviewController implements InvokableContract
                     if ($resp->getStatusCode() === Response::HTTP_OK && empty($request->get_params())) {
                         $this->reviewListStoreInDB($resp->getApiData());
                     }
-                    return Helper::getApiResponse($resp);
+                    return $this->enrichReviewList($resp);
                 }
             } else {
                 $resp = $this->reviewService->reviewList($request->get_params());
-                return Helper::getApiResponse($resp);
+                return $this->enrichReviewList($resp);
             }
         } catch (Exception $e) {
             \error_log("Error fetching review list: " . $e->getMessage());
@@ -149,7 +164,12 @@ class ReviewController implements InvokableContract
             // Re-enable the comment notification emails
             add_action('comment_post', 'wp_notify_postauthor');
             remove_filter('comments_notify', '__return_false');
+            // Clear caches
             $this->cacheServices->removeCache();
+            $postId = $request->get_param('wp_post_id');
+            if ($postId) {
+                $this->cacheServices->removeProductCache($postId);
+            }
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
             // Re-enable the comment notification emails in case of error
@@ -166,10 +186,19 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->updateReview($request);
-            $this->cacheServices->removeCache();
+            if ($resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300) {
+                // 1. Clear site-wide generic caches
+                $this->cacheServices->removeCache();
+                // 2. Clear product-specific caches (Insight & Latest Reviews)
+                $postId = $request->get_param('wp_post_id');
+                if ($postId) {
+                    \delete_transient("rvx_{$postId}_latest_reviews_insight");
+                    \delete_transient("rvx_{$postId}_latest_reviews");
+                }
+            }
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Not Create', $e->getCode());
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Update Failed', $e->getCode());
         }
     }
     /**

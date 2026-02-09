@@ -22,8 +22,7 @@
                                 <template x-if="currentPreviewImage">
                                     <span>
                                         <img x-show="currentPreviewImage && getFileType(currentPreviewImage).isImage" :src="currentPreviewImage" alt="test" class="rvx-w-full rvx-h-[150px] sm:rvx-h-auto rvx-object-cover " />
-                                        <video x-show="currentPreviewImage && getFileType(currentPreviewImage).isVideo" width="100%" height="200" controls class="rvx-h-[150px] sm:rvx-h-auto">
-                                            <source :src="currentPreviewImage">
+                                        <video x-show="currentPreviewImage && getFileType(currentPreviewImage).isVideo" :key="currentPreviewImage" :src="currentPreviewImage" width="100%" height="200" controls class="rvx-h-[150px] sm:rvx-h-auto">
                                         </video>
                                     </span>
                                 </template>

@@ -16,17 +16,8 @@ class WooReviewTableHandler
     }
     public function __invoke($new_status, $old_status, $comment)
     {
-        add_action('init', function () use($new_status, $old_status, $comment) {
-            $screen = \get_current_screen();
-            if ($screen instanceof WP_Screen || $screen->id == 'edit-comments') {
-                $comment_id = $comment->comment_ID;
-                $this->handleAction($new_status, $old_status, $comment_id);
-            }
-            if (wp_doing_ajax()) {
-                $comment_id = $comment->comment_ID;
-                $this->handleAction($new_status, $old_status, $comment_id);
-            }
-        });
+        $comment_id = $comment->comment_ID;
+        $this->handleAction($new_status, $old_status, $comment_id);
     }
     public function handleAction($new_status, $old_status, $comment_id)
     {
@@ -41,6 +32,10 @@ class WooReviewTableHandler
             default:
                 $this->changeVisibility($new_status, $old_status, $wpUniqueId);
                 break;
+        }
+        $comment = get_comment($comment_id);
+        if ($comment && $comment->comment_post_ID) {
+            \Rvx\CPT\CptAverageRating::update_average_rating($comment->comment_post_ID);
         }
         $this->cacheServices->removeCache();
     }
@@ -83,7 +78,10 @@ class WooReviewTableHandler
     private function restoreFromTrash($wpUniqueId, $new_status)
     {
         try {
-            (new ReviewsApi())->restoreReview($wpUniqueId);
+            $statusMap = ["approved" => 1, "unapproved" => 2, "hold" => 4, "pending" => 4, "spam" => 5];
+            $status = isset($statusMap[$new_status]) ? $statusMap[$new_status] : 1;
+            // Default to published if unknown
+            (new ReviewsApi())->restoreReview($wpUniqueId, $status);
         } catch (Exception $e) {
             \error_log("Restored Form trash " . \print_r($e->getMessage(), \true));
         }
@@ -94,7 +92,22 @@ class WooReviewTableHandler
     private function changeVisibility($new_status, $old_status, $wpUniqueId)
     {
         try {
-            $statusMap = ["approved" => 1, "published" => 1, "unapproved" => 4, "unpublished" => 2, "pending" => 4, "spam" => 5];
+            $statusMap = [
+                "approved" => 1,
+                // WordPress default
+                "published" => 1,
+                "unapproved" => 2,
+                // WordPress default
+                "unpublished" => 2,
+                "pending" => 4,
+                "hold" => 4,
+                "spam" => 5,
+                "trash" => 3,
+                "delete" => 3,
+            ];
+            if (!isset($statusMap[$new_status])) {
+                return;
+            }
             $status = $statusMap[$new_status];
             (new ReviewsApi())->visibilityReviewData(["status" => $status], $wpUniqueId);
         } catch (Exception $e) {

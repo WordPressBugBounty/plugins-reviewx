@@ -68,4 +68,16 @@ class CacheServices extends \Rvx\Services\Service
         }
         return \false;
     }
+    /**
+     * Clear product-specific transients for reviews and insight data.
+     * @param int $productId The WP Post ID of the product.
+     */
+    public function removeProductCache($productId) : void
+    {
+        if (!$productId) {
+            return;
+        }
+        \delete_transient("rvx_{$productId}_latest_reviews");
+        \delete_transient("rvx_{$productId}_latest_reviews_insight");
+    }
 }

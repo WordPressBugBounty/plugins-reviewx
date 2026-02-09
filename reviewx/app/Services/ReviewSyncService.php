@@ -5,6 +5,7 @@ namespace Rvx\Services;
 use Rvx\Handlers\MigrationRollback\MigrationPrompt;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 use Rvx\Utilities\Helper;
+use Rvx\Utilities\Auth\Client;
 use Rvx\WPDrill\Facades\DB;
 use Rvx\Services\ReviewService;
 class ReviewSyncService extends \Rvx\Services\Service
@@ -20,6 +21,9 @@ class ReviewSyncService extends \Rvx\Services\Service
     protected $reviewMultiCriteriasRating;
     protected $reviewTrashStatus;
     protected $reviewTrashTime;
+    protected $reviewMetaOrder;
+    protected $reviewMetaOrderItem;
+    protected $orderCustomerRelation = [];
     protected $criteria;
     protected $procesedReviews;
     protected $commentReplyRelation;
@@ -85,13 +89,36 @@ class ReviewSyncService extends \Rvx\Services\Service
         } else {
             $status = $this->getCommentStatus($comment);
         }
-        return ['rid' => 'rid://Review/' . (int) $comment->comment_ID, 'product_id' => (int) $comment->comment_post_ID, 'wp_id' => (int) $comment->comment_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'rating' => isset($this->reviewMetaRating[$comment->comment_ID]) ? (float) \round($this->reviewMetaRating[$comment->comment_ID], 2) : (float) 0.0, 'reviewer_email' => $comment->comment_author_email ?? null, 'reviewer_name' => $comment->comment_author ?? null, 'title' => isset($this->reviewMetaTitle[$comment->comment_ID]) ? $this->reviewMetaTitle[$comment->comment_ID] : null, 'feedback' => $comment->comment_content ?? null, 'verified' => !empty($this->reviewMetaVerified[$comment->comment_ID]), 'attachments' => $this->reviewMetaAttachmentsAll[$comment->comment_ID] ?? [], 'is_recommended' => !empty($this->reviewMetaRecommended[$comment->comment_ID]), 'is_anonymous' => !empty($this->reviewMetaAnonymous[$comment->comment_ID]), 'status' => $status, 'reply' => $reply, 'trashed_at' => $trashed_at, 'created_at' => Helper::validateReturnDate($comment->comment_date_gmt) ?? null, 'customer_id' => $comment->user_id ?? null, 'ip' => $comment->comment_author_IP ?? null, 'criterias' => $this->reviewMultiCriteriasRating[$comment->comment_ID] ?? null];
+        return ['rid' => 'rid://Review/' . (int) $comment->comment_ID, 'product_id' => (int) $comment->comment_post_ID, 'wp_id' => (int) $comment->comment_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'rating' => isset($this->reviewMetaRating[$comment->comment_ID]) ? (float) \round($this->reviewMetaRating[$comment->comment_ID], 2) : (float) 0.0, 'reviewer_email' => $comment->comment_author_email ?? null, 'reviewer_name' => $comment->comment_author ?? null, 'title' => isset($this->reviewMetaTitle[$comment->comment_ID]) ? $this->reviewMetaTitle[$comment->comment_ID] : null, 'feedback' => $comment->comment_content ?? null, 'verified' => !empty($this->reviewMetaVerified[$comment->comment_ID]), 'attachments' => $this->reviewMetaAttachmentsAll[$comment->comment_ID] ?? [], 'is_recommended' => !empty($this->reviewMetaRecommended[$comment->comment_ID]), 'is_anonymous' => !empty($this->reviewMetaAnonymous[$comment->comment_ID]), 'status' => $status, 'reply' => $reply, 'trashed_at' => $trashed_at, 'created_at' => Helper::validateReturnDate($comment->comment_date_gmt) ?? null, 'customer_id' => $this->getReviewCustomerId($comment), 'order_wp_unique_id' => isset($this->reviewMetaOrder[$comment->comment_ID]) ? Client::getUid() . '-' . $this->reviewMetaOrder[$comment->comment_ID] : null, 'order_item_wp_unique_id' => $this->reviewMetaOrderItem[$comment->comment_ID] ?? null, 'ip' => $comment->comment_author_IP ?? null, 'criterias' => $this->reviewMultiCriteriasRating[$comment->comment_ID] ?? null];
+    }
+    private function getReviewCustomerId($comment) : ?string
+    {
+        $orderId = $this->reviewMetaOrder[$comment->comment_ID] ?? null;
+        // If we have an order ID, try to get the customer from the order relation
+        if ($orderId && isset($this->orderCustomerRelation[(int) $orderId])) {
+            $customerId = $this->orderCustomerRelation[(int) $orderId];
+            return Client::getUid() . '-' . $customerId;
+        }
+        // Fallback to comment user_id, but only if it's not likely to be an admin
+        if ($comment->user_id) {
+            // For now, we'll trust user_id if no order is linked.
+            return Client::getUid() . '-' . $comment->user_id;
+        }
+        return null;
     }
     public function syncReviewMata() : void
     {
-        DB::table('commentmeta')->whereIn('meta_key', ['rvx_review_version', 'reviewx_title', 'verified', 'rating', 'rvx_criterias', 'reviewx_rating', 'reviewx_attachments', 'reviewx_video_url', 'is_recommended', 'reviewx_recommended', 'is_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time'])->chunk(100, function ($allCommentMeta) {
+        DB::table('commentmeta')->whereIn('meta_key', ['rvx_review_version', 'reviewx_title', 'verified', 'rating', 'rvx_criterias', 'reviewx_rating', 'reviewx_attachments', 'reviewx_video_url', 'is_recommended', 'reviewx_recommended', 'is_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time', 'reviewx_order', 'rvx_comment_order_item'])->chunk(100, function ($allCommentMeta) {
+            $orderIds = [];
             foreach ($allCommentMeta as $commentMeta) {
                 $commentId = $commentMeta->comment_id;
+                if ($commentMeta->meta_key === 'reviewx_order') {
+                    $this->reviewMetaOrder[$commentId] = $commentMeta->meta_value;
+                    $orderIds[] = (int) $commentMeta->meta_value;
+                }
+                if ($commentMeta->meta_key === 'rvx_comment_order_item') {
+                    $this->reviewMetaOrderItem[$commentId] = $commentMeta->meta_value;
+                }
                 // Process each meta_key
                 if ($commentMeta->meta_key === 'reviewx_title') {
                     $this->reviewMetaTitle[$commentId] = $commentMeta->meta_value;
@@ -140,6 +167,13 @@ class ReviewSyncService extends \Rvx\Services\Service
                 }
                 if ($commentMeta->meta_key === '_wp_trash_meta_time') {
                     $this->reviewTrashTime[$commentId] = $commentMeta->meta_value;
+                }
+            }
+            // Pre-fetch customer IDs for found orders to avoid N+1 queries
+            if (!empty($orderIds)) {
+                $orderStats = DB::table('wc_order_stats')->whereIn('order_id', \array_unique($orderIds))->select(['order_id', 'customer_id'])->get();
+                foreach ($orderStats as $stat) {
+                    $this->orderCustomerRelation[(int) $stat->order_id] = (int) $stat->customer_id;
                 }
             }
         });

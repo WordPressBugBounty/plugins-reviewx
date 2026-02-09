@@ -67,7 +67,11 @@ class ReviewStarCountShortcode implements ShortcodeContract
             $defaultData['reviewsCount'] = (int) get_post_meta($id, '_wc_review_count', \true);
         } else {
             $defaultData['starCount'] = (float) get_post_meta($id, 'rvx_avg_rating', \true);
-            $defaultData['reviewsCount'] = (int) $post->comment_count;
+            $defaultData['reviewsCount'] = (int) get_post_meta($id, 'rvx_total_reviews', \true);
+            // Fallback to comment_count if meta is not set yet
+            if (!$defaultData['reviewsCount']) {
+                $defaultData['reviewsCount'] = (int) $post->comment_count;
+            }
         }
         return $defaultData;
     }

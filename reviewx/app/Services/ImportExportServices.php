@@ -5,6 +5,7 @@ namespace Rvx\Services;
 use Exception;
 use Rvx\Api\ReviewImportAndExportApi;
 use Rvx\Utilities\Helper;
+use Rvx\Utilities\TransactionManager;
 class ImportExportServices extends \Rvx\Services\Service
 {
     public function importSupportedAppStore($data)
@@ -15,8 +16,11 @@ class ImportExportServices extends \Rvx\Services\Service
     {
         $files = $request->get_file_params();
         $data = $request->get_params();
-        $this->importReviewStore($files, $data);
-        return (new ReviewImportAndExportApi())->importStore($data, $files);
+        return TransactionManager::run(function () use($files, $data) {
+            return $this->importReviewStore($files, $data);
+        }, function () use($files, $data) {
+            return (new ReviewImportAndExportApi())->importStore($data, $files);
+        });
     }
     public function importReviewStore($files, $data)
     {
@@ -86,8 +90,19 @@ class ImportExportServices extends \Rvx\Services\Service
         if (!empty($post_type) && \strtolower($post_type) != 'product') {
             $comment_type = 'comment';
         }
-        $comment_data = ['comment_post_ID' => $reviews_id, 'comment_author' => $review_data[$request['map']['customer_name']], 'comment_author_email' => $review_data[$request['map']['customer_email']], 'comment_content' => $review_data[$request['map']['feedback']], 'comment_date' => !empty($review_data[$request['map']['created_at']]) && \strtotime($review_data[$request['map']['created_at']]) !== \false ? \wp_date('Y-m-d H:i:s', \strtotime($review_data[$request['map']['created_at']])) : \wp_date('Y-m-d H:i:s'), 'comment_approved' => Helper::arrayGet($request, 'status'), 'comment_type' => $comment_type, 'comment_meta' => ['reviewx_title' => $review_data[$request['map']['review_title']] ?? null, 'rating' => $review_data[$request['map']['rating']] ?? 5, 'reviewx_attachments' => $mediaArray, 'verified' => Helper::arrayGet($request, 'verified')]];
-        wp_insert_comment($comment_data);
+        $comment_data = ['comment_post_ID' => $reviews_id, 'comment_author' => $review_data[$request['map']['customer_name']], 'comment_author_email' => $review_data[$request['map']['customer_email']], 'comment_content' => $review_data[$request['map']['feedback']], 'comment_date' => !empty($review_data[$request['map']['created_at']]) && \strtotime($review_data[$request['map']['created_at']]) !== \false ? \wp_date('Y-m-d H:i:s', \strtotime($review_data[$request['map']['created_at']])) : \wp_date('Y-m-d H:i:s'), 'comment_approved' => Helper::arrayGet($request, 'status'), 'comment_type' => $comment_type];
+        $comment_id = wp_insert_comment($comment_data);
+        if ($comment_id && !\is_wp_error($comment_id)) {
+            update_comment_meta($comment_id, 'reviewx_title', $review_data[$request['map']['review_title']] ?? null);
+            update_comment_meta($comment_id, 'rating', $review_data[$request['map']['rating']] ?? 5);
+            update_comment_meta($comment_id, 'reviewx_attachments', $mediaArray);
+            update_comment_meta($comment_id, 'verified', Helper::arrayGet($request, 'verified'));
+            update_comment_meta($comment_id, 'rvx_review_version', 'v2');
+            // Explicitly trigger aggregation if approved
+            if ($comment_data['comment_approved'] == 1) {
+                \Rvx\CPT\CptAverageRating::update_average_rating($reviews_id);
+            }
+        }
     }
     /**
      * @throws Exception

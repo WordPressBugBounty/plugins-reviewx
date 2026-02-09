@@ -76,9 +76,13 @@ class ReviewsApi extends \Rvx\Api\BaseApi
      * @return Response
      * @throws Exception
      */
-    public function restoreReview($wpUniqueId) : Response
+    public function restoreReview($wpUniqueId, $status = null) : Response
     {
-        return $this->put('reviews/' . $wpUniqueId . '/restore');
+        $route = 'reviews/' . $wpUniqueId . '/restore';
+        if ($status) {
+            $route .= '?status=' . $status;
+        }
+        return $this->put($route);
     }
     /**
      * @param $data

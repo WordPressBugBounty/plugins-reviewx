@@ -50,6 +50,9 @@ class Helper
     public static function getApiResponse($response)
     {
         try {
+            if (!\is_object($response)) {
+                return self::rest([])->fails('Invalid response from SaaS');
+            }
             if ($response->getStatusCode() >= Response::HTTP_OK && $response->getStatusCode() < 300) {
                 return self::rest($response->getApiData())->success($response()->message, $response->getStatusCode());
             }
