@@ -77,7 +77,7 @@ class AuthController implements InvokableContract
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
             // Set the localStorage isAlreadySyncSuccess
-            set_transient('rvx_reset_sync_flag', \true);
+            \set_transient('rvx_reset_sync_flag', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();
@@ -126,7 +126,7 @@ class AuthController implements InvokableContract
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
             // Set the localStorage isAlreadySyncSuccess
-            set_transient('rvx_reset_sync_flag', \true);
+            \set_transient('rvx_reset_sync_flag', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();
@@ -144,7 +144,7 @@ class AuthController implements InvokableContract
         $isOldReviewXExists = ReviewXChecker::isReviewXExists();
         $isReviewXSaaSExists = ReviewXChecker::isReviewXSaasExists();
         if ($isOldReviewXExists && !$isReviewXSaaSExists) {
-            $options = get_option('_rx_option_review_criteria');
+            $options = \get_option('_rx_option_review_criteria');
             $keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
             $criterias = [];
             $i = 0;
@@ -154,7 +154,7 @@ class AuthController implements InvokableContract
                 }
                 $i++;
             }
-            $multicrtriaEnableorDisable = get_option('_rx_option_allow_multi_criteria');
+            $multicrtriaEnableorDisable = \get_option('_rx_option_allow_multi_criteria');
             $data = ["enable" => $multicrtriaEnableorDisable == 1 ? \true : \false, "criterias" => $criterias];
         } elseif ($isReviewXSaaSExists) {
             $data = (array) (new SettingService())->getReviewSettings('product') ?? [];
@@ -215,7 +215,7 @@ class AuthController implements InvokableContract
             $this->loginService->resetPostMeta();
             $this->removeUserSettingsFormLocal();
             // Set the localStorage isAlreadySyncSuccess
-            set_transient('rvx_reset_sync_flag', \true);
+            \set_transient('rvx_reset_sync_flag', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();

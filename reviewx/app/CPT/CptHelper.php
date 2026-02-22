@@ -12,7 +12,7 @@ class CptHelper
             return [];
         }
         // Retrieve settings
-        $data = get_option('_rvx_cpt_settings');
+        $data = \get_option('_rvx_cpt_settings');
         // Default enabled post types
         $enabled_post_types = ['product' => 'product'];
         // Validate data before processing
@@ -66,14 +66,14 @@ class CptHelper
             return [];
         }
         // Retrieve settings with default as an empty array
-        $data = get_option('_rvx_cpt_settings', []);
+        $data = \get_option('_rvx_cpt_settings', []);
         // Ensure the data is always an array
         return \is_array($data) ? $data : [];
     }
     public function cptSettingsOnSync() : array
     {
         // Retrieve settings with default as an empty array
-        $data = get_option('_rvx_cpt_settings', []);
+        $data = \get_option('_rvx_cpt_settings', []);
         // Ensure the data is always an array
         return \is_array($data) ? $data : [];
     }

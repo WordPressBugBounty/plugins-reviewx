@@ -29,9 +29,9 @@ class FilesystemLoader implements LoaderInterface
      * @param string|array $paths    A path or an array of paths where to look for templates
      * @param string|null  $rootPath The root path common to all relative paths (null for getcwd())
      */
-    public function __construct($paths = [], ?string $rootPath = null)
+    public function __construct($paths = [], string $rootPath = null)
     {
-        $this->rootPath = ($rootPath ?? \getcwd()) . \DIRECTORY_SEPARATOR;
+        $this->rootPath = (null === $rootPath ? \getcwd() : $rootPath) . \DIRECTORY_SEPARATOR;
         if (null !== $rootPath && \false !== ($realPath = \realpath($rootPath))) {
             $this->rootPath = $realPath . \DIRECTORY_SEPARATOR;
         }
@@ -152,7 +152,7 @@ class FilesystemLoader implements LoaderInterface
             throw new LoaderError($this->errorCache[$name]);
         }
         try {
-            [$namespace, $shortname] = $this->parseName($name);
+            list($namespace, $shortname) = $this->parseName($name);
             $this->validateName($shortname);
         } catch (LoaderError $e) {
             if (!$throw) {
@@ -202,7 +202,7 @@ class FilesystemLoader implements LoaderInterface
     }
     private function validateName(string $name) : void
     {
-        if (\str_contains($name, "\x00")) {
+        if (\false !== \strpos($name, "\x00")) {
             throw new LoaderError('A template name cannot contain NUL bytes.');
         }
         $name = \ltrim($name, '/');

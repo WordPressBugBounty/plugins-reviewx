@@ -10,7 +10,6 @@
  */
 namespace Rvx\Twig\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 use Rvx\Twig\Node\Expression\AbstractExpression;
 use Rvx\Twig\Node\Expression\ConstantExpression;
@@ -19,10 +18,9 @@ use Rvx\Twig\Node\Expression\ConstantExpression;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-#[YieldReady]
 class DeprecatedNode extends Node
 {
-    public function __construct(AbstractExpression $expr, int $lineno, ?string $tag = null)
+    public function __construct(AbstractExpression $expr, int $lineno, string $tag = null)
     {
         parent::__construct(['expr' => $expr], [], $lineno, $tag);
     }
@@ -30,28 +28,12 @@ class DeprecatedNode extends Node
     {
         $compiler->addDebugInfo($this);
         $expr = $this->getNode('expr');
-        if (!$expr instanceof ConstantExpression) {
-            $varName = $compiler->getVarName();
-            $compiler->write(\sprintf('$%s = ', $varName))->subcompile($expr)->raw(";\n");
-        }
-        $compiler->write('trigger_deprecation(');
-        if ($this->hasNode('package')) {
-            $compiler->subcompile($this->getNode('package'));
-        } else {
-            $compiler->raw("''");
-        }
-        $compiler->raw(', ');
-        if ($this->hasNode('version')) {
-            $compiler->subcompile($this->getNode('version'));
-        } else {
-            $compiler->raw("''");
-        }
-        $compiler->raw(', ');
         if ($expr instanceof ConstantExpression) {
-            $compiler->subcompile($expr);
+            $compiler->write('@trigger_error(')->subcompile($expr);
         } else {
-            $compiler->write(\sprintf('$%s', $varName));
+            $varName = $compiler->getVarName();
+            $compiler->write(\sprintf('$%s = ', $varName))->subcompile($expr)->raw(";\n")->write(\sprintf('@trigger_error($%s', $varName));
         }
-        $compiler->raw(".")->string(\sprintf(' in "%s" at line %d.', $this->getTemplateName(), $this->getTemplateLine()))->raw(");\n");
+        $compiler->raw('.')->string(\sprintf(' ("%s" at line %d).', $this->getTemplateName(), $this->getTemplateLine()))->raw(", E_USER_DEPRECATED);\n");
     }
 }

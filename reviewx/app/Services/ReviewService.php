@@ -35,7 +35,7 @@ class ReviewService extends \Rvx\Services\Service
         }, function ($commentId) use($request) {
             $appReviewData = $this->prepareAppReviewData($request->get_params(), $commentId);
             // Ensure SaaS payload rating equals the exact value stored in WP DB
-            $storedRating = get_comment_meta($commentId, 'rating', \true);
+            $storedRating = \get_comment_meta($commentId, 'rating', \true);
             $appReviewData['rating'] = \is_numeric($storedRating) ? (float) \round($storedRating, 2) : (float) 0.0;
             return $this->reviewApi->create($appReviewData);
         });
@@ -73,7 +73,7 @@ class ReviewService extends \Rvx\Services\Service
                 $wcAverageRating = (float) \round($data->get_params()['rating'], 2);
             }
             $wpCommentData['comment_meta'] = ['reviewx_title' => \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null), 'is_recommended' => \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0, 'verified' => \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified'], 'is_anonymous' => \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0, 'rvx_criterias' => $criterias, 'rating' => $wcAverageRating, 'reviewx_attachments' => $attachments, 'rvx_review_version' => 'v2'];
-            $commentId = wp_insert_comment($wpCommentData);
+            $commentId = \wp_insert_comment($wpCommentData);
             if (!\is_wp_error($commentId) && $commentId > 0) {
                 \Rvx\CPT\CptAverageRating::update_average_rating($wpCommentData['comment_post_ID']);
                 return $commentId;
@@ -96,7 +96,7 @@ class ReviewService extends \Rvx\Services\Service
                 $wcAverageRating = \round($data->get_params()['rating'], 2);
             }
             $wpCommentData['comment_meta'] = ['reviewx_title' => \strip_tags(\array_key_exists('title', $data->get_params()) ? $data->get_params()['title'] : null), 'is_recommended' => \array_key_exists('is_recommended', $data->get_params()) && $data->get_params()['is_recommended'] === "true" ? 1 : 0, 'verified' => \array_key_exists('verified', $data->get_params()) && $data->get_params()['verified'], 'is_anonymous' => \array_key_exists('is_anonymous', $data->get_params()) && $data->get_params()['is_anonymous'] === "true" ? 1 : 0, 'rvx_criterias' => $criterias, 'rating' => $wcAverageRating, 'reviewx_attachments' => $attachments, 'rvx_review_version' => 'v2'];
-            $commentId = wp_insert_comment($wpCommentData);
+            $commentId = \wp_insert_comment($wpCommentData);
             if (!\is_wp_error($commentId) && $commentId > 0) {
                 \Rvx\CPT\CptAverageRating::update_average_rating($wpCommentData['comment_post_ID']);
                 return (int) $commentId;
@@ -189,7 +189,7 @@ class ReviewService extends \Rvx\Services\Service
     public function restoreTrashToPublish($review_unique_id)
     {
         $id = $this->getLastSegment($review_unique_id);
-        $status = get_comment_meta($id, '_wp_trash_meta_status', \true);
+        $status = \get_comment_meta($id, '_wp_trash_meta_status', \true);
         if ($status) {
             wp_set_comment_status($id, 'approve');
         } else {
@@ -213,7 +213,7 @@ class ReviewService extends \Rvx\Services\Service
     public function bulkRestoreTrashItem($data)
     {
         foreach ($data['wp_id'] as $id) {
-            $status = get_comment_meta($id, '_wp_trash_meta_status', \true);
+            $status = \get_comment_meta($id, '_wp_trash_meta_status', \true);
             if ($status == 'approve' || $status == ReviewStatusEnum::APPROVED) {
                 wp_set_comment_status($id, 'approve');
             } elseif ($status == 'hold' || $status == ReviewStatusEnum::PENDING) {
@@ -300,7 +300,7 @@ class ReviewService extends \Rvx\Services\Service
         }
         $replyData = $this->prepareDataForReply($parent_comment, $replies, $parentReviewId);
         if ($parent_comment->comment_parent == 0) {
-            $replayId = wp_insert_comment($replyData);
+            $replayId = \wp_insert_comment($replyData);
             return \true;
         }
     }
@@ -348,7 +348,7 @@ class ReviewService extends \Rvx\Services\Service
         global $wpdb;
         $wpdb->query('START TRANSACTION');
         try {
-            $comment_id = wp_insert_comment($this->aiReviewWp($request));
+            $comment_id = \wp_insert_comment($this->aiReviewWp($request));
             $reviApp = $this->aiReviewApp($request, $comment_id);
             $reviewApi = new ReviewsApi();
             $res = $reviewApi->aiReview($reviApp);
@@ -369,7 +369,7 @@ class ReviewService extends \Rvx\Services\Service
                     continue;
                 }
                 $aggregation_data = \json_encode(wp_slash(Helper::arrayGet($data, "meta")), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-                set_transient("rvx_{$productId}_latest_reviews_insight", $aggregation_data, 604800);
+                \set_transient("rvx_{$productId}_latest_reviews_insight", $aggregation_data, 604800);
                 // Expires in 7 days
             }
             return Helper::rest()->success("Success");
@@ -433,37 +433,37 @@ class ReviewService extends \Rvx\Services\Service
         $params = $data->get_params();
         // 1. Title
         if (isset($params['title'])) {
-            update_comment_meta($reviewId, 'reviewx_title', sanitize_text_field($params['title']));
+            \update_comment_meta($reviewId, 'reviewx_title', sanitize_text_field($params['title']));
         }
         // 2. Rating & Criterias
         $criterias = $params['criterias'] ?? null;
         if ($criterias !== null) {
-            update_comment_meta($reviewId, 'rvx_criterias', $criterias);
+            \update_comment_meta($reviewId, 'rvx_criterias', $criterias);
             $wp_post_id = $params['wp_post_id'] ?? get_comment($reviewId)->comment_post_ID;
             $isAllowedMultiCriteria = (new \Rvx\Services\SettingService())->getReviewSettings(get_post_type($wp_post_id))['reviews']['multicriteria']['enable'] ?? \false;
             if ($isAllowedMultiCriteria) {
                 $wcAverageRating = $this->calculateAverageRating($criterias);
-                update_comment_meta($reviewId, 'rating', $wcAverageRating);
-                update_comment_meta($reviewId, 'reviewx_rating', $wcAverageRating);
+                \update_comment_meta($reviewId, 'rating', $wcAverageRating);
+                \update_comment_meta($reviewId, 'reviewx_rating', $wcAverageRating);
             }
         } elseif (isset($params['rating'])) {
             $rating = (float) \round($params['rating'], 2);
-            update_comment_meta($reviewId, 'rating', $rating);
-            update_comment_meta($reviewId, 'reviewx_rating', $rating);
+            \update_comment_meta($reviewId, 'rating', $rating);
+            \update_comment_meta($reviewId, 'reviewx_rating', $rating);
         }
         // 3. Flags (Safe updates using filter_var for string booleans)
         if (isset($params['verified'])) {
-            update_comment_meta($reviewId, 'verified', \filter_var($params['verified'], \FILTER_VALIDATE_BOOLEAN));
+            \update_comment_meta($reviewId, 'verified', \filter_var($params['verified'], \FILTER_VALIDATE_BOOLEAN));
         }
         if (isset($params['is_recommended'])) {
-            update_comment_meta($reviewId, 'is_recommended', \filter_var($params['is_recommended'], \FILTER_VALIDATE_BOOLEAN) ? 1 : 0);
+            \update_comment_meta($reviewId, 'is_recommended', \filter_var($params['is_recommended'], \FILTER_VALIDATE_BOOLEAN) ? 1 : 0);
         }
         if (isset($params['is_anonymous'])) {
-            update_comment_meta($reviewId, 'is_anonymous', \filter_var($params['is_anonymous'], \FILTER_VALIDATE_BOOLEAN) ? 1 : 0);
+            \update_comment_meta($reviewId, 'is_anonymous', \filter_var($params['is_anonymous'], \FILTER_VALIDATE_BOOLEAN) ? 1 : 0);
         }
         // 4. Attachments
         if (isset($params['attachments'])) {
-            update_comment_meta($reviewId, 'reviewx_attachments', $params['attachments'] ?? []);
+            \update_comment_meta($reviewId, 'reviewx_attachments', $params['attachments'] ?? []);
         }
     }
     /**
@@ -714,7 +714,7 @@ class ReviewService extends \Rvx\Services\Service
                 $image_urls = \array_map(function ($file) {
                     return $file['file'];
                 }, $files);
-                update_comment_meta($wp_unique_id, 'reviewx_attachments', $image_urls);
+                \update_comment_meta($wp_unique_id, 'reviewx_attachments', $image_urls);
                 // Add the data for this review
                 $response[] = ['wp_unique_id' => Client::getUid() . '-' . $wp_unique_id, 'files' => $files];
             }
@@ -779,7 +779,7 @@ class ReviewService extends \Rvx\Services\Service
             if (!$comment) {
                 continue;
             }
-            $data = ['wp_id' => (int) $comment->comment_ID, 'product_wp_unique_id' => Client::getUid() . '-' . $comment->comment_post_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'rating' => (float) \round(get_comment_meta($comment->comment_ID, 'rating', \true), 2), 'feedback' => $comment->comment_content, 'created_at' => $comment->comment_date, 'title' => get_comment_meta($comment->comment_ID, 'rvx_comment_title', \true), 'order_item_wp_unique_id' => get_comment_meta($comment->comment_ID, 'rvx_comment_order_item', \true), 'criterias' => get_comment_meta($comment->comment_ID, 'rvx_criterias', \true)];
+            $data = ['wp_id' => (int) $comment->comment_ID, 'product_wp_unique_id' => Client::getUid() . '-' . $comment->comment_post_ID, 'wp_post_id' => (int) $comment->comment_post_ID, 'reviewer_email' => $comment->comment_author_email, 'reviewer_name' => $comment->comment_author, 'rating' => (float) \round(\get_comment_meta($comment->comment_ID, 'rating', \true), 2), 'feedback' => $comment->comment_content, 'created_at' => $comment->comment_date, 'title' => \get_comment_meta($comment->comment_ID, 'rvx_comment_title', \true), 'order_item_wp_unique_id' => \get_comment_meta($comment->comment_ID, 'rvx_comment_order_item', \true), 'criterias' => \get_comment_meta($comment->comment_ID, 'rvx_criterias', \true)];
             $reviewData['reviews'][] = $data;
         }
         return $reviewData;
@@ -815,9 +815,9 @@ class ReviewService extends \Rvx\Services\Service
                     $wcAverageRating = (float) sanitize_text_field(\round($data['reviews'][$index]['rating'], 2)) ?? 0.0;
                     $modified_criteria = null;
                 }
-                $commentId = wp_insert_comment($comment);
+                $commentId = \wp_insert_comment($comment);
                 add_comment_meta($commentId, 'rvx_comment_title', sanitize_text_field($data['reviews'][$index]['title'] ?? null));
-                update_comment_meta($commentId, 'rvx_criterias', $modified_criteria);
+                \update_comment_meta($commentId, 'rvx_criterias', $modified_criteria);
                 add_comment_meta($commentId, 'rating', $wcAverageRating);
                 add_comment_meta($commentId, 'rvx_comment_order_item', sanitize_text_field($data['reviews'][$index]['order_item_wp_unique_id']));
                 add_comment_meta($commentId, 'verified', 1);
@@ -868,12 +868,12 @@ class ReviewService extends \Rvx\Services\Service
     public function setAllReviewsMetaTransient($site_id, $post_type, $latest_reviews)
     {
         $post_type = $post_type != null ? $post_type : 'all';
-        set_transient("rvx_{$site_id}_{$post_type}_reviews", wp_slash($latest_reviews), 3600);
+        \set_transient("rvx_{$site_id}_{$post_type}_reviews", wp_slash($latest_reviews), 3600);
         // Expires in 1 hour
     }
     public function postMetaReviewInsert($id, $latest_reviews)
     {
-        set_transient("rvx_{$id}_latest_reviews", wp_slash($latest_reviews), 3600);
+        \set_transient("rvx_{$id}_latest_reviews", wp_slash($latest_reviews), 3600);
         // Expires in 1 hour
     }
     public function allReviewApproveCount() : int

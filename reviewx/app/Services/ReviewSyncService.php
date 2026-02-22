@@ -34,7 +34,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         $this->reviewService = new ReviewService();
         $this->migrationData = new MigrationPrompt();
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
-            $this->criteria = get_option('_rx_option_review_criteria') ?? [];
+            $this->criteria = \get_option('_rx_option_review_criteria') ?? [];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
             $this->criteria = (new \Rvx\Services\SettingService())->getReviewSettings('product')['reviews']['multicriteria']["criterias"] ?? [];
         } else {
@@ -216,7 +216,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         }
         // Update the comment meta with the new format
         if (!empty($newArray)) {
-            update_comment_meta($commentId, 'rvx_criterias', $newArray);
+            \update_comment_meta($commentId, 'rvx_criterias', $newArray);
         }
         return $newArray;
     }
@@ -258,12 +258,12 @@ class ReviewSyncService extends \Rvx\Services\Service
             }
         }
         // Update the 'rating' comment meta with the new format
-        $ratingValue = get_comment_meta($commentId, 'rating', \true);
+        $ratingValue = \get_comment_meta($commentId, 'rating', \true);
         $currentRating = (float) \is_numeric($ratingValue) ? (float) \round($ratingValue, 2) : (float) 0.0;
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
         $critriaAllowed = $this->migrationData->rvx_retrieve_old_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
-            update_comment_meta($commentId, 'rating', $averageRating);
+            \update_comment_meta($commentId, 'rating', $averageRating);
         }
         // Fill in missing keys ('a' to 'j') with default value 0
         $allKeys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
@@ -275,7 +275,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         }
         // Update the 'rvx_criterias' comment meta with the new format
         if (!empty($newCriteria)) {
-            update_comment_meta($commentId, 'rvx_criterias', $newCriteria);
+            \update_comment_meta($commentId, 'rvx_criterias', $newCriteria);
         }
         return $newCriteria;
     }
@@ -297,12 +297,12 @@ class ReviewSyncService extends \Rvx\Services\Service
         $newCriteria = $metaValue;
         // Start with existing metaValue if valid
         // Update the 'rating' comment meta with the new format
-        $ratingValue = get_comment_meta($commentId, 'rating', \true);
+        $ratingValue = \get_comment_meta($commentId, 'rating', \true);
         $currentRating = (float) \is_numeric($ratingValue) ? (float) \round($ratingValue, 2) : (float) 0.0;
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
         $critriaAllowed = $this->migrationData->rvx_retrieve_saas_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
-            update_comment_meta($commentId, 'rating', $averageRating);
+            \update_comment_meta($commentId, 'rating', $averageRating);
         }
         // Fill in missing keys ('a' to 'j') with default value 0
         $allKeys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
@@ -317,7 +317,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         }
         // Update the comment meta with the new format
         if (!empty($newCriteria)) {
-            update_comment_meta($commentId, 'rvx_criterias', $newCriteria);
+            \update_comment_meta($commentId, 'rvx_criterias', $newCriteria);
         }
         return $newCriteria;
         // Ensure all keys from 'a' to 'j' are present
@@ -358,7 +358,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         }
         // Update the comment meta with IDs for images and URLs for videos
         if (!empty($links)) {
-            update_comment_meta($commentId, 'reviewx_attachments', $links);
+            \update_comment_meta($commentId, 'reviewx_attachments', $links);
         }
         return $links;
         // Return URLs

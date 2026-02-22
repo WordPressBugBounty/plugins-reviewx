@@ -67,11 +67,14 @@ class Helper
     }
     public static function saasResponse($response) : Response
     {
-        $content = $response()->get()->toArray();
-        if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
-            return self::rest($content["data"])->success($content["message"], $response->getStatusCode());
+        $content = $response->autoParse();
+        $statusCode = $response->getStatusCode();
+        $data = $content['data'] ?? [];
+        $message = $content['message'] ?? ($statusCode >= 400 ? 'SaaS API Error' : 'Success');
+        if ($statusCode >= 200 && $statusCode < 300) {
+            return self::rest($data)->success($message, $statusCode);
         } else {
-            return self::rest($content["data"])->fails($content["message"], $response->getStatusCode());
+            return self::rest($data)->fails((string) $message, $statusCode);
         }
     }
     public static function loggedIn()

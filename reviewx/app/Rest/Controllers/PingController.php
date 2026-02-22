@@ -28,7 +28,7 @@ class PingController
             if (\false === $data) {
                 // Cache miss: fetch fresh data, store and return
                 $data = $this->pingService->ping();
-                set_transient('rvx_ping_cache', $data, $cache_duration);
+                \set_transient('rvx_ping_cache', $data, $cache_duration);
             }
             return Helper::rvxApi($data)->success(__('Plugin Active', 'reviewx'), 200);
         } catch (Exception $e) {

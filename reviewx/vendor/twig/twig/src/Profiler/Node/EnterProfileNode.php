@@ -10,7 +10,6 @@
  */
 namespace Rvx\Twig\Profiler\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 use Rvx\Twig\Node\Node;
 /**
@@ -18,7 +17,6 @@ use Rvx\Twig\Node\Node;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class EnterProfileNode extends Node
 {
     public function __construct(string $extensionName, string $type, string $name, string $varName)

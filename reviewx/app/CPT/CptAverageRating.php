@@ -58,7 +58,7 @@ class CptAverageRating
         global $wpdb;
         // Fetch all approved comment ratings for the post, only for parent comments.
         $ratings = $wpdb->get_col($wpdb->prepare("SELECT cm.meta_value \n            FROM {$wpdb->commentmeta} AS cm\n            INNER JOIN {$wpdb->comments} AS c\n            ON cm.comment_id = c.comment_ID\n            WHERE cm.meta_key = 'rating'\n            AND c.comment_post_ID = %d\n            AND c.comment_approved = '1'\n            AND c.comment_parent = 0", $post_id));
-        $average_rating = get_post_meta($post_id, 'rvx_avg_rating', \true);
+        $average_rating = \get_post_meta($post_id, 'rvx_avg_rating', \true);
         if (empty($average_rating)) {
             $average_rating = 0.0;
         }
@@ -69,28 +69,28 @@ class CptAverageRating
             // Calculate individual star counts
             $starCounts = \array_count_values(\array_map('intval', $ratings));
             // Store the average rating and count as post meta
-            update_post_meta($post_id, 'rvx_avg_rating', (float) $average_rating);
-            update_post_meta($post_id, 'rating', (float) $average_rating);
-            update_post_meta($post_id, 'rvx_total_reviews', (int) $count);
+            \update_post_meta($post_id, 'rvx_avg_rating', (float) $average_rating);
+            \update_post_meta($post_id, 'rating', (float) $average_rating);
+            \update_post_meta($post_id, 'rvx_total_reviews', (int) $count);
             // Store individual star counts
             for ($i = 1; $i <= 5; $i++) {
-                update_post_meta($post_id, "rvx_star_count_{$i}", (int) ($starCounts[$i] ?? 0));
+                \update_post_meta($post_id, "rvx_star_count_{$i}", (int) ($starCounts[$i] ?? 0));
             }
             if ($post_type === 'product') {
-                update_post_meta($post_id, '_wc_average_rating', (float) $average_rating);
-                update_post_meta($post_id, '_wc_review_count', (int) $count);
+                \update_post_meta($post_id, '_wc_average_rating', (float) $average_rating);
+                \update_post_meta($post_id, '_wc_review_count', (int) $count);
             }
         } else {
             // No ratings found, set the meta keys to 0.
-            update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
-            update_post_meta($post_id, 'rating', (float) 0.0);
-            update_post_meta($post_id, 'rvx_total_reviews', 0);
+            \update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
+            \update_post_meta($post_id, 'rating', (float) 0.0);
+            \update_post_meta($post_id, 'rvx_total_reviews', 0);
             for ($i = 1; $i <= 5; $i++) {
-                update_post_meta($post_id, "rvx_star_count_{$i}", 0);
+                \update_post_meta($post_id, "rvx_star_count_{$i}", 0);
             }
             if ($post_type === 'product') {
-                update_post_meta($post_id, '_wc_average_rating', (float) 0.0);
-                update_post_meta($post_id, '_wc_review_count', 0);
+                \update_post_meta($post_id, '_wc_average_rating', (float) 0.0);
+                \update_post_meta($post_id, '_wc_review_count', 0);
             }
         }
     }
@@ -113,10 +113,10 @@ class CptAverageRating
             return;
         }
         // Check if the rvx_avg_rating key already exists
-        if (!get_post_meta($post_id, 'rvx_avg_rating', \true)) {
+        if (!\get_post_meta($post_id, 'rvx_avg_rating', \true)) {
             // Add the rvx_avg_rating meta key with an initial value (0.00)
-            update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
-            update_post_meta($post_id, 'rating', (float) 0.0);
+            \update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
+            \update_post_meta($post_id, 'rating', (float) 0.0);
         }
     }
 }

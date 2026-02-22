@@ -12,10 +12,10 @@ class OrderStatusChangedHandler
     public function __invoke($order_id, $old_status, $new_status, $order)
     {
         if (isset($_GET['page']) && $_GET['page'] === 'wc-orders' && $_GET['action'] === 'edit') {
-            $is_new_order = get_post_meta($order_id, '_is_new_order', \true);
+            $is_new_order = \get_post_meta($order_id, '_is_new_order', \true);
             if ($is_new_order) {
                 // Remove the flag to allow future status changes to trigger this hook
-                delete_post_meta($order_id, '_rvx_is_new_order');
+                \delete_post_meta($order_id, '_rvx_is_new_order');
                 return;
             }
             $payload = $this->prepareData($order, $new_status, $old_status);

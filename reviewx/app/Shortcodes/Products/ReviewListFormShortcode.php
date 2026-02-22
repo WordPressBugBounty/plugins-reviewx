@@ -28,7 +28,7 @@ class ReviewListFormShortcode implements ShortcodeContract
         $attributes = $this->sanitizeAttributes($attrs);
         $title = $this->resolveTitle($attrs['title'], $data['product']['postTitle']);
         $formData = $this->reviewFormHelper->builderCustomizedFormTextsData();
-        return View::render('storefront/shortcode/reviewListForm', ['title' => $title, 'data' => wp_json_encode($data), 'attributes' => $attributes, 'formLevelData' => $formData, 'wooVerificationRequired' => 'yes' === get_option('woocommerce_review_rating_verification_required'), 'isVerifiedCustomer' => $data['userInfo']['isVerified'], 'requireSignIn' => (bool) get_option('comment_registration'), 'user_is_logged_in' => $data['userInfo']['isLoggedIn'], 'login_url' => wp_login_url(esc_url(add_query_arg([], wp_unslash($_SERVER['REQUEST_URI'])))), 'register_url' => wp_registration_url(), 'registration_enabled' => (bool) get_option('users_can_register')]);
+        return View::render('storefront/shortcode/reviewListForm', ['title' => $title, 'data' => wp_json_encode($data), 'attributes' => $attributes, 'formLevelData' => $formData, 'wooVerificationRequired' => 'yes' === \get_option('woocommerce_review_rating_verification_required'), 'isVerifiedCustomer' => $data['userInfo']['isVerified'], 'requireSignIn' => (bool) \get_option('comment_registration'), 'user_is_logged_in' => $data['userInfo']['isLoggedIn'], 'login_url' => wp_login_url(esc_url(add_query_arg([], wp_unslash($_SERVER['REQUEST_URI'])))), 'register_url' => wp_registration_url(), 'registration_enabled' => (bool) \get_option('users_can_register')]);
     }
     private function error(string $message) : string
     {

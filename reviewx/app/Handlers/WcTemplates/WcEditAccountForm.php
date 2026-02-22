@@ -7,7 +7,7 @@ class WcEditAccountForm
     public function __invoke()
     {
         $user_id = get_current_user_id();
-        $attachment_id = get_user_meta($user_id, "rvx_image", \true);
+        $attachment_id = \get_user_meta($user_id, "rvx_image", \true);
         if ($attachment_id) {
             $original_image_url = wp_get_attachment_url($attachment_id);
         }

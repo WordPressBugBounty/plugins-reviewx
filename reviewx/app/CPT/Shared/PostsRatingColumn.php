@@ -63,7 +63,7 @@ class PostsRatingColumn
         if ($column === 'rating') {
             $post_type = get_post_type($post_id);
             $meta_key = 'product' === $post_type ? '_wc_average_rating' : 'rvx_avg_rating';
-            $rating = get_post_meta($post_id, $meta_key, \true);
+            $rating = \get_post_meta($post_id, $meta_key, \true);
             echo $this->getStarsHtml($rating ? $rating : 0);
             // Default to 0 if no rating
         }

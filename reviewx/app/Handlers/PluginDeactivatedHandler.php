@@ -16,7 +16,7 @@ class PluginDeactivatedHandler implements InvokableContract
             // Change rvx_sites table is_saas_sync to 0
             $wpdb->update($rvxSites, ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
             // Mark sync flag locally
-            set_transient('rvx_reset_sync_flag', \true);
+            \set_transient('rvx_reset_sync_flag', \true);
             try {
                 // Attempt API call — skip gracefully on failure
                 (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 0, 'plugin_version' => \defined('RVX_VERSION') ? RVX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);

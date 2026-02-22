@@ -45,7 +45,7 @@ class GoogleReviewLIst implements ShortcodeContract
         $reviews = $this->googleReview->googleReviewGet();
         $reviews = \json_decode($reviews, \true);
         $cache_duration = (int) $cache_time ?: DAY_IN_SECONDS;
-        set_transient($cache_key, $reviews['data'], $cache_duration);
+        \set_transient($cache_key, $reviews['data'], $cache_duration);
         if (empty($reviews['data']['reviews'])) {
             return [];
         }
@@ -66,7 +66,7 @@ class GoogleReviewLIst implements ShortcodeContract
         $response = $this->googleReviewService->googleReviewPlaceApi();
         $response = \json_decode($response, \true);
         $response = $response['data']['creadential']['google_place'];
-        set_transient('rvx_google_api_settings', $response, HOUR_IN_SECONDS);
+        \set_transient('rvx_google_api_settings', $response, HOUR_IN_SECONDS);
         if (empty($response['google_api_key']) || empty($response['google_place_id_or_url'])) {
             return [];
         }

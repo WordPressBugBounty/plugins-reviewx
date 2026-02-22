@@ -116,12 +116,12 @@ class ProductSyncService extends \Rvx\Services\Service
                 // Fetch fresh data immediately
                 $freshStars = [];
                 for ($i = 1; $i <= 5; $i++) {
-                    $freshStars[$i] = (int) get_post_meta($product->ID, "rvx_star_count_{$i}", \true);
+                    $freshStars[$i] = (int) \get_post_meta($product->ID, "rvx_star_count_{$i}", \true);
                 }
                 $this->postMetaStarCountsRelation[$product->ID] = $freshStars;
-                $freshTotal = (int) get_post_meta($product->ID, 'rvx_total_reviews', \true);
+                $freshTotal = (int) \get_post_meta($product->ID, 'rvx_total_reviews', \true);
                 $this->postMetaReviewsCountRelation[$product->ID] = $freshTotal;
-                $freshAvg = (float) get_post_meta($product->ID, 'rvx_avg_rating', \true);
+                $freshAvg = (float) \get_post_meta($product->ID, 'rvx_avg_rating', \true);
                 $this->postMetaAverageRatingRelation[$product->ID] = $freshAvg;
             }
             $cptStars = $this->postMetaStarCountsRelation[$product->ID];

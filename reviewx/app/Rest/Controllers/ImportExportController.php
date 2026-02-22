@@ -15,10 +15,10 @@ class ImportExportController implements InvokableContract
     /**
      *
      */
-    public function __construct()
+    public function __construct(ImportExportServices $importExportServices, CacheServices $cacheServices)
     {
-        $this->importExportServices = new ImportExportServices();
-        $this->cacheServices = new CacheServices();
+        $this->importExportServices = $importExportServices;
+        $this->cacheServices = $cacheServices;
     }
     public function __invoke()
     {
@@ -47,9 +47,9 @@ class ImportExportController implements InvokableContract
         try {
             $response = $this->importExportServices->importStore($request);
             $this->cacheServices->removeCache();
-            return Helper::saasResponse($response);
+            return Helper::rest($response['data'] ?? [])->success($response['message'] ?? 'Review Import started');
         } catch (Throwable $e) {
-            return Helper::rvxApi(['error' => $e->getMessage()])->fails('FIle Not Import', $e->getCode());
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Import Failed', $e->getCode());
         }
     }
     /**
@@ -97,6 +97,15 @@ class ImportExportController implements InvokableContract
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
+        }
+    }
+    public function rollbackReviews($request)
+    {
+        try {
+            $response = $this->importExportServices->rollbackImportByIds($request->get_params());
+            return Helper::rest($response)->success($response['message'] ?? 'Review Rollback Success');
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Rollback Failed', $e->getCode());
         }
     }
 }

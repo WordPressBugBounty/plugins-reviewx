@@ -19,10 +19,10 @@ class UserHandler
             // 'display_name' => $user->display_name,
             // 'role' => $user->roles,
             'avatar' => get_avatar_url($user->ID),
-            'city' => get_user_meta($user->ID, 'billing_city', \true) ?? '',
-            'phone' => get_user_meta($user->ID, 'billing_phone', \true) ?? '',
-            'address' => get_user_meta($user->ID, 'billing_address_1', \true) ?? '',
-            'country' => get_user_meta($user->ID, 'billing_country', \true) ?? '',
+            'city' => \get_user_meta($user->ID, 'billing_city', \true) ?? '',
+            'phone' => \get_user_meta($user->ID, 'billing_phone', \true) ?? '',
+            'address' => \get_user_meta($user->ID, 'billing_address_1', \true) ?? '',
+            'country' => \get_user_meta($user->ID, 'billing_country', \true) ?? '',
             'status' => 1,
         ];
         $response = (new UserApi())->create($data);

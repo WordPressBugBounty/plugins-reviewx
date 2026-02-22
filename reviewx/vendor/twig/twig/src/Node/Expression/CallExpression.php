@@ -14,19 +14,16 @@ use Rvx\Twig\Compiler;
 use Rvx\Twig\Error\SyntaxError;
 use Rvx\Twig\Extension\ExtensionInterface;
 use Rvx\Twig\Node\Node;
-use Rvx\Twig\Util\ReflectionCallable;
 abstract class CallExpression extends AbstractExpression
 {
-    private $reflector = null;
+    private $reflector;
     protected function compileCallable(Compiler $compiler)
     {
         $callable = $this->getAttribute('callable');
-        if (\is_string($callable) && !\str_contains($callable, '::')) {
+        if (\is_string($callable) && \false === \strpos($callable, '::')) {
             $compiler->raw($callable);
         } else {
-            $rc = $this->reflectCallable($callable);
-            $r = $rc->getReflector();
-            $callable = $rc->getCallable();
+            [$r, $callable] = $this->reflectCallable($callable);
             if (\is_string($callable)) {
                 $compiler->raw($callable);
             } elseif (\is_array($callable) && \is_string($callable[0])) {
@@ -52,19 +49,9 @@ abstract class CallExpression extends AbstractExpression
     }
     protected function compileArguments(Compiler $compiler, $isArray = \false) : void
     {
-        if (\func_num_args() >= 2) {
-            trigger_deprecation('twig/twig', '3.11', 'Passing a second argument to "%s()" is deprecated.', __METHOD__);
-        }
         $compiler->raw($isArray ? '[' : '(');
         $first = \true;
-        if ($this->hasAttribute('needs_charset') && $this->getAttribute('needs_charset')) {
-            $compiler->raw('$this->env->getCharset()');
-            $first = \false;
-        }
         if ($this->hasAttribute('needs_environment') && $this->getAttribute('needs_environment')) {
-            if (!$first) {
-                $compiler->raw(', ');
-            }
             $compiler->raw('$this->env');
             $first = \false;
         }
@@ -131,7 +118,7 @@ abstract class CallExpression extends AbstractExpression
             }
             throw new \LogicException($message);
         }
-        [$callableParameters, $isPhpVariadic] = $this->getCallableParameters($callable, $isVariadic);
+        list($callableParameters, $isPhpVariadic) = $this->getCallableParameters($callable, $isVariadic);
         $arguments = [];
         $names = [];
         $missingArguments = [];
@@ -209,14 +196,9 @@ abstract class CallExpression extends AbstractExpression
     }
     private function getCallableParameters($callable, bool $isVariadic) : array
     {
-        $rc = $this->reflectCallable($callable);
-        $r = $rc->getReflector();
-        $callableName = $rc->getName();
+        [$r, , $callableName] = $this->reflectCallable($callable);
         $parameters = $r->getParameters();
         if ($this->hasNode('node')) {
-            \array_shift($parameters);
-        }
-        if ($this->hasAttribute('needs_charset') && $this->getAttribute('needs_charset')) {
             \array_shift($parameters);
         }
         if ($this->hasAttribute('needs_environment') && $this->getAttribute('needs_environment')) {
@@ -233,7 +215,7 @@ abstract class CallExpression extends AbstractExpression
         $isPhpVariadic = \false;
         if ($isVariadic) {
             $argument = \end($parameters);
-            $isArray = $argument && $argument->hasType() && $argument->getType() instanceof \ReflectionNamedType && 'array' === $argument->getType()->getName();
+            $isArray = $argument && $argument->hasType() && 'array' === $argument->getType()->getName();
             if ($isArray && $argument->isDefaultValueAvailable() && [] === $argument->getDefaultValue()) {
                 \array_pop($parameters);
             } elseif ($argument && $argument->isVariadic()) {
@@ -245,11 +227,41 @@ abstract class CallExpression extends AbstractExpression
         }
         return [$parameters, $isPhpVariadic];
     }
-    private function reflectCallable($callable) : ReflectionCallable
+    private function reflectCallable($callable)
     {
-        if (!$this->reflector) {
-            $this->reflector = new ReflectionCallable($callable, $this->getAttribute('type'), $this->getAttribute('name'));
+        if (null !== $this->reflector) {
+            return $this->reflector;
         }
-        return $this->reflector;
+        if (\is_string($callable) && \false !== ($pos = \strpos($callable, '::'))) {
+            $callable = [\substr($callable, 0, $pos), \substr($callable, 2 + $pos)];
+        }
+        if (\is_array($callable) && \method_exists($callable[0], $callable[1])) {
+            $r = new \ReflectionMethod($callable[0], $callable[1]);
+            return $this->reflector = [$r, $callable, $r->class . '::' . $r->name];
+        }
+        $checkVisibility = $callable instanceof \Closure;
+        try {
+            $closure = \Closure::fromCallable($callable);
+        } catch (\TypeError $e) {
+            throw new \LogicException(\sprintf('Callback for %s "%s" is not callable in the current scope.', $this->getAttribute('type'), $this->getAttribute('name')), 0, $e);
+        }
+        $r = new \ReflectionFunction($closure);
+        if (\false !== \strpos($r->name, '{closure}')) {
+            return $this->reflector = [$r, $callable, 'Closure'];
+        }
+        if ($object = $r->getClosureThis()) {
+            $callable = [$object, $r->name];
+            $callableName = (\function_exists('get_debug_type') ? \get_debug_type($object) : \get_class($object)) . '::' . $r->name;
+        } elseif (\PHP_VERSION_ID >= 80111 && ($class = $r->getClosureCalledClass())) {
+            $callableName = $class->name . '::' . $r->name;
+        } elseif (\PHP_VERSION_ID < 80111 && ($class = $r->getClosureScopeClass())) {
+            $callableName = (\is_array($callable) ? $callable[0] : $class->name) . '::' . $r->name;
+        } else {
+            $callable = $callableName = $r->name;
+        }
+        if ($checkVisibility && \is_array($callable) && \method_exists(...$callable) && !(new \ReflectionMethod(...$callable))->isPublic()) {
+            $callable = $r->getClosure();
+        }
+        return $this->reflector = [$r, $callable, $callableName];
     }
 }

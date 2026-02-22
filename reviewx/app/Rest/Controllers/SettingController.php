@@ -40,7 +40,7 @@ class SettingController
     public function userSettingsAccess($request)
     {
         $data = $request->get_params()['user_access'];
-        update_option('__user_setting_access', \json_encode($data));
+        \update_option('__user_setting_access', \json_encode($data));
     }
     public function saveApiReviewSettings($request)
     {
@@ -50,16 +50,16 @@ class SettingController
                 // Update Review Settings
                 $review_settings = $response->getApiData()['review_settings'];
                 if (!empty($review_settings['reviews']['show_verified_badge']) && $review_settings['reviews']['show_verified_badge'] === \true) {
-                    update_option('woocommerce_review_rating_verification_label', 'yes');
+                    \update_option('woocommerce_review_rating_verification_label', 'yes');
                 }
                 if (!empty($review_settings['reviews']['show_verified_badge']) && $review_settings['reviews']['show_verified_badge'] === \false) {
-                    update_option('woocommerce_review_rating_verification_label', 'no');
+                    \update_option('woocommerce_review_rating_verification_label', 'no');
                 }
                 if (!empty($review_settings['reviews']['review_submission_policy']['options']['verified_customer']) && $review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \true) {
-                    update_option('woocommerce_review_rating_verification_required', 'yes');
+                    \update_option('woocommerce_review_rating_verification_required', 'yes');
                 }
                 if (!empty($review_settings['reviews']['review_submission_policy']['options']['verified_customer']) && $review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
-                    update_option('woocommerce_review_rating_verification_required', 'no');
+                    \update_option('woocommerce_review_rating_verification_required', 'no');
                 }
                 $this->settingService->updateReviewSettings($review_settings, $request['post_type']);
             }
@@ -133,7 +133,7 @@ class SettingController
     {
         $data = ["review_settings" => ["reviews" => ["review_submission_policy" => ["options" => ["anyone" => \true, "verified_customer" => \false]], "show_verified_badge" => \false, "review_eligibility" => ["pending_payment" => \false, "processing" => \false, "on_hold" => \false, "completed_payment" => \true, "cancelled" => \false, "refunded" => \false, "failed" => \false, "draft" => \false], "auto_approve_reviews" => \true, "show_reviewer_name" => \true, "show_reviewer_country" => \true, "enable_likes_dislikes" => ["enabled" => \true, "options" => ["allow_likes" => \true, "allow_dislikes" => \false]], "allow_review_sharing" => \true, "allow_review_titles" => \true, "photo_reviews_allowed" => \true, "video_reviews_allowed" => \true, "allow_recommendations" => \true, "anonymous_reviews_allowed" => \true, "show_consent_checkbox" => \true, "allow_multiple_reviews" => \true, "multi_criteria_reviews" => ["enabled" => \true, "criteria" => ["Quality", "Price", "Size"]]]]];
         $json_data = \json_encode($data);
-        update_option('your_option_name', $json_data);
+        \update_option('your_option_name', $json_data);
     }
     public function dataSyncStatus()
     {

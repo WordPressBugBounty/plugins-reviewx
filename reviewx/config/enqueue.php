@@ -111,17 +111,6 @@ return [
                         'type' => 'module',
                     ],
             ],
-            [
-                'handle' => 'reviewx-admin-review-import-judgeme-js',
-                'src' => 'frontend/dist/apps/importJudgeMe/rvx-review-import-judgeme.js',
-                'deps' => [],
-                'ver' => false,
-                'in_footer' => true,
-                'attributes' =>
-                    [
-                        'type' => 'module',
-                    ],
-            ],
         ],
    
        'localize_scripts' => [

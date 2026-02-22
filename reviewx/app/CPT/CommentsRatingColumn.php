@@ -54,7 +54,7 @@ class CommentsRatingColumn
             // Check if the comment's post type is in the target post types and comment type is 'review' and 'comment'
             if (\in_array($post_type, $enabled_post_types, \true) && \in_array($comment_type, ['comment', 'review'], \true)) {
                 // Get the rating meta data for the comment (reviews have 'rating' meta key)
-                $rating = get_comment_meta($comment_id, 'rating', \true);
+                $rating = \get_comment_meta($comment_id, 'rating', \true);
                 // If rating exists, display stars, otherwise show empty stars (0)
                 if ($rating) {
                     echo $this->getStarsHtml($rating);

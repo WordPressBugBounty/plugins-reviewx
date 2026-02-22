@@ -10,7 +10,6 @@
  */
 namespace Rvx\Twig\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 /**
  * Represents an autoescape node.
@@ -23,7 +22,6 @@ use Rvx\Twig\Compiler;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class AutoEscapeNode extends Node
 {
     public function __construct($value, Node $body, int $lineno, string $tag = 'autoescape')

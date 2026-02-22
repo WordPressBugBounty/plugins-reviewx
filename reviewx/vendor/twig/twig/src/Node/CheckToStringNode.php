@@ -10,7 +10,6 @@
  */
 namespace Rvx\Twig\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 use Rvx\Twig\Node\Expression\AbstractExpression;
 /**
@@ -23,7 +22,6 @@ use Rvx\Twig\Node\Expression\AbstractExpression;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class CheckToStringNode extends AbstractExpression
 {
     public function __construct(AbstractExpression $expr)

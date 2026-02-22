@@ -240,7 +240,7 @@ class StoreFrontReviewController implements InvokableContract
         \delete_transient("rvx_{$request->get_param("product_id")}_latest_reviews_insight");
         // Store the data in post meta as a JSON string
         $latestAggregationJson = \json_encode($latestAggregation, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-        set_transient("rvx_{$request->get_param("product_id")}_latest_reviews_insight", $latestAggregationJson, 604800);
+        \set_transient("rvx_{$request->get_param("product_id")}_latest_reviews_insight", $latestAggregationJson, 604800);
         // Expires in 7 days
         return $latestAggregation;
     }
@@ -334,7 +334,7 @@ class StoreFrontReviewController implements InvokableContract
     public function storeAggregationMeta($productId, $payload)
     {
         $aggregation_data = \json_encode(wp_slash(Helper::arrayGet($payload, "meta")), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-        set_transient("rvx_{$productId}_latest_reviews_insight", $aggregation_data, 604800);
+        \set_transient("rvx_{$productId}_latest_reviews_insight", $aggregation_data, 604800);
         // Expires in 7 days
     }
     public function reviewRequestStoreItem($request)
@@ -359,7 +359,7 @@ class StoreFrontReviewController implements InvokableContract
     public function getSpecificReviewItem($request)
     {
         try {
-            $defferentIds = $this->cacheService->clearShortcodesCache(get_option('_rvx_reviews_ids'), $request->get_params());
+            $defferentIds = $this->cacheService->clearShortcodesCache(\get_option('_rvx_reviews_ids'), $request->get_params());
             if ($defferentIds == \false) {
                 \delete_transient('rvx_shortcode_transient');
             }
@@ -371,8 +371,8 @@ class StoreFrontReviewController implements InvokableContract
             } else {
                 $response = $this->reviewService->getSpecificReviewItem($request);
                 $api_data = $response->getApiData();
-                set_transient($transient_key, $api_data, 12 * HOUR_IN_SECONDS);
-                update_option('_rvx_reviews_ids', $request->get_params());
+                \set_transient($transient_key, $api_data, 12 * HOUR_IN_SECONDS);
+                \update_option('_rvx_reviews_ids', $request->get_params());
                 return Helper::saasResponse($response);
             }
         } catch (Throwable $e) {

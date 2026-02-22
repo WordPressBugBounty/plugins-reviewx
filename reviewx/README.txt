@@ -1,13 +1,13 @@
 === ReviewX – WooCommerce Product Reviews with Multi-Criteria, Reminder Emails, Google Reviews, Schema & More ===
-Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, sadhinsabbir, sujansarkar, mhrubel, sakhawatsifat, akmshakib
+Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, mhrubel, sadhinsabbir, sujansarkar, sakhawatsifat, akmshakib
 Donate link: https://reviewx.io
 Tags: woocommerce reviews, product reviews, customer reviews, review reminder, google reviews
 Requires at least: 5.0
 Tested up to: 6.9
 WC requires at least: 3.1
 Requires PHP: 7.4
-WC tested up to: 10.4
-Stable tag: 2.3.2
+WC tested up to: 10.5
+Stable tag: 2.3.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,7 +83,7 @@ Whether you’re looking to boost customer engagement or improve product credibi
 
 **✍️ [Review for Custom Post](https://reviewx.io/docs/how-to-use-reviewx-with-custom-post-types/)**: Use ReviewX to collect customer reviews for WooCommerce on custom posts too. Whether it’s a blog post or a custom content type, you can gather valuable feedback from your audience.
 
-**🔄 [One-Click Judge.me Review Migration](https://reviewx.io/docs/how-to-migrate-judge-me-reviews-to-reviewx-in-wordpress/)**: Switching from Judge me? We've made it effortless. With our one-click migration tool, you can import all your existing product reviews from Judgeme to ReviewX, including review content, ratings, and reviewer details.
+**🔄 [Import Judge.me Reviews](https://reviewx.io/docs/how-to-migrate-judge-me-reviews-to-reviewx-in-wordpress/)**: Switching from Judge me? We've made it effortless. With our review import tool, you can import all your existing product reviews from Judgeme to ReviewX, including review content, ratings, and reviewer details.
 
 ## Pro Features
 
@@ -220,6 +220,11 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.3.3 - 02-22-2026 =
+- Regular Update
+- Fix: 2+ Bug fixes
+- Fix: Import and Export Issues
+
 = 2.3.2 - 02-09-2026 =
 - Regular Update
 - Fix: 10+ Bug fixes

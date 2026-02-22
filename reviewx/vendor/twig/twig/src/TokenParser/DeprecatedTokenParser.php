@@ -10,7 +10,6 @@
  */
 namespace Rvx\Twig\TokenParser;
 
-use Rvx\Twig\Error\SyntaxError;
 use Rvx\Twig\Node\DeprecatedNode;
 use Rvx\Twig\Node\Node;
 use Rvx\Twig\Token;
@@ -20,8 +19,6 @@ use Rvx\Twig\Token;
  *    {% deprecated 'The "base.twig" template is deprecated, use "layout.twig" instead.' %}
  *    {% extends 'layout.html.twig' %}
  *
- *    {% deprecated 'The "base.twig" template is deprecated, use "layout.twig" instead.' package="foo/bar" version="1.1" %}
- *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  *
  * @internal
@@ -30,27 +27,9 @@ final class DeprecatedTokenParser extends AbstractTokenParser
 {
     public function parse(Token $token) : Node
     {
-        $stream = $this->parser->getStream();
-        $expressionParser = $this->parser->getExpressionParser();
-        $expr = $expressionParser->parseExpression();
-        $node = new DeprecatedNode($expr, $token->getLine(), $this->getTag());
-        while ($stream->test(Token::NAME_TYPE)) {
-            $k = $stream->getCurrent()->getValue();
-            $stream->next();
-            $stream->expect(Token::OPERATOR_TYPE, '=');
-            switch ($k) {
-                case 'package':
-                    $node->setNode('package', $expressionParser->parseExpression());
-                    break;
-                case 'version':
-                    $node->setNode('version', $expressionParser->parseExpression());
-                    break;
-                default:
-                    throw new SyntaxError(\sprintf('Unknown "%s" option.', $k), $stream->getCurrent()->getLine(), $stream->getSourceContext());
-            }
-        }
-        $stream->expect(Token::BLOCK_END_TYPE);
-        return $node;
+        $expr = $this->parser->getExpressionParser()->parseExpression();
+        $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
+        return new DeprecatedNode($expr, $token->getLine(), $this->getTag());
     }
     public function getTag() : string
     {

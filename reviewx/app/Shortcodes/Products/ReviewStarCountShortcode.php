@@ -63,11 +63,11 @@ class ReviewStarCountShortcode implements ShortcodeContract
         }
         // Get actual star/review counts
         if ($post->post_type === 'product') {
-            $defaultData['starCount'] = (float) get_post_meta($id, '_wc_average_rating', \true);
-            $defaultData['reviewsCount'] = (int) get_post_meta($id, '_wc_review_count', \true);
+            $defaultData['starCount'] = (float) \get_post_meta($id, '_wc_average_rating', \true);
+            $defaultData['reviewsCount'] = (int) \get_post_meta($id, '_wc_review_count', \true);
         } else {
-            $defaultData['starCount'] = (float) get_post_meta($id, 'rvx_avg_rating', \true);
-            $defaultData['reviewsCount'] = (int) get_post_meta($id, 'rvx_total_reviews', \true);
+            $defaultData['starCount'] = (float) \get_post_meta($id, 'rvx_avg_rating', \true);
+            $defaultData['reviewsCount'] = (int) \get_post_meta($id, 'rvx_total_reviews', \true);
             // Fallback to comment_count if meta is not set yet
             if (!$defaultData['reviewsCount']) {
                 $defaultData['reviewsCount'] = (int) $post->comment_count;

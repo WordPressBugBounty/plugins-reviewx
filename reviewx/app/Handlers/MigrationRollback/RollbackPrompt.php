@@ -40,8 +40,8 @@ class RollbackPrompt
         if (isset($existing_data['reviews']['multicriteria'])) {
             $oldCriteriaData = $sharedMethods->rvxRollbackReverseReviewCriteriaConverter($existing_data['reviews']['multicriteria']);
             if ($sharedMethods->key_exists('_rx_option_review_criteria')) {
-                update_option('_rx_option_allow_multi_criteria', $oldCriteriaData['_rx_option_allow_multi_criteria']);
-                update_option('_rx_option_review_criteria', $oldCriteriaData['_rx_option_review_criteria']);
+                \update_option('_rx_option_allow_multi_criteria', $oldCriteriaData['_rx_option_allow_multi_criteria']);
+                \update_option('_rx_option_review_criteria', $oldCriteriaData['_rx_option_review_criteria']);
             }
             return $oldCriteriaData;
         }
@@ -51,13 +51,13 @@ class RollbackPrompt
     private function update_widget_settings($widget_settings)
     {
         if (isset($widget_settings['brand_color_code'])) {
-            update_option('_rx_option_color_theme', $widget_settings['brand_color_code']);
+            \update_option('_rx_option_color_theme', $widget_settings['brand_color_code']);
         }
         if (isset($widget_settings['star_color_code'])) {
-            update_option('_rx_option_star_color', $widget_settings['star_color_code']);
+            \update_option('_rx_option_star_color', $widget_settings['star_color_code']);
         }
         if (isset($widget_settings['button_font_color_code'])) {
-            update_option('_rx_option_button_font_color', $widget_settings['button_font_color_code']);
+            \update_option('_rx_option_button_font_color', $widget_settings['button_font_color_code']);
         }
     }
     // Updates review-related settings
@@ -67,15 +67,15 @@ class RollbackPrompt
         // Update each mapped setting
         foreach ($map as $key => $option) {
             if (isset($review_settings[$key])) {
-                update_option($option, $review_settings[$key]);
+                \update_option($option, $review_settings[$key]);
             }
         }
         // Handle boolean values for auto-approve and schema settings
         if (isset($review_settings['auto_approve_reviews'])) {
-            update_option('_rx_option_disable_auto_approval', !$review_settings['auto_approve_reviews']);
+            \update_option('_rx_option_disable_auto_approval', !$review_settings['auto_approve_reviews']);
         }
         if (isset($review_settings['product_schema'])) {
-            update_option('_rx_option_disable_richschema', !$review_settings['product_schema']);
+            \update_option('_rx_option_disable_richschema', !$review_settings['product_schema']);
         }
     }
     // Handles rollback for multi-criteria reviews
@@ -85,7 +85,7 @@ class RollbackPrompt
         if (empty($reviews_with_meta)) {
             return [];
         }
-        $existingOldData = get_option('_rx_option_review_criteria');
+        $existingOldData = \get_option('_rx_option_review_criteria');
         $oldCriteria = \is_string($existingOldData) ? maybe_unserialize($existingOldData) : [];
         if (empty($oldCriteria)) {
             return [];
@@ -95,7 +95,7 @@ class RollbackPrompt
             $criterias = $review_data['meta_data']['rvx_criterias'] ?? null;
             if (\is_array($criterias)) {
                 $converted_criterias = $this->rvx_convert_criterias_to_serialized_format($criterias, $oldCriteria);
-                update_comment_meta($comment_id, 'rvx_criterias', $converted_criterias);
+                \update_comment_meta($comment_id, 'rvx_criterias', $converted_criterias);
             }
         }
         return $reviews_with_meta;
@@ -162,7 +162,7 @@ class RollbackPrompt
                 }
                 if (!empty($attachment_data)) {
                     $attachment_data_collection = ['images' => $attachment_data];
-                    update_comment_meta($comment_id, 'reviewx_attachments', $attachment_data_collection);
+                    \update_comment_meta($comment_id, 'reviewx_attachments', $attachment_data_collection);
                 }
             }
         }

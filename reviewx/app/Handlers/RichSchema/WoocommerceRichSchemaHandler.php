@@ -60,7 +60,7 @@ class WoocommerceRichSchemaHandler
                     continue;
                     // Skip replies
                 }
-                $rating = get_comment_meta($review->comment_ID, 'rating', \true);
+                $rating = \get_comment_meta($review->comment_ID, 'rating', \true);
                 $ratingValue = $rating !== '' ? (float) $rating : null;
                 if ($ratingValue !== null) {
                     $reviewCount++;

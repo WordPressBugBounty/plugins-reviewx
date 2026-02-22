@@ -11,22 +11,20 @@
  */
 namespace Rvx\Twig\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 /**
  * Represents a block call node.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class BlockReferenceNode extends Node implements NodeOutputInterface
 {
-    public function __construct(string $name, int $lineno, ?string $tag = null)
+    public function __construct(string $name, int $lineno, string $tag = null)
     {
         parent::__construct([], ['name' => $name], $lineno, $tag);
     }
     public function compile(Compiler $compiler) : void
     {
-        $compiler->addDebugInfo($this)->write(\sprintf("yield from \$this->unwrap()->yieldBlock('%s', \$context, \$blocks);\n", $this->getAttribute('name')));
+        $compiler->addDebugInfo($this)->write(\sprintf("\$this->displayBlock('%s', \$context, \$blocks);\n", $this->getAttribute('name')));
     }
 }

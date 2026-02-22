@@ -82,7 +82,7 @@ class SharedMethods
     }
     public function rvxOldReviewCriteriaConverter()
     {
-        $data = get_option('_rx_option_review_criteria');
+        $data = \get_option('_rx_option_review_criteria');
         $keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
         $criterias = [];
         $i = 0;
@@ -92,7 +92,7 @@ class SharedMethods
             }
             $i++;
         }
-        $multicrtriaEnableorDisable = get_option('_rx_option_allow_multi_criteria');
+        $multicrtriaEnableorDisable = \get_option('_rx_option_allow_multi_criteria');
         $newCriteria = ["enable" => $multicrtriaEnableorDisable == 1 ? \true : \false, "criterias" => $criterias];
         return $newCriteria;
     }
@@ -101,7 +101,7 @@ class SharedMethods
         // Initialize old criteria structure
         $oldCriteria = [];
         // Retrieve existing criteria from the database
-        $existingOldData = get_option('_rx_option_review_criteria');
+        $existingOldData = \get_option('_rx_option_review_criteria');
         if ($existingOldData) {
             $oldCriteria = maybe_unserialize($existingOldData);
             // Deserialize existing criteria
@@ -140,7 +140,7 @@ class SharedMethods
     }
     public function key_exists($option_name)
     {
-        $option_value = get_option($option_name);
+        $option_value = \get_option($option_name);
         return $option_value !== \false;
     }
 }

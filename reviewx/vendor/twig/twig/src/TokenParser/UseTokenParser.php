@@ -39,7 +39,7 @@ final class UseTokenParser extends AbstractTokenParser
         }
         $targets = [];
         if ($stream->nextIf('with')) {
-            while (\true) {
+            do {
                 $name = $stream->expect(
                     /* Token::NAME_TYPE */
                     5
@@ -59,7 +59,7 @@ final class UseTokenParser extends AbstractTokenParser
                 )) {
                     break;
                 }
-            }
+            } while (\true);
         }
         $stream->expect(
             /* Token::BLOCK_END_TYPE */

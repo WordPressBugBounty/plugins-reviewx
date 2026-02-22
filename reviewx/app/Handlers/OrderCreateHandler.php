@@ -19,7 +19,7 @@ class OrderCreateHandler
                 return \false;
             }
             // WP Operation: Mark as new order. This MUST happen regardless of SaaS success.
-            update_post_meta($order_id, '_rvx_is_new_order', \true);
+            \update_post_meta($order_id, '_rvx_is_new_order', \true);
             // SaaS Operation: Attempt sync, but don't roll back WP if it fails.
             $payload = $this->prepareData($order);
             $orderResponse = (new OrderApi())->create($payload);

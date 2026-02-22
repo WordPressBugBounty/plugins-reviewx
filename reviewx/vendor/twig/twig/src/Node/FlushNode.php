@@ -10,14 +10,12 @@
  */
 namespace Rvx\Twig\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 /**
  * Represents a flush node.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class FlushNode extends Node
 {
     public function __construct(int $lineno, string $tag)

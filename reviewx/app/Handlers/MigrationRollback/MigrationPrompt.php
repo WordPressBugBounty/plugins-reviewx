@@ -14,62 +14,62 @@ class MigrationPrompt
             $data['multicriteria'] = $sharedMethods->rvxOldReviewCriteriaConverter();
         }
         if ($sharedMethods->key_exists('_rx_option_allow_like_dislike')) {
-            $data['enable_likes_dislikes']['enabled'] = get_option('_rx_option_allow_like_dislike');
-            $data['enable_likes_dislikes']['options']['allow_dislikes'] = get_option('_rx_option_allow_like_dislike');
+            $data['enable_likes_dislikes']['enabled'] = \get_option('_rx_option_allow_like_dislike');
+            $data['enable_likes_dislikes']['options']['allow_dislikes'] = \get_option('_rx_option_allow_like_dislike');
         }
         if ($sharedMethods->key_exists('_rx_option_color_theme')) {
-            $data['brand_color_code'] = get_option('_rx_option_color_theme');
+            $data['brand_color_code'] = \get_option('_rx_option_color_theme');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_img')) {
-            $data['photo_reviews_allowed'] = get_option('_rx_option_allow_img');
+            $data['photo_reviews_allowed'] = \get_option('_rx_option_allow_img');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_share_review')) {
-            $data['allow_review_sharing'] = get_option('_rx_option_allow_share_review');
+            $data['allow_review_sharing'] = \get_option('_rx_option_allow_share_review');
         }
         if ($sharedMethods->key_exists('_rx_option_disable_auto_approval')) {
-            $data['auto_approve_reviews'] = get_option('_rx_option_disable_auto_approval');
+            $data['auto_approve_reviews'] = \get_option('_rx_option_disable_auto_approval');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_review_title')) {
-            $data['allow_review_titles'] = get_option('_rx_option_allow_review_title');
+            $data['allow_review_titles'] = \get_option('_rx_option_allow_review_title');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_reviewer_name_censor')) {
-            $data['censor_reviewer_name'] = get_option('_rx_option_allow_reviewer_name_censor');
+            $data['censor_reviewer_name'] = \get_option('_rx_option_allow_reviewer_name_censor');
         }
         if ($sharedMethods->key_exists('_rx_option_disable_richschema')) {
-            $data['product_schema'] = get_option('_rx_option_disable_richschema');
+            $data['product_schema'] = \get_option('_rx_option_disable_richschema');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_video')) {
-            $data['video_reviews_allowed'] = get_option('_rx_option_allow_video');
+            $data['video_reviews_allowed'] = \get_option('_rx_option_allow_video');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_multiple_review')) {
-            $data['allow_multiple_reviews'] = get_option('_rx_option_allow_multiple_review');
+            $data['allow_multiple_reviews'] = \get_option('_rx_option_allow_multiple_review');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_anonymouse')) {
-            $data['anonymous_reviews_allowed'] = get_option('_rx_option_allow_anonymouse');
+            $data['anonymous_reviews_allowed'] = \get_option('_rx_option_allow_anonymouse');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_recaptcha')) {
-            $data['recaptcha']['enabled'] = get_option('_rx_option_allow_recaptcha');
+            $data['recaptcha']['enabled'] = \get_option('_rx_option_allow_recaptcha');
         }
         if ($sharedMethods->key_exists('_rx_option_recaptcha_site_key')) {
-            $data['recaptcha']['site_key'] = get_option('_rx_option_recaptcha_site_key');
+            $data['recaptcha']['site_key'] = \get_option('_rx_option_recaptcha_site_key');
         }
         if ($sharedMethods->key_exists('_rx_option_recaptcha_secret_key')) {
-            $data['recaptcha']['secret_key'] = get_option('_rx_option_recaptcha_secret_key');
+            $data['recaptcha']['secret_key'] = \get_option('_rx_option_recaptcha_secret_key');
         }
         if ($sharedMethods->key_exists('_rx_option_disable_richschema')) {
-            $data['product_schema'] = get_option('_rx_option_disable_richschema');
+            $data['product_schema'] = \get_option('_rx_option_disable_richschema');
         }
         if ($sharedMethods->key_exists('_rx_option_review_per_page')) {
-            $data['per_page_reviews'] = get_option('_rx_option_review_per_page');
+            $data['per_page_reviews'] = \get_option('_rx_option_review_per_page');
         }
         if ($sharedMethods->key_exists('_rx_option_allow_recommendation')) {
-            $data['allow_recommendations'] = get_option('_rx_option_allow_recommendation');
+            $data['allow_recommendations'] = \get_option('_rx_option_allow_recommendation');
         }
         if ($sharedMethods->key_exists('_rx_option_filter_recent')) {
-            $data['filter_and_sort_options']['recent'] = get_option('_rx_option_filter_recent');
+            $data['filter_and_sort_options']['recent'] = \get_option('_rx_option_filter_recent');
         }
         if ($sharedMethods->key_exists('_rx_option_filter_photo')) {
-            $data['filter_and_sort_options']['photo'] = get_option('_rx_option_filter_photo');
+            $data['filter_and_sort_options']['photo'] = \get_option('_rx_option_filter_photo');
         }
         if (empty($data)) {
             return \false;

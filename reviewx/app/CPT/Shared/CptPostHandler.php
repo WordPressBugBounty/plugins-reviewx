@@ -31,20 +31,20 @@ class CptPostHandler
             return;
         }
         // WP Independent Sync: We execute logic, but SaaS failure MUST NOT roll back WP.
-        $is_new_sync = get_post_meta($post_id, 'rvx_sync_new_status', \true);
+        $is_new_sync = \get_post_meta($post_id, 'rvx_sync_new_status', \true);
         if (!$is_new_sync) {
             // Handle new post/product sync
             $response = $this->createHandler($post_id, $post);
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 $this->enableCommentsReviews($post_id);
-                update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
+                \update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
             } else {
                 // If creation failed, try update as a fallback sync
                 $response = $this->updateHandler($post_id, $post);
                 if ($response->getStatusCode() === Response::HTTP_OK) {
                     $this->enableCommentsReviews($post_id);
-                    update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
-                    update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
+                    \update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
+                    \update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
                 } else {
                     \error_log("CptPostHandler Create/Update Sync Failed for ID {$post_id}: " . $response->getBody());
                 }
@@ -54,8 +54,8 @@ class CptPostHandler
             $response = $this->updateHandler($post_id, $post);
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 $this->enableCommentsReviews($post_id);
-                update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
-                update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
+                \update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
+                \update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
             } else {
                 \error_log("CptPostHandler Update Sync Failed for ID {$post_id}: " . $response->getBody());
             }
@@ -209,12 +209,12 @@ class CptPostHandler
     }
     private function getStarCounts($post_id)
     {
-        $check = get_post_meta($post_id, 'rvx_star_count_1', \true);
+        $check = \get_post_meta($post_id, 'rvx_star_count_1', \true);
         // Backward compatibility: If meta doesn't exist, calculate it now.
         if ($check === '' || $check === \false) {
             \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
         }
-        return ["one" => (int) get_post_meta($post_id, 'rvx_star_count_1', \true), "two" => (int) get_post_meta($post_id, 'rvx_star_count_2', \true), "three" => (int) get_post_meta($post_id, 'rvx_star_count_3', \true), "four" => (int) get_post_meta($post_id, 'rvx_star_count_4', \true), "five" => (int) get_post_meta($post_id, 'rvx_star_count_5', \true)];
+        return ["one" => (int) \get_post_meta($post_id, 'rvx_star_count_1', \true), "two" => (int) \get_post_meta($post_id, 'rvx_star_count_2', \true), "three" => (int) \get_post_meta($post_id, 'rvx_star_count_3', \true), "four" => (int) \get_post_meta($post_id, 'rvx_star_count_4', \true), "five" => (int) \get_post_meta($post_id, 'rvx_star_count_5', \true)];
     }
     private function enableCommentsReviews($post_id)
     {
@@ -251,21 +251,21 @@ class CptPostHandler
     }
     private function getReviewCount($post_id)
     {
-        $count = get_post_meta($post_id, 'rvx_total_reviews', \true);
+        $count = \get_post_meta($post_id, 'rvx_total_reviews', \true);
         // Backward compatibility: If meta doesn't exist, calculate it now.
         if ($count === '' || $count === \false) {
             \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
-            $count = get_post_meta($post_id, 'rvx_total_reviews', \true);
+            $count = \get_post_meta($post_id, 'rvx_total_reviews', \true);
         }
         return (int) $count;
     }
     private function getAverageRating($post_id)
     {
-        $rating = get_post_meta($post_id, 'rvx_avg_rating', \true);
+        $rating = \get_post_meta($post_id, 'rvx_avg_rating', \true);
         // Backward compatibility: If meta doesn't exist, calculate it now.
         if ($rating === '' || $rating === \false) {
             \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
-            $rating = get_post_meta($post_id, 'rvx_avg_rating', \true);
+            $rating = \get_post_meta($post_id, 'rvx_avg_rating', \true);
         }
         return (float) ($rating ?: 0.0);
     }

@@ -24,7 +24,6 @@ use Rvx\Twig\Node\NodeOutputInterface;
 use Rvx\Twig\Node\PrintNode;
 use Rvx\Twig\Node\TextNode;
 use Rvx\Twig\TokenParser\TokenParserInterface;
-use Rvx\Twig\Util\ReflectionCallable;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
@@ -87,9 +86,6 @@ class Parser
         }
         $node = new ModuleNode(new BodyNode([$body]), $this->parent, new Node($this->blocks), new Node($this->macros), new Node($this->traits), $this->embeddedTemplates, $stream->getSourceContext());
         $traverser = new NodeTraverser($this->env, $this->visitors);
-        /**
-         * @var ModuleNode $node
-         */
         $node = $traverser->traverse($node);
         // restore previous stack so previous parse() call can resume working
         foreach (\array_pop($this->stack) as $key => $val) {
@@ -134,9 +130,8 @@ class Parser
                     if (!($subparser = $this->env->getTokenParser($token->getValue()))) {
                         if (null !== $test) {
                             $e = new SyntaxError(\sprintf('Unexpected "%s" tag', $token->getValue()), $token->getLine(), $this->stream->getSourceContext());
-                            $callable = (new ReflectionCallable($test))->getCallable();
-                            if (\is_array($callable) && $callable[0] instanceof TokenParserInterface) {
-                                $e->appendMessage(\sprintf(' (expecting closing tag for the "%s" tag defined near line %s).', $callable[0]->getTag(), $lineno));
+                            if (\is_array($test) && isset($test[0]) && $test[0] instanceof TokenParserInterface) {
+                                $e->appendMessage(\sprintf(' (expecting closing tag for the "%s" tag defined near line %s).', $test[0]->getTag(), $lineno));
                             }
                         } else {
                             $e = new SyntaxError(\sprintf('Unknown "%s" tag.', $token->getValue()), $token->getLine(), $this->stream->getSourceContext());
@@ -209,7 +204,7 @@ class Parser
         $template->setIndex(\mt_rand());
         $this->embeddedTemplates[] = $template;
     }
-    public function addImportedSymbol(string $type, string $alias, ?string $name = null, ?AbstractExpression $node = null) : void
+    public function addImportedSymbol(string $type, string $alias, string $name = null, AbstractExpression $node = null) : void
     {
         $this->importedSymbols[0][$type][$alias] = ['name' => $name, 'node' => $node];
     }
@@ -254,7 +249,7 @@ class Parser
     {
         // check that the body does not contain non-empty output nodes
         if ($node instanceof TextNode && !\ctype_space($node->getAttribute('data')) || !$node instanceof TextNode && !$node instanceof BlockReferenceNode && $node instanceof NodeOutputInterface) {
-            if (\str_contains((string) $node, \chr(0xef) . \chr(0xbb) . \chr(0xbf))) {
+            if (\false !== \strpos((string) $node, \chr(0xef) . \chr(0xbb) . \chr(0xbf))) {
                 $t = \substr($node->getAttribute('data'), 3);
                 if ('' === $t || \ctype_space($t)) {
                     // bypass empty nodes starting with a BOM

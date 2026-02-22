@@ -16,7 +16,7 @@ class CategorySync implements InvokableContract
     public function categoryGat()
     {
         $chunkSize = 20;
-        $offset = get_option('category_chunk_offset', 0);
+        $offset = \get_option('category_chunk_offset', 0);
         $products = $this->getProductsChunk($offset, $chunkSize);
         $modyFiedCategories = [];
         foreach ($products as $category) {
@@ -24,12 +24,12 @@ class CategorySync implements InvokableContract
         }
         $this->catSync($modyFiedCategories);
         $totalProducts = $offset + \count($products);
-        update_option('total_catagory_count', $totalProducts);
+        \update_option('total_catagory_count', $totalProducts);
         \error_log('Total Category=: ' . $totalProducts);
-        update_option('category_chunk_offset', $offset + $chunkSize);
+        \update_option('category_chunk_offset', $offset + $chunkSize);
         \error_log('Chunk size=: ' . $offset);
         if (\count($products) < $chunkSize) {
-            delete_option('category_chunk_offset');
+            \delete_option('category_chunk_offset');
         }
     }
     public function processCategories($category)

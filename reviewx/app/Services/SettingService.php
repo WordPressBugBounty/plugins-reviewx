@@ -45,18 +45,18 @@ class SettingService extends \Rvx\Services\Service
             $default_cpt_name = $post_type;
         }
         $option_name = '_rvx_settings_' . $default_cpt_name;
-        $rvx_settings = get_option($option_name, \false);
+        $rvx_settings = \get_option($option_name, \false);
         if ($post_type === 'product' && $rvx_settings === \false) {
-            $rvx_settings = get_option('_rvx_settings_data');
+            $rvx_settings = \get_option('_rvx_settings_data');
         }
         return $rvx_settings['setting']['review_settings'] ?? [];
     }
     public function getWidgetSettings() : array
     {
         $option_name = '_rvx_settings_widget';
-        $rvx_settings = get_option($option_name, \false);
+        $rvx_settings = \get_option($option_name, \false);
         if ($rvx_settings === \false) {
-            $rvx_settings = get_option('_rvx_settings_data');
+            $rvx_settings = \get_option('_rvx_settings_data');
         }
         return $rvx_settings['setting']['widget_settings'] ?? [];
     }
@@ -66,7 +66,7 @@ class SettingService extends \Rvx\Services\Service
      */
     public function updateSettingsData(array $data, $post_type = null) : void
     {
-        update_option("_rvx_settings_data", $data);
+        \update_option("_rvx_settings_data", $data);
     }
     public function updateReviewSettings(array $review_settings, $post_type = null) : void
     {
@@ -89,7 +89,7 @@ class SettingService extends \Rvx\Services\Service
             // Merge the policy directly at the top level of "reviews"
             $data['setting']['review_settings']['reviews'] = \array_merge($policy, $data['setting']['review_settings']['reviews']);
         }
-        update_option($option_name, $data);
+        \update_option($option_name, $data);
     }
     public function updateReviewSettingsOnSync(array $review_settings, $post_type = null) : void
     {
@@ -110,12 +110,12 @@ class SettingService extends \Rvx\Services\Service
             // Merge the policy directly at the top level of "reviews"
             $data['setting']['review_settings']['reviews'] = \array_merge($policy, $data['setting']['review_settings']['reviews']);
         }
-        update_option($option_name, $data);
+        \update_option($option_name, $data);
     }
     public function updateWidgetSettings(array $widget_settings) : void
     {
         $data = ["setting" => ["widget_settings" => $widget_settings]];
-        update_option("_rvx_settings_widget", $data);
+        \update_option("_rvx_settings_widget", $data);
     }
     private function formatSettings(array $review_settings, array $widget_settings) : array
     {
@@ -124,23 +124,23 @@ class SettingService extends \Rvx\Services\Service
     }
     public function wooCommerceVerificationRating() : array
     {
-        $value = get_option('woocommerce_review_rating_verification_label', 'no');
+        $value = \get_option('woocommerce_review_rating_verification_label', 'no');
         return ['active' => $value === 'yes'];
     }
     public function wooVerificationRatingRequired() : array
     {
-        $value = get_option('woocommerce_review_rating_verification_required', 'no');
+        $value = \get_option('woocommerce_review_rating_verification_required', 'no');
         return ['active' => $value === 'yes'];
     }
     public function wooCommerceVerificationRatingUpdate($data)
     {
         if ($data['active'] == \true) {
-            update_option('woocommerce_review_rating_verification_label', 'yes');
+            \update_option('woocommerce_review_rating_verification_label', 'yes');
             $data = ['success' => \true, 'message' => __("Verified Owner Active")];
             return $data;
         }
         if ($data['active'] == \false) {
-            update_option('woocommerce_review_rating_verification_label', 'no');
+            \update_option('woocommerce_review_rating_verification_label', 'no');
             $data = ['success' => \true, 'message' => __("Verified Owner Deactive")];
             return $data;
         }
@@ -148,12 +148,12 @@ class SettingService extends \Rvx\Services\Service
     public function wooVerificationRating($data)
     {
         if ($data['active'] == \true) {
-            update_option('woocommerce_review_rating_verification_required', 'yes');
+            \update_option('woocommerce_review_rating_verification_required', 'yes');
             $data = ['success' => \true, 'message' => __("Reviews can only be left by verified owners active")];
             return $data;
         }
         if ($data['active'] == \false) {
-            update_option('woocommerce_review_rating_verification_required', 'no');
+            \update_option('woocommerce_review_rating_verification_required', 'no');
             $data = ['success' => \true, 'message' => __("Reviews can only be left by verified owners deactive")];
             return $data;
         }
@@ -173,7 +173,7 @@ class SettingService extends \Rvx\Services\Service
     public function allSettingsSave($data)
     {
         $payload_json = \json_encode($data['settings']);
-        update_option('rvx_all_setting_data', $payload_json);
+        \update_option('rvx_all_setting_data', $payload_json);
         return ['message' => __('Settings saved successfully'), 'data' => $data['settings']];
     }
     public function removeCredentials($requestData)

@@ -101,9 +101,9 @@ class DataSyncService extends Service
         $file = \fopen($file_path, 'a');
         $totalLines = 0;
         if ("users" === $data['action']) {
-            $totalLines = get_option('rvx_sync_number');
+            $totalLines = \get_option('rvx_sync_number');
             $totalLines += (new UserSyncService())->syncUser($file);
-            update_option('rvx_sync_number', $totalLines);
+            \update_option('rvx_sync_number', $totalLines);
         }
         if ("categories" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
@@ -111,27 +111,27 @@ class DataSyncService extends Service
                 // $totalLines += $syncedCaterories->syncCategory($file);
                 $processProduct = new ProductSyncService();
                 $totalLines += $processProduct->processProductForSync($file, 'product');
-                update_option('rvx_sync_number', $totalLines);
+                \update_option('rvx_sync_number', $totalLines);
             }
         }
         if ("reviews" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
-                $totalLines = get_option('rvx_sync_number');
+                $totalLines = \get_option('rvx_sync_number');
                 $totalLines += (new ReviewSyncService())->processReviewForSync($file, 'product');
-                update_option('rvx_sync_number', $totalLines);
+                \update_option('rvx_sync_number', $totalLines);
             }
         }
         if ("order" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
                 $order = new OrderItemSyncService();
-                $totalLines = get_option('rvx_sync_number');
+                $totalLines = \get_option('rvx_sync_number');
                 $totalLines += $order->syncOrder($file);
                 $totalLines += $order->syncOrderItem($file);
-                update_option('rvx_sync_number', $totalLines);
+                \update_option('rvx_sync_number', $totalLines);
             }
         }
         if ("api" === $data['action']) {
-            $totalLines = get_option('rvx_sync_number');
+            $totalLines = \get_option('rvx_sync_number');
             return $this->dataSyncFile($file, $file_path, 'register', $totalLines);
         }
     }

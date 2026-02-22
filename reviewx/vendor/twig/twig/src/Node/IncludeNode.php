@@ -11,7 +11,6 @@
  */
 namespace Rvx\Twig\Node;
 
-use Rvx\Twig\Attribute\YieldReady;
 use Rvx\Twig\Compiler;
 use Rvx\Twig\Node\Expression\AbstractExpression;
 /**
@@ -19,10 +18,9 @@ use Rvx\Twig\Node\Expression\AbstractExpression;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-#[YieldReady]
 class IncludeNode extends Node implements NodeOutputInterface
 {
-    public function __construct(AbstractExpression $expr, ?AbstractExpression $variables, bool $only, bool $ignoreMissing, int $lineno, ?string $tag = null)
+    public function __construct(AbstractExpression $expr, ?AbstractExpression $variables, bool $only, bool $ignoreMissing, int $lineno, string $tag = null)
     {
         $nodes = ['expr' => $expr];
         if (null !== $variables) {
@@ -37,13 +35,12 @@ class IncludeNode extends Node implements NodeOutputInterface
             $template = $compiler->getVarName();
             $compiler->write(\sprintf("\$%s = null;\n", $template))->write("try {\n")->indent()->write(\sprintf('$%s = ', $template));
             $this->addGetTemplate($compiler);
-            $compiler->raw(";\n")->outdent()->write("} catch (LoaderError \$e) {\n")->indent()->write("// ignore missing template\n")->outdent()->write("}\n")->write(\sprintf("if (\$%s) {\n", $template))->indent()->write(\sprintf('yield from $%s->unwrap()->yield(', $template));
+            $compiler->raw(";\n")->outdent()->write("} catch (LoaderError \$e) {\n")->indent()->write("// ignore missing template\n")->outdent()->write("}\n")->write(\sprintf("if (\$%s) {\n", $template))->indent()->write(\sprintf('$%s->display(', $template));
             $this->addTemplateArguments($compiler);
             $compiler->raw(");\n")->outdent()->write("}\n");
         } else {
-            $compiler->write('yield from ');
             $this->addGetTemplate($compiler);
-            $compiler->raw('->unwrap()->yield(');
+            $compiler->raw('->display(');
             $this->addTemplateArguments($compiler);
             $compiler->raw(");\n");
         }
@@ -57,9 +54,9 @@ class IncludeNode extends Node implements NodeOutputInterface
         if (!$this->hasNode('variables')) {
             $compiler->raw(\false === $this->getAttribute('only') ? '$context' : '[]');
         } elseif (\false === $this->getAttribute('only')) {
-            $compiler->raw('CoreExtension::merge($context, ')->subcompile($this->getNode('variables'))->raw(')');
+            $compiler->raw('twig_array_merge($context, ')->subcompile($this->getNode('variables'))->raw(')');
         } else {
-            $compiler->raw('CoreExtension::toArray(');
+            $compiler->raw('twig_to_array(');
             $compiler->subcompile($this->getNode('variables'));
             $compiler->raw(')');
         }

@@ -32,7 +32,7 @@ class PluginActivatedHandler implements InvokableContract
             global $wpdb;
             // Initialize tables and reset sync flag
             (new \Rvx\Handlers\RvxInit\LoadReviewxCreateSiteTable())->init();
-            set_transient('rvx_reset_sync_flag', \true, 300);
+            \set_transient('rvx_reset_sync_flag', \true, 300);
             // 5 mins TTL
             $this->migrator->run();
             $rvxSites = $wpdb->prefix . 'rvx_sites';

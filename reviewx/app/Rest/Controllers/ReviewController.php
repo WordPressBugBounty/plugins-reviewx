@@ -44,7 +44,7 @@ class ReviewController implements InvokableContract
     public function aggregationDataStore($data)
     {
         \delete_transient('rvx_admin_aggregation');
-        set_transient('rvx_admin_aggregation', $data, 3600);
+        \set_transient('rvx_admin_aggregation', $data, 3600);
     }
     public function adminAllReviewSaasCall($data)
     {
@@ -120,25 +120,25 @@ class ReviewController implements InvokableContract
     public function reviewListStoreInDB($reviewData)
     {
         \delete_transient('rvx_reviews_data_list');
-        set_transient('rvx_reviews_data_list', $reviewData, 3600);
+        \set_transient('rvx_reviews_data_list', $reviewData, 3600);
     }
     public function storeVisibilityReview($data, $visibility)
     {
         if ($visibility === 'published') {
             \delete_transient('rvx_review_approve_data');
-            set_transient('rvx_review_approve_data', $data, 3600);
+            \set_transient('rvx_review_approve_data', $data, 3600);
         }
         if ($visibility === 'pending') {
             \delete_transient('rvx_review_pending_data');
-            set_transient('rvx_review_pending_data', $data, 3600);
+            \set_transient('rvx_review_pending_data', $data, 3600);
         }
         if ($visibility === 'spam') {
             \delete_transient('rvx_review_spam_data');
-            set_transient('rvx_review_spam_data', $data, 3600);
+            \set_transient('rvx_review_spam_data', $data, 3600);
         }
         if ($visibility === 'trash') {
             \delete_transient('rvx_review_trash_data');
-            set_transient('rvx_review_trash_data', $data, 3600);
+            \set_transient('rvx_review_trash_data', $data, 3600);
         }
     }
     /**
@@ -471,7 +471,7 @@ class ReviewController implements InvokableContract
                 }
                 $reviewAndMeta = ['reviews' => Helper::arrayGet($item, 'reviews'), 'meta' => Helper::arrayGet($item, 'meta')];
                 $latest_ten_review = \json_encode($reviewAndMeta, \true);
-                set_transient("rvx_{$item['product_wp_id']}_latest_reviews", $latest_ten_review, 604800);
+                \set_transient("rvx_{$item['product_wp_id']}_latest_reviews", $latest_ten_review, 604800);
                 // Expires in 7 days
                 return Helper::rest()->success("Success");
             }

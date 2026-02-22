@@ -15,8 +15,8 @@ class UserServices extends \Rvx\Services\Service
         $customer_data_array = array();
         foreach ($customer_ids as $customer_id) {
             $user_data = get_userdata($customer_id);
-            $customer_first_name = get_user_meta($customer_id, 'first_name', \true);
-            $customer_last_name = get_user_meta($customer_id, 'last_name', \true);
+            $customer_first_name = \get_user_meta($customer_id, 'first_name', \true);
+            $customer_last_name = \get_user_meta($customer_id, 'last_name', \true);
             $current_customer_data = array('customer_id' => $customer_id, 'customer_email' => $user_data->user_email, 'customer_username' => $user_data->user_login, 'customer_first_name' => $customer_first_name, 'customer_last_name' => $customer_last_name);
             $customer_data_array[] = $current_customer_data;
         }

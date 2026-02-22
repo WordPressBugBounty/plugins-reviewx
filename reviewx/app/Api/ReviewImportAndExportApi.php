@@ -77,4 +77,13 @@ class ReviewImportAndExportApi extends \Rvx\Api\BaseApi
     {
         return $this->withJson($data)->put('admin/import/restore/7kAN-uGTkdlmo-4BAP');
     }
+    /**
+     * @param array $data
+     * @return Response
+     * @throws Exception
+     */
+    public function logImportHistory(array $data) : Response
+    {
+        return $this->withJson($data)->post('reviews/import/log-history');
+    }
 }

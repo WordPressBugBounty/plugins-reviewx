@@ -24,7 +24,7 @@ class WooCommerceReviewEditForm
         $post_id = $data['comment_post_ID'];
         // $post_type = get_post_type($post_id);
         // Retrieve the rating.
-        $rating = (float) \round(get_comment_meta($id, 'rating', \true), 2);
+        $rating = (float) \round(\get_comment_meta($id, 'rating', \true), 2);
         // if ($post_type === 'product') {
         //     // For products, round up to the nearest whole number.
         //     $rating = ceil((float) $rating);

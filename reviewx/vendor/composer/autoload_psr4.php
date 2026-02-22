@@ -10,7 +10,6 @@ return array(
     'Rvx\\Viocon\\' => array($vendorDir . '/usmanhalalit/viocon/src/Viocon'),
     'Rvx\\Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Rvx\\Tests\\' => array($vendorDir . '/nahid/apiz/Tests'),
-    'Rvx\\Symfony\\Polyfill\\Php81\\' => array($vendorDir . '/symfony/polyfill-php81'),
     'Rvx\\Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Rvx\\Symfony\\Polyfill\\Php73\\' => array($vendorDir . '/symfony/polyfill-php73'),
     'Rvx\\Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),

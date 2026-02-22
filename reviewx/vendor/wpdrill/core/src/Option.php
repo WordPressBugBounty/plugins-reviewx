@@ -9,15 +9,15 @@ class Option
         if (\is_array($keys)) {
             return get_options($keys);
         }
-        return get_option($keys, $default);
+        return \get_option($keys, $default);
     }
     public static function set(string $key, $value) : bool
     {
-        return update_option($key, $value);
+        return \update_option($key, $value);
     }
     public static function delete(string $key) : bool
     {
-        return delete_option($key);
+        return \delete_option($key);
     }
     public static function all() : array
     {
@@ -37,19 +37,19 @@ class Option
     }
     public static function getPostMeta(int $postId, string $key, $default = null)
     {
-        return get_post_meta($postId, $key, \true) ?: $default;
+        return \get_post_meta($postId, $key, \true) ?: $default;
     }
     public static function setPostMeta(int $postId, string $key, $value) : bool
     {
-        return update_post_meta($postId, $key, $value);
+        return \update_post_meta($postId, $key, $value);
     }
     public static function deletePostMeta(int $postId, string $key) : bool
     {
-        return delete_post_meta($postId, $key);
+        return \delete_post_meta($postId, $key);
     }
     public static function allPostMeta(int $postId) : array
     {
-        return get_post_meta($postId);
+        return \get_post_meta($postId);
     }
     public static function hasPostMeta(int $postId, string $key) : bool
     {
@@ -61,6 +61,6 @@ class Option
     }
     public static function flushPostMeta(int $postId) : bool
     {
-        return delete_post_meta($postId, '');
+        return \delete_post_meta($postId, '');
     }
 }

@@ -21,7 +21,6 @@ use Rvx\Rest\Controllers\AccessController;
 use Rvx\Rest\Controllers\DataSyncController;
 use Rvx\Rest\Controllers\LogController;
 use Rvx\Rest\Controllers\CptController;
-use Rvx\Rest\Controllers\ImportJudgeMeController;
 use Rvx\Rest\Controllers\PingController;
 use Rvx\Rest\Middleware\AuthSaasMiddleware;
 Route::group(['prefix' => '/api/v1'], function () {
@@ -56,16 +55,8 @@ Route::group(['prefix' => '/api/v1'], function () {
     Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
     //ALl review shortcode
     Route::post('/storefront/all/reviews/shortcode', [StoreFrontReviewController::class, 'getWidgetAllReviewsListForSite']);
-    // Judgeme API's
-    Route::get('/judgeme/status/detect', [ImportJudgeMeController::class, 'judgemeStatusDetect']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], function () {
-    // Judgeme API's
-    Route::post('/judgeme/export/csv', [ImportJudgeMeController::class, 'judgemeCSVdownload']);
-    Route::post('/judgeme/upload/csv', [ImportJudgeMeController::class, 'judgemeCSVUpload']);
-    Route::post('/judgeme/import/chunk', [ImportJudgeMeController::class, 'judgemeImportChunk']);
-    Route::post('/judgeme/data/sync', [ImportJudgeMeController::class, 'judgemeDataSaasSync']);
-    Route::get('/judgeme/import/status', [ImportJudgeMeController::class, 'judgemeImportStatus']);
     /**
      * Reviews API
      */
@@ -221,6 +212,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/admin/access/control', [AccessController::class, 'adminAccess']);
     Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
     Route::post('/reviews/bulk/action/product/meta', [ReviewController::class, 'bulkActionProductMeta']);
+    Route::post('/reviews/import/rollback', [ImportExportController::class, 'rollbackReviews']);
     /**
      * Remove/Update table and user/site information
      */

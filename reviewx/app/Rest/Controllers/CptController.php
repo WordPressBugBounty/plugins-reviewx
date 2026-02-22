@@ -301,7 +301,7 @@ class CptController
         $status = \false;
         $dataArray = \json_decode($response, \true);
         if ($dataArray !== null) {
-            $status = update_option('_rvx_cpt_settings', $dataArray['data']);
+            $status = \update_option('_rvx_cpt_settings', $dataArray['data']);
         }
         return $status;
     }

@@ -57,6 +57,10 @@ if ($has_orders) {
         foreach ($items as $item_id => $item) {
             $product_id = $item->get_product_id();
             $product = wc_get_product($product_id);
+            // Skip if product no longer exists (deleted/invalid)
+            if (!$product) {
+                continue;
+            }
             // Initialize variables to prevent issues
             $product_image_id = 0;
             $product_image = '';
