@@ -6,7 +6,7 @@ namespace Rvx;
  * Plugin Name: ReviewX – Multi-Criteria Rating & Reviews
  * Plugin URI:  https://reviewx.io
  * Description: Advanced Multi-Criteria Rating & Reviews for WooCommerce. Turn customer reviews into sales by leveraging reviews with multiple criteria, reminder emails, Google reviews, review schemas, and incentives like discounts.
- * Version:     2.3.3
+ * Version:     2.3.4
  * Author:      ReviewX
  * Author URI:  https://reviewx.io
  * Text Domain: reviewx
@@ -14,13 +14,14 @@ namespace Rvx;
  * @package     ReviewX
  * @author      ReviewX <support@reviewx.io>
  * @copyright   Copyright (C) 2024 ReviewX & JoulesLabs. All rights reserved.
- * @license     GPLv3 or later
+ * License:      GPLv3 or later
+ * License URI:  http://www.gnu.org/licenses/gpl-3.0.html
  * @since       1.0.0
  */
 @\ini_set('display_errors', 0);
 // don't call the file directly
 \defined('ABSPATH') || die;
-\define('RVX_VERSION', '2.3.3');
+\define('RVX_VERSION', '2.3.4');
 \define('RVX_DIR_PATH', plugin_dir_path(__FILE__));
 \define('RVX_DIR_NAME', \basename(\RVX_DIR_PATH));
 \define('RVX_PREFIX', 'rvx_');

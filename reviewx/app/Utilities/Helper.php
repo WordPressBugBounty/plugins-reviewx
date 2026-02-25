@@ -167,7 +167,7 @@ class Helper
         $translations = \json_decode($json_content, \true);
         $result = [];
         foreach ($translations as $key => $text) {
-            $result[$key] = __($text, "reviewx");
+            $result[$key] = $text;
         }
         return $result;
     }

@@ -1,4 +1,4 @@
-=== ReviewX – WooCommerce Product Reviews with Multi-Criteria, Reminder Emails, Google Reviews, Schema & More ===
+=== ReviewX – Multi-Criteria Reviews for WooCommerce with Google Reviews & Schema ===
 Contributors: reviewx, jouleslabs7, re_enter_rupok, arnaim, mhrubel, sadhinsabbir, sujansarkar, sakhawatsifat, akmshakib
 Donate link: https://reviewx.io
 Tags: woocommerce reviews, product reviews, customer reviews, review reminder, google reviews
@@ -7,8 +7,8 @@ Tested up to: 6.9
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 10.5
-Stable tag: 2.3.3
-License: GPLv3 or later
+Stable tag: 2.3.4
+License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Drive woocommerce business growth with social proof: gather product reviews with multicriteria ratings, auto-reminder emails, discounts, and more.
@@ -17,7 +17,7 @@ Drive woocommerce business growth with social proof: gather product reviews with
 
 Looking to enhance your WooCommerce store’s credibility with authentic customer feedback?
 
-Meet [ReviewX](https://reviewx.io/) – the ultimate WooCommerce reviews plugin that makes collecting and managing reviews effortless. Whether you’re just getting started or aiming to take your store to the next level with multicriteria ratings, automated review reminders, or discounts for reviews, ReviewX fits right in. It also works seamlessly with Custom Post Type.
+Meet [ReviewX](https://reviewx.io/) – a comprehensive WooCommerce product reviews plugin that makes collecting and managing reviews effortless. Whether you’re just getting started or aiming to take your store to the next level with multicriteria ratings, automated review reminders, or discounts for reviews, ReviewX fits right in. It also works seamlessly with Custom Post Type.
 
 With ReviewX, you can create custom review criteria that perfectly match your products, whether it’s product quality, delivery speed, customer service, or anything else that matters to your customers.
 
@@ -33,7 +33,7 @@ Ready to elevate your WooCommerce reviews? Let’s dive into what ReviewX can do
 
 ## Why Choose ReviewX?
 
-ReviewX is designed with WooCommerce store owners in mind. Unlike other review plugins, ReviewX offers advanced features like multi-criteria reviews, photo & video reviews, and review reminders, making it the ultimate WooCommerce reviews plugin.
+ReviewX is designed with WooCommerce store owners in mind. Unlike other review plugins, ReviewX offers advanced features like multi-criteria reviews, photo & video reviews, and review reminders, making it a powerful WooCommerce product reviews plugin.
 
 Whether you’re looking to boost customer engagement or improve product credibility, ReviewX has the tools you need.
 
@@ -213,13 +213,18 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 * Join our [Facebook Group](https://www.facebook.com/groups/reviewx).
 * Learn from our tutorials on [Youtube Channel](https://www.youtube.com/channel/UC3kxtXZYySXXtr6DydZHCsA).
-* Or rate us on [WordPress](https://wordpress.org/support/plugin/reviewx/reviews/?rate=5#new-post).
+* Or rate us on [WordPress](https://wordpress.org/support/plugin/reviewx/reviews/).
 * Learn More About ReviewX(PRO): [All The Features of the ReviewX](https://reviewx.io/free-vs-pro/).
 * Check out the plugin and compare it with other review plugins: [Compare here](https://reviewx.io/compare/)
 == Screenshots ==
 
 
 == Changelog ==
+= 2.3.4 - 02-25-2026 =
+- Regular Update
+- Fix: 2+ Bug fixes
+- Improve: Data Integrity
+
 = 2.3.3 - 02-22-2026 =
 - Regular Update
 - Fix: 2+ Bug fixes

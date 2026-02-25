@@ -3,6 +3,7 @@
 namespace Rvx\Handlers;
 
 use Rvx\Services\ReviewService;
+use Rvx\Api\ReviewsApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Services\CacheServices;
 class WooCommerceReviewEditForm
@@ -14,9 +15,22 @@ class WooCommerceReviewEditForm
     }
     public function __invoke($id, $data)
     {
-        $updatedData = $this->prepareData($id, $data);
-        $reviewService = new ReviewService();
-        $reviewService->updateWooReview($updatedData, $data);
+        $comment = get_comment($id);
+        if ($comment && $comment->comment_parent > 0) {
+            // It's a reply
+            $wpUniqueId = Client::getUid() . '-' . $comment->comment_parent;
+            $replies = ['reply' => $data['comment_content'], 'wp_id' => $comment->comment_parent];
+            try {
+                (new ReviewsApi())->commentReply($replies, $wpUniqueId);
+            } catch (\Exception $e) {
+                \error_log("Reply edit sync failed: " . $e->getMessage());
+            }
+        } else {
+            // It's a review
+            $updatedData = $this->prepareData($id, $data);
+            $reviewService = new ReviewService();
+            $reviewService->updateWooReview($updatedData, $data);
+        }
         $this->cacheServices->removeCache();
     }
     public function prepareData($id, $data)

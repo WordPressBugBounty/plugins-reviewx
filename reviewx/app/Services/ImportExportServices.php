@@ -212,6 +212,13 @@ class ImportExportServices extends \Rvx\Services\Service
             $comment = \Rvx\get_comment($commentId);
             if ($comment) {
                 $affectedPosts[] = $comment->comment_post_ID;
+                // Find and delete replies (child comments)
+                $replies = \Rvx\get_comments(['parent' => $commentId]);
+                if (!empty($replies)) {
+                    foreach ($replies as $reply) {
+                        \Rvx\wp_delete_comment($reply->comment_ID, \true);
+                    }
+                }
                 if (\Rvx\wp_delete_comment($commentId, \true)) {
                     $count++;
                 }

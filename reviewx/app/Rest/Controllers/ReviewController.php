@@ -279,6 +279,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->reviewReplies($request);
+            $this->cacheServices->removeCache();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Reply Fails', $e->getCode());
@@ -292,6 +293,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->reviewRepliesUpdate($request);
+            $this->cacheServices->removeCache();
             return Helper::rvxApi($resp)->success('Review Reply Updated');
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Reply Updated Fails', $e->getCode());
@@ -305,6 +307,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->reviewRepliesDelete($request);
+            $this->cacheServices->removeCache();
             return Helper::getApiResponse($resp);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());

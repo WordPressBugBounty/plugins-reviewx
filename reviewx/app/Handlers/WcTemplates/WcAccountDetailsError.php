@@ -12,7 +12,6 @@ class WcAccountDetailsError
         // ) {
         //     $args->add(
         //         "image_error",
-        //         __("Please provide a valid image", "woocommerce")
         //     );
         // }
     }

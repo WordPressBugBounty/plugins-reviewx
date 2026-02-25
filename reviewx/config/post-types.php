@@ -3,8 +3,8 @@
 return [
     /*'product' => [
         'labels'      => [
-            'name'          => __( 'Products', 'textdomain' ),
-            'singular_name' => __( 'Product', 'textdomain' ),
+            'name'          => __( 'Products', 'reviewx' ),
+            'singular_name' => __( 'Product', 'reviewx' ),
         ],
         'public'      => true,
         'has_archive' => true,

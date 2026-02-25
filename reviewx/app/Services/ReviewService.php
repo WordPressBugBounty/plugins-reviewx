@@ -174,6 +174,13 @@ class ReviewService extends \Rvx\Services\Service
     {
         $parts = \explode('-', $data['wpUniqueId']);
         $last_part = \end($parts);
+        // Find and delete replies (child comments)
+        $replies = get_comments(['parent' => $last_part]);
+        if (!empty($replies)) {
+            foreach ($replies as $reply) {
+                wp_delete_comment($reply->comment_ID, \true);
+            }
+        }
         wp_delete_comment($last_part, \true);
     }
     public function restoreReview($request)
@@ -323,7 +330,7 @@ class ReviewService extends \Rvx\Services\Service
         $commentReply = (new ReviewsApi())->updateCommentReply($repliesUpdate, $wpUniqueId);
         if ($commentReply) {
             $this->reviewRepliesUpdateForWp($wpUniqueId, $repliesUpdate);
-            $this->reviewCacheDelete($wpUniqueId);
+            $this->reviewCacheDelete($this->getLastSegment($wpUniqueId));
             return Helper::rest($commentReply()->from('data')->toArray())->success();
         }
         return Helper::rest(null)->fails(__('Update Fail', 'reviewx'));

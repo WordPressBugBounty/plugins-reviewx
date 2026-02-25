@@ -13,12 +13,17 @@ return [
         'interpolation' => ['#{', '}'],
     ],
     'functions' => [
-        '__' => function ($text, $domain = 'default') {
-            return __($text, $domain);
-        },
-
 	    'bearer_token' => function () {
 		    return \Rvx\Utilities\Helper::getAuthToken();
+	    },
+	    '__' => function ($text, $domain = 'reviewx') {
+		    return __($text, $domain);
+	    },
+	    'esc_html__' => function ($text, $domain = 'reviewx') {
+		    return esc_html__($text, $domain);
+	    },
+	    'esc_attr__' => function ($text, $domain = 'reviewx') {
+		    return esc_attr__($text, $domain);
 	    },
     ]
 ];

@@ -16,12 +16,40 @@ class WooReviewTableHandler
     }
     public function __invoke($new_status, $old_status, $comment)
     {
-        $comment_id = $comment->comment_ID;
-        $this->handleAction($new_status, $old_status, $comment_id);
+        $this->handleAction($new_status, $old_status, $comment);
     }
-    public function handleAction($new_status, $old_status, $comment_id)
+    public function handleAction($new_status, $old_status, $comment)
     {
-        $wpUniqueId = $this->getWpUniqueId($comment_id);
+        $comment_id = $comment->comment_ID;
+        $is_reply = $comment->comment_parent > 0;
+        $sync_comment_id = $is_reply ? $comment->comment_parent : $comment_id;
+        $wpUniqueId = $this->getWpUniqueId($sync_comment_id);
+        if ($is_reply) {
+            $this->handleReplyAction($new_status, $old_status, $wpUniqueId, $comment);
+        } else {
+            $this->handleReviewAction($new_status, $old_status, $wpUniqueId);
+        }
+        if ($comment && $comment->comment_post_ID) {
+            \Rvx\CPT\CptAverageRating::update_average_rating($comment->comment_post_ID);
+        }
+        $this->cacheServices->removeCache();
+    }
+    private function handleReplyAction($new_status, $old_status, $wpUniqueId, $comment)
+    {
+        try {
+            $reviewsApi = new ReviewsApi();
+            if ($new_status === 'trash' || $new_status === 'spam') {
+                $reviewsApi->deleteCommentReply($wpUniqueId);
+            } else {
+                $replies = ['reply' => $comment->comment_content, 'wp_id' => $comment->comment_parent];
+                $reviewsApi->commentReply($replies, $wpUniqueId);
+            }
+        } catch (Exception $e) {
+            \error_log("Reply status sync failed: " . $e->getMessage());
+        }
+    }
+    private function handleReviewAction($new_status, $old_status, $wpUniqueId)
+    {
         switch (\true) {
             case $this->isMoveToTrash($new_status, $old_status):
                 $this->moveToTrash($wpUniqueId);
@@ -33,11 +61,6 @@ class WooReviewTableHandler
                 $this->changeVisibility($new_status, $old_status, $wpUniqueId);
                 break;
         }
-        $comment = get_comment($comment_id);
-        if ($comment && $comment->comment_post_ID) {
-            \Rvx\CPT\CptAverageRating::update_average_rating($comment->comment_post_ID);
-        }
-        $this->cacheServices->removeCache();
     }
     /**
      * Generate the unique ID for a WordPress comment.

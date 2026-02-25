@@ -13,6 +13,8 @@ use Rvx\CPT\Shared\WooReviewsRedirectHandler;
 use Rvx\CPT\Shared\CommentEditBlockHandler;
 use Rvx\CPT\Shared\CptPostHandler;
 use Rvx\CPT\Shared\PostsRatingColumn;
+use Rvx\Api\ReviewsApi;
+use Rvx\Utilities\Auth\Client;
 use Rvx\Form\ReviewForm;
 use Rvx\Handlers\BulkAction\CustomBulkActionsForReviewsHandler;
 use Rvx\Handlers\BulkAction\RegisterBulkActionsForReviewsHandler;
@@ -205,18 +207,28 @@ class PluginServiceProvider extends ServiceProvider
             }
         }, 999, 2);
         // Removed redundant save_post hook for CptAverageRating as it's now registered above with correct priority
-        add_action('deleted_comment', function ($comment_id) {
-            $comment = get_comment($comment_id);
+        add_action('deleted_comment', function ($comment_id, $comment) {
             if ($comment && $comment->comment_post_ID) {
-                // 1. Update average rating locally
+                // 1. Sync deletion to SaaS
+                $reviewsApi = new ReviewsApi();
+                if ($comment->comment_parent > 0) {
+                    // It's a reply
+                    $wpUniqueId = Client::getUid() . '-' . $comment->comment_parent;
+                    $reviewsApi->deleteCommentReply($wpUniqueId);
+                } else {
+                    // It's a review
+                    $wpUniqueId = Client::getUid() . '-' . $comment_id;
+                    $reviewsApi->deleteReviewData($wpUniqueId);
+                }
+                // 2. Update average rating locally
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
-                // 2. Sync updated post data to SaaS
+                // 3. Sync updated post data to SaaS
                 $post = get_post($comment->comment_post_ID);
                 if ($post) {
                     (new CptPostHandler())->__invoke($post->ID, $post, \true);
                 }
             }
-        }, 999);
+        }, 999, 2);
         /**
          * Rich Schema
          */
@@ -257,7 +269,7 @@ class PluginServiceProvider extends ServiceProvider
         add_filter('comments_template', [ReviewForm::class, 'comments_template_init'], \PHP_INT_MAX);
         // Load plugin textdomain
         add_action('init', function () {
-            load_plugin_textdomain('reviewx', \false, \dirname(plugin_basename(__FILE__)) . '/languages');
+            load_plugin_textdomain('reviewx', '', \dirname(plugin_basename(__FILE__)) . '/languages');
         }, 15, 5);
         // Defer localization until scripts are enqueued
         add_action('admin_enqueue_scripts', [$this, 'localizeScripts'], 20);

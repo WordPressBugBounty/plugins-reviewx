@@ -84,7 +84,9 @@ class ImportExportController implements InvokableContract
     public function importRollback($request)
     {
         try {
-            $response = $this->importExportServices->importRollback($request->get_params());
+            $data = $request->get_params();
+            $data['uid'] = $request->get_param('uid');
+            $response = $this->importExportServices->importRollback($data);
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());

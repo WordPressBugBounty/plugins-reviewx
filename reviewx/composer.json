@@ -1,25 +1,49 @@
 {
     "name": "reviewx/reviewx",
-    "description": "\\",
-    "type": "project",
-    "minimum-stability": "dev",
+    "description": "A WordPress Plugin",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Nahid Bin Azhar",
+            "email": "nahid.dns@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
     "require": {
-        "jouleslabs/warehouse": "dev-master",
-        "ext-json": "*"
-
+        "php": ">=7.4",
+        "wpdrill/core": "dev-master",
+        "firebase/php-jwt": "6.10.0",
+        "nahid/apiz": "^v5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rvx\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.4",
+        "phpunit/phpunit": "9.6.x-dev",
+        "wp-coding-standards/wpcs": "^3.0"
     },
     "repositories": [
         {
             "type": "vcs",
-            "url" : "https://github.com/JoulesLabs/warehouse"
+            "url": "https://github.com/WPDrill/core.git"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "ReviewX\\": "app/"
+    "config": {
+        "platform": {
+            "php": "7.4"
         },
-        "files": [
-            "app/Support/Helpers.php"
-        ]
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": false,
+            "bamarni/composer-bin-plugin": true
+        }
     }
 }

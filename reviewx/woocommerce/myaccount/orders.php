@@ -99,7 +99,7 @@ if ($has_orders) {
                     echo esc_url($order->get_view_order_url());
                     ?>">
                                         <?php 
-                    echo esc_html(_x('#', 'hash before order number', 'woocommerce') . $order->get_order_number());
+                    echo esc_html(_x('#', 'hash before order number', 'reviewx') . $order->get_order_number());
                     ?>
                                     </a>
                                 <?php 
@@ -228,7 +228,7 @@ if ($has_orders) {
                    href="<?php 
             echo esc_url(wc_get_endpoint_url('orders', $current_page - 1));
             ?>"><?php 
-            esc_html_e('Previous', 'woocommerce');
+            esc_html_e('Previous', 'reviewx');
             ?></a>
             <?php 
         }
@@ -241,7 +241,7 @@ if ($has_orders) {
                    href="<?php 
             echo esc_url(wc_get_endpoint_url('orders', $current_page + 1));
             ?>"><?php 
-            esc_html_e('Next', 'woocommerce');
+            esc_html_e('Next', 'reviewx');
             ?></a>
             <?php 
         }
@@ -256,7 +256,7 @@ if ($has_orders) {
     ?>
 
     <?php 
-    wc_print_notice(esc_html__('No order has been made yet.', 'woocommerce'), 'notice');
+    wc_print_notice(esc_html__('No order has been made yet.', 'reviewx'), 'notice');
     ?>
 
 <?php 
