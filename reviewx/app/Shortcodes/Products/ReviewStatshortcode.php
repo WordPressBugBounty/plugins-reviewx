@@ -31,7 +31,7 @@ class ReviewStatshortcode implements ShortcodeContract
         } elseif ($attrs['title'] === 'true' || empty($attrs['title'])) {
             $title = $data['postTitle'];
         } else {
-            $title = esc_html($attrs['title']);
+            $title = \esc_html($attrs['title']);
         }
         // If no title is provided, use the post title from the data.
         return View::render('storefront/shortcode/reviewStats', ['title' => $title, 'postType' => !empty($data['postType']) ? $data['postType'] : '', 'data' => \json_encode($data)]);
@@ -47,7 +47,7 @@ class ReviewStatshortcode implements ShortcodeContract
     public function getReviewStatsData(int $id, bool $isProduct) : array
     {
         // Retrieve the post object.
-        $post = get_post($id);
+        $post = \get_post($id);
         $defaultData = ['product' => ['id' => $id], 'postTitle' => $post ? $post->post_title : \false, 'postType' => $post ? $post->post_type : '', 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $defaultData;
     }

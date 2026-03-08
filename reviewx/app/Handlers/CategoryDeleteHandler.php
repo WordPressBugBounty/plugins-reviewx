@@ -41,10 +41,9 @@ class CategoryDeleteHandler
             $uid = Client::getUid() . '-' . $term_id;
             $response = (new CategoryApi())->remove($uid);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                throw new Exception("API status: " . $response->getStatusCode());
+                throw new Exception(\esc_html__("API status: ", 'reviewx') . $response->getStatusCode());
             }
         } catch (Exception $e) {
-            \error_log("Update failed for term {$term_id}: " . $e->getMessage());
             return \false;
         }
     }
@@ -63,12 +62,10 @@ class CategoryDeleteHandler
     }
     protected function handleNewParentTerm($term)
     {
-        // error_log("Term {$term->term_id} is now a parent");
         // Add specific new parent logic here
     }
     protected function handleFormerParentTerm($term)
     {
-        // error_log("Term {$term->term_id} was a parent but is now a child");
         // Add specific former parent logic here
     }
     protected function updateAllDescendants($term)

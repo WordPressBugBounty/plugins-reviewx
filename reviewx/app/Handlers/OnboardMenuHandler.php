@@ -11,6 +11,7 @@ class OnboardMenuHandler implements InvokableContract
     {
         global $wpdb;
         $rvxSites = $wpdb->prefix . 'rvx_sites';
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
         $wpdb->query("TRUNCATE TABLE {$rvxSites}");
         $sharedMethods = new SharedMethods();
         $is_pro_active = $sharedMethods->rvx_is_old_pro_plugin_active();
@@ -18,9 +19,10 @@ class OnboardMenuHandler implements InvokableContract
             // Old Pro version is detected, let's deactivate
             $sharedMethods->rvx_deactivate_old_pro_plugin();
             // Reload the page once to remove Old Pro plugin's notices
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Simple flag check, no form data processing
             if (!isset($_GET['rvx_reloaded'])) {
-                //$url = add_query_arg('rvx_reloaded', '1', $_SERVER['REQUEST_URI']);
-                $url = add_query_arg('', '', $_SERVER['REQUEST_URI']);
+                $current_uri = isset($_SERVER['REQUEST_URI']) ? \esc_url_raw(\wp_unslash($_SERVER['REQUEST_URI'])) : '';
+                $url = \add_query_arg('rvx_reloaded', '1', $current_uri);
                 \header('Location: ' . $url);
                 exit;
             }

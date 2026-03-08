@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Api\ReviewImportAndExportApi;
 use Rvx\CPT\CptHelper;
 use Rvx\Services\Api\LoginService;
@@ -30,12 +31,21 @@ class ImportExportServices extends \Rvx\Services\Service
         // Direct WP DB import
         $response = $this->importReviewStore($files, $data);
         global $wpdb;
+        $rvxSites = $wpdb->prefix . 'rvx_sites';
         // Initialize tables and reset sync flag
         (new \Rvx\Handlers\RvxInit\LoadReviewxCreateSiteTable())->init();
         \set_transient('rvx_reset_sync_flag', \true, 300);
         // 5 mins TTL
-        $rvxSites = $wpdb->prefix . 'rvx_sites';
-        $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+        $cache_key = 'rvx_site_uid';
+        $uid = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $uid) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery -- Table name from $wpdb->prefix, safe
+            $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+            if ($uid) {
+                \wp_cache_set($cache_key, $uid, 'reviewx', 86400);
+                // 1 day
+            }
+        }
         if ($uid) {
             // Mark as not synced initially
             $wpdb->update($rvxSites, ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
@@ -55,58 +65,64 @@ class ImportExportServices extends \Rvx\Services\Service
     public function importReviewStore($files, $data)
     {
         // Prevent timeout for large files
+        // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- Required for large CSV import processing
         \set_time_limit(0);
         $request = $data;
-        $reviews = [];
         $totalProcessed = 0;
         $successCount = 0;
-        $file = $files['file']['tmp_name'];
+        $file_path = $files['file']['tmp_name'];
         $wpReviewIds = [];
-        if (($handle = \fopen($file, 'r')) !== \FALSE) {
-            // Get the header row
-            $header = \fgetcsv($handle);
-            if (!$header) {
-                \fclose($handle);
-                return ['total' => 0, 'success' => 0, 'failed' => 0];
+        global $wp_filesystem;
+        if (empty($wp_filesystem)) {
+            require_once \ABSPATH . 'wp-admin/includes/file.php';
+            \WP_Filesystem();
+        }
+        $content = $wp_filesystem->get_contents($file_path);
+        if (empty($content)) {
+            return ['total' => 0, 'success' => 0, 'failed' => 0];
+        }
+        $lines = \explode(\PHP_EOL, $content);
+        $header_line = \array_shift($lines);
+        if (empty($header_line)) {
+            return ['total' => 0, 'success' => 0, 'failed' => 0];
+        }
+        $header = \str_getcsv($header_line);
+        $map = $request['map'] ?? [];
+        $productIdColumn = $map['product_id'] ?? null;
+        $chunkSize = 50;
+        $currentChunk = [];
+        foreach ($lines as $line) {
+            if (empty(\trim($line))) {
+                continue;
             }
-            $map = $request['map'] ?? [];
-            $productIdColumn = $map['product_id'] ?? null;
-            $chunkSize = 50;
-            $currentChunk = [];
-            while (($row = \fgetcsv($handle)) !== \FALSE) {
-                // Combine header with row data
-                if (\count($header) === \count($row)) {
-                    $reviewData = \array_combine($header, $row);
-                    // Basic validation
-                    if ($productIdColumn && !empty($reviewData[$productIdColumn])) {
-                        $currentChunk[] = $reviewData;
-                    }
-                }
-                // Process chunk
-                if (\count($currentChunk) >= $chunkSize) {
-                    $results = $this->processReviewBatch($currentChunk, $request);
-                    $totalProcessed += $results['total'];
-                    $successCount += $results['success'];
-                    $wpReviewIds = \array_merge($wpReviewIds, $results['ids']);
-                    $currentChunk = [];
-                    // Optional: distinct cleanups if needed per chunk
+            $row = \str_getcsv($line);
+            if (\count($header) === \count($row)) {
+                $reviewData = \array_combine($header, $row);
+                if ($productIdColumn && !empty($reviewData[$productIdColumn])) {
+                    $currentChunk[] = $reviewData;
                 }
             }
-            // Process remaining
-            if (!empty($currentChunk)) {
+            if (\count($currentChunk) >= $chunkSize) {
                 $results = $this->processReviewBatch($currentChunk, $request);
                 $totalProcessed += $results['total'];
                 $successCount += $results['success'];
                 $wpReviewIds = \array_merge($wpReviewIds, $results['ids']);
+                $currentChunk = [];
             }
-            \fclose($handle);
+        }
+        // Process remaining
+        if (!empty($currentChunk)) {
+            $results = $this->processReviewBatch($currentChunk, $request);
+            $totalProcessed += $results['total'];
+            $successCount += $results['success'];
+            $wpReviewIds = \array_merge($wpReviewIds, $results['ids']);
         }
         $response = ['total' => $totalProcessed, 'success' => $successCount, 'failed' => $totalProcessed - $successCount];
         // Log history to SaaS
         try {
             (new \Rvx\Api\ReviewImportAndExportApi())->logImportHistory(['name' => \basename($files['file']['name']), 'map' => $request['map'] ?? [], 'wp_review_ids' => $wpReviewIds, 'stats' => ['total_reviews' => $totalProcessed, 'success_reviews' => $successCount, 'failed_reviews' => $totalProcessed - $successCount]]);
-        } catch (\Exception $e) {
-            \error_log("Failed to log import history to SaaS: " . $e->getMessage());
+        } catch (\Throwable $e) {
+            // SaaS logging failed
         }
         return $response;
     }
@@ -134,8 +150,9 @@ class ImportExportServices extends \Rvx\Services\Service
                     $ids[] = $commentId;
                     $success++;
                 }
-            } catch (Exception $e) {
-                \error_log("Failed to insert review: " . $e->getMessage());
+            } catch (\Throwable $e) {
+                // Insert failed, but continue with the next review
+                \Rvx\Utilities\Helper::rvxLog('Review insertion failed: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine(), 'error');
             }
         }
         return ['total' => $total, 'success' => $success, 'ids' => $ids];
@@ -185,9 +202,15 @@ class ImportExportServices extends \Rvx\Services\Service
             $replyContentColumn = $request['map']['review_reply'] ?? null;
             if ($replyContentColumn && isset($review_data[$replyContentColumn]) && !empty($review_data[$replyContentColumn]) && $comment_id) {
                 $repliedAtColumn = $request['map']['replied_at'] ?? null;
-                $repliedAt = $repliedAtColumn && isset($review_data[$repliedAtColumn]) && !empty($review_data[$repliedAtColumn]) ? \strtotime($review_data[$repliedAtColumn]) : \time();
+                $repliedAtTime = \time();
+                if ($repliedAtColumn && !empty($review_data[$repliedAtColumn])) {
+                    $parsed = \strtotime($review_data[$repliedAtColumn]);
+                    if ($parsed !== \false) {
+                        $repliedAtTime = $parsed;
+                    }
+                }
                 $currentUser = Helper::getWpCurrentUser();
-                $replyData = ['comment_post_ID' => $reviews_id, 'comment_author' => $currentUser ? $currentUser->display_name : 'Shop Owner', 'comment_author_email' => $currentUser ? $currentUser->user_email : \get_option('admin_email'), 'comment_content' => $review_data[$replyContentColumn], 'comment_type' => 'comment', 'comment_parent' => $comment_id, 'comment_approved' => 1, 'comment_date' => \wp_date('Y-m-d H:i:s', $repliedAt)];
+                $replyData = ['comment_post_ID' => $reviews_id, 'comment_author' => $currentUser ? $currentUser->display_name : 'Shop Owner', 'comment_author_email' => $currentUser ? $currentUser->user_email : \get_option('admin_email'), 'comment_content' => $review_data[$replyContentColumn], 'comment_type' => 'comment', 'comment_parent' => $comment_id, 'comment_approved' => 1, 'comment_date' => \wp_date('Y-m-d H:i:s', $repliedAtTime)];
                 \wp_insert_comment($replyData);
             }
         }
@@ -209,17 +232,17 @@ class ImportExportServices extends \Rvx\Services\Service
         $count = 0;
         $affectedPosts = [];
         foreach ($wpReviewIds as $commentId) {
-            $comment = \Rvx\get_comment($commentId);
+            $comment = \get_comment($commentId);
             if ($comment) {
                 $affectedPosts[] = $comment->comment_post_ID;
                 // Find and delete replies (child comments)
-                $replies = \Rvx\get_comments(['parent' => $commentId]);
+                $replies = \get_comments(['parent' => $commentId]);
                 if (!empty($replies)) {
                     foreach ($replies as $reply) {
-                        \Rvx\wp_delete_comment($reply->comment_ID, \true);
+                        \wp_delete_comment($reply->comment_ID, \true);
                     }
                 }
-                if (\Rvx\wp_delete_comment($commentId, \true)) {
+                if (\wp_delete_comment($commentId, \true)) {
                     $count++;
                 }
             }
@@ -264,8 +287,8 @@ class ImportExportServices extends \Rvx\Services\Service
         }
         // 1. Same-Domain Check
         $homeUrl = \Rvx\home_url();
-        $parsedHome = \parse_url($homeUrl);
-        $parsedUrl = \parse_url($url);
+        $parsedHome = \wp_parse_url($homeUrl);
+        $parsedUrl = \wp_parse_url($url);
         if (isset($parsedUrl['host'], $parsedHome['host']) && $parsedUrl['host'] === $parsedHome['host']) {
             return $url;
         }
@@ -273,31 +296,34 @@ class ImportExportServices extends \Rvx\Services\Service
         $args = ['post_type' => 'attachment', 'post_status' => 'inherit', 'meta_query' => [['key' => '_rvx_source_url', 'value' => $url]], 'posts_per_page' => 1, 'fields' => 'ids'];
         $existing = \Rvx\get_posts($args);
         if (!empty($existing)) {
-            return \Rvx\wp_get_attachment_url($existing[0]);
+            return \wp_get_attachment_url($existing[0]);
         }
         // 3. Sideloading Process
-        if (!\function_exists('Rvx\\download_url')) {
+        if (!\function_exists('download_url')) {
             require_once \ABSPATH . 'wp-admin/includes/file.php';
         }
         if (!\function_exists('Rvx\\media_handle_sideload')) {
             require_once \ABSPATH . 'wp-admin/includes/media.php';
             require_once \ABSPATH . 'wp-admin/includes/image.php';
         }
-        $tmp = \Rvx\download_url($url);
+        $tmp = \download_url($url);
         if (\is_wp_error($tmp)) {
-            \error_log("RVX Import: Failed to download attachment ({$url}): " . $tmp->get_error_message());
             return $url;
         }
         $file_array = ['name' => \basename($url), 'tmp_name' => $tmp];
         // Sideload keeping the file
         $id = \Rvx\media_handle_sideload($file_array, 0);
         if (\is_wp_error($id)) {
-            @\unlink($tmp);
-            \error_log("RVX Import: Failed to sideload attachment ({$url}): " . $id->get_error_message());
+            global $wp_filesystem;
+            if (!empty($wp_filesystem)) {
+                $wp_filesystem->delete($tmp);
+            } else {
+                \wp_delete_file($tmp);
+            }
             return $url;
         }
         // Store original source URL as metadata
         \update_post_meta($id, '_rvx_source_url', $url);
-        return \Rvx\wp_get_attachment_url($id);
+        return \wp_get_attachment_url($id);
     }
 }

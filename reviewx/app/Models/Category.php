@@ -2,6 +2,7 @@
 
 namespace Rvx\Models;
 
+\defined("ABSPATH") || exit;
 use Rvx\WPDrill\Models\Model;
 class Category extends Model
 {

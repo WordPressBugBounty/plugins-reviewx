@@ -26,17 +26,17 @@ class ReviewListShortcode implements ShortcodeContract
             return '<div class="warning notice notice-error"><b>Error:</b> Post type can\'t be used with `product_id` and/or `post_id` in the shortcode.</div>';
         }
         if (!empty($attrs['product_id']) || !empty($attrs['post_id'])) {
-            $title = esc_attr($attrs['title']) ?: 'true';
-            $type_name_id = !empty($attrs['product_id']) ? ' product_id="' . esc_attr($attrs['product_id']) . '"' : (!empty($attrs['post_id']) ? ' post_id="' . esc_attr($attrs['post_id']) . '"' : '');
-            return do_shortcode('[rvx-review-form title="' . $title . '" filter="' . esc_attr($attrs['filter']) . '" ' . $type_name_id . ' graph="off" list="on" form="off"]');
+            $title = \esc_attr($attrs['title']) ?: 'true';
+            $type_name_id = !empty($attrs['product_id']) ? ' product_id="' . \esc_attr($attrs['product_id']) . '"' : (!empty($attrs['post_id']) ? ' post_id="' . \esc_attr($attrs['post_id']) . '"' : '');
+            return do_shortcode('[rvx-review-form title="' . $title . '" filter="' . \esc_attr($attrs['filter']) . '" ' . $type_name_id . ' graph="off" list="on" form="off"]');
         }
         if (!empty($attrs['post_type']) || empty($attrs['product_id']) && empty($attrs['post_id'])) {
             $this->reviewFormHelper = new ReviewFormHelper();
             $data = $this->attributesData($attrs);
-            if ($data['post_type_enabled'] == \false && !empty(esc_attr($attrs['post_type']))) {
+            if ($data['post_type_enabled'] == \false && !empty(\esc_attr($attrs['post_type']))) {
                 return '<div class="warning notice notice-error"><b>Error:</b> This post type isn\'t enabled in ReviewX.</div>';
             }
-            $title = !isset($attrs['title']) || $attrs['title'] === 'false' ? 'false' : esc_html($attrs['title']);
+            $title = !isset($attrs['title']) || $attrs['title'] === 'false' ? 'false' : \esc_html($attrs['title']);
             return View::render('storefront/shortcode/reviewList', ['title' => $title, 'data' => $data]);
         }
         return '<div class="warning notice notice-error"><b>Error:</b> Please, make sure you have provided necessary parameter\'(s) in the shortcode. Please, follow documentation.</div>';
@@ -47,13 +47,13 @@ class ReviewListShortcode implements ShortcodeContract
         $postType = null;
         if (!empty($attrs['post_type'])) {
             $enabled_post_types = $this->reviewFormHelper->rvxEnabledPostTypes();
-            $currentPostType = esc_attr($attrs['post_type']) ?: 'rvx_no_post_type';
-            $postType = esc_attr($attrs['post_type']) ?: null;
+            $currentPostType = \esc_attr($attrs['post_type']) ?: 'rvx_no_post_type';
+            $postType = \esc_attr($attrs['post_type']) ?: null;
             if (isset($enabled_post_types[$currentPostType]) && \strtolower($enabled_post_types[$currentPostType]) == $currentPostType) {
                 $postTypeEnable = 1;
             }
         }
-        $attributes = ['post_type_enabled' => $postTypeEnable, 'filter' => esc_attr($attrs['filter']) ?: 'off', 'params' => ['post_type' => $postType, 'sort_by' => esc_attr($attrs['sort_by']) ?: '', 'attachment' => esc_attr($attrs['attachment']) ?: '', 'rating' => esc_attr($attrs['rating']) ?: ''], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
+        $attributes = ['post_type_enabled' => $postTypeEnable, 'filter' => \esc_attr($attrs['filter']) ?: 'off', 'params' => ['post_type' => $postType, 'sort_by' => \esc_attr($attrs['sort_by']) ?: '', 'attachment' => \esc_attr($attrs['attachment']) ?: '', 'rating' => \esc_attr($attrs['rating']) ?: ''], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $attributes;
     }
 }

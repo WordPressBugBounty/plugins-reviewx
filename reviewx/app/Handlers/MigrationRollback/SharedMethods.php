@@ -103,7 +103,7 @@ class SharedMethods
         // Retrieve existing criteria from the database
         $existingOldData = \get_option('_rx_option_review_criteria');
         if ($existingOldData) {
-            $oldCriteria = maybe_unserialize($existingOldData);
+            $oldCriteria = \maybe_unserialize($existingOldData);
             // Deserialize existing criteria
         }
         // Find the highest number in old criteria keys (ctr_h8S7, ctr_h8S8, etc.)

@@ -2,6 +2,7 @@
 
 namespace Rvx\CPT\Shared;
 
+\defined('ABSPATH') || exit;
 use Rvx\CPT\CptHelper;
 class PostsRatingColumn
 {
@@ -16,10 +17,10 @@ class PostsRatingColumn
         // Loop through each post type and hook into the actions/filters dynamically
         foreach ($enabled_post_types as $post_type) {
             // Hook into the columns filter for each post type
-            add_filter("manage_edit-{$post_type}_columns", function ($columns) use($post_type) {
+            \add_filter("manage_edit-{$post_type}_columns", function ($columns) use($post_type) {
                 return $this->addRatingColumn($columns, $post_type);
             });
-            add_action("manage_{$post_type}_posts_custom_column", [$this, 'populateRatingColumn'], 10, 2);
+            \add_action("manage_{$post_type}_posts_custom_column", [$this, 'populateRatingColumn'], 10, 2);
             // if($post_type !== 'product'){
             //     add_filter("manage_edit-{$post_type}_sortable_columns", [$this, 'makeRatingColumnSortable']);
             //     add_action('pre_get_posts', [$this, 'sortPostsByRating']);
@@ -41,13 +42,13 @@ class PostsRatingColumn
             // Insert the 'rating' column after the 'price' column
             if ($price_position !== \false) {
                 // Add the 'rating' column after the 'author' column
-                $columns = \array_slice($columns, 0, $price_position + 1, \true) + ['rating' => __('ReviewX Rating', 'reviewx')] + \array_slice($columns, $price_position + 1, null, \true);
+                $columns = \array_slice($columns, 0, $price_position + 1, \true) + ['rating' => \__('ReviewX Rating', 'reviewx')] + \array_slice($columns, $price_position + 1, null, \true);
             }
         } else {
             // For other post types, find the position of the 'author' column
             $author_position = \array_search('author', \array_keys($columns));
             if ($author_position !== \false) {
-                $columns = \array_slice($columns, 0, $author_position + 1, \true) + ['rating' => __('ReviewX Rating', 'reviewx')] + \array_slice($columns, $author_position + 1, null, \true);
+                $columns = \array_slice($columns, 0, $author_position + 1, \true) + ['rating' => \__('ReviewX Rating', 'reviewx')] + \array_slice($columns, $author_position + 1, null, \true);
             }
         }
         return $columns;
@@ -61,10 +62,10 @@ class PostsRatingColumn
     public function populateRatingColumn($column, $post_id)
     {
         if ($column === 'rating') {
-            $post_type = get_post_type($post_id);
+            $post_type = \get_post_type($post_id);
             $meta_key = 'product' === $post_type ? '_wc_average_rating' : 'rvx_avg_rating';
             $rating = \get_post_meta($post_id, $meta_key, \true);
-            echo $this->getStarsHtml($rating ? $rating : 0);
+            echo \wp_kses($this->getStarsHtml($rating ? $rating : 0), ['span' => ['class' => [], 'title' => [], 'style' => []]]);
             // Default to 0 if no rating
         }
     }
@@ -94,7 +95,7 @@ class PostsRatingColumn
             }
             $stars .= $star_symbol;
         }
-        return "<span class='rvx-stars' title='{$rating}' style='font-size: {$star_size}; color: #f5a623;'>{$stars}</span>";
+        return "<span class='rvx-stars' title='" . \esc_attr($rating) . "' style='font-size: " . \esc_attr($star_size) . "; color: #f5a623;'>" . $stars . "</span>";
     }
     /**
      * Make the rating column sortable.
@@ -114,9 +115,11 @@ class PostsRatingColumn
      */
     public function sortPostsByRating($query)
     {
-        if (is_admin() && isset($_GET['orderby']) && 'rating' === $_GET['orderby']) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for column sorting, not processing form data
+        if (\is_admin() && isset($_GET['orderby']) && 'rating' === $_GET['orderby']) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for column sorting, not processing form data
             $order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'ASC' : 'DESC';
-            $meta_key = get_post_type() === 'product' ? '_wc_average_rating' : 'rvx_avg_rating';
+            $meta_key = \get_post_type() === 'product' ? '_wc_average_rating' : 'rvx_avg_rating';
             $query->set('meta_key', $meta_key);
             $query->set('orderby', 'meta_value_num');
             $query->set('order', $order);

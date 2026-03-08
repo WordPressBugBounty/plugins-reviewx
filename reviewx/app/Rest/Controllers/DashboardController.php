@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Rvx\Services\DashboardServices;
 use Rvx\Utilities\Helper;
 use Throwable;

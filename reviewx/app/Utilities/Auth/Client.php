@@ -2,6 +2,7 @@
 
 namespace Rvx\Utilities\Auth;
 
+\defined("ABSPATH") || exit;
 use Rvx\WPDrill\Facade;
 /**
  * Class Client

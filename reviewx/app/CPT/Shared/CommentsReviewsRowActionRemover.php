@@ -22,7 +22,7 @@ class CommentsReviewsRowActionRemover
         // List of post types to target (include product)
         $enabled_post_types = $this->cptHelper->enabledCPT();
         // Get the post type of the comment
-        $post_type = get_post_type($comment->comment_post_ID);
+        $post_type = \get_post_type($comment->comment_post_ID);
         // Get the comment type (WooCommerce product reviews have a type 'review')
         $comment_type = $comment->comment_type;
         // List of actions to remove

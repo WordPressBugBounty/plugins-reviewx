@@ -2,6 +2,7 @@
 
 namespace Rvx\Handlers;
 
+\defined('ABSPATH') || exit;
 use Rvx\Api\AuthApi;
 use Rvx\CPT\CptHelper;
 use Rvx\Services\Api\LoginService;
@@ -25,7 +26,7 @@ class PluginActivatedHandler implements InvokableContract
     }
     public function __invoke()
     {
-        add_action('activated_plugin', function ($plugin) {
+        \add_action('activated_plugin', function ($plugin) {
             if (RVX_DIR_NAME . '/reviewx.php' !== $plugin) {
                 return;
             }
@@ -35,11 +36,19 @@ class PluginActivatedHandler implements InvokableContract
             \set_transient('rvx_reset_sync_flag', \true, 300);
             // 5 mins TTL
             $this->migrator->run();
-            $rvxSites = $wpdb->prefix . 'rvx_sites';
-            $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+            $cache_key = 'rvx_site_uid';
+            $uid = \wp_cache_get($cache_key, 'reviewx');
+            if (\false === $uid) {
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
+                $uid = $wpdb->get_var("SELECT uid FROM {$wpdb->prefix}rvx_sites ORDER BY id DESC LIMIT 1");
+                if ($uid) {
+                    \wp_cache_set($cache_key, $uid, 'reviewx', 86400);
+                    // 1 day
+                }
+            }
             if ($uid) {
                 // Mark as not synced initially
-                $wpdb->update($rvxSites, ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
+                $wpdb->update("{$wpdb->prefix}rvx_sites", ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
                 try {
                     // Attempt SaaS activation
                     (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => \defined('RVX_VERSION') ? RVX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
@@ -55,16 +64,14 @@ class PluginActivatedHandler implements InvokableContract
                     }
                 } catch (Exception $e) {
                     // Clean up if AuthApi fails
-                    $wpdb->query("TRUNCATE TABLE {$rvxSites}");
-                    if (\defined('WP_DEBUG') || WP_DEBUG) {
-                        \error_log('[ReviewX] Activation warning: AuthApi connection failed - ' . $e->getMessage());
-                    }
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
+                    $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}rvx_sites");
                 }
             }
             // Always clean cache and redirect, even if UID or API failed
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
-            wp_safe_redirect(admin_url('admin.php?page=reviewx'));
+            \wp_safe_redirect(\admin_url('admin.php?page=reviewx'));
             exit;
         }, 15, 1);
     }

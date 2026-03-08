@@ -61,6 +61,18 @@ class RouteManager
     {
         return $this->addRoute('POST', $uri, $action);
     }
+    public function put(string $uri, $action)
+    {
+        return $this->addRoute('PUT', $uri, $action);
+    }
+    public function patch(string $uri, $action)
+    {
+        return $this->addRoute('PATCH', $uri, $action);
+    }
+    public function delete(string $uri, $action)
+    {
+        return $this->addRoute('DELETE', $uri, $action);
+    }
     public function loadRoutes()
     {
         require_once $this->app->getPath('routes/api.php');
@@ -69,7 +81,7 @@ class RouteManager
     }
     public function dispatch()
     {
-        add_action('rest_api_init', function () {
+        \add_action('rest_api_init', function () {
             /**
              * @var Route $route
              */

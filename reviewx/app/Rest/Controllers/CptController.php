@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Rvx\CPT\CptHelper;
 use Rvx\Services\CptService;
 use Rvx\Services\DataSyncService;

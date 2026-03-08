@@ -2,11 +2,12 @@
 
 namespace Rvx\Handlers;
 
+\defined('ABSPATH') || exit;
 class IsAlreadySyncSucess
 {
     public function resetSyncFlag()
     {
-        add_action('admin_footer', function () {
+        \add_action('admin_footer', function () {
             if (!\get_transient('rvx_reset_sync_flag')) {
                 return;
             }

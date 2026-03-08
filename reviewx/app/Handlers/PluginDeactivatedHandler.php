@@ -11,7 +11,16 @@ class PluginDeactivatedHandler implements InvokableContract
     {
         global $wpdb;
         $rvxSites = $wpdb->prefix . 'rvx_sites';
-        $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+        $cache_key = 'rvx_site_uid';
+        $uid = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $uid) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery -- Table name from $wpdb->prefix, safe; no placeholders needed
+            $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+            if ($uid) {
+                \wp_cache_set($cache_key, $uid, 'reviewx');
+                // Cache indefinitely or with a default expiration
+            }
+        }
         if ($uid) {
             // Change rvx_sites table is_saas_sync to 0
             $wpdb->update($rvxSites, ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
@@ -21,10 +30,6 @@ class PluginDeactivatedHandler implements InvokableContract
                 // Attempt API call — skip gracefully on failure
                 (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 0, 'plugin_version' => \defined('RVX_VERSION') ? RVX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
             } catch (Exception $e) {
-                // Log quietly instead of breaking plugin disable process
-                if (\defined('WP_DEBUG') || WP_DEBUG) {
-                    \error_log('[ReviewX] PluginDeactivatedHandler: API call failed - ' . $e->getMessage());
-                }
                 // continue silently
             }
         }

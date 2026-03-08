@@ -15,7 +15,7 @@ class WooCommerceReviewEditForm
     }
     public function __invoke($id, $data)
     {
-        $comment = get_comment($id);
+        $comment = \get_comment($id);
         if ($comment && $comment->comment_parent > 0) {
             // It's a reply
             $wpUniqueId = Client::getUid() . '-' . $comment->comment_parent;
@@ -23,7 +23,7 @@ class WooCommerceReviewEditForm
             try {
                 (new ReviewsApi())->commentReply($replies, $wpUniqueId);
             } catch (\Exception $e) {
-                \error_log("Reply edit sync failed: " . $e->getMessage());
+                // Reply edit sync failed
             }
         } else {
             // It's a review
@@ -46,6 +46,6 @@ class WooCommerceReviewEditForm
         //     // For other post types, round to two decimal places.
         //     $rating = (float) round($rating, 2);
         // }
-        return ['wp_id' => $id, 'wp_post_id' => $post_id, 'comment_approved' => $data['comment_approved'], 'rating' => $rating, 'reviewer_email' => $data['comment_author_email'], 'reviewer_name' => $data['comment_author'], 'feedback' => $data['comment_content'], 'date' => current_time('mysql', \true), 'customer_id' => $data['user_id'], 'wp_unique_id' => Client::getUid() . '-' . $id, 'woocommerce_update' => \true];
+        return ['wp_id' => $id, 'wp_post_id' => $post_id, 'comment_approved' => $data['comment_approved'], 'rating' => $rating, 'reviewer_email' => $data['comment_author_email'], 'reviewer_name' => $data['comment_author'], 'feedback' => $data['comment_content'], 'date' => \current_time('mysql', \true), 'customer_id' => $data['user_id'], 'wp_unique_id' => Client::getUid() . '-' . $id, 'woocommerce_update' => \true];
     }
 }

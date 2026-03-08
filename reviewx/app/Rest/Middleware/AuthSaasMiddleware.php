@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Middleware;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use WP_REST_Request;
 use Rvx\Utilities\Auth\Client;

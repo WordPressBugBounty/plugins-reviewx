@@ -19,11 +19,13 @@ class CustomBulkActionsForReviewsHandler
         if (!$screen instanceof \Rvx\Handlers\BulkAction\WP_Screen || $screen->id !== 'edit-comments') {
             return;
         }
-        // Validate request parameters
         if (empty($_REQUEST['action']) || empty($_REQUEST['delete_comments'])) {
             return;
         }
-        $action = sanitize_text_field($_REQUEST['action']);
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_REQUEST['_wpnonce'])), 'bulk-comments')) {
+            return;
+        }
+        $action = \sanitize_text_field(\wp_unslash($_REQUEST['action']));
         $comment_ids = \array_map('intval', (array) $_REQUEST['delete_comments']);
         // Define valid actions
         $valid_actions = ['approve', 'unapprove', 'spam', 'trash', 'unspam', 'restore'];

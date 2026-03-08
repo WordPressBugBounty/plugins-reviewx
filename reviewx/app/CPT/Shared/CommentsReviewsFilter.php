@@ -28,7 +28,7 @@ class CommentsReviewsFilter
             return;
         }
         // Only filter on the admin comments page
-        if (!is_admin()) {
+        if (!\is_admin()) {
             return;
         }
         // Check if we're on the comments admin page
@@ -67,9 +67,11 @@ class CommentsReviewsFilter
         }
         // Build placeholders for IN clause
         $placeholders = \implode(', ', \array_fill(0, \count($post_types), '%s'));
-        // Prepare query to get post IDs for the enabled post types
-        $query = $wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$placeholders})", \array_values($post_types));
-        $post_ids = $wpdb->get_col($query);
+        $post_ids = $wpdb->get_col($wpdb->prepare(
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is safe array_fill of %s
+            "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$placeholders})",
+            \array_values($post_types)
+        ));
         return \array_map('intval', $post_ids);
     }
 }

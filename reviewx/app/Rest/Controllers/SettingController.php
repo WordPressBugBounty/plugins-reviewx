@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Rvx\Services\SettingService;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;

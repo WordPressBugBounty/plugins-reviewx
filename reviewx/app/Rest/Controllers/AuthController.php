@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Rvx\Api\AuthApi;
 use Rvx\CPT\CptHelper;

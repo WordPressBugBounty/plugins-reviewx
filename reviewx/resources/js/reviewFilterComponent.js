@@ -1,24 +1,24 @@
-function __rvxReviewFilterComponent__() {
+window.__rvxReviewFilterComponent__ = function () {
     return {
         openFilterOptions: false,
         openSortOptions: false,
         selectFilterByRating: 'all',
         selectFilterByAttachment: 'both',
         selectFilterCount: 0,
-        selectSortBy :'newest_first',
-        applyFilterHandler(){
+        selectSortBy: 'newest_first',
+        applyFilterHandler() {
             const newQuery = {}
             this.selectFilterCount = 0
             if (this.selectFilterByAttachment) {
-                newQuery.attachment=  this.selectFilterByAttachment
-                if(this.selectFilterByAttachment !== 'both'){
+                newQuery.attachment = this.selectFilterByAttachment
+                if (this.selectFilterByAttachment !== 'both') {
                     this.selectFilterCount += 1
                 }
                 // storeFrontReviewQueryCount.value += 1
             }
             if (this.selectFilterByRating) {
                 newQuery.rating = this.selectFilterByRating
-                if(this.selectFilterByRating !== 'all'){
+                if (this.selectFilterByRating !== 'all') {
                     this.selectFilterCount += 1
                 }
                 // storeFrontReviewQueryCount.value += 1
@@ -29,10 +29,10 @@ function __rvxReviewFilterComponent__() {
                 ...newQuery
             }
             this.isFiltering = true
-            this.fetchReviews({query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id})
+            this.fetchReviews({ query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id })
             this.openFilterOptions = false
         },
-        filterResetHandler(){
+        filterResetHandler() {
             // Reset the selected filters to default values
             this.selectFilterByRating = 'all';
             this.selectFilterByAttachment = 'both';
@@ -52,21 +52,21 @@ function __rvxReviewFilterComponent__() {
             this.selectFilterCount = 0
             this.isFiltering = false
             // Fetch reviews based on the reset query
-            this.fetchReviews({query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id});
+            this.fetchReviews({ query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id });
 
             // Close the filter options UI
             this.openFilterOptions = false;
         },
         init() {
             this.$watch('selectSortBy', (newValue, oldValue) => {
-                if(newValue !== oldValue){
+                if (newValue !== oldValue) {
                     if (this.fetchReviewsIsLoading) return;
                     this.storeFrontReviewQuery = {
                         ...this.storeFrontReviewQuery,
                         cursor: '',
                         sortBy: newValue
                     }
-                    this.fetchReviews({query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id})
+                    this.fetchReviews({ query: this.storeFrontReviewQuery, productId: this.rvxAttributes?.product?.id })
                     this.openSortOptions = false
                 }
             });

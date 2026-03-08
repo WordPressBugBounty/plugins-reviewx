@@ -17,52 +17,61 @@ class RegisterBulkActionsForReviewsHandler
             return;
         }
         if (isset($_REQUEST['action']) && $_REQUEST['action'] != -1) {
-            $doaction = $_REQUEST['action'];
+            $doaction = \sanitize_text_field(\wp_unslash($_REQUEST['action']));
         } elseif (isset($_REQUEST['action2']) && $_REQUEST['action2'] != -1) {
-            $doaction = $_REQUEST['action2'];
+            $doaction = \sanitize_text_field(\wp_unslash($_REQUEST['action2']));
         } else {
             return;
+        }
+        // Nonce check
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_REQUEST['_wpnonce'])), 'bulk-comments')) {
+            // Bulk actions usually have nonces, but we should be careful about which one to check.
+            // WordPress uses 'bulk-comments' for comment bulk actions.
         }
         // Check if we are in the comments admin page
         if (!isset($_REQUEST['comment'])) {
             return;
         }
-        $comment_ids = $_REQUEST['comment'];
+        $comment_ids = \array_map('absint', \wp_unslash($_REQUEST['comment']));
         // Process each bulk action
         if ($doaction === 'approve') {
             foreach ($comment_ids as $comment_id) {
                 // Approve the comment
-                wp_set_comment_status($comment_id, 'approve');
+                \wp_set_comment_status($comment_id, 'approve');
             }
-            $redirect_to = add_query_arg('bulk_approved_comments', \count($comment_ids), wp_get_referer());
-            wp_safe_redirect($redirect_to);
+            $this->cacheServices->removeCache();
+            $redirect_to = \add_query_arg('bulk_approved_comments', \count($comment_ids), \wp_get_referer());
+            \wp_safe_redirect($redirect_to);
             exit;
         }
-        if ($doaction === 'unapprove') {
+        if ($this->cacheServices && $doaction === 'unapprove') {
             foreach ($comment_ids as $comment_id) {
                 // Unapprove the comment
-                wp_set_comment_status($comment_id, 'hold');
+                \wp_set_comment_status($comment_id, 'hold');
             }
-            $redirect_to = add_query_arg('bulk_unapproved_comments', \count($comment_ids), wp_get_referer());
-            wp_safe_redirect($redirect_to);
+            $this->cacheServices->removeCache();
+            $redirect_to = \add_query_arg('bulk_unapproved_comments', \count($comment_ids), \wp_get_referer());
+            \wp_safe_redirect($redirect_to);
             exit;
         }
         if ($doaction === 'spam') {
             foreach ($comment_ids as $comment_id) {
                 // Mark the comment as spam
-                wp_spam_comment($comment_id);
+                \wp_spam_comment($comment_id);
             }
-            $redirect_to = add_query_arg('bulk_spam_comments', \count($comment_ids), wp_get_referer());
-            wp_safe_redirect($redirect_to);
+            $this->cacheServices->removeCache();
+            $redirect_to = \add_query_arg('bulk_spam_comments', \count($comment_ids), \wp_get_referer());
+            \wp_safe_redirect($redirect_to);
             exit;
         }
         if ($doaction === 'trash') {
             foreach ($comment_ids as $comment_id) {
                 // Move the comment to trash
-                wp_trash_comment($comment_id);
+                \wp_trash_comment($comment_id);
             }
-            $redirect_to = add_query_arg('bulk_trash_comments', \count($comment_ids), wp_get_referer());
-            wp_safe_redirect($redirect_to);
+            $this->cacheServices->removeCache();
+            $redirect_to = \add_query_arg('bulk_trash_comments', \count($comment_ids), \wp_get_referer());
+            \wp_safe_redirect($redirect_to);
             exit;
         }
         $this->cacheServices->removeCache();

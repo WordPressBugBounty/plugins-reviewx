@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
@@ -26,10 +27,10 @@ class ProductSyncService extends \Rvx\Services\Service
         $this->syncedCategories = new CategorySyncService();
         $this->postTermRelation = $this->syncedCategories->getPostTermRelation();
     }
-    public function processProductForSync($file, $post_type) : int
+    public function processProductForSync(&$buffer, $post_type) : int
     {
         $this->syncProductsMeta($post_type);
-        return $this->syncProducts($file, $post_type);
+        return $this->syncProducts($buffer, $post_type);
     }
     public function getProductAttachementRalation()
     {
@@ -74,15 +75,15 @@ class ProductSyncService extends \Rvx\Services\Service
                 }
             });
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception(\esc_html($e->getMessage()));
         }
     }
-    public function syncProducts($file, $post_type)
+    public function syncProducts(&$buffer, $post_type)
     {
         $productCount = 0;
         $attachmentRelation = [];
         $this->postMetaAttachmentsRelation = [];
-        DB::table('posts')->select(['ID', 'post_type', 'post_title', 'post_name', 'post_excerpt', 'post_status', 'guid', 'post_modified', 'comment_count'])->orderBy('ID')->whereIn('post_type', [$post_type])->chunk(100, function ($products) use(&$attachmentRelation, &$file, &$productCount) {
+        DB::table('posts')->select(['ID', 'post_type', 'post_title', 'post_name', 'post_excerpt', 'post_status', 'guid', 'post_modified', 'comment_count'])->orderBy('ID')->whereIn('post_type', [$post_type])->chunk(100, function ($products) use(&$attachmentRelation, &$buffer, &$productCount) {
             foreach ($products as $product) {
                 $this->productids[] = $product->ID;
                 $productImage = get_the_post_thumbnail_url($product->ID, 'full') ? get_the_post_thumbnail_url($product->ID, 'full') : null;
@@ -91,8 +92,9 @@ class ProductSyncService extends \Rvx\Services\Service
                 }
                 $formatedProduct = $this->processProduct($product, $productImage);
                 if ($formatedProduct['post_type'] !== 'attachment') {
-                    Helper::appendToJsonl($file, $formatedProduct);
-                    $productCount++;
+                    if (Helper::appendToJsonl($buffer, $formatedProduct)) {
+                        $productCount++;
+                    }
                 }
             }
         });

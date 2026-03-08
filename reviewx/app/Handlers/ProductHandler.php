@@ -9,7 +9,7 @@ class ProductHandler
     public function __invoke($new_status, $old_status, $product)
     {
         if ($new_status == 'publish' && $old_status != 'publish') {
-            $post = get_post($product->ID);
+            $post = \get_post($product->ID);
             if ($post->post_type === 'product') {
                 switch ($new_status) {
                     case 'publish':
@@ -17,17 +17,14 @@ class ProductHandler
                         $payload = $this->prepareData($currentProduct);
                         $response = (new ProductApi())->create($payload);
                         if ($response->getStatusCode() !== Response::HTTP_OK) {
-                            \error_log("Product Not insert" . $response->getStatusCode());
                             return \false;
                         }
                         break;
                 }
             } else {
                 $payload = $this->customPost($post);
-                \error_log("Custom post" . \print_r($payload, \true));
                 $response = (new ProductApi())->create($payload);
                 if ($response->getStatusCode() !== Response::HTTP_OK) {
-                    \error_log("Cpt Not insert" . $response);
                     return \false;
                 }
             }
@@ -42,8 +39,8 @@ class ProductHandler
             "title" => isset($title) ? \htmlspecialchars($title, \ENT_QUOTES, 'UTF-8') : null,
             "url" => get_permalink($currentProduct->get_id()),
             "description" => isset($currentProduct->short_description) ? \htmlspecialchars($currentProduct->short_description, \ENT_QUOTES, 'UTF-8') : null,
-            "price" => isset($_POST['_regular_price']) ? (float) sanitize_text_field($_POST['_regular_price']) : 0,
-            "discounted_price" => isset($_POST['_sale_price']) ? (float) sanitize_text_field($_POST['_sale_price']) : 0,
+            "price" => (float) $currentProduct->get_regular_price(),
+            "discounted_price" => (float) $currentProduct->get_sale_price(),
             "slug" => $currentProduct->get_slug(),
             "image" => $images[0] ?? '',
             "status" => $this->productStatus($currentProduct->get_status()),
@@ -90,17 +87,15 @@ class ProductHandler
     public function customPost($post)
     {
         $image_url = get_the_post_thumbnail_url($post->ID, 'full');
-        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => $image_url ?? '', "status" => $this->productStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => 0.0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => [\Rvx\Utilities\Auth\Client::getUid() . '-' . 0]];
+        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => $image_url ?? '', "status" => $this->productStatus($post->post_status), "post_type" => \get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => 0.0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => [\Rvx\Utilities\Auth\Client::getUid() . '-' . 0]];
         return $data;
     }
     public function getPostCategoryIds($post_ids)
     {
         if (empty($post_ids)) {
-            \error_log("No valid post ID provided.");
             return [];
         }
         if (empty($category_ids)) {
-            \error_log("No categories found for post ID: " . $post_ids);
             return [];
         }
         $parent_category_ids = [];

@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Apiz\Http\Response;
 use Rvx\Api\ProductApi;
 class ProductService extends \Rvx\Services\Service

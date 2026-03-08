@@ -14,7 +14,7 @@ class StorefrontReviewLinkClickScroll
     {
         global $post;
         // Check if $post is available before accessing properties
-        if (!isset($post) || !\is_object($post) && !is_admin()) {
+        if (!isset($post) || !\is_object($post) && !\is_admin()) {
             return;
         }
         // Define the target post types

@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Rvx\Services\Api\LoginService;
 use Rvx\Services\ReviewService;
@@ -263,8 +264,7 @@ class StoreFrontReviewController implements InvokableContract
     public function getOnlyApproveReviewCount($id) : int
     {
         global $wpdb;
-        $query = $wpdb->prepare("SELECT COUNT(*) \n             FROM {$wpdb->comments} \n             WHERE comment_post_ID = %d \n             AND comment_approved = '1' \n             AND comment_parent = 0\n             AND comment_type IN ('comment', 'review')", $id);
-        return (int) $wpdb->get_var($query);
+        return (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) \n             FROM {$wpdb->comments} \n             WHERE comment_post_ID = %d \n             AND comment_approved = '1' \n             AND comment_parent = 0\n             AND comment_type IN ('comment', 'review')", $id));
     }
     public function insightReviewCount($id) : int
     {
@@ -333,7 +333,7 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function storeAggregationMeta($productId, $payload)
     {
-        $aggregation_data = \json_encode(wp_slash(Helper::arrayGet($payload, "meta")), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
+        $aggregation_data = \json_encode(\wp_slash(Helper::arrayGet($payload, "meta")), \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
         \set_transient("rvx_{$productId}_latest_reviews_insight", $aggregation_data, 604800);
         // Expires in 7 days
     }

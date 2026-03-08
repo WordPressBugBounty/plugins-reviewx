@@ -19,7 +19,6 @@ class OrderDeleteHandler
         $uid = Client::getUid() . '-' . $order_id;
         $response = (new OrderApi())->delete($uid);
         if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log('Delete insert' . $response->getStatusCode());
             return \false;
         }
     }

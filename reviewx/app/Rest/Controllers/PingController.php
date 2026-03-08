@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use WP_REST_Response;
 use Rvx\Services\PingService;
@@ -30,9 +31,9 @@ class PingController
                 $data = $this->pingService->ping();
                 \set_transient('rvx_ping_cache', $data, $cache_duration);
             }
-            return Helper::rvxApi($data)->success(__('Plugin Active', 'reviewx'), 200);
+            return Helper::rvxApi($data)->success(\__('Plugin Active', 'reviewx'), 200);
         } catch (Exception $e) {
-            return Helper::rvxApi()->fails(__('Plugin deactivated or uninstalled', 'reviewx'), 404);
+            return Helper::rvxApi()->fails(\__('Plugin deactivated or uninstalled', 'reviewx'), 404);
         }
     }
 }

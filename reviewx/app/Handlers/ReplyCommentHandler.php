@@ -15,7 +15,7 @@ class ReplyCommentHandler
     public function __invoke($comment_id, $comment_approved, $commentdata)
     {
         if ($commentdata['comment_parent'] > 0) {
-            $parent_comment = get_comment($commentdata['comment_parent']);
+            $parent_comment = \get_comment($commentdata['comment_parent']);
             if ($parent_comment) {
                 $wpUniqueId = Client::getUid() . '-' . $parent_comment->comment_ID;
                 $replies = ['reply' => $commentdata['comment_content'], 'wp_id' => $parent_comment->comment_ID];

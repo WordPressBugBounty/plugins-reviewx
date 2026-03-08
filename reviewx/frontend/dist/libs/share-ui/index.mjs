@@ -3617,13 +3617,13 @@ const b1 = [
   },
   {
     name: "review-delete",
-    url: "reviews/delete/{id}",
-    method: "post"
+    url: "reviews/{id}/delete",
+    method: "delete"
   },
   {
     name: "review-trash",
-    url: "reviews/trash/{id}",
-    method: "post"
+    url: "reviews/{id}/trash",
+    method: "put"
   },
   {
     name: "review-details",
@@ -3638,12 +3638,12 @@ const b1 = [
   {
     name: "review-replay-update",
     url: "reviews/{id}/update/replies",
-    method: "post"
+    method: "put"
   },
   {
     name: "review-update",
     url: "reviews/{id}/update",
-    method: "post"
+    method: "put"
   },
   {
     name: "create-AI-review",
@@ -3658,12 +3658,12 @@ const b1 = [
   {
     name: "review-status-update",
     url: "reviews/{id}/visibility",
-    method: "post"
+    method: "put"
   },
   {
     name: "review-highlight",
     url: "reviews/{id}/highlight",
-    method: "post"
+    method: "put"
   },
   {
     name: "get-review-settings",
@@ -3692,8 +3692,8 @@ const b1 = [
   },
   {
     name: "review-restore",
-    url: "reviews/restore/{id}",
-    method: "post"
+    url: "reviews/{id}/restore",
+    method: "put"
   },
   {
     name: "review-import-history",
@@ -3719,6 +3719,16 @@ const b1 = [
     name: "review-export-history",
     url: "reviews/exports/history",
     method: "get"
+  },
+  {
+    name: "review-bulk-trash-delete",
+    url: "reviews/bulk/delete",
+    method: "post"
+  },
+  {
+    name: "review-empty-trash",
+    url: "reviews/empty/trash",
+    method: "delete"
   }
 ], A1 = [
   {

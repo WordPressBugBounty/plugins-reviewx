@@ -2,6 +2,7 @@
 
 namespace Rvx\Utilities\Auth;
 
+\defined("ABSPATH") || exit;
 class ClientManager
 {
     protected ?object $site = null;

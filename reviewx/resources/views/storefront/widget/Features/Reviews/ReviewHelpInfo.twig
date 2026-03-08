@@ -10,7 +10,7 @@
             <p class="!rvx-text-[14px] !rvx-text-neutral-600 rvx-review-footer__text">  {{__('Was this helpful', 'reviewx')}}</p>
             <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.options.allow_likes">
                 <p class="!rvx-text-[15px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
-                    <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 1 })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 1, review: review })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
                             <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />
                         </mask>
@@ -27,7 +27,7 @@
             <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.enable_likes_dislikes.options.allow_dislikes">
                 <div class="rvx-gap-[3px] rvx-flex rvx-items-center">
                     <p class="!rvx-text-[15px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-duration-150 rvx-review-footer__thumbs">
-                        <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 1 })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 1, review: review })" class="rvx-cursor-pointer hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mb-[3px] rvx-review-footer__thumbs--like-icon " width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
                                 <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />
                             </mask>
@@ -40,7 +40,7 @@
                         <span x-text="review.likes"></span>
                     </p>
                     <p class="!rvx-text-[14px] rvx-gap-[3px] rvx-flex rvx-items-center !rvx-text-neutral-600 rvx-review-footer__thumbs">
-                        <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 2 })" class="rvx-cursor-pointer rvx-rotate-thumbs-down hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mt-[3px] rvx-review-footer__thumbs--dislike-icon" width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg @click="likeDislikeHandler({ uid: review.wp_unique_id, preference: 2, review: review })" class="rvx-cursor-pointer rvx-rotate-thumbs-down hover:rvx-bg-neutral-200 hover:rvx-rounded rvx-mt-[3px] rvx-review-footer__thumbs--dislike-icon" width="20" height="18" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <mask id="mask0_420_27618" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
                                 <rect y="0.948242" width="20" height="20" fill="#D9D9D9" />
                             </mask>
@@ -58,7 +58,7 @@
         </div>
     </template>
     <template x-if="reviewSettingsData?.data?.setting?.review_settings.reviews.allow_review_sharing">
-        <div x-data="{dropdownOpen: false, successCopy: false}" class="!rvx-leading-[0]">
+        <div x-data="{dropdownOpen: false, successCopy: false}" class="!rvx-leading-[0] rvx-relative">
             <span @click="dropdownOpen=true" class="material-symbols-rounded rvx-cursor-pointer !rvx-text-[18px] !rvx-text-neutral-600 hover:rvx-text-neutral-800 hover:rvx-rounded">share</span>
 
 {#            -rvx-right-[50px]#}
@@ -67,7 +67,7 @@
                  x-transition:enter="rvx-ease-out rvx-duration-200"
                  x-transition:enter-start="-rvx-translate-y-2"
                  x-transition:enter-end="rvx-translate-y-0"
-                 class="rvx-absolute rvx-top-[136px] rvx-left-[20px] rvx-bottom-0 rvx-z-50 rvx-w-56 rvx-mt-space16"
+                 class="rvx-absolute rvx-top-0 rvx-right-0 rvx-z-50 rvx-w-56 rvx-mt-space24"
                  x-cloak>
                 <div class="rvx-p-1 rvx-mt-1 rvx-text-sm rvx-bg-white rvx-border rvx-rounded-md rvx-shadow-md rvx-border-neutral-200/70 rvx-text-neutral-700">
                     <a :href="review.socials?.facebook" class="rvx-flex rvx-items-center rvx-gap-space5 !rvx-text-neutral-700 rvx-px-space16 rvx-py-space8 hover:rvx-bg-[#EEF3FF] rvx-no-underline">

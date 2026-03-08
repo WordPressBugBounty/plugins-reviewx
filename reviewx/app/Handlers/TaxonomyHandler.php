@@ -40,28 +40,22 @@ class TaxonomyHandler
         $term = \get_term($term_id, $taxonomy);
         return !$term || \is_wp_error($term) ? null : $term;
     }
-    public function getTaxonomyByTermIdFromDB($term_id, $wpdb)
+    public function getTaxonomyByTermIdFromDB($term_id)
     {
         // Ensure $term_id is a valid integer
         if (!\is_int($term_id)) {
             return \false;
         }
-        // Query to fetch the taxonomy names for the given term ID
-        $query = "\n            SELECT tt.taxonomy\n            FROM {$wpdb->prefix}term_taxonomy tt\n            WHERE tt.term_id = %d\n        ";
-        // Prepare the query and execute
-        $results = $wpdb->get_results($wpdb->prepare($query, $term_id));
-        if (empty($results)) {
+        // Use standard WP function to get taxonomies for a term
+        $taxonomies = \get_term_taxonomies($term_id);
+        if (empty($taxonomies)) {
             return \false;
-            // No taxonomies found for this term ID
         }
-        // Array to store taxonomy information
         $taxonomy_array = [];
-        // Loop through results and fetch taxonomy labels and other info
-        foreach ($results as $row) {
-            $taxonomy_data = \get_taxonomy($row->taxonomy);
-            // Use WordPress function to get taxonomy details
+        foreach ($taxonomies as $tax_name) {
+            $taxonomy_data = \get_taxonomy($tax_name);
             if ($taxonomy_data) {
-                $taxonomy_array[] = ['taxonomy' => $row->taxonomy, 'label' => $taxonomy_data->labels->name, 'hierarchical' => $taxonomy_data->hierarchical];
+                $taxonomy_array[] = ['taxonomy' => $tax_name, 'label' => $taxonomy_data->labels->name, 'hierarchical' => $taxonomy_data->hierarchical];
             }
         }
         return $taxonomy_array;
@@ -74,7 +68,7 @@ class TaxonomyHandler
     }
     protected function collectDescendants(int $parent_id, string $taxonomy, array &$descendants, int $current_level = 1) : void
     {
-        $children = get_terms(['taxonomy' => $taxonomy, 'parent' => $parent_id, 'hide_empty' => \false, 'fields' => 'all']);
+        $children = \get_terms(['taxonomy' => $taxonomy, 'parent' => $parent_id, 'hide_empty' => \false, 'fields' => 'all']);
         if (\is_wp_error($children) || empty($children)) {
             return;
         }
@@ -85,7 +79,7 @@ class TaxonomyHandler
     }
     public function hasChildren(int $term_id, string $taxonomy) : bool
     {
-        $children = get_terms(['taxonomy' => $taxonomy, 'parent' => $term_id, 'hide_empty' => \false, 'fields' => 'ids', 'number' => 1]);
+        $children = \get_terms(['taxonomy' => $taxonomy, 'parent' => $term_id, 'hide_empty' => \false, 'fields' => 'ids', 'number' => 1]);
         return !\is_wp_error($children) && !empty($children);
     }
     public function isParentTerm(int $term_id, string $taxonomy = '') : bool
@@ -95,7 +89,7 @@ class TaxonomyHandler
     }
     public function getChildTerms(int $parent_id, string $taxonomy) : array
     {
-        $children = get_terms(['taxonomy' => $taxonomy, 'parent' => $parent_id, 'hide_empty' => \false, 'fields' => 'all']);
+        $children = \get_terms(['taxonomy' => $taxonomy, 'parent' => $parent_id, 'hide_empty' => \false, 'fields' => 'all']);
         if (\is_wp_error($children)) {
             return [];
         }
@@ -120,17 +114,27 @@ class TaxonomyHandler
         \delete_transient($transient_key);
         return $had_children === 'yes';
     }
+    public function taxonomyExists(string $taxonomy) : bool
+    {
+        $cache_key = 'rvx_tax_exists_' . $taxonomy;
+        $exists = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $exists) {
+            global $wpdb;
+            $exists = (bool) $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s", $taxonomy));
+            \wp_cache_set($cache_key, (int) $exists, 'reviewx', 86400);
+        }
+        return $exists;
+    }
     public function syncTermUpdate($term)
     {
         try {
-            $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => $term->parent > 0 ? Client::getUid() . '-' . $term->parent : null, 'updated_at' => current_time('mysql')];
+            $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => $term->parent > 0 ? Client::getUid() . '-' . $term->parent : null, 'updated_at' => \current_time('mysql')];
             $uid = Client::getUid() . '-' . $term->term_id;
             $response = (new CategoryApi())->update($payload, $uid);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                throw new Exception("API status: " . $response->getStatusCode());
+                throw new Exception(\esc_html__("API status: ", 'reviewx') . $response->getStatusCode());
             }
         } catch (Exception $e) {
-            \error_log("Update failed for term {$term->term_id}: " . $e->getMessage());
             return \false;
         }
     }

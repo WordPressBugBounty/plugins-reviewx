@@ -45,14 +45,13 @@ class CategoryUpdateHandler
     protected function syncTermUpdate($term)
     {
         try {
-            $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => $term->parent > 0 ? Client::getUid() . '-' . $term->parent : null, 'updated_at' => current_time('mysql')];
+            $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => $term->parent > 0 ? Client::getUid() . '-' . $term->parent : null, 'updated_at' => \current_time('mysql')];
             $uid = Client::getUid() . '-' . $term->term_id;
             $response = (new CategoryApi())->update($payload, $uid);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                throw new Exception("API status: " . $response->getStatusCode());
+                throw new Exception(\esc_html__("API status: ", 'reviewx') . $response->getStatusCode());
             }
         } catch (Exception $e) {
-            \error_log("Update failed for term {$term->term_id}: " . $e->getMessage());
             return \false;
         }
     }
@@ -71,12 +70,10 @@ class CategoryUpdateHandler
     }
     protected function handleNewParentTerm($term)
     {
-        // error_log("Term {$term->term_id} is now a parent");
         // Add specific new parent logic here
     }
     protected function handleFormerParentTerm($term)
     {
-        // error_log("Term {$term->term_id} was a parent but is now a child");
         // Add specific former parent logic here
     }
     protected function updateAllDescendants($term)

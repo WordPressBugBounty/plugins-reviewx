@@ -2,12 +2,9 @@
 
 namespace Rvx\Elementor\Classes;
 
+\defined('ABSPATH') || exit;
 use Rvx\Elementor\Traits\Addons;
 use Rvx\Elementor\Traits\Library;
-if (!\defined('ABSPATH')) {
-    exit;
-}
-// Exit if accessed directly
 /**
  * Class Starter
  * @package Rvx\Elementor\Classes
@@ -60,8 +57,8 @@ class Starter
     protected function register_hooks()
     {
         // Elements
-        add_action('elementor/elements/categories_registered', array($this, 'register_widget_categories'));
-        add_action('elementor/widgets/widgets_registered', array($this, 'register_elements'));
-        add_action('elementor/widgets/register', array($this, 'cpt_register_element'));
+        \add_action('elementor/elements/categories_registered', array($this, 'register_widget_categories'));
+        \add_action('elementor/widgets/widgets_registered', array($this, 'register_elements'));
+        \add_action('elementor/widgets/register', array($this, 'cpt_register_element'));
     }
 }

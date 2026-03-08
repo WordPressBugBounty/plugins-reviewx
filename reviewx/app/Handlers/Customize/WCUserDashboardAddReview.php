@@ -21,7 +21,7 @@ class WCUserDashboardAddReview
     }
     public function setRvxAttributes()
     {
-        $user_id = get_current_user_id();
+        $user_id = \get_current_user_id();
         $wpCurrentUser = Helper::getWpCurrentUser();
         $user_name = $wpCurrentUser ? $wpCurrentUser->display_name : '';
         $attributes = ['userInfo' => ['isLoggedIn' => Helper::loggedIn(), 'id' => $wpCurrentUser ? $wpCurrentUser->ID : null, 'name' => $user_name, 'email' => $wpCurrentUser ? $wpCurrentUser->user_email : '', 'isVerified' => Helper::verifiedCustomer($user_id)], 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];

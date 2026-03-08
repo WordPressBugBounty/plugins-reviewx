@@ -16,7 +16,7 @@ class CptAverageRating
             return;
         }
         if ($comment === null) {
-            $comment = get_comment($comment_id);
+            $comment = \get_comment($comment_id);
         }
         if (!$comment) {
             return;
@@ -33,7 +33,7 @@ class CptAverageRating
      */
     public static function handle_comment_status_change($comment_id, $status)
     {
-        $comment = get_comment($comment_id);
+        $comment = \get_comment($comment_id);
         if (!$comment) {
             return;
             // Exit if the comment doesn't exist.
@@ -50,7 +50,7 @@ class CptAverageRating
     public static function update_average_rating($post_id)
     {
         // Check the post type.
-        $post_type = get_post_type($post_id);
+        $post_type = \get_post_type($post_id);
         $enabled_post_types = (new CptHelper())->usedCPT('used');
         if (!isset($enabled_post_types[$post_type]) && $post_type !== 'product') {
             return;
@@ -103,11 +103,11 @@ class CptAverageRating
     public static function rvx_avg_rating_on_save($post_id, $post)
     {
         // Ensure we are not triggering on autosave
-        if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        if (\defined('DOING_AUTOSAVE') && \DOING_AUTOSAVE) {
             return;
         }
         // Check the post type.
-        $post_type = get_post_type($post_id);
+        $post_type = \get_post_type($post_id);
         $enabled_post_types = (new CptHelper())->usedCPT('used');
         if (!isset($enabled_post_types[$post_type]) && $post_type !== 'product') {
             return;

@@ -16,7 +16,7 @@ class ShortcodeServiceProvider extends ServiceProvider
     }
     public function boot() : void
     {
-        add_action('init', function () {
+        \add_action('init', function () {
             $shortcode = (require $this->plugin->getPath('bootstrap/shortcodes.php'));
             $shortcode($this->plugin);
             $this->shortcode->register();

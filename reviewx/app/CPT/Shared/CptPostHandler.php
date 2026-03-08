@@ -17,7 +17,7 @@ class CptPostHandler
     public function __invoke($post_id, $post, $update)
     {
         // Ignore if called during autosave or automatic draft
-        if (\defined('DOING_AUTOSAVE') && DOING_AUTOSAVE || \in_array($post->post_status, ['auto-draft', 'inherit'], \true)) {
+        if (\defined('DOING_AUTOSAVE') && \DOING_AUTOSAVE || \in_array($post->post_status, ['auto-draft', 'inherit'], \true)) {
             return;
         }
         // Define the target post types
@@ -46,7 +46,7 @@ class CptPostHandler
                     \update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
                     \update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
                 } else {
-                    \error_log("CptPostHandler Create/Update Sync Failed for ID {$post_id}: " . $response->getBody());
+                    // Sync fail handled silently for production
                 }
             }
         } else {
@@ -57,7 +57,7 @@ class CptPostHandler
                 \update_post_meta($post_id, 'rvx_sync_new_status', 1, \true);
                 \update_post_meta($post_id, 'rvx_sync_edit_status', 1, \true);
             } else {
-                \error_log("CptPostHandler Update Sync Failed for ID {$post_id}: " . $response->getBody());
+                // Sync fail handled silently for production
             }
         }
     }
@@ -147,7 +147,7 @@ class CptPostHandler
             $image_url = '';
         }
         // $average_rating calculated via helper in return array
-        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) $this->getReviewCount($post->ID), "avg_rating" => (float) $this->getAverageRating($post->ID), "stars" => $this->getStarCounts($post->ID), "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
+        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => \get_post_type($post->ID), "total_reviews" => (int) $this->getReviewCount($post->ID), "avg_rating" => (float) $this->getAverageRating($post->ID), "stars" => $this->getStarCounts($post->ID), "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
         return $data;
     }
     private function updatedPostData($post_id, $post)
@@ -157,7 +157,7 @@ class CptPostHandler
             $image_url = '';
         }
         // $average_rating calculated via helper in return array
-        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => get_post_type($post->ID), "total_reviews" => (int) $this->getReviewCount($post->ID), "avg_rating" => (float) $this->getAverageRating($post->ID), "stars" => $this->getStarCounts($post->ID), "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
+        $data = ["wp_id" => $post->ID, "title" => isset($post->post_title) ? \htmlspecialchars($post->post_title, \ENT_QUOTES, 'UTF-8') : null, "url" => get_permalink($post->ID), "description" => isset($post->post_excerpt) ? \htmlspecialchars($post->post_excerpt, \ENT_QUOTES, 'UTF-8') : null, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => (string) $image_url, "status" => $this->postStatus($post->post_status), "post_type" => \get_post_type($post->ID), "total_reviews" => (int) $this->getReviewCount($post->ID), "avg_rating" => (float) $this->getAverageRating($post->ID), "stars" => $this->getStarCounts($post->ID), "category_wp_unique_ids" => $this->getCategoryIds($post_id)];
         return $data;
     }
     private function postStatus($status)
@@ -175,11 +175,10 @@ class CptPostHandler
     {
         // Validate the post ID
         if (empty($post_id)) {
-            \error_log("No valid post/product ID found.");
             return [];
         }
         // Get the post type
-        $post_type = get_post_type($post_id);
+        $post_type = \get_post_type($post_id);
         // Determine the taxonomy: 'product_cat' for products, hierarchical taxonomy for others
         $taxonomy = $post_type === 'product' ? 'product_cat' : null;
         if (!$taxonomy) {
@@ -220,7 +219,7 @@ class CptPostHandler
     {
         global $wpdb;
         // Validate post ID
-        $post = get_post($post_id);
+        $post = \get_post($post_id);
         if (!$post) {
             return \false;
         }

@@ -19,7 +19,7 @@ class Migrator
         global $wpdb;
         $this->input = $input;
         $this->output = $output;
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        require_once \ABSPATH . 'wp-admin/includes/upgrade.php';
         $this->migrationPath = $migrationPath;
         $this->db = $wpdb;
     }
@@ -146,7 +146,7 @@ class Migrator
             $this->output->writeln('<comment>Migration: </comment> ' . \get_class($migration));
         }
         $query = $migration->up();
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        require_once \ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($query);
         if ($this->output) {
             $this->output->writeln('<info>Migrated: </info> ' . \get_class($migration));
@@ -196,7 +196,7 @@ class Migrator
     protected function createMigrationsTable()
     {
         $query = "CREATE TABLE IF NOT EXISTS {$this->getMigrationTableName()} (\n                    id INT AUTO_INCREMENT PRIMARY KEY,\n                    migration VARCHAR(255),\n                    batch INT\n                )";
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        require_once \ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($query);
     }
     protected function getLastBatch() : int

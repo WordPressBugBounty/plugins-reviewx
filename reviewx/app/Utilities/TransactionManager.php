@@ -2,6 +2,7 @@
 
 namespace Rvx\Utilities;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Throwable;
 class TransactionManager
@@ -43,7 +44,6 @@ class TransactionManager
             return $saasResponse;
         } catch (Throwable $e) {
             $wpdb->query('ROLLBACK');
-            \error_log("Transaction failed: " . $e->getMessage());
             throw $e;
         }
     }

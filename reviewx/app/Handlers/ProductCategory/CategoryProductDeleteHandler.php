@@ -15,7 +15,6 @@ class CategoryProductDeleteHandler
         $uid = Client::getUid() . '-' . $term->term_id;
         $response = (new CategoryApi())->remove($uid);
         if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log("Category Not Update" . $response->getStatusCode());
             return \false;
         }
     }

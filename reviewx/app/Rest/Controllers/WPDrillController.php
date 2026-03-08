@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Rvx\WPDrill\Contracts\InvokableContract;
 use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 use Rvx\WPDrill\Response;

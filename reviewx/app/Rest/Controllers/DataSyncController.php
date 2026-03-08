@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use WP_REST_Request;
 use Rvx\CPT\CptHelper;
 use Rvx\Models\Site;
@@ -86,8 +87,13 @@ class DataSyncController
         } else {
             $file_name = "{$post_type}-cpt-bulk-data.jsonl";
         }
-        $file_path = WP_CONTENT_DIR . '/uploads/reviewx/' . $file_name;
-        if (!\file_exists($file_path)) {
+        $file_path = \WP_CONTENT_DIR . '/uploads/reviewx/' . $file_name;
+        global $wp_filesystem;
+        if (empty($wp_filesystem)) {
+            require_once \ABSPATH . 'wp-admin/includes/file.php';
+            \WP_Filesystem();
+        }
+        if (!$wp_filesystem->exists($file_path)) {
             return Helper::rvxApi()->fails('File not found for post_type: ' . $post_type, 404);
         }
         \header('Content-Description: File Transfer');
@@ -96,8 +102,10 @@ class DataSyncController
         \header('Expires: 0');
         \header('Cache-Control: must-revalidate');
         \header('Pragma: public');
-        \header('Content-Length: ' . \filesize($file_path));
-        \readfile($file_path);
+        \header('Content-Length: ' . $wp_filesystem->size($file_path));
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $wp_filesystem->get_contents($file_path);
         exit;
     }
 }

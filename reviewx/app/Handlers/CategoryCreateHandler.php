@@ -48,10 +48,9 @@ class CategoryCreateHandler
             $payload = ['wp_id' => $term->term_id, 'title' => $term->name, 'slug' => $term->slug, 'taxonomy' => $term->taxonomy, 'description' => $term->description, 'parent_wp_unique_id' => Client::getUid() . '-' . $term->parent ?? null];
             $response = (new CategoryApi())->create($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                throw new Exception("API status: " . $response->getStatusCode());
+                throw new Exception(\esc_html__("API status: ", 'reviewx') . $response->getStatusCode());
             }
         } catch (Exception $e) {
-            \error_log("Update failed for term {$term->term_id}: " . $e->getMessage());
             return \false;
         }
     }
@@ -75,7 +74,6 @@ class CategoryCreateHandler
     }
     protected function handleFormerParentTerm($term)
     {
-        // error_log("Term {$term->term_id} was a parent but is now a child");
         // Add specific former parent logic here
     }
     protected function updateAllDescendants($term)

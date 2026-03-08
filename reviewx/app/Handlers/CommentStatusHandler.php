@@ -4,9 +4,11 @@ namespace Rvx\Handlers;
 
 class CommentStatusHandler
 {
-    public function __invoke($comment_id)
+    public function wooProductSaveHandler()
     {
-        $comments = get_comment($comment_id);
-        \error_log("Comment id" . $comments);
+        if (!isset($_POST['_wpnonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_POST['_wpnonce'])), 'woocommerce-settings')) {
+            return;
+        }
+        // Isset specific fields
     }
 }

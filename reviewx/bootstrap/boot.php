@@ -2,6 +2,7 @@
 
 namespace Rvx;
 
+\defined('ABSPATH') || exit;
 use Rvx\WPDrill\Plugin;
 return function (string $file) {
     $plugin = new Plugin($file);

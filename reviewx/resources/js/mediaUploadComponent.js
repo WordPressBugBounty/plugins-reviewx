@@ -1,4 +1,4 @@
-function __rvxMediaUploadComponent__(){
+window.__rvxMediaUploadComponent__ = function () {
     return {
         isDragging: false,
         multiple: true,
@@ -23,17 +23,17 @@ function __rvxMediaUploadComponent__(){
             // console.log('isPhotoReviewsAllowed:', this.isPhotoReviewsAllowed);
             // console.log('isVideoReviewsAllowed:', this.isVideoReviewsAllowed);
 
-            if(this.isPhotoReviewsAllowed && !this.isVideoReviewsAllowed){
+            if (this.isPhotoReviewsAllowed && !this.isVideoReviewsAllowed) {
                 this.accept = 'image/*'
             }
-            if(this.isVideoReviewsAllowed && !this.isPhotoReviewsAllowed){
+            if (this.isVideoReviewsAllowed && !this.isPhotoReviewsAllowed) {
                 this.accept = 'video/*'
             }
-            if(this.isVideoReviewsAllowed && this.isPhotoReviewsAllowed){
+            if (this.isVideoReviewsAllowed && this.isPhotoReviewsAllowed) {
                 this.accept = 'image/*,video/*'
             }
             this.ready = true;
-            
+
             this.clearAll();  // Clear files on init
             this.$nextTick(() => {
                 this.notifyFiles();  // Notify parent components about the state of files
@@ -57,7 +57,7 @@ function __rvxMediaUploadComponent__(){
             }
         },
         notifyFiles() {
-            this.$dispatch('notify-attachment',{ reviewAttachFiles:  this.files });
+            this.$dispatch('notify-attachment', { reviewAttachFiles: this.files });
         },
         // File upload (input and drop) handling
         onUpload(event) {

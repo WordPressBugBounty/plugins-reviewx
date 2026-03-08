@@ -2,6 +2,7 @@
 
 namespace Rvx\Utilities;
 
+\defined("ABSPATH") || exit;
 use Rvx\Firebase\JWT\JWT;
 use Rvx\Utilities\Auth\Client;
 use Throwable;
@@ -38,14 +39,14 @@ class Helper
         if (!Client::has()) {
             return "";
         }
-        $payload = ["iss" => $_SERVER["HTTP_HOST"], "iat" => \time(), "exp" => \time() + 300, "nbf" => \time(), "jti" => \uniqid("", \true)];
+        $payload = ["iss" => isset($_SERVER["HTTP_HOST"]) ? \sanitize_text_field(\wp_unslash($_SERVER["HTTP_HOST"])) : '', "iat" => \time(), "exp" => \time() + 300, "nbf" => \time(), "jti" => \uniqid("", \true)];
         $additionalPayload = ["uid" => Client::getUid()];
         // Encode the payload and return the JWT token
         return JWT::encode(\array_merge($payload, $additionalPayload), Client::getSecret(), "HS256");
     }
     public static function getWpDomainNameOnly() : string
     {
-        return \trim(\parse_url(home_url(), \PHP_URL_HOST), '/');
+        return \trim(\wp_parse_url(home_url(), \PHP_URL_HOST), '/');
     }
     public static function getApiResponse($response)
     {
@@ -109,7 +110,6 @@ class Helper
     public static function debugLog($message = "")
     {
         $logMessage = \is_array($message) ? "Output is: " . \print_r($message, \true) : "Output is: " . $message;
-        \error_log($logMessage);
         return $logMessage;
     }
     public static function arrayValue($array, $key, $default = null)
@@ -147,7 +147,9 @@ class Helper
     }
     public static function getIpAddress()
     {
-        $ip_address = $_SERVER["HTTP_CLIENT_IP"] ?? $_SERVER["REMOTE_ADDR"];
+        $http_client_ip = isset($_SERVER["HTTP_CLIENT_IP"]) ? \sanitize_text_field(\wp_unslash($_SERVER["HTTP_CLIENT_IP"])) : null;
+        $remote_addr = isset($_SERVER["REMOTE_ADDR"]) ? \sanitize_text_field(\wp_unslash($_SERVER["REMOTE_ADDR"])) : null;
+        $ip_address = $http_client_ip ?? $remote_addr;
         return \explode(":", $ip_address)[0] ?? null;
     }
     public static function loadTemplate($template_name, $data = [])
@@ -157,7 +159,11 @@ class Helper
         if (\file_exists($template_path)) {
             include $template_path;
         } else {
-            echo "Template file not found: " . $template_name;
+            \printf(
+                /* translators: %s: Template name */
+                \esc_html__('Template file not found: %s', 'reviewx'),
+                \esc_html($template_name)
+            );
         }
     }
     public static function prepareLangArray() : array
@@ -175,30 +181,41 @@ class Helper
     {
         return \str_replace('wc-', '', $orderStatus);
     }
-    public static function appendToJsonl($file, $data, $jsonOptions = \JSON_UNESCAPED_UNICODE)
+    public static function appendToJsonl(&$buffer, $data, $jsonOptions = \JSON_UNESCAPED_UNICODE | \JSON_INVALID_UTF8_SUBSTITUTE)
     {
         $json = wp_json_encode($data, $jsonOptions);
         if ($json === \false) {
             return \false;
         }
-        return \fwrite($file, $json . \PHP_EOL);
+        // Prepend newline only if buffer already has content, to avoid trailing empty line
+        if ($buffer !== '') {
+            $buffer .= \PHP_EOL;
+        }
+        $buffer .= $json;
+        return \true;
     }
     public static function rvxLog($message, $context = 'debug')
     {
+        global $wp_filesystem;
+        if (empty($wp_filesystem)) {
+            require_once \ABSPATH . 'wp-admin/includes/file.php';
+            \WP_Filesystem();
+        }
         $log_folder = RVX_DIR_PATH . 'log/';
-        if (!\is_dir($log_folder)) {
+        if (!$wp_filesystem->is_dir($log_folder)) {
             return;
         }
         $log_file = $log_folder . 'log-' . \wp_date('Y-m-d') . '.log';
         $formatted_message = \sprintf("[%s] [%s]: %s\n", \wp_date('Y-m-d H:i:s'), \strtoupper($context), \print_r($message, \true));
-        \file_put_contents($log_file, $formatted_message, \FILE_APPEND);
+        $current = $wp_filesystem->exists($log_file) ? $wp_filesystem->get_contents($log_file) : '';
+        $wp_filesystem->put_contents($log_file, $current . $formatted_message, \FS_CHMOD_FILE);
     }
     public static function domainSupport()
     {
         // Get the full site URL including the subdomain and subdirectory (if present)
         $site_url = get_site_url();
         // Parse the URL to extract the components
-        $parsed_url = \parse_url($site_url);
+        $parsed_url = \wp_parse_url($site_url);
         // Rebuild the base URL (scheme + host + path)
         $full_domain = $parsed_url['scheme'] . '://' . $parsed_url['host'];
         // Add the path (subdirectory) if it exists
@@ -257,6 +274,6 @@ class Helper
         $current_user = wp_get_current_user();
         $first_name = $current_user->first_name ?: $current_user->user_login;
         $last_name = $current_user->last_name ?: '';
-        return ['domain' => \Rvx\Utilities\Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => sanitize_text_field($first_name), 'last_name' => sanitize_text_field($last_name)];
+        return ['domain' => \Rvx\Utilities\Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => \sanitize_text_field($first_name), 'last_name' => \sanitize_text_field($last_name)];
     }
 }

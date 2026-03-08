@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Rvx\Api\DataSyncApi;
 use Rvx\Api\WebhookRequestApi;
@@ -36,53 +37,49 @@ class DataSyncService extends Service
     public function dataSync($from, $post_type = 'product') : bool
     {
         try {
-            $reviewx_dir_exists = \is_dir(WP_CONTENT_DIR . '/uploads/reviewx');
-            if (!$reviewx_dir_exists) {
-                // Create the directory if it does not exist
-                \mkdir(WP_CONTENT_DIR . '/uploads/reviewx', 0777, \true);
+            global $wp_filesystem;
+            if (empty($wp_filesystem)) {
+                require_once \ABSPATH . 'wp-admin/includes/file.php';
+                \WP_Filesystem();
             }
-            // Create the file path for the sync data
-            // Sanitize just in case:
+            $storage_dir = \WP_CONTENT_DIR . '/uploads/reviewx';
+            if (!$wp_filesystem->is_dir($storage_dir)) {
+                $wp_filesystem->mkdir($storage_dir, 0777);
+            }
             $post_type = sanitize_key($post_type);
-            if ($post_type === 'product') {
-                $file_name = "shop-bulk-data.jsonl";
-            } else {
-                $file_name = "{$post_type}-cpt-bulk-data.jsonl";
-            }
-            $file_path = WP_CONTENT_DIR . '/uploads/reviewx/' . $file_name;
-            $file = \fopen($file_path, 'w');
+            $file_name = $post_type === 'product' ? "shop-bulk-data.jsonl" : "{$post_type}-cpt-bulk-data.jsonl";
+            $file_path = $storage_dir . '/' . $file_name;
+            $buffer = "";
             $total_objects = 0;
             if ($post_type === 'product') {
-                // Product Sync Data for *Login or Register*
-                $total_objects += $this->userSyncService->syncUser($file);
+                $total_objects += $this->userSyncService->syncUser($buffer);
                 if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
-                    // $syncedCaterories = new CategorySyncService();
-                    // $total_objects += $syncedCaterories->syncCategory($file);
-                    $total_objects += $this->productSyncService->processProductForSync($file, $post_type);
-                    $total_objects += $this->reviewSyncService->processReviewForSync($file, $post_type);
-                    $total_objects += $this->orderItemSyncService->syncOrder($file);
-                    $total_objects += $this->orderItemSyncService->syncOrderItem($file);
+                    $total_objects += $this->productSyncService->processProductForSync($buffer, $post_type);
+                    $total_objects += $this->reviewSyncService->processReviewForSync($buffer, $post_type);
+                    $total_objects += $this->orderItemSyncService->syncOrder($buffer);
+                    $total_objects += $this->orderItemSyncService->syncOrderItem($buffer);
                 }
             } else {
-                // CPT Sync Data
-                $total_objects += $this->productSyncService->processProductForSync($file, $post_type);
-                $total_objects += $this->reviewSyncService->processReviewForSync($file, $post_type);
+                $total_objects += $this->productSyncService->processProductForSync($buffer, $post_type);
+                $total_objects += $this->reviewSyncService->processReviewForSync($buffer, $post_type);
             }
-            \fclose($file);
+            $wp_filesystem->put_contents($file_path, $buffer, \FS_CHMOD_FILE);
             (new WebhookRequestApi())->finishedWebhook(['total_objects' => $total_objects, 'status' => 'finished', 'from' => $from, 'post_type' => $post_type, 'resource_url' => Helper::getRestAPIurl() . '/api/v1/synced/data?post_type=' . $post_type]);
             return \true;
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             return \false;
         }
     }
-    protected function dataSyncFile($file, $file_path, $from, $total_objects)
+    protected function dataSyncFile($file_path, $from, $total_objects)
     {
-        \fclose($file);
         $file_info = $this->prepareFileInfo($file_path);
         $file = $_FILES['file'] = $file_info;
         $fileUpload = (new DataSyncApi())->dataSync($file, $from, $total_objects);
-        if (\file_exists($file_path)) {
-            \unlink($file_path);
+        global $wp_filesystem;
+        if (!empty($wp_filesystem) && $wp_filesystem->exists($file_path)) {
+            \wp_delete_file($file_path);
+        } elseif (\file_exists($file_path)) {
+            \wp_delete_file($file_path);
         }
         return $fileUpload;
     }
@@ -96,28 +93,34 @@ class DataSyncService extends Service
     }
     public function dataManualSync($data)
     {
-        \mkdir(WP_CONTENT_DIR . '/uploads/reviewx', 0777, \true);
-        $file_path = WP_CONTENT_DIR . '/uploads/reviewx/manual_sync.jsonl';
-        $file = \fopen($file_path, 'a');
+        global $wp_filesystem;
+        if (empty($wp_filesystem)) {
+            require_once \ABSPATH . 'wp-admin/includes/file.php';
+            \WP_Filesystem();
+        }
+        $storage_dir = \WP_CONTENT_DIR . '/uploads/reviewx';
+        if (!$wp_filesystem->is_dir($storage_dir)) {
+            $wp_filesystem->mkdir($storage_dir, 0777);
+        }
+        $file_path = $storage_dir . '/manual_sync.jsonl';
+        $buffer = "";
         $totalLines = 0;
         if ("users" === $data['action']) {
             $totalLines = \get_option('rvx_sync_number');
-            $totalLines += (new UserSyncService())->syncUser($file);
+            $totalLines += (new UserSyncService())->syncUser($buffer);
             \update_option('rvx_sync_number', $totalLines);
         }
         if ("categories" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
-                // $syncedCaterories = new CategorySyncService();
-                // $totalLines += $syncedCaterories->syncCategory($file);
                 $processProduct = new ProductSyncService();
-                $totalLines += $processProduct->processProductForSync($file, 'product');
+                $totalLines += $processProduct->processProductForSync($buffer, 'product');
                 \update_option('rvx_sync_number', $totalLines);
             }
         }
         if ("reviews" === $data['action']) {
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
                 $totalLines = \get_option('rvx_sync_number');
-                $totalLines += (new ReviewSyncService())->processReviewForSync($file, 'product');
+                $totalLines += (new ReviewSyncService())->processReviewForSync($buffer, 'product');
                 \update_option('rvx_sync_number', $totalLines);
             }
         }
@@ -125,14 +128,18 @@ class DataSyncService extends Service
             if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
                 $order = new OrderItemSyncService();
                 $totalLines = \get_option('rvx_sync_number');
-                $totalLines += $order->syncOrder($file);
-                $totalLines += $order->syncOrderItem($file);
+                $totalLines += $order->syncOrder($buffer);
+                $totalLines += $order->syncOrderItem($buffer);
                 \update_option('rvx_sync_number', $totalLines);
             }
         }
+        if (!empty($buffer)) {
+            $current = $wp_filesystem->exists($file_path) ? $wp_filesystem->get_contents($file_path) : '';
+            $wp_filesystem->put_contents($file_path, $current . $buffer, \FS_CHMOD_FILE);
+        }
         if ("api" === $data['action']) {
             $totalLines = \get_option('rvx_sync_number');
-            return $this->dataSyncFile($file, $file_path, 'register', $totalLines);
+            return $this->dataSyncFile($file_path, 'register', $totalLines);
         }
     }
 }

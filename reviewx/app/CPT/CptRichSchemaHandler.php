@@ -2,6 +2,7 @@
 
 namespace Rvx\CPT;
 
+\defined('ABSPATH') || exit;
 use Rvx\Services\SettingService;
 use WP_Post;
 /**
@@ -19,10 +20,10 @@ class CptRichSchemaHandler
     public function schemaHandler($markup, $post) : array
     {
         // Guard conditions.
-        if (is_admin() || empty($post) || !isset($post->ID)) {
+        if (\is_admin() || empty($post) || !isset($post->ID)) {
             return $markup;
         }
-        $postType = get_post_type($post);
+        $postType = \get_post_type($post);
         if (empty($postType) || $postType === 'product') {
             return $markup;
             // Skip WooCommerce products.
@@ -46,7 +47,7 @@ class CptRichSchemaHandler
         $markup = ['@context' => 'https://schema.org/', '@type' => $schemaType, 'name' => $post->post_title, 'url' => get_permalink($post)];
         // Only attach review data to supported types.
         if (\in_array($schemaType, $reviewableTypes, \true)) {
-            $reviews = get_comments(['post_id' => $post->ID, 'status' => 'approve', 'type__in' => ['comment', 'review']]);
+            $reviews = \get_comments(['post_id' => $post->ID, 'status' => 'approve', 'type__in' => ['comment', 'review']]);
             if (!empty($reviews)) {
                 $reviewCount = 0;
                 $averageRating = 0.0;
@@ -74,7 +75,7 @@ class CptRichSchemaHandler
         }
         // Restore Divi filter.
         if ($divi_removed) {
-            add_filter('get_comment_metadata', $divi_callback, $priority ?? 10, 4);
+            \add_filter('get_comment_metadata', $divi_callback, $priority ?? 10, 4);
         }
         return $markup;
     }
@@ -84,7 +85,7 @@ class CptRichSchemaHandler
     public static function addCustomRichSchema() : void
     {
         // Bail early if not on frontend or not singular.
-        if (is_admin() || !is_singular() || \function_exists('is_product') && \is_product()) {
+        if (\is_admin() || !is_singular() || \function_exists('is_product') && \is_product()) {
             return;
         }
         global $post;
@@ -94,9 +95,10 @@ class CptRichSchemaHandler
         $handler = new self();
         $markup = $handler->schemaHandler([], $post);
         if (!empty($markup)) {
-            echo "\n<!-- ReviewX Rich Schema for {$post->post_type} -->\n";
+            /* translators: %s: Post type */
+            \printf("\n<!-- %s -->\n", \esc_html(\sprintf(\__('ReviewX Rich Schema for %s', 'reviewx'), $post->post_type)));
             echo '<script type="application/ld+json">' . wp_json_encode($markup, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES) . '</script>';
-            echo "\n<!-- /ReviewX Rich Schema -->\n";
+            \printf("\n<!-- %s -->\n", \esc_html__('/ReviewX Rich Schema', 'reviewx'));
         }
     }
 }

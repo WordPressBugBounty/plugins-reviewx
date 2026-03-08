@@ -18,6 +18,15 @@ class UpgradeDBSettings
      */
     public function run_upgrade()
     {
+        // Check if the rvx_sites table exists before querying it.
+        // On fresh installs, the migration may not have run yet.
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'rvx_sites';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
+        if (!$table_exists) {
+            return;
+        }
         if (!Client::getSync()) {
             return;
         }

@@ -14,11 +14,19 @@ class ProductStatusHandler
             if (($new_status === 'publish' || $new_status === 'pending') && $old_status !== 'publish') {
                 // Product is being published
                 // Your custom code for product publishing here
-                echo "Product with ID {$post->ID} published.";
+                \printf(
+                    // translators: %d: Product ID
+                    \esc_html__('Product with ID %d published.', 'reviewx'),
+                    \absint($post->ID)
+                );
             } elseif ($new_status === 'draft' && $old_status === 'publish') {
                 // Product is being unpublished
                 // Your custom code for product unpublishing here
-                echo "Product with ID {$post->ID} unpublished.";
+                \printf(
+                    // translators: %d: Product ID
+                    \esc_html__('Product with ID %d unpublished.', 'reviewx'),
+                    \absint($post->ID)
+                );
             }
         }
     }

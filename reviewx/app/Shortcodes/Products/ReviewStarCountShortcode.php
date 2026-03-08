@@ -28,7 +28,7 @@ class ReviewStarCountShortcode implements ShortcodeContract
         if (!$productId && !$postId) {
             global $post;
         } else {
-            $post = get_post($id);
+            $post = \get_post($id);
         }
         if (!$post) {
             return '<div class="warning">No post or product found!</div>';
@@ -43,7 +43,7 @@ class ReviewStarCountShortcode implements ShortcodeContract
         } elseif ($attrs['title'] === 'true' || empty($attrs['title'])) {
             $title = $data['postTitle'];
         } else {
-            $title = esc_html($attrs['title']);
+            $title = \esc_html($attrs['title']);
         }
         return View::render('storefront/shortcode/reviewsStarCount', ['title' => $title, 'data' => $data, 'info' => $attrs['info'] ?: 'default', 'postType' => $data['postType']]);
     }

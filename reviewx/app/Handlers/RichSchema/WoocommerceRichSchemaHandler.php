@@ -2,6 +2,7 @@
 
 namespace Rvx\Handlers\RichSchema;
 
+\defined('ABSPATH') || exit;
 use Rvx\Services\SettingService;
 use Rvx\WC_Product;
 /**
@@ -19,7 +20,7 @@ class WoocommerceRichSchemaHandler
     public function __invoke($markup, $product) : array
     {
         // Ensure we are on a single product page and in frontend.
-        if (is_admin() || !\function_exists('is_product') || !\is_product()) {
+        if (\is_admin() || !\function_exists('is_product') || !\is_product()) {
             return $markup;
         }
         if (!$product instanceof WC_Product) {
@@ -53,7 +54,7 @@ class WoocommerceRichSchemaHandler
         $averageRating = 0.0;
         $reviewItems = [];
         // Fetch all approved reviews.
-        $reviews = get_comments(['post_id' => $product->get_id(), 'status' => 'approve', 'type' => 'review']);
+        $reviews = \get_comments(['post_id' => $product->get_id(), 'status' => 'approve', 'type' => 'review']);
         if (!empty($reviews)) {
             foreach ($reviews as $review) {
                 if (!empty($review->comment_parent)) {
@@ -76,7 +77,7 @@ class WoocommerceRichSchemaHandler
         }
         // Restore Divi filter
         if ($divi_removed) {
-            add_filter('get_comment_metadata', $divi_callback, $priority ?? 10, 4);
+            \add_filter('get_comment_metadata', $divi_callback, $priority ?? 10, 4);
         }
         return $markup;
     }

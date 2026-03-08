@@ -25,8 +25,8 @@ class UpgradeReviewxDeactiveProHandler
                 $plugin_data = \json_decode(wp_remote_retrieve_body($response));
                 if ($plugin_data && isset($plugin_data->version)) {
                     global $wpdb;
-                    $rvxSites = $wpdb->prefix . 'rvx_sites';
-                    $uid = $wpdb->get_var("SELECT uid FROM {$rvxSites} ORDER BY id DESC LIMIT 1");
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
+                    $uid = $wpdb->get_var("SELECT uid FROM {$wpdb->prefix}rvx_sites ORDER BY id DESC LIMIT 1");
                     $plugin_version = $plugin_data->version;
                     if ($uid) {
                         (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => $plugin_version ?? RVX_VERSION, 'wp_version' => get_bloginfo('version')]);

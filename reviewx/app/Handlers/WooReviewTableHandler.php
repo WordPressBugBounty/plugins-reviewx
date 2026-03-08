@@ -45,7 +45,7 @@ class WooReviewTableHandler
                 $reviewsApi->commentReply($replies, $wpUniqueId);
             }
         } catch (Exception $e) {
-            \error_log("Reply status sync failed: " . $e->getMessage());
+            // Reply status sync failed
         }
     }
     private function handleReviewAction($new_status, $old_status, $wpUniqueId)
@@ -92,7 +92,7 @@ class WooReviewTableHandler
             $data = ["WpUniqueId" => $wpUniqueId];
             (new ReviewsApi())->reviewMoveToTrash($data);
         } catch (Exception $e) {
-            \error_log("Move to trash : " . \print_r($e->getMessage(), \true));
+            // Move to trash failed
         }
     }
     /**
@@ -106,7 +106,7 @@ class WooReviewTableHandler
             // Default to published if unknown
             (new ReviewsApi())->restoreReview($wpUniqueId, $status);
         } catch (Exception $e) {
-            \error_log("Restored Form trash " . \print_r($e->getMessage(), \true));
+            // Restored Form trash failed
         }
     }
     /**
@@ -134,7 +134,7 @@ class WooReviewTableHandler
             $status = $statusMap[$new_status];
             (new ReviewsApi())->visibilityReviewData(["status" => $status], $wpUniqueId);
         } catch (Exception $e) {
-            \error_log("Change Visibility: " . \print_r($e->getMessage(), \true));
+            // Change Visibility failed
         }
     }
 }

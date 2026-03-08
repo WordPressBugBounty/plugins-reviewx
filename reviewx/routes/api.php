@@ -2,6 +2,7 @@
 
 namespace Rvx;
 
+\defined('ABSPATH') || exit;
 use Rvx\Rest\Middleware\AdminMiddleware;
 use Rvx\WPDrill\Facades\Route;
 use Rvx\Rest\Middleware\AuthMiddleware;
@@ -64,28 +65,29 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::post('/reviews/create/manual', [ReviewController::class, 'store']);
     Route::get('/reviews/list', [ReviewController::class, 'reviewList']);
     Route::post('/reviews/bulk/trash', [ReviewController::class, 'reviewBulkTrash']);
-    Route::post('/reviews/trash/(?P<WpUniqueId>[a-zA-Z0-9-]+)', [ReviewController::class, 'reviewMoveToTrash']);
-    Route::post('/reviews/empty/trash', [ReviewController::class, 'reviewEmptyTrash']);
+    Route::put('/reviews/(?P<WpUniqueId>[a-zA-Z0-9-]+)/trash', [ReviewController::class, 'reviewMoveToTrash']);
+    Route::delete('/reviews/empty/trash', [ReviewController::class, 'reviewEmptyTrash']);
     Route::get('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)', [ReviewController::class, 'show']);
-    Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/update', [ReviewController::class, 'update']);
-    Route::post('/reviews/delete/(?P<wpUniqueId>[a-zA-Z0-9-]+)', [ReviewController::class, 'delete']);
-    Route::post('/reviews/restore/(?P<wpUniqueId>[a-zA-Z0-9-]+)', [ReviewController::class, 'restoreReview']);
-    Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/verify', [ReviewController::class, 'verify']);
-    Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/visibility', [ReviewController::class, 'visibility']);
+    Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/update', [ReviewController::class, 'update']);
+    Route::delete('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/delete', [ReviewController::class, 'delete']);
+    Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/restore', [ReviewController::class, 'restoreReview']);
+    Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/verify', [ReviewController::class, 'verify']);
+    Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/visibility', [ReviewController::class, 'visibility']);
     Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/send/update/request/email', [ReviewController::class, 'updateReqEmail']);
     Route::post('/reviews/bulk/status/update', [ReviewController::class, 'reviewBulkUpdate']);
+    Route::post('/reviews/bulk/delete', [ReviewController::class, 'reviewBulkSoftDelete']);
     Route::get('/reviews/get/aggregation', [ReviewController::class, 'reviewAggregation']);
     Route::get('/wp/products', [ProductController::class, 'wpProducts']);
     Route::get('/products/selectable', [ProductController::class, 'selectable']);
-    Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/highlight', [ReviewController::class, 'highlight']);
+    Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/highlight', [ReviewController::class, 'highlight']);
     Route::post('bulk/restore/trash', [ReviewController::class, 'restoreTrashItem']);
     /**
      * Multi-Criteria
      */
     Route::get('reviews/list/multi/criteria', [ReviewController::class, 'reviewListMultiCriteria']);
     Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/replies', [ReviewController::class, 'replies']);
-    Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/update/replies', [ReviewController::class, 'repliesUpdate']);
-    Route::post('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/delete/reply', [ReviewController::class, 'replyDelete']);
+    Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/update/replies', [ReviewController::class, 'repliesUpdate']);
+    Route::delete('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/delete/reply', [ReviewController::class, 'replyDelete']);
     /**
      * Reviews API
      */

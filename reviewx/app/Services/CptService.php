@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Apiz\Http\Response;
 use Rvx\Api\CptApi;
 use Rvx\Utilities\Auth\Client;

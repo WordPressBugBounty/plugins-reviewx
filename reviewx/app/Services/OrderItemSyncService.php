@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use DateTime;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
@@ -18,20 +19,21 @@ class OrderItemSyncService extends \Rvx\Services\Service
     protected $orderItemProductRelation = [];
     protected $orderItemQtyRelation = [];
     protected $orderItemPriceRelation = [];
-    public function syncOrder($file) : int
+    public function syncOrder(&$buffer) : int
     {
         $orderCount = 0;
         $this->orderStat();
         $startDate = (new DateTime())->modify('-60 days')->format('Y-m-d H:i:s');
         $endDate = (new DateTime())->format('Y-m-d H:i:s');
-        DB::table('wc_orders')->select(['id', 'customer_id', 'total_amount', 'tax_amount', 'status', 'date_created_gmt', 'date_updated_gmt'])->whereBetween('date_created_gmt', $startDate, $endDate)->chunk(100, function ($orders) use($file, &$orderCount) {
+        DB::table('wc_orders')->select(['id', 'customer_id', 'total_amount', 'tax_amount', 'status', 'date_created_gmt', 'date_updated_gmt'])->whereBetween('date_created_gmt', $startDate, $endDate)->chunk(100, function ($orders) use(&$buffer, &$orderCount) {
             foreach ($orders as $order) {
                 $this->validOrderIds[] = (int) $order->id;
                 $order->fulfillment_status = $this->orderFullfillmentStatusRelation[(int) $order->id] ?? null;
                 $order->fulfilled_at = $this->orderFullfillmentAtRelation[(int) $order->id] ?? null;
                 $formattedOrder = $this->formatOrderData($order);
-                Helper::appendToJsonl($file, $formattedOrder);
-                $orderCount++;
+                if (Helper::appendToJsonl($buffer, $formattedOrder)) {
+                    $orderCount++;
+                }
             }
         });
         Helper::rvxLog($orderCount, "Order Done");
@@ -53,7 +55,7 @@ class OrderItemSyncService extends \Rvx\Services\Service
             }
         });
     }
-    public function syncOrderItem($file) : int
+    public function syncOrderItem(&$buffer) : int
     {
         $orderItemCount = 0;
         // Early exit if no valid orders to process
@@ -84,8 +86,9 @@ class OrderItemSyncService extends \Rvx\Services\Service
             $orderItem->quantity = $this->orderItemQtyRelation[$orderItemId] ?? 0;
             $orderItem->price = $this->orderItemPriceRelation[$orderItemId] ?? 0.0;
             $formattedOrderItem = $this->formatOrderItem($orderItem);
-            Helper::appendToJsonl($file, $formattedOrderItem);
-            $orderItemCount++;
+            if (Helper::appendToJsonl($buffer, $formattedOrderItem)) {
+                $orderItemCount++;
+            }
         }
         Helper::rvxLog($orderItemCount, "Order Item Done");
         return $orderItemCount;

@@ -29,7 +29,6 @@ class CategoryApi extends \Rvx\Api\BaseApi
      */
     public function remove($id)
     {
-        \error_log("delete uid " . $id);
         return $this->delete('category/' . $id);
     }
     /**

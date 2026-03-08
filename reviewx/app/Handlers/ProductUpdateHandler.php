@@ -14,7 +14,6 @@ class ProductUpdateHandler
         $uid = Client::getUid() . '-' . $product_id;
         $response = (new ProductApi())->update($payload, $uid);
         if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log("Data Not Update " . \print_r($response, \true));
             return \false;
         }
     }
@@ -22,7 +21,7 @@ class ProductUpdateHandler
     {
         $images = wp_get_attachment_image_src($product->image_id, 'full');
         $title = $product->get_name();
-        return ['wp_id' => $product->get_id(), 'title' => isset($title) ? \htmlspecialchars($title, \ENT_QUOTES, 'UTF-8') : null, 'url' => get_permalink($product->get_id()), 'description' => isset($product->short_description) ? \htmlspecialchars($product->short_description, \ENT_QUOTES, 'UTF-8') : null, 'price' => (float) $product->regular_price, 'discounted_price' => (float) $product->price, 'slug' => $product->get_slug(), 'post_type' => get_post_type(), 'image' => $images[0] ?? null, 'status' => $this->productStatus($product->get_status()), "category_wp_unique_ids" => $this->productCategory($product)];
+        return ['wp_id' => $product->get_id(), 'title' => isset($title) ? \htmlspecialchars($title, \ENT_QUOTES, 'UTF-8') : null, 'url' => get_permalink($product->get_id()), 'description' => isset($product->short_description) ? \htmlspecialchars($product->short_description, \ENT_QUOTES, 'UTF-8') : null, 'price' => (float) $product->regular_price, 'discounted_price' => (float) $product->price, 'slug' => $product->get_slug(), 'post_type' => \get_post_type(), 'image' => $images[0] ?? null, 'status' => $this->productStatus($product->get_status()), "category_wp_unique_ids" => $this->productCategory($product)];
     }
     public function productCategory($product)
     {

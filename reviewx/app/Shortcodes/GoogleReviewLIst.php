@@ -31,7 +31,7 @@ class GoogleReviewLIst implements ShortcodeContract
         }
         // Fetch reviews
         $reviews = $this->reviews($attrs['cache'], $credentials);
-        $title = isset($attrs['title']) && $attrs['title'] === 'false' ? 'false' : ($attrs['title'] === 'true' || empty($attrs['title']) ? 'Google Reviews' : esc_html($attrs['title']));
+        $title = isset($attrs['title']) && $attrs['title'] === 'false' ? 'false' : ($attrs['title'] === 'true' || empty($attrs['title']) ? 'Google Reviews' : \esc_html($attrs['title']));
         return View::render('storefront/shortcode/googleReviewList', ['title' => $title, 'content' => $reviews, 'reviewLimit' => (int) $attrs['limit'] ?: 3, 'loadMore' => !empty($attrs['loadmore']) ? $attrs['loadmore'] : \true, 'truncateLimit' => !empty($attrs['truncate']) ? $attrs['truncate'] : 300]);
     }
     protected function reviews($cache_time, array $credentials)

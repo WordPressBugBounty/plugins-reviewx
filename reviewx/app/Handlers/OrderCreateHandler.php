@@ -26,12 +26,9 @@ class OrderCreateHandler
             if ($orderResponse->getStatusCode() === Response::HTTP_OK) {
                 $customers = $this->customerPayload($order);
                 (new UserApi())->create($customers);
-            } else {
-                \error_log("Order Sync Failed for ID {$order_id}: " . $orderResponse->getBody());
             }
             return \true;
         } catch (Exception $e) {
-            \error_log("OrderCreateHandler Exception: " . $e->getMessage());
             return \false;
         }
     }
@@ -39,8 +36,12 @@ class OrderCreateHandler
     {
         $order_id = $order->get_id();
         global $wpdb;
-        $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
-        $wpWcOrderStats = $wpdb->get_row($query);
+        $cache_key = 'rvx_wc_order_stats_' . $order_id;
+        $wpWcOrderStats = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $wpWcOrderStats) {
+            $wpWcOrderStats = $wpdb->get_row($wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id));
+            \wp_cache_set($cache_key, $wpWcOrderStats, 'reviewx', 3600);
+        }
         $paid_at = $wpWcOrderStats && $wpWcOrderStats->date_paid ? \wp_date('Y-m-d H:i:s', \strtotime($wpWcOrderStats->date_paid)) : null;
         $date_created = $order->get_date_created();
         $created_at = $date_created ? \wp_date('Y-m-d H:i:s', $date_created->getTimestamp()) : \wp_date('Y-m-d H:i:s');
@@ -55,8 +56,12 @@ class OrderCreateHandler
         $order_items = $order->get_items();
         if (!$wpWcOrderStats) {
             $order_id = $order->get_id();
-            $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
-            $wpWcOrderStats = $wpdb->get_row($query);
+            $cache_key = 'rvx_wc_order_stats_' . $order_id;
+            $wpWcOrderStats = \wp_cache_get($cache_key, 'reviewx');
+            if (\false === $wpWcOrderStats) {
+                $wpWcOrderStats = $wpdb->get_row($wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id));
+                \wp_cache_set($cache_key, $wpWcOrderStats, 'reviewx', 3600);
+            }
         }
         $fulfillment_status = Helper::orderItemStatus($order->get_status()) ?? null;
         $fulfilled_at = $wpWcOrderStats && $wpWcOrderStats->date_completed ? \wp_date('Y-m-d H:i:s', \strtotime($wpWcOrderStats->date_completed)) : null;

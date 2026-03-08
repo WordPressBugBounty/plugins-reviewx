@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Api\SettingApi;
 class SettingService extends \Rvx\Services\Service
 {
@@ -136,12 +137,12 @@ class SettingService extends \Rvx\Services\Service
     {
         if ($data['active'] == \true) {
             \update_option('woocommerce_review_rating_verification_label', 'yes');
-            $data = ['success' => \true, 'message' => __("Verified Owner Active")];
+            $data = ['success' => \true, 'message' => \__("Verified Owner Active", 'reviewx')];
             return $data;
         }
         if ($data['active'] == \false) {
             \update_option('woocommerce_review_rating_verification_label', 'no');
-            $data = ['success' => \true, 'message' => __("Verified Owner Deactive")];
+            $data = ['success' => \true, 'message' => \__("Verified Owner Deactive", 'reviewx')];
             return $data;
         }
     }
@@ -149,12 +150,12 @@ class SettingService extends \Rvx\Services\Service
     {
         if ($data['active'] == \true) {
             \update_option('woocommerce_review_rating_verification_required', 'yes');
-            $data = ['success' => \true, 'message' => __("Reviews can only be left by verified owners active")];
+            $data = ['success' => \true, 'message' => \__("Reviews can only be left by verified owners active", 'reviewx')];
             return $data;
         }
         if ($data['active'] == \false) {
             \update_option('woocommerce_review_rating_verification_required', 'no');
-            $data = ['success' => \true, 'message' => __("Reviews can only be left by verified owners deactive")];
+            $data = ['success' => \true, 'message' => \__("Reviews can only be left by verified owners deactive", 'reviewx')];
             return $data;
         }
     }
@@ -174,14 +175,18 @@ class SettingService extends \Rvx\Services\Service
     {
         $payload_json = \json_encode($data['settings']);
         \update_option('rvx_all_setting_data', $payload_json);
-        return ['message' => __('Settings saved successfully'), 'data' => $data['settings']];
+        return ['message' => \__('Settings saved successfully', 'reviewx'), 'data' => $data['settings']];
     }
     public function removeCredentials($requestData)
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'rvx_sites';
-        $sql = "TRUNCATE TABLE {$table_name}";
-        $result = $wpdb->query($sql);
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
+        $result = $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}rvx_sites");
+        // Clear general cache if any site ID exists.
+        // We don't know the UIDs here so we can't clear specific site caches easily,
+        // but TRUNCATE is a rare operation.
+        \wp_cache_flush();
+        // Drastic but TRUNCATE is also drastic.
         if ($wpdb->last_error) {
             return ['message' => 'Error: ' . $wpdb->last_error];
         }
@@ -193,13 +198,12 @@ class SettingService extends \Rvx\Services\Service
         $table_name = $wpdb->prefix . 'rvx_sites';
         // --- Extract headers (headers come as arrays) ---
         $user_email = isset($requestHeaders['x_user_email'][0]) ? sanitize_email($requestHeaders['x_user_email'][0]) : '';
-        $user_name = isset($requestHeaders['x_user_name'][0]) ? sanitize_text_field($requestHeaders['x_user_name'][0]) : '';
-        $site_uid = isset($requestHeaders['x_site_uid'][0]) ? sanitize_text_field($requestHeaders['x_site_uid'][0]) : '';
+        $user_name = isset($requestHeaders['x_user_name'][0]) ? \sanitize_text_field($requestHeaders['x_user_name'][0]) : '';
+        $site_uid = isset($requestHeaders['x_site_uid'][0]) ? \sanitize_text_field($requestHeaders['x_site_uid'][0]) : '';
         // $site_id    = isset($requestHeaders['x_site_id'][0])    ? intval($requestHeaders['x_site_id'][0])                 : 0;
         // $domain     = isset($requestHeaders['x_domain'][0])     ? sanitize_text_field($requestHeaders['x_domain'][0])     : '';
         // --- Validation: must provide at least one field to update ---
         if (empty($user_email) && empty($user_name)) {
-            // error_log('[ReviewX] updateSiteData: Missing X-User-Email and X-User-Name in request headers.');
             return ['status' => 'fail', 'message' => 'Missing X-User-Email and X-User-Name in request headers.'];
         }
         // --- Decide which identifier to use for WHERE (preferred order: uid, site_id, domain) ---
@@ -210,7 +214,6 @@ class SettingService extends \Rvx\Services\Service
             $where_fmt = ['%s'];
         } else {
             // No identifier provided — refuse to do a global update for safety
-            // error_log('[ReviewX] updateSiteData: No site identifier provided (x_site_uid, x_site_id or x_domain). Aborting to avoid global update.');
             return ['status' => 'fail', 'message' => 'Missing site identifier. Provide x_site_uid, x_site_id or x_domain in request headers.'];
         }
         // --- Prepare data to update ---
@@ -227,21 +230,34 @@ class SettingService extends \Rvx\Services\Service
         if (empty($data)) {
             return ['status' => 'fail', 'message' => 'No valid update fields provided.'];
         }
-        // error_log('[ReviewX] updateSiteData: Target WHERE: ' . print_r($where, true) . ' — Updating: ' . print_r($data, true));
         // --- Fetch existing row to detect no-op updates and to ensure the row exists ---
-        $where_keys = \array_keys($where);
-        // Build a safe WHERE clause and prepare values
+        // Whitelist allowed column names for WHERE clause to prevent SQL injection
+        $allowed_columns = array('uid', 'id', 'domain');
         $where_clauses = [];
         $where_values = [];
         foreach ($where as $col => $val) {
-            $where_clauses[] = "{$col} = %s";
+            if (!\in_array($col, $allowed_columns, \true)) {
+                continue;
+            }
+            $where_clauses[] = "`{$col}` = %s";
             $where_values[] = (string) $val;
         }
+        if (empty($where_clauses)) {
+            return ['status' => 'fail', 'message' => 'Invalid where clause columns.'];
+        }
         $where_sql = \implode(' AND ', $where_clauses);
-        $select_sql = $wpdb->prepare("SELECT * FROM {$table_name} WHERE {$where_sql} LIMIT 1", $where_values);
-        $existing = $wpdb->get_row($select_sql, ARRAY_A);
+        $cache_key = 'rvx_site_' . \md5($where_sql . \serialize($where_values));
+        $existing = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $existing) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table query, no WP API equivalent
+            $existing = $wpdb->get_row(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where_sql uses whitelisted column names with %s placeholders
+                $wpdb->prepare("SELECT * FROM {$wpdb->prefix}rvx_sites WHERE {$where_sql} LIMIT 1", $where_values),
+                ARRAY_A
+            );
+            \wp_cache_set($cache_key, $existing, 'reviewx', 3600);
+        }
         if (null === $existing) {
-            // error_log('[ReviewX] updateSiteData: No site row found for identifier: ' . print_r($where, true));
             return ['status' => 'fail', 'message' => 'No site found matching provided identifier.', 'where' => $where];
         }
         // Compare values — if identical, return success (no change needed)
@@ -258,8 +274,13 @@ class SettingService extends \Rvx\Services\Service
         }
         // --- Perform the update using $wpdb->update (safe) ---
         $updated = $wpdb->update($table_name, $data, $where, $format, $where_fmt);
+        // Clear cache
+        \wp_cache_delete('rvx_site_' . \md5($where_sql . \serialize($where_values)), 'reviewx');
+        if (!empty($site_uid)) {
+            \wp_cache_delete('rvx_site_uid_' . $site_uid, 'reviewx');
+            \wp_cache_delete('rvx_site_exists_' . $site_uid, 'reviewx');
+        }
         if ($wpdb->last_error) {
-            // error_log('[ReviewX] updateSiteData: DB error - ' . $wpdb->last_error);
             return ['status' => 'error', 'message' => 'Database error: ' . $wpdb->last_error];
         }
         // $updated can be: false (error), 0 (no rows changed), >0 (rows updated)

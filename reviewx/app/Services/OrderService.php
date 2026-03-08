@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Api\OrderApi;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
@@ -21,7 +22,6 @@ class OrderService extends \Rvx\Services\Service
         $uid = Client::getUid() . '-' . $order_id;
         $response = (new OrderApi())->update($payload, $uid);
         if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log('Order Not Update' . $response->getStatusCode());
             return \false;
         }
     }
@@ -48,9 +48,12 @@ class OrderService extends \Rvx\Services\Service
     }
     public function wooOrderState($order_id)
     {
-        global $wpdb;
-        $query = $wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id);
-        $results = $wpdb->get_row($query);
+        $cache_key = 'rvx_wc_order_stats_' . $order_id;
+        $results = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $results) {
+            $results = $wpdb->get_row($wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id));
+            \wp_cache_set($cache_key, $results, 'reviewx', 3600);
+        }
         if ($results) {
             return ['date_paid' => !empty($results->date_paid) && \strtotime($results->date_paid) ? \wp_date('Y-m-d H:i:s', \strtotime($results->date_paid)) : null, 'date_completed' => !empty($results->date_completed) && \strtotime($results->date_completed) ? \wp_date('Y-m-d H:i:s', \strtotime($results->date_completed)) : null];
         }

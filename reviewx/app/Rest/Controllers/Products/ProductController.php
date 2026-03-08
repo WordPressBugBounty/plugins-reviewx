@@ -30,7 +30,7 @@ class ProductController implements InvokableContract
             if (isset($data['products']) && \is_array($data['products'])) {
                 foreach ($data['products'] as &$product) {
                     if (isset($product['wp_id'])) {
-                        $product['post_type'] = get_post_type($product['wp_id']);
+                        $product['post_type'] = \get_post_type($product['wp_id']);
                     }
                 }
             }

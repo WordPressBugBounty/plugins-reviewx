@@ -25,9 +25,7 @@ class CategorySync implements InvokableContract
         $this->catSync($modyFiedCategories);
         $totalProducts = $offset + \count($products);
         \update_option('total_catagory_count', $totalProducts);
-        \error_log('Total Category=: ' . $totalProducts);
         \update_option('category_chunk_offset', $offset + $chunkSize);
-        \error_log('Chunk size=: ' . $offset);
         if (\count($products) < $chunkSize) {
             \delete_option('category_chunk_offset');
         }
@@ -40,16 +38,13 @@ class CategorySync implements InvokableContract
     }
     private function getProductsChunk($offset, $limit)
     {
-        global $wpdb;
-        $query = $wpdb->prepare("\n            SELECT *\n            FROM {$wpdb->terms}\n            LIMIT %d OFFSET %d\n        ", $limit, $offset);
-        return $wpdb->get_results($query);
+        return \get_terms(['taxonomy' => 'product_cat', 'hide_empty' => \false, 'number' => $limit, 'offset' => $offset]);
     }
     public function catSync($payload)
     {
         if (!Client::getSync()) {
             $response = (new CategoryApi())->dataSync(['categories' => $payload]);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                \error_log("Sync Category not inserted: " . $response);
                 return \false;
             }
         }

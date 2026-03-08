@@ -12,17 +12,17 @@ class RollbackPrompt
     // Entry point for the rollback process
     public function rvx_retrieve_sass_plugin_reviews_meta_updater()
     {
-        echo '<h3>Rollback started.</h3>';
+        \printf('<h3>%s</h3>', \esc_html__('Rollback started.', 'reviewx'));
         // Rollback options data
         $this->rvx_retrieve_saas_plugin_options_data();
-        echo 'Options data rollback completed.<br>';
+        \printf('%s<br>', \esc_html__('Options data rollback completed.', 'reviewx'));
         // Rollback multi-criteria reviews
         $reviews_data = $this->rvx_retrieve_saas_plugin_criterias_reviews_converter();
-        echo 'Multi-criteria data rollback completed.<br>';
+        \printf('%s<br>', \esc_html__('Multi-criteria data rollback completed.', 'reviewx'));
         // Rollback attachments for reviews
         $this->rvx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data);
-        echo 'Reviews attachments data rollback completed.<br>';
-        echo '<h3>Rollback done.</h3><br>';
+        \printf('%s<br>', \esc_html__('Reviews attachments data rollback completed.', 'reviewx'));
+        \printf('<h3>%s</h3><br>', \esc_html__('Rollback done.', 'reviewx'));
     }
     // Handles the rollback of plugin options data
     public function rvx_retrieve_saas_plugin_options_data()
@@ -86,7 +86,7 @@ class RollbackPrompt
             return [];
         }
         $existingOldData = \get_option('_rx_option_review_criteria');
-        $oldCriteria = \is_string($existingOldData) ? maybe_unserialize($existingOldData) : [];
+        $oldCriteria = \is_string($existingOldData) ? \maybe_unserialize($existingOldData) : [];
         if (empty($oldCriteria)) {
             return [];
         }
@@ -106,16 +106,40 @@ class RollbackPrompt
         global $wpdb;
         $meta_key = 'rvx_review_version';
         $meta_value = 'v2';
-        $query = $wpdb->prepare("SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s", $meta_key, $meta_value);
-        $comment_ids = $wpdb->get_col($query);
+        $cache_key = 'rvx_rollback_comment_ids';
+        $comment_ids = \wp_cache_get($cache_key, 'reviewx');
+        if (\false === $comment_ids) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Fetching comment IDs by meta; no WP API equivalent for this query
+            $comment_ids = $wpdb->get_col($wpdb->prepare("SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = %s AND meta_value = %s", $meta_key, $meta_value));
+            \wp_cache_set($cache_key, $comment_ids, 'reviewx', 3600);
+        }
         if (empty($comment_ids)) {
             return [];
         }
         $placeholders = \implode(',', \array_fill(0, \count($comment_ids), '%d'));
-        $query = $wpdb->prepare("SELECT * FROM {$wpdb->comments} WHERE comment_ID IN ({$placeholders})", $comment_ids);
-        $reviews_data = $wpdb->get_results($query, ARRAY_A);
-        $query = $wpdb->prepare("SELECT comment_id, meta_key, meta_value FROM {$wpdb->commentmeta} WHERE comment_id IN ({$placeholders})", $comment_ids);
-        $meta_data = $wpdb->get_results($query, ARRAY_A);
+        $comment_ids_int = \array_map('intval', $comment_ids);
+        $cache_key_data = 'rvx_rollback_reviews_data_' . \md5(\implode(',', $comment_ids_int));
+        $reviews_data = \wp_cache_get($cache_key_data, 'reviewx');
+        if (\false === $reviews_data) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Bulk fetching comments by IDs for rollback
+            $reviews_data = $wpdb->get_results(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $placeholders is a safe array_fill of %d
+                $wpdb->prepare("SELECT * FROM {$wpdb->comments} WHERE comment_ID IN ({$placeholders})", $comment_ids_int),
+                ARRAY_A
+            );
+            \wp_cache_set($cache_key_data, $reviews_data, 'reviewx', 3600);
+        }
+        $cache_key_meta = 'rvx_rollback_meta_data_' . \md5(\implode(',', $comment_ids_int));
+        $meta_data = \wp_cache_get($cache_key_meta, 'reviewx');
+        if (\false === $meta_data) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Bulk fetching comment meta for rollback
+            $meta_data = $wpdb->get_results(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $placeholders is a safe array_fill of %d
+                $wpdb->prepare("SELECT comment_id, meta_key, meta_value FROM {$wpdb->commentmeta} WHERE comment_id IN ({$placeholders})", $comment_ids_int),
+                ARRAY_A
+            );
+            \wp_cache_set($cache_key_meta, $meta_data, 'reviewx', 3600);
+        }
         $reviews_with_meta = [];
         foreach ($reviews_data as $review) {
             $comment_id = $review['comment_ID'];
@@ -124,7 +148,7 @@ class RollbackPrompt
         foreach ($meta_data as $meta) {
             $comment_id = $meta['comment_id'];
             if (isset($reviews_with_meta[$comment_id])) {
-                $reviews_with_meta[$comment_id]['meta_data'][$meta['meta_key']] = maybe_unserialize($meta['meta_value']);
+                $reviews_with_meta[$comment_id]['meta_data'][$meta['meta_key']] = \maybe_unserialize($meta['meta_value']);
             }
         }
         return $reviews_with_meta;

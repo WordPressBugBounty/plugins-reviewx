@@ -20,7 +20,7 @@ class CommonServiceProvider extends ServiceProvider
             $cpt = function () use($type, $config) {
                 register_post_type($type, $config);
             };
-            add_action('init', $cpt);
+            \add_action('init', $cpt);
         }
     }
 }

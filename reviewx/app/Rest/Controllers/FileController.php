@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Contracts\InvokableContract;
 class FileController implements InvokableContract

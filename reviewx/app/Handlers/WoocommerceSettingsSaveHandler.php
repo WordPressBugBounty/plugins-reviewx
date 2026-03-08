@@ -11,7 +11,9 @@ class WoocommerceSettingsSaveHandler
     public function wooProductSaveHandler()
     {
         // Isset specific fields
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified by WooCommerce before this hook fires
         $isset_label = isset($_POST['woocommerce_review_rating_verification_label']) ? \true : \false;
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified by WooCommerce before this hook fires
         $isset_required = isset($_POST['woocommerce_review_rating_verification_required']) ? \true : \false;
         $modifiedReviewsettings = $this->prepareData($isset_label, $isset_required);
         try {
@@ -22,7 +24,7 @@ class WoocommerceSettingsSaveHandler
                 (new SettingService())->updateReviewSettings($review_settings, $post_type);
             }
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                \error_log('API response - NOT OK: ' . \print_r($response->getApiData()['review_settings'], \true));
+                // API response - NOT OK
                 return Helper::rvxApi(['error' => "WC Settings Fail"])->fails('WC Settings Fail', $response->getStatusCode());
             }
             return Helper::saasResponse($response);

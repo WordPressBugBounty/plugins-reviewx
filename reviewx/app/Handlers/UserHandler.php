@@ -11,7 +11,7 @@ class UserHandler
     }
     public function __invoke($user_id)
     {
-        $user = get_userdata($user_id);
+        $user = \get_userdata($user_id);
         $data = [
             'wp_id' => $user->ID,
             'name' => $user->first_name . ' ' . $user->last_name,

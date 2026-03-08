@@ -31,7 +31,7 @@ class ReviewSummaryShortcode implements ShortcodeContract
         } elseif ($attrs['title'] === 'true' || empty($attrs['title'])) {
             $title = $data['postTitle'];
         } else {
-            $title = esc_html($attrs['title']);
+            $title = \esc_html($attrs['title']);
         }
         return View::render('storefront/shortcode/reviewSummary', ['title' => $title, 'data' => \json_encode($data)]);
     }
@@ -44,7 +44,7 @@ class ReviewSummaryShortcode implements ShortcodeContract
      */
     public function productWiseReviewShow($id, $isProduct) : array
     {
-        $post = get_post($id);
+        $post = \get_post($id);
         $attributes = ['product' => ['id' => $id], 'postTitle' => $post ? $post->post_title : \false, 'postType' => $post ? $post->post_type : '', 'domain' => ['baseDomain' => Helper::domainSupport(), 'baseRestUrl' => Helper::getRestAPIurl()]];
         return $attributes;
     }

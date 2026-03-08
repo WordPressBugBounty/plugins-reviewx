@@ -2,6 +2,7 @@
 
 namespace Rvx;
 
+\defined("ABSPATH") || exit;
 return ['name' => 'ReviewX', 'slug' => 'reviewx', 'prefix' => 'rvx', 'rest_api_namespace' => 'reviewx', 'version' => '0.0.1', 'initial_handlers' => ['activated' => \Rvx\Handlers\PluginActivatedHandler::class, 'deactivated' => \Rvx\Handlers\PluginDeactivatedHandler::class, 'uninstalled' => [\Rvx\Handlers\PluginUninstallerHandler::class, 'handleUninstall']], 'providers' => [\Rvx\WPDrill\Providers\ShortcodeServiceProvider::class, \Rvx\WPDrill\Providers\DBServiceProvider::class, \Rvx\WPDrill\Providers\RequestServiceProvider::class, \Rvx\WPDrill\Providers\MenuServiceProvider::class, \Rvx\WPDrill\Providers\ViewServiceProvider::class, \Rvx\WPDrill\Providers\ConfigServiceProvider::class, \Rvx\WPDrill\Providers\EnqueueServiceProvider::class, \Rvx\WPDrill\Providers\RoutingServiceProvider::class, \Rvx\WPDrill\Providers\MigrationServiceProvider::class, \Rvx\WPDrill\Providers\CommonServiceProvider::class, \Rvx\Providers\PluginServiceProvider::class], 'build' => ['output_dir' => '.dist', 'commands' => ['before' => [], 'after' => [['composer', 'dump-autoload']]], 'cleanup' => [
     // 'composer.json',
     // 'composer.lock',

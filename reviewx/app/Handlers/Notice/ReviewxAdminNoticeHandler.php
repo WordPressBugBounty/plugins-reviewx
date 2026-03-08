@@ -20,11 +20,11 @@ class ReviewxAdminNoticeHandler
     public function rvx_admin_deal_notice_until()
     {
         // Verify nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'rvx_dismiss_notice_nonce')) {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_POST['nonce'])), 'rvx_dismiss_notice_nonce')) {
             wp_send_json_error(['message' => 'Invalid nonce.']);
         }
         // Get duration
-        $duration = $_POST['duration'];
+        $duration = isset($_POST['duration']) ? \sanitize_text_field(\wp_unslash($_POST['duration'])) : '';
         if (\is_numeric($duration)) {
             $timestamp = \strtotime("+{$duration} days");
             \update_option('rvx_admin_deal_notice_until', $timestamp);

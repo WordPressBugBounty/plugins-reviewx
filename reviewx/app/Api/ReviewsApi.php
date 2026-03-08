@@ -2,6 +2,7 @@
 
 namespace Rvx\Api;
 
+\defined('ABSPATH') || exit;
 use Rvx\Apiz\Http\Response;
 use Exception;
 use Rvx\Models\Post;
@@ -121,9 +122,12 @@ class ReviewsApi extends \Rvx\Api\BaseApi
      * @return Response
      * @throws Exception
      */
-    public function reviewAggregation() : Response
+    public function reviewAggregation($data) : Response
     {
-        return $this->get('reviews/get-aggregation');
+        if (!empty($data)) {
+            return $this->get('reviews/get/aggregation?' . \http_build_query($data));
+        }
+        return $this->get('reviews/get/aggregation');
     }
     /**
      * @return Response
@@ -317,6 +321,10 @@ class ReviewsApi extends \Rvx\Api\BaseApi
     public function reviewBulkTrash($data)
     {
         return $this->withJson($data)->post('/reviews/bulk/trash');
+    }
+    public function reviewBulkSoftDelete($data)
+    {
+        return $this->withJson($data)->post('/reviews/bulk/delete');
     }
     public function reviewEmptyTrash()
     {

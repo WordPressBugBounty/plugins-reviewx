@@ -23,7 +23,7 @@ class CommentsRatingColumn
         // Insert the 'rating' column after the 'author' column
         if ($author_position !== \false) {
             // Add the 'rating' column after the 'author' column
-            $columns = \array_slice($columns, 0, $author_position + 1, \true) + ['rating' => __('ReviewX Rating', 'reviewx')] + \array_slice($columns, $author_position + 1, null, \true);
+            $columns = \array_slice($columns, 0, $author_position + 1, \true) + ['rating' => \__('ReviewX Rating', 'reviewx')] + \array_slice($columns, $author_position + 1, null, \true);
         }
         return $columns;
     }
@@ -37,7 +37,7 @@ class CommentsRatingColumn
     {
         if ($column === 'rating') {
             // Get the comment object
-            $comment = get_comment($comment_id);
+            $comment = \get_comment($comment_id);
             // Check if the comment is a parent comment
             if ($comment->comment_parent != 0) {
                 return;
@@ -46,7 +46,7 @@ class CommentsRatingColumn
             // Get the comment type (WooCommerce product reviews have a type 'review')
             $comment_type = $comment->comment_type;
             // Get the post type of the comment
-            $post_type = get_post_type($comment->comment_post_ID);
+            $post_type = \get_post_type($comment->comment_post_ID);
             // Define the target post types
             $enabled_post_types = $this->cptHelper->enabledCPT();
             unset($enabled_post_types['product']);
@@ -57,9 +57,9 @@ class CommentsRatingColumn
                 $rating = \get_comment_meta($comment_id, 'rating', \true);
                 // If rating exists, display stars, otherwise show empty stars (0)
                 if ($rating) {
-                    echo $this->getStarsHtml($rating);
+                    echo \wp_kses($this->getStarsHtml($rating), ['span' => ['class' => [], 'title' => [], 'style' => []]]);
                 } else {
-                    echo $this->getStarsHtml(0);
+                    echo \wp_kses($this->getStarsHtml(0), ['span' => ['class' => [], 'title' => [], 'style' => []]]);
                     // Empty stars for no rating
                 }
             }
@@ -91,7 +91,7 @@ class CommentsRatingColumn
             }
             $stars .= $star_symbol;
         }
-        return "<span class='rvx-stars' title='{$rating}' style='font-size: {$star_size}; color: #f5a623;'>{$stars}</span>";
+        return "<span class='rvx-stars' title='" . \esc_attr($rating) . "' style='font-size: " . \esc_attr($star_size) . "; color: #f5a623;'>" . $stars . "</span>";
     }
     /**
      * Sort comments based on the 'rating' column.
@@ -101,8 +101,10 @@ class CommentsRatingColumn
     public function sortCommentsByRating($query)
     {
         // Check if we are in the admin and the correct screen (comments)
-        if (is_admin() && isset($_GET['orderby']) && 'rating' === $_GET['orderby']) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for column sorting, not processing form data
+        if (\is_admin() && isset($_GET['orderby']) && 'rating' === $_GET['orderby']) {
             // Sort by rating in ascending or descending order based on the current 'order' parameter
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for column sorting, not processing form data
             $order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'ASC' : 'DESC';
             // Modify the query to order by rating
             $query->set('meta_key', 'rating');

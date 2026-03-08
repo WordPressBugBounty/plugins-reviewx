@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Throwable;
 use Rvx\Services\GoogleReviewService;
 use Rvx\Utilities\Helper;

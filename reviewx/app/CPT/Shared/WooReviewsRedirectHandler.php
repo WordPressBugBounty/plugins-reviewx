@@ -47,16 +47,20 @@ class WooReviewsRedirectHandler
         // Check for WooCommerce product-reviews page (Products -> Reviews)
         // URL: edit.php?post_type=product&page=product-reviews
         if ($pagenow === 'edit.php') {
-            $post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : '';
-            $page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for page detection, not processing form data
+            $post_type = isset($_GET['post_type']) ? \sanitize_text_field(\wp_unslash($_GET['post_type'])) : '';
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for page detection, not processing form data
+            $page = isset($_GET['page']) ? \sanitize_text_field(\wp_unslash($_GET['page'])) : '';
             if ($post_type === 'product' && $page === 'product-reviews') {
                 return \true;
             }
         }
         // Also check legacy edit-comments.php page
         if ($pagenow === 'edit-comments.php') {
-            $post_type = isset($_GET['post_type']) ? sanitize_text_field($_GET['post_type']) : '';
-            $comment_type = isset($_GET['comment_type']) ? sanitize_text_field($_GET['comment_type']) : '';
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for page detection, not processing form data
+            $post_type = isset($_GET['post_type']) ? \sanitize_text_field(\wp_unslash($_GET['post_type'])) : '';
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading $_GET for page detection, not processing form data
+            $comment_type = isset($_GET['comment_type']) ? \sanitize_text_field(\wp_unslash($_GET['comment_type'])) : '';
             if ($post_type === 'product' || $comment_type === 'review') {
                 return \true;
             }
@@ -68,7 +72,7 @@ class WooReviewsRedirectHandler
      */
     public function displayRedirectNotice() : void
     {
-        if (!is_admin()) {
+        if (!\is_admin()) {
             return;
         }
         if (!$this->shouldHideWooReviews()) {
@@ -77,26 +81,26 @@ class WooReviewsRedirectHandler
         if (!$this->isWooReviewsPage()) {
             return;
         }
-        $reviewx_reviews_url = admin_url('admin.php?page=reviewx_reviews');
+        $reviewx_reviews_url = \admin_url('admin.php?page=reviewx_reviews');
         ?>
         <div class="notice notice-info" style="padding: 15px; margin: 20px 0; border-left-color: #6366f1;">
             <h3 style="margin: 0 0 10px 0; color: #1e293b;">
                 <span class="dashicons dashicons-star-filled" style="color: #6366f1; margin-right: 5px;"></span>
                 <?php 
-        esc_html_e('Reviews Managed by ReviewX', 'reviewx');
+        \esc_html_e('Reviews Managed by ReviewX', 'reviewx');
         ?>
             </h3>
             <p style="font-size: 14px; color: #475569; margin: 0 0 15px 0;">
                 <?php 
-        esc_html_e('Product reviews are now managed by ReviewX. You can view, manage, and respond to all product reviews from the ReviewX Reviews page.', 'reviewx');
+        \esc_html_e('Product reviews are now managed by ReviewX. You can view, manage, and respond to all product reviews from the ReviewX Reviews page.', 'reviewx');
         ?>
             </p>
             <a href="<?php 
-        echo esc_url($reviewx_reviews_url);
+        echo \esc_url($reviewx_reviews_url);
         ?>" class="button button-primary" style="background-color: #6366f1; border-color: #6366f1;">
                 <span class="dashicons dashicons-arrow-right-alt" style="margin-top: 4px;"></span>
                 <?php 
-        esc_html_e('Go to ReviewX Reviews', 'reviewx');
+        \esc_html_e('Go to ReviewX Reviews', 'reviewx');
         ?>
             </a>
         </div>
@@ -128,7 +132,7 @@ class WooReviewsRedirectHandler
      */
     public function filterWooReviewsClauses($clauses, $comment_query) : array
     {
-        if (!is_admin()) {
+        if (!\is_admin()) {
             return $clauses;
         }
         if (!$this->shouldHideWooReviews()) {

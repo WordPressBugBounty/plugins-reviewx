@@ -18,8 +18,8 @@ class WoocommerceCommentStatusChangeHandler
     }
     public function prepareData($comment_id, $status)
     {
-        $comment = get_comment($comment_id);
-        $post_type = get_post_type($comment->comment_post_ID);
+        $comment = \get_comment($comment_id);
+        $post_type = \get_post_type($comment->comment_post_ID);
         if ($post_type) {
             $data = [];
             switch ($status) {

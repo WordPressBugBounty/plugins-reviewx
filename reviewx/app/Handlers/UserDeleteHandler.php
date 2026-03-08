@@ -14,9 +14,7 @@ class UserDeleteHandler
     {
         $id = Client::getUid() . '-' . $user_id;
         $response = (new UserApi())->remove($id);
-        \error_log("Response" . $response->getStatusCode());
         if ($response->getStatusCode() !== Response::HTTP_OK) {
-            \error_log("user Not Delete");
             return \false;
         }
     }

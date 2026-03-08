@@ -19,7 +19,7 @@ class CptCommentsLinkMeta
         $enabled_post_types = $this->cptHelper->enabledCPT();
         unset($enabled_post_types['product']);
         // Unset Product
-        $post_type = get_post_type($post_id);
+        $post_type = \get_post_type($post_id);
         // Exclude post type
         if (!isset($enabled_post_types[$post_type])) {
             return $count;

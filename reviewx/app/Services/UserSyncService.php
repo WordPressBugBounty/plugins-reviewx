@@ -2,19 +2,21 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
 class UserSyncService extends \Rvx\Services\Service
 {
     protected $users;
-    public function syncUser($file)
+    public function syncUser(&$file)
     {
         $userCount = 0;
-        DB::table('users')->select(['ID', 'display_name', 'user_email', 'user_status'])->chunk(100, function ($allUsers) use($file, &$userCount) {
+        DB::table('users')->select(['ID', 'display_name', 'user_email', 'user_status'])->chunk(100, function ($allUsers) use(&$file, &$userCount) {
             foreach ($allUsers as $user) {
                 $formatedUser = $this->formatUserData($user);
-                Helper::appendToJsonl($file, $formatedUser);
-                $userCount++;
+                if (Helper::appendToJsonl($file, $formatedUser)) {
+                    $userCount++;
+                }
             }
         });
         Helper::rvxLog($userCount, "User Done");

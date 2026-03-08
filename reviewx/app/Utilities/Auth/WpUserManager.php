@@ -2,6 +2,7 @@
 
 namespace Rvx\Utilities\Auth;
 
+\defined("ABSPATH") || exit;
 class WpUserManager
 {
     protected bool $isUserLoggedIn = \false;

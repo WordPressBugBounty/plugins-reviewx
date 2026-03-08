@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Handlers\MigrationRollback\MigrationPrompt;
 use Rvx\Handlers\MigrationRollback\ReviewXChecker;
 use Rvx\Utilities\Helper;
@@ -45,30 +46,31 @@ class ReviewSyncService extends \Rvx\Services\Service
     {
         return $this->criteria;
     }
-    public function processReviewForSync($file, $post_type) : int
+    public function processReviewForSync(&$buffer, $post_type) : int
     {
         $this->syncReviewMata();
-        return $this->syncReview($file, $post_type);
+        return $this->syncReview($buffer, $post_type);
     }
-    public function syncReview($file, $post_type) : int
+    public function syncReview(&$buffer, $post_type) : int
     {
         $this->procesedReviews = [];
         $this->reviewids = [];
         $this->reviewRelationId = [];
         $reviewCount = 0;
         //Reply
-        DB::table('comments')->join('posts', 'posts.ID', '=', 'comments.comment_post_ID')->where('posts.post_type', $post_type)->where('comment_parent', '!=', 0)->chunk(100, function ($comments) use(&$file) {
+        DB::table('comments')->join('posts', 'posts.ID', '=', 'comments.comment_post_ID')->where('posts.post_type', $post_type)->where('comment_parent', '!=', 0)->chunk(100, function ($comments) use(&$buffer) {
             foreach ($comments as $comment) {
                 $this->commentReplyRelation[$comment->comment_parent][] = [$comment->comment_ID => $comment->comment_content];
             }
         });
         //WC Reviews / CPT Reviews
         $review_type = $post_type === 'product' ? ['review'] : ['comment'];
-        DB::table('comments')->join('posts', 'posts.ID', '=', 'comments.comment_post_ID')->where('posts.post_type', $post_type)->where('comment_parent', '=', 0)->whereIn('comment_type', $review_type)->chunk(100, function ($comments) use(&$commentReplyRelation, &$file, &$reviewCount) {
+        DB::table('comments')->join('posts', 'posts.ID', '=', 'comments.comment_post_ID')->where('posts.post_type', $post_type)->where('comment_parent', '=', 0)->whereIn('comment_type', $review_type)->chunk(100, function ($comments) use(&$buffer, &$reviewCount) {
             foreach ($comments as $comment) {
                 $this->procesedReviews = $this->processReview($comment);
-                Helper::appendToJsonl($file, $this->procesedReviews);
-                $reviewCount++;
+                if (Helper::appendToJsonl($buffer, $this->procesedReviews)) {
+                    $reviewCount++;
+                }
             }
         });
         // Helper::rvxLog($reviewCount, "Review Done");
@@ -193,7 +195,7 @@ class ReviewSyncService extends \Rvx\Services\Service
     }
     private function criteriaMappingWC($commentId, $metaValue)
     {
-        $metaValue = maybe_unserialize($metaValue) ?? 0;
+        $metaValue = \maybe_unserialize($metaValue) ?? 0;
         // If $metaValue is not an array or scalar numeric, default to 0
         if (!\is_array($metaValue) && !\is_numeric($metaValue)) {
             $metaValue = 0;
@@ -222,7 +224,7 @@ class ReviewSyncService extends \Rvx\Services\Service
     }
     private function criteriaMappingV1($commentId, $metaValue)
     {
-        $metaValue = maybe_unserialize($metaValue);
+        $metaValue = \maybe_unserialize($metaValue);
         // Example: a:3:{s:8:"ctr_h8S7";s:1:"3";s:8:"ctr_h8S8";s:1:"3";s:8:"ctr_h8S9";s:1:"3";}
         // Retrieve the existing criteria mapping (old criteria names)
         $multCritria_data = $this->getCriteria();
@@ -282,7 +284,7 @@ class ReviewSyncService extends \Rvx\Services\Service
     private function criteriaMappingV2($commentId, $metaValue)
     {
         // Deserialize the meta value
-        $metaValue = maybe_unserialize($metaValue);
+        $metaValue = \maybe_unserialize($metaValue);
         // Ensure $metaValue is always an array
         if (!\is_array($metaValue)) {
             $metaValue = [];
@@ -330,11 +332,11 @@ class ReviewSyncService extends \Rvx\Services\Service
                 continue;
                 // Skip if no value provided for this meta key
             }
-            $data = \is_string($metaValue) ? maybe_unserialize($metaValue) : $metaValue;
+            $data = \is_string($metaValue) ? \maybe_unserialize($metaValue) : $metaValue;
             if ($metaKey === 'reviewx_attachments' && \is_array($data) && isset($data['images'])) {
                 // Process image attachments
                 foreach ($data['images'] as $image_id) {
-                    $image_url = wp_get_attachment_url($image_id);
+                    $image_url = \wp_get_attachment_url($image_id);
                     if (\filter_var($image_url, \FILTER_VALIDATE_URL)) {
                         $links[] = $image_url;
                     }
@@ -365,7 +367,7 @@ class ReviewSyncService extends \Rvx\Services\Service
     }
     private function attachmentsV2($commentId, $metaValue) : array
     {
-        $data = maybe_unserialize($metaValue);
+        $data = \maybe_unserialize($metaValue);
         $links = [];
         if (\is_array($data)) {
             foreach ($data as $data_url) {

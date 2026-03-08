@@ -43,8 +43,6 @@ class UserApi extends \Rvx\Api\BaseApi
      */
     public function remove($id) : Response
     {
-        $tt = 'customer/' . $id;
-        \error_log("Delete " . $tt);
         return $this->delete('customer/' . $id);
     }
 }

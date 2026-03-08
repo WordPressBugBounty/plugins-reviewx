@@ -17,7 +17,7 @@ trait Addons
      */
     public function register_widget_categories($elements_manager)
     {
-        $elements_manager->add_category('rx-addons-elementor', ['title' => __('ReviewX Addons', 'reviewx'), 'icon' => 'font'], 1);
+        $elements_manager->add_category('rx-addons-elementor', ['title' => \esc_html__('ReviewX Addons', 'reviewx'), 'icon' => 'font'], 1);
     }
     /**
      * Register widgets
@@ -58,7 +58,7 @@ trait Addons
             $widgets_manager->register(new \Rvx\Cpt_Widgets());
         }
         if (!\file_exists($new_path)) {
-            \error_log("File Pathe Not found", 0);
+            // File Path Not found
         }
     }
     /**

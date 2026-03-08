@@ -33,7 +33,7 @@ class Option
     }
     public static function flush() : bool
     {
-        return wp_cache_delete('alloptions', 'options');
+        return \wp_cache_delete('alloptions', 'options');
     }
     public static function getPostMeta(int $postId, string $key, $default = null)
     {

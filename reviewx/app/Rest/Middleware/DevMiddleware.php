@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Middleware;
 
+\defined("ABSPATH") || exit;
 class DevMiddleware
 {
     /**

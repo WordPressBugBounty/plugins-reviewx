@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Api\DashboardApi;
 class DashboardServices extends \Rvx\Services\Service
 {
@@ -16,9 +17,7 @@ class DashboardServices extends \Rvx\Services\Service
     public function requestUserData()
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'rvx_sites';
-        $site_data = $wpdb->get_row("SELECT * FROM {$table_name} WHERE id = 1");
-        // error_log('Site Data: ' . print_r($site_data, true));
+        $site_data = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}rvx_sites WHERE id = %d", 1));
         if (!$site_data) {
             return ['success' => \false, 'message' => 'No site data found', 'data' => null];
         }

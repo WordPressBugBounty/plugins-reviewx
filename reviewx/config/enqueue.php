@@ -1,4 +1,6 @@
 <?php
+
+defined( "ABSPATH" ) || exit;
 use Rvx\Utilities\Helper;
 $rvx_user_access_script = get_option('__user_setting_access') ?? '';
 

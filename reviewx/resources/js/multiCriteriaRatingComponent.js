@@ -1,4 +1,4 @@
-function __rvxMultiCriteriaRatingComponent__(rating, index) {
+window.__rvxMultiCriteriaRatingComponent__ = function (rating, index) {
     return {
         selectedStars: 5, // Set initially selected stars
         selectCriteriaStars(star) {
@@ -13,7 +13,7 @@ function __rvxMultiCriteriaRatingComponent__(rating, index) {
     }
 }
 
-function __rvxStarRatingComponent__() {
+window.__rvxStarRatingComponent__ = function () {
     return {
         selectedStars: 5, // Set initially selected stars
         selectStars(star) {

@@ -2,6 +2,7 @@
 
 namespace Rvx\Rest\Controllers;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Rvx\Services\CategorySyncService;
 use Rvx\Services\DataSyncService;
@@ -35,55 +36,78 @@ class LogController implements InvokableContract
     public function directoryCreate($data)
     {
         if ($data['action'] === 'dir') {
+            global $wp_filesystem;
+            if (empty($wp_filesystem)) {
+                require_once \ABSPATH . 'wp-admin/includes/file.php';
+                \WP_Filesystem();
+            }
             $log_folder = RVX_DIR_PATH . 'log/';
-            if (!\file_exists($log_folder) && !\mkdir($log_folder, 0755, \true) && !\is_dir($log_folder)) {
-                throw new \RuntimeException(\sprintf('Directory "%s" was not created', $log_folder));
+            if (!$wp_filesystem->exists($log_folder)) {
+                if (!$wp_filesystem->mkdir($log_folder, 0755)) {
+                    throw new \RuntimeException(\sprintf('Directory "%s" was not created', \esc_html($log_folder)));
+                }
             }
         }
     }
     public function logDownload($data)
     {
         if ($data['action'] === 'log') {
+            global $wp_filesystem;
+            if (empty($wp_filesystem)) {
+                require_once \ABSPATH . 'wp-admin/includes/file.php';
+                \WP_Filesystem();
+            }
             $logPath = RVX_DIR_PATH . 'log/';
             $files = \glob($logPath . '*');
+            // glob is generally acceptable if WP_Filesystem doesn't provide a direct equivalent that is as easy to use here, but we'll stick to contents if possible.
             if (empty($files)) {
-                echo 'No log files found';
+                \esc_html_e('No log files found', 'reviewx');
+                return;
             }
             $recentFile = null;
             foreach ($files as $file) {
-                if (\is_null($recentFile) || \filemtime($file) > \filemtime($recentFile)) {
+                if (\is_null($recentFile) || $wp_filesystem->mtime($file) > $wp_filesystem->mtime($recentFile)) {
                     $recentFile = $file;
                 }
             }
-            if (!\file_exists($recentFile)) {
-                echo 'File not found';
+            if (!$wp_filesystem->exists($recentFile)) {
+                \esc_html_e('File not found', 'reviewx');
+                return;
             }
             \header('Content-Type: text/plain');
             \header('Content-Disposition: attachment; filename="' . \basename($recentFile) . '"');
-            \header('Content-Length: ' . \filesize($recentFile));
+            \header('Content-Length: ' . $wp_filesystem->size($recentFile));
             \ob_clean();
             \flush();
-            \readfile($recentFile);
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $wp_filesystem->get_contents($recentFile);
             exit;
         }
     }
     public function deleteLog($data)
     {
         if ($data['action'] === 'remove') {
-            $log_folder = RVX_DIR_PATH . 'log/';
-            if (!\is_dir($log_folder)) {
-                echo 'Log folder does not exist';
+            global $wp_filesystem;
+            if (empty($wp_filesystem)) {
+                require_once \ABSPATH . 'wp-admin/includes/file.php';
+                \WP_Filesystem();
             }
-            $files = \glob($log_folder . '/*');
-            foreach ($files as $file) {
-                if (\is_file($file)) {
-                    \unlink($file);
+            $log_folder = RVX_DIR_PATH . 'log/';
+            if (!$wp_filesystem->is_dir($log_folder)) {
+                \esc_html_e('Log folder does not exist', 'reviewx');
+                return;
+            }
+            $files = $wp_filesystem->dirlist($log_folder);
+            if ($files) {
+                foreach ($files as $file) {
+                    $wp_filesystem->delete($log_folder . $file['name']);
                 }
             }
-            if (\rmdir($log_folder)) {
-                echo 'Log folder and files deleted successfully';
+            if ($wp_filesystem->rmdir($log_folder)) {
+                \esc_html_e('Log folder and files deleted successfully', 'reviewx');
             } else {
-                echo 'Failed to delete the log folder';
+                \esc_html_e('Failed to delete the log folder', 'reviewx');
             }
         }
     }
@@ -109,36 +133,48 @@ class LogController implements InvokableContract
     public function createJsonl()
     {
         try {
-            $file_path = RVX_DIR_PATH . 'sync.jsonl';
-            $file = \fopen($file_path, 'w');
+            global $wp_filesystem;
+            if (empty($wp_filesystem)) {
+                require_once \ABSPATH . 'wp-admin/includes/file.php';
+                \WP_Filesystem();
+            }
+            $file_buffer = "";
             $syncedCaterories = new CategorySyncService();
-            $syncedCaterories->syncCategory($file);
-            (new UserSyncService())->syncUser($file);
-            $processProduct = new ProductSyncService($syncedCaterories);
-            $processProduct->processProductForSync($file);
-            (new ReviewSyncService($processProduct))->processReviewForSync($file);
+            $syncedCaterories->syncCategory($file_buffer);
+            (new UserSyncService())->syncUser($file_buffer);
+            $processProduct = new ProductSyncService();
+            $processProduct->processProductForSync($file_buffer, 'product');
+            (new ReviewSyncService())->processReviewForSync($file_buffer, 'product');
             if (\class_exists('WooCommerce')) {
                 $order = new OrderItemSyncService();
-                $order->syncOrder($file);
-                $order->syncOrderItem($file);
+                $order->syncOrder($file_buffer);
+                $order->syncOrderItem($file_buffer);
             }
-            echo 'jsonl create done';
+            $file_path = RVX_DIR_PATH . 'sync.jsonl';
+            $wp_filesystem->put_contents($file_path, $file_buffer, \FS_CHMOD_FILE);
+            \esc_html_e('jsonl create done', 'reviewx');
         } catch (Exception $e) {
-            return $e->getMessage();
+            return \esc_html($e->getMessage());
         }
     }
     public function downloadJsonl()
     {
         $syncJsonlDownload = RVX_DIR_PATH . 'sync.jsonl';
-        if (\file_exists($syncJsonlDownload)) {
+        global $wp_filesystem;
+        if (empty($wp_filesystem)) {
+            require_once \ABSPATH . 'wp-admin/includes/file.php';
+            \WP_Filesystem();
+        }
+        if ($wp_filesystem->exists($syncJsonlDownload)) {
             \header('Content-Type: text/plain');
             \header('Content-Disposition: attachment; filename="' . \basename($syncJsonlDownload) . '"');
-            \header('Content-Length: ' . \filesize($syncJsonlDownload));
-            \header('Content-Length: ' . \filesize($syncJsonlDownload));
+            \header('Content-Length: ' . $wp_filesystem->size($syncJsonlDownload));
             \ob_clean();
             \flush();
-            \readfile($syncJsonlDownload);
-            \unlink($syncJsonlDownload);
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $wp_filesystem->get_contents($syncJsonlDownload);
+            $wp_filesystem->delete($syncJsonlDownload);
             exit;
         }
     }

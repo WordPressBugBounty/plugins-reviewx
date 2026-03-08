@@ -2,6 +2,7 @@
 
 namespace Rvx;
 
+\defined('ABSPATH') || exit;
 use Rvx\WPDrill\Facades\Shortcode;
 use Rvx\WPDrill\Plugin;
 return function (Plugin $plugin) {

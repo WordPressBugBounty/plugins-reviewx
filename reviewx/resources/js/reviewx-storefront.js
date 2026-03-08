@@ -1,4 +1,4 @@
-function __reviewXState__() {
+window.__reviewXState__ = function () {
     return {
         rvxAttributes: {
             // settings: {
@@ -65,13 +65,15 @@ function __reviewXState__() {
             reviewSubmitFailed: false,
             isAcceptConsent: false
         },
+        showErrorToastMessage: false,
+        errorToastMessage: '',
 
         rvxAttributesDataSetHandler(rvxAttributes) {
             this.rvxAttributes = {
                 ...this.rvxAttributes,
                 ...rvxAttributes,
-                baseDomain:`${rvxAttributes.domain.baseDomain}/wp-json/reviewx/api/v1/storefront`,
-                baseRestUrl:`${rvxAttributes.domain.baseRestUrl}/api/v1/storefront`
+                baseDomain: `${rvxAttributes.domain.baseDomain}/wp-json/reviewx/api/v1/storefront`,
+                baseRestUrl: `${rvxAttributes.domain.baseRestUrl}/api/v1/storefront`
             }
             this.isRvxUserLoggedIn = this.rvxAttributes?.userInfo?.isLoggedIn ? true : false
             this.isRvxUserVerified = this.rvxAttributes?.userInfo?.isVerified ? true : false
@@ -88,7 +90,7 @@ function __reviewXState__() {
                     reviews: [
                         ...this.reviewsData.data.reviews,
                         ...newRes.data.reviews],
-                    meta: {...this.reviewsData.data.meta, ...newRes.data.meta},
+                    meta: { ...this.reviewsData.data.meta, ...newRes.data.meta },
                 }
             };
         },
@@ -100,14 +102,14 @@ function __reviewXState__() {
                     reviews: [
                         ...this.reviewsAllData.data.reviews,
                         ...newRes.data.reviews],
-                    meta: {...this.reviewsAllData.data.meta, ...newRes.data.meta},
+                    meta: { ...this.reviewsAllData.data.meta, ...newRes.data.meta },
                 }
             };
         },
-        async fetchReviews({query, loadMoreReview, productId}) {
-            if(loadMoreReview){
+        async fetchReviews({ query, loadMoreReview, productId }) {
+            if (loadMoreReview) {
                 this.isLoadMoreReviews = true
-            }else{
+            } else {
                 this.fetchReviewsIsLoading = true;
             }
             let queryParams;
@@ -138,10 +140,10 @@ function __reviewXState__() {
                 this.isLoadMoreReviews = false
             }
         },
-        async fetchReviewsListShortcode({query, loadMoreReview, productId}) {
-            if(loadMoreReview){
+        async fetchReviewsListShortcode({ query, loadMoreReview, productId }) {
+            if (loadMoreReview) {
                 this.isLoadMoreReviews = true
-            }else{
+            } else {
                 this.fetchReviewsIsLoading = true;
             }
             let queryParams;
@@ -196,10 +198,10 @@ function __reviewXState__() {
         // },
         // //////////////////////////
 
-        async fetchAllReviewListShortCodes({query, loadMoreReview}) {
-            if(loadMoreReview){
+        async fetchAllReviewListShortCodes({ query, loadMoreReview }) {
+            if (loadMoreReview) {
                 this.isLoadMoreAllReviews = true
-            }else{
+            } else {
                 this.fetchReviewsIsLoading = true;
             }
             let queryParams;
@@ -339,7 +341,7 @@ function __reviewXState__() {
                 const url = `${this.rvxAttributes.baseRestUrl}/${productId}/reviews${queryParams ? '?' + queryParams : ''}`;
                 const data = await fetch(url);
                 const res = await data.json();
-                
+
                 if (loadMoreReview) {
                     // Append new reviews to existing data
                     if (this.reviewListShortCodeData?.data?.reviews) {
@@ -358,7 +360,7 @@ function __reviewXState__() {
                     // Initial load
                     this.reviewListShortCodeData = res;
                 }
-        
+
                 if (res?.data?.reviews?.length) {
                     this.haveReviews = true;
                 }
@@ -369,7 +371,7 @@ function __reviewXState__() {
                 this.isLoadMoreReviews = false;
             }
         },
-        async fetchAllReviewListShortcodeReviews({ query, loadMoreReview}) {
+        async fetchAllReviewListShortcodeReviews({ query, loadMoreReview }) {
             if (loadMoreReview) {
                 this.isLoadMoreAllReviews = true;
             } else {
@@ -389,7 +391,7 @@ function __reviewXState__() {
                     body: JSON.stringify(queryParams),
                 });
                 const res = await data.json();
-                
+
                 if (loadMoreReview) {
                     // Append new reviews to existing data
                     if (this.reviewListShortCodeData?.data?.reviews) {
@@ -408,7 +410,7 @@ function __reviewXState__() {
                     // Initial load
                     this.reviewListShortCodeData = res;
                 }
-        
+
                 if (res?.data?.reviews?.length) {
                     this.haveReviews = true;
                 }
@@ -437,7 +439,7 @@ function __reviewXState__() {
         loadMoreAllReviewListShortcodeHandler() {
             const cursor = this.reviewListShortCodeData?.data?.meta?.next_cursor;
             const per_page = this.reviewListShortCodeData?.data?.meta?.per_page;
-            
+
             if (cursor) {
                 this.storeFrontReviewListShortcodeQuery = {
                     ...this.storeFrontReviewListShortcodeQuery,
@@ -477,7 +479,7 @@ function __reviewXState__() {
                 this.fetchReviewsSettingsIsLoading = false;
             }
         },
-        async fetchReviewsAggregation({productId}) {
+        async fetchReviewsAggregation({ productId }) {
             // console.log('Fetching review Aggregation');
             this.fetchReviewsSettingsIsLoading = true;
             try {
@@ -525,7 +527,7 @@ function __reviewXState__() {
                 this.fetchReviewsSettingsIsLoading = false;
             }
         },
-        formattedMultiCriteriaAggregation({criteriaStats, criterias, totalAvaReview, percentDefaultValue = 5}) {
+        formattedMultiCriteriaAggregation({ criteriaStats, criterias, totalAvaReview, percentDefaultValue = 5 }) {
             return criterias?.map((criteria) => {
                 const total = criteriaStats[criteria.key] || 0;
                 let modifyTotal
@@ -544,7 +546,7 @@ function __reviewXState__() {
                 };
             });
         },
-        createMultiCriteriaRatingObject({criterias, criteriaStats, existingRating}) {
+        createMultiCriteriaRatingObject({ criterias, criteriaStats, existingRating }) {
             const newCriterial = criterias.map((criteria) => {
                 if (criteriaStats) {
                     let rating;
@@ -586,7 +588,7 @@ function __reviewXState__() {
                 }
                 const baseAPIEndPoint = this.rvxAttributes.baseRestUrl
                 grecaptcha.ready(function () {
-                    grecaptcha.execute(siteKey, {action: 'submit'}).then(async function (token) {
+                    grecaptcha.execute(siteKey, { action: 'submit' }).then(async function (token) {
                         try {
                             const payload = {
                                 token
@@ -709,7 +711,7 @@ function __reviewXState__() {
                 updatedReviewPayload.attachments = this.attachmentFiles;
             }
 
-            const payload = this.generateFormData({objectData: updatedReviewPayload})
+            const payload = this.generateFormData({ objectData: updatedReviewPayload })
             // payload.forEach((value, key) => {
             //     if (value instanceof File) {
             //         console.log(
@@ -741,9 +743,9 @@ function __reviewXState__() {
                 }
 
                 this.showReviewSuccessModal = true
-                document.getElementById('rvx-storefront-widget').scrollIntoView({behavior: 'smooth'});
-                if(this.reviewSettingsData?.data?.setting?.review_settings?.reviews?.auto_approve_reviews){
-                    await this.fetchReviews({productId: this.rvxAttributes?.product?.id});
+                document.getElementById('rvx-storefront-widget').scrollIntoView({ behavior: 'smooth' });
+                if (this.reviewSettingsData?.data?.setting?.review_settings?.reviews?.auto_approve_reviews) {
+                    await this.fetchReviews({ productId: this.rvxAttributes?.product?.id });
                 }
             } catch (error) {
                 console.log('error ======', error);
@@ -752,7 +754,7 @@ function __reviewXState__() {
             }
         },
         notifyReviewAdded() {
-            this.$dispatch('notify-review-added', {message: 'Success'});
+            this.$dispatch('notify-review-added', { message: 'Success' });
         },
         generateQueryParams(params) {
             const queryParams = new URLSearchParams();
@@ -778,7 +780,7 @@ function __reviewXState__() {
                 !(value instanceof File)
             );
         },
-        avatarComponent({src = '', alt = 'Default Name'}) {
+        avatarComponent({ src = '', alt = 'Default Name' }) {
             return {
                 hasError: false,
                 src: src,
@@ -808,12 +810,38 @@ function __reviewXState__() {
         },
         reviewHelpInfoComponent() {
             return {
-                async likeDislikeHandler({preference, uid}) {
+                async likeDislikeHandler({ preference, uid, review }) {
                     if (!this.isRvxUserLoggedIn) {
+                        this.errorToastMessage = 'Please login first';
                         this.showErrorToastMessage = true
-                        setTimeout(() => this.showErrorToastMessage = false, 1000);
-                        throw new Error('Please login first')
+                        setTimeout(() => this.showErrorToastMessage = false, 3000);
+                        return;
                     }
+
+                    // Save original state for possible rollback
+                    const originalLikes = review.likes;
+                    const originalDislikes = review.dislikes;
+                    const originalPreference = review.preference ? { ...review.preference } : null;
+
+                    const prevPreference = review.preference?.preference;
+
+                    // Optimistic update
+                    if (prevPreference === preference) {
+                        // Toggle off
+                        if (preference === 1) review.likes--;
+                        if (preference === 2) review.dislikes--;
+                        review.preference = null;
+                    } else {
+                        // Change preference
+                        if (prevPreference === 1) review.likes--;
+                        if (prevPreference === 2) review.dislikes--;
+
+                        if (preference === 1) review.likes++;
+                        if (preference === 2) review.dislikes++;
+
+                        review.preference = { preference };
+                    }
+
                     const payload = {
                         preference,
                     };
@@ -825,16 +853,25 @@ function __reviewXState__() {
                             },
                             body: JSON.stringify(payload)
                         });
-                        // console.log('res ======', res)
-                        // this.$dispatch('notify-like-dislike')
+
+                        if (!res.ok) {
+                            throw new Error('API request failed');
+                        }
                     } catch (error) {
                         console.log('error =======', error);
-                        // toast.error(error.response?.data?.message);
+                        // Rollback on error
+                        review.likes = originalLikes;
+                        review.dislikes = originalDislikes;
+                        review.preference = originalPreference;
+
+                        this.errorToastMessage = 'Something went wrong. Please try again later.';
+                        this.showErrorToastMessage = true;
+                        setTimeout(() => this.showErrorToastMessage = false, 3000);
                     }
                 }
             }
         },
-        generateFormData({objectData, fileKey}) {
+        generateFormData({ objectData, fileKey }) {
             const formData = new FormData();
             const appendFormData = (key, value) => {
                 if (value instanceof File && fileKey) {
@@ -892,8 +929,8 @@ function __reviewXState__() {
             try {
                 await this.fetchReviewsSettings();
                 if (this.rvxAttributes?.product?.id) {
-                    await this.fetchReviewsAggregation({productId: this.rvxAttributes?.product?.id});
-                    await this.fetchReviews({productId: this.rvxAttributes?.product?.id});
+                    await this.fetchReviewsAggregation({ productId: this.rvxAttributes?.product?.id });
+                    await this.fetchReviews({ productId: this.rvxAttributes?.product?.id });
                 }
             } catch (error) {
                 console.error('Error during initialization:', error);
@@ -914,10 +951,10 @@ function __reviewXState__() {
             try {
                 await this.fetchReviewsSettings();
                 if (this.rvxAttributes?.product?.id && (parseAttributes?.graph == 'on' || parseAttributes?.form == 'on')) {
-                    await this.fetchReviewsAggregation({productId: this.rvxAttributes?.product?.id});
+                    await this.fetchReviewsAggregation({ productId: this.rvxAttributes?.product?.id });
                 }
                 if (this.rvxAttributes?.product?.id && parseAttributes?.list == 'on') {
-                    await this.fetchReviewsListShortcode({productId: this.rvxAttributes?.product?.id});
+                    await this.fetchReviewsListShortcode({ productId: this.rvxAttributes?.product?.id });
                 }
             } catch (error) {
                 console.error('Error during initialization:', error);
@@ -949,7 +986,7 @@ function __reviewXState__() {
         async initializeMyAccountReviewFormOnProductChange(productId) {
             try {
                 // console.log('init 3')
-                await this.fetchReviewsAggregation({productId: productId});
+                await this.fetchReviewsAggregation({ productId: productId });
             } catch (error) {
                 console.error('Error during initialization:', error);
             }
@@ -960,7 +997,7 @@ function __reviewXState__() {
             // console.log('init 4')
             try {
                 await this.fetchReviewsSettings();
-                await this.fetchReviewsAggregation({productId: parseData.product.id});
+                await this.fetchReviewsAggregation({ productId: parseData.product.id });
             } catch (error) {
                 console.error('Error during initialization:', error);
             }
@@ -1008,7 +1045,7 @@ function __reviewXState__() {
             try {
                 // console.log('init 7')
                 await this.fetchReviewsSettings();
-                await this.fetchReviewsAggregation({productId: parseData.product.id});
+                await this.fetchReviewsAggregation({ productId: parseData.product.id });
             } catch (error) {
                 console.error('Error during initialization:', error);
             }
@@ -1019,7 +1056,7 @@ function __reviewXState__() {
             try {
                 // console.log('init 8')
                 await this.fetchReviewsSettings();
-                await this.fetchReviewsAggregation({productId: parseData.product.id});
+                await this.fetchReviewsAggregation({ productId: parseData.product.id });
             } catch (error) {
                 console.error('Error during initialization:', error);
             }

@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Exception;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
@@ -18,7 +19,7 @@ class DiscountSyncService extends \Rvx\Services\Service
     protected $usageLimitRelation;
     protected $couponAmountRelation;
     protected $discountTypeRelation;
-    public function processDiscountForSync($file) : int
+    public function processDiscountForSync(&$file) : int
     {
         $this->syncPostMeta();
         return $this->syncPost($file);
@@ -69,10 +70,10 @@ class DiscountSyncService extends \Rvx\Services\Service
                 }
             });
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception(\esc_html($e->getMessage()));
         }
     }
-    public function syncPost($file)
+    public function syncPost(&$file)
     {
         $discountCount = 0;
         DB::table('posts')->select(['ID', 'post_type', 'post_title', 'post_name', 'post_status', 'post_modified'])->orderBy('ID')->whereIn('post_type', ['shop_coupon'])->chunk(100, function ($discounts) use(&$file, &$discountCount) {

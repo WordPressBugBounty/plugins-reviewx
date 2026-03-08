@@ -1,4 +1,4 @@
-function __rvxReviewSuccessModalComponent__() {
+window.__rvxReviewSuccessModalComponent__ = function () {
     return {
         duration: 1500,
         progress: 0,

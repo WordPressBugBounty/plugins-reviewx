@@ -61,6 +61,25 @@
 
     {% include "storefront/widget/Features/Reviews/Modals/ReviewSuccessModal.twig" %}
 
+    <!-- Error Toast Notification -->
+    <div x-show="showErrorToastMessage" 
+         x-transition:enter="rvx-transition rvx-ease-out rvx-duration-300"
+         x-transition:enter-start="rvx-opacity-0 rvx-translate-y-4"
+         x-transition:enter-end="rvx-opacity-100 rvx-translate-y-0"
+         x-transition:leave="rvx-transition rvx-ease-in rvx-duration-200"
+         x-transition:leave-start="rvx-opacity-100 rvx-translate-y-0"
+         x-transition:leave-end="rvx-opacity-0 rvx-translate-y-4"
+         class="rvx-fixed rvx-bottom-5 rvx-right-5 rvx-z-[100] rvx-max-w-sm rvx-bg-red-50 rvx-border rvx-border-red-200 rvx-rounded-lg rvx-shadow-lg rvx-p-4"
+         x-cloak>
+        <div class="rvx-flex rvx-items-center rvx-gap-3">
+            <span class="material-symbols-rounded rvx-text-red-500">error</span>
+            <p class="rvx-text-red-700 rvx-text-sm rvx-font-medium" x-text="errorToastMessage"></p>
+            <button @click="showErrorToastMessage = false" class="rvx-text-red-400 hover:rvx-text-red-600 rvx-ml-auto">
+                <span class="material-symbols-rounded rvx-text-lg">close</span>
+            </button>
+        </div>
+    </div>
+
     <div x-show="!fetchReviewsIsLoading || !fetchReviewsSettingsIsLoading" x-cloak>
         {% if not requireSignIn or (requireSignIn and user_is_logged_in) %}
             {% if not wooVerificationRequired or (wooVerificationRequired and user_is_logged_in and isVerifiedCustomer) %}

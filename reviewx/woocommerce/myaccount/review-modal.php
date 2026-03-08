@@ -2,6 +2,7 @@
 
 namespace Rvx;
 
+\defined('ABSPATH') || exit;
 use Rvx\Handlers\Customize\WCUserDashboardAddReview;
 ?>
 

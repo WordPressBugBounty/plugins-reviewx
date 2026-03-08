@@ -16,7 +16,7 @@ class MenuServiceProvider extends ServiceProvider
     }
     public function boot() : void
     {
-        add_action('admin_menu', function () {
+        \add_action('admin_menu', function () {
             $menu = (require $this->plugin->getPath('bootstrap/menu.php'));
             $menu($this->plugin);
             $this->builder->register();

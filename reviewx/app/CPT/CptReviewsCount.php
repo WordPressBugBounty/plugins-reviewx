@@ -7,7 +7,7 @@ class CptReviewsCount
     public function newCount($post_id)
     {
         // Fetch all approved comments (reviews) for the post
-        $reviews = get_comments(['post_id' => $post_id, 'status' => 'approve', 'type' => 'comment']);
+        $reviews = \get_comments(['post_id' => $post_id, 'status' => 'approve', 'type' => 'comment']);
         // Initialize review count
         $totalCount = 0;
         $reviewCount = 0;

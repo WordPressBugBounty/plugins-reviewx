@@ -2,6 +2,7 @@
 
 namespace Rvx\Services;
 
+\defined("ABSPATH") || exit;
 use Rvx\Utilities\Auth\Client;
 use Rvx\Utilities\Helper;
 use Rvx\WPDrill\Facades\DB;
@@ -21,19 +22,20 @@ class CategorySyncService extends \Rvx\Services\Service
     {
         $this->datSyncHandler = new DataSyncHandler();
     }
-    public function syncCategory($file)
+    public function syncCategory(&$buffer)
     {
         $catCount = 0;
         $this->syncTermTaxonomy();
         $this->syncTermTaxonomyRelation();
-        DB::table('terms')->chunk(100, function ($allTerms) use($file, &$catCount) {
+        DB::table('terms')->chunk(100, function ($allTerms) use(&$buffer, &$catCount) {
             foreach ($allTerms as $term) {
                 if (\in_array((int) $term->term_id, $this->selectedTerms, \true)) {
                     $formatedTerm = $this->formatCategoryData($term);
                     $this->setSyncCategories($formatedTerm);
                     Helper::rvxLog($formatedTerm);
-                    Helper::appendToJsonl($file, $formatedTerm);
-                    $catCount++;
+                    if (Helper::appendToJsonl($buffer, $formatedTerm)) {
+                        $catCount++;
+                    }
                 }
             }
         });

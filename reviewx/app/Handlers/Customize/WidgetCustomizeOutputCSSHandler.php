@@ -160,30 +160,30 @@ class WidgetCustomizeOutputCSSHandler
             #rvx-storefront-widget p.rvx-rating-out-of,
             p.rvx-rating-out-of{
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_out_of_text_color);
+        echo \esc_attr($rvx_reviews_overview_rating_out_of_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_out_of_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_rating_out_of_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget span.rvx-rating-total,
             span.rvx-rating-total{
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_out_of_total_text_color);
+        echo \esc_attr($rvx_reviews_overview_rating_out_of_total_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_out_of_total_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_rating_out_of_total_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-rating-badge,
             .rvx-rating-badge{
                 background-color: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_badge_background_color);
+        echo \esc_attr($rvx_reviews_overview_rating_badge_background_color);
         ?> !important;
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_badge_text_color);
+        echo \esc_attr($rvx_reviews_overview_rating_badge_text_color);
         ?> !important;
             }
 
@@ -217,61 +217,61 @@ class WidgetCustomizeOutputCSSHandler
             #rvx-storefront-widget p.rvx-total-review,
             p.rvx-total-review{
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_total_reviews_text_color);
+        echo \esc_attr($rvx_reviews_overview_total_reviews_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_overview_total_reviews_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_total_reviews_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget tr.rvx-aggregation__row td span,
             tr.rvx-aggregation__row td span{
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_overview_chart_text_color);
+        echo \esc_attr($rvx_reviews_overview_rating_overview_chart_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_overview_rating_overview_chart_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_rating_overview_chart_text_font_size);
         ?>px !important;
             }
             #rvx-storefront-widget .rvx-recommendation-count,
             .rvx-recommendation-count{
                 background-color: <?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_background_color);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_border_color);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_border_radius);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_border_radius);
         ?>px !important;
             }
             #rvx-storefront-widget .rvx-recommendation-count p,
             .rvx-recommendation-count p{
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_text_color);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-recommendation-count svg,
             .rvx-recommendation-count svg{
                 width:<?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_text_font_size);
         ?>;
                 height:<?php 
-        echo esc_attr($rvx_reviews_overview_product_recommendation_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_product_recommendation_text_font_size);
         ?>;
             }
             
             #rvx-storefront-widget .rvx-aggregation-multicriteria span,
             .rvx-aggregation-multicriteria span{
                 color: <?php 
-        echo esc_attr($rvx_reviews_overview_review_criteria_text_color);
+        echo \esc_attr($rvx_reviews_overview_review_criteria_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_overview_review_criteria_text_font_size);
+        echo \esc_attr($rvx_reviews_overview_review_criteria_text_font_size);
         ?>px !important;
             }
 
@@ -282,80 +282,80 @@ class WidgetCustomizeOutputCSSHandler
             #rvx-storefront-widget .rvx-review-filter__button,
             .rvx-review-filter__button{
                 color: <?php 
-        echo esc_attr($rvx_filter_button_text_color);
+        echo \esc_attr($rvx_filter_button_text_color);
         ?> !important;
                 background-color: <?php 
-        echo esc_attr($rvx_filter_button_background_color);
+        echo \esc_attr($rvx_filter_button_background_color);
         ?> !important;
             }
             #rvx-storefront-widget .rvx-review-filter__button,
             .rvx-review-filter__button{
                 border:solid 1px <?php 
-        echo esc_attr($rvx_filter_button_border_color);
+        echo \esc_attr($rvx_filter_button_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_filter_button_border_radius);
+        echo \esc_attr($rvx_filter_button_border_radius);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-filter-wrapper,
             .rvx-review-filter-wrapper{
                 color: <?php 
-        echo esc_attr($rvx_filter_dropdown_menu_text_color);
+        echo \esc_attr($rvx_filter_dropdown_menu_text_color);
         ?> !important;
                 background-color: <?php 
-        echo esc_attr($rvx_filter_dropdown_menu_background_color);
+        echo \esc_attr($rvx_filter_dropdown_menu_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_filter_dropdown_menu_border_color);
+        echo \esc_attr($rvx_filter_dropdown_menu_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_filter_dropdown_menu_border_radius);
+        echo \esc_attr($rvx_filter_dropdown_menu_border_radius);
         ?>px !important;
                 font-size: <?php 
-        echo esc_attr($rvx_filter_dropdown_menu_text_font_size);
+        echo \esc_attr($rvx_filter_dropdown_menu_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-filter-wrapper p.rvx-review-filter-wrapper__title,
             .rvx-review-filter-wrapper p.rvx-review-filter-wrapper__title{
                 color: <?php 
-        echo esc_attr($rvx_filter_by_text_color);
+        echo \esc_attr($rvx_filter_by_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_filter_by_text_font_size);
+        echo \esc_attr($rvx_filter_by_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-filter-wrapper__footer-reset-button,
             .rvx-review-filter-wrapper__footer-reset-button{
                 color: <?php 
-        echo esc_attr($rvx_filter_reset_button_text_color);
+        echo \esc_attr($rvx_filter_reset_button_text_color);
         ?> !important;
                 background-color: <?php 
-        echo esc_attr($rvx_filter_reset_button_background_color);
+        echo \esc_attr($rvx_filter_reset_button_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_filter_reset_button_border_color);
+        echo \esc_attr($rvx_filter_reset_button_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_filter_reset_button_border_radius);
+        echo \esc_attr($rvx_filter_reset_button_border_radius);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-filter-wrapper__footer-save-button,
             .rvx-review-filter-wrapper__footer-save-button{
                 color: <?php 
-        echo esc_attr($rvx_filter_apply_button_text_color);
+        echo \esc_attr($rvx_filter_apply_button_text_color);
         ?> !important;
                 background-color: <?php 
-        echo esc_attr($rvx_filter_apply_button_background_color);
+        echo \esc_attr($rvx_filter_apply_button_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_filter_apply_button_border_color);
+        echo \esc_attr($rvx_filter_apply_button_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_filter_apply_button_border_radius);
+        echo \esc_attr($rvx_filter_apply_button_border_radius);
         ?>px !important;
             }
             
@@ -363,45 +363,45 @@ class WidgetCustomizeOutputCSSHandler
             #rvx-storefront-widget .rvx-review-sort__button,
             .rvx-review-sort__button{
                 color: <?php 
-        echo esc_attr($rvx_sort_button_text_color);
+        echo \esc_attr($rvx_sort_button_text_color);
         ?> !important;
                 background-color: <?php 
-        echo esc_attr($rvx_sort_button_background_color);
+        echo \esc_attr($rvx_sort_button_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_sort_button_border_color);
+        echo \esc_attr($rvx_sort_button_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_sort_button_border_radius);
+        echo \esc_attr($rvx_sort_button_border_radius);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-sort-wrapper__outer,
             .rvx-review-sort-wrapper__outer{
                 color: <?php 
-        echo esc_attr($rvx_sort_dropdown_menu_text_color);
+        echo \esc_attr($rvx_sort_dropdown_menu_text_color);
         ?> !important;
                 background-color: <?php 
-        echo esc_attr($rvx_sort_dropdown_menu_background_color);
+        echo \esc_attr($rvx_sort_dropdown_menu_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_sort_dropdown_menu_border_color);
+        echo \esc_attr($rvx_sort_dropdown_menu_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_sort_dropdown_menu_border_radius);
+        echo \esc_attr($rvx_sort_dropdown_menu_border_radius);
         ?>px !important;
                 font-size: <?php 
-        echo esc_attr($rvx_sort_dropdown_menu_text_font_size);
+        echo \esc_attr($rvx_sort_dropdown_menu_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-write__button,
             .rvx-review-write__button{
                 border:solid 1px <?php 
-        echo esc_attr($rvx_write_review_button_border_color);
+        echo \esc_attr($rvx_write_review_button_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_write_review_button_border_radius);
+        echo \esc_attr($rvx_write_review_button_border_radius);
         ?>px !important;
             }
 
@@ -411,56 +411,56 @@ class WidgetCustomizeOutputCSSHandler
             #rvx-storefront-widget .rvx-review-wrapper .rvx-review-card,
             .rvx-review-wrapper .rvx-review-card{
                 background-color: <?php 
-        echo esc_attr($rvx_reviews_items_card_background_color);
+        echo \esc_attr($rvx_reviews_items_card_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_reviews_items_card_border_color);
+        echo \esc_attr($rvx_reviews_items_card_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_reviews_items_card_border_radius);
+        echo \esc_attr($rvx_reviews_items_card_border_radius);
         ?>px !important;
                 padding: <?php 
-        echo esc_attr($rvx_reviews_items_card_inline_padding);
+        echo \esc_attr($rvx_reviews_items_card_inline_padding);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-wrapper .rvx-review-card .rvx-review-user__name,
             .rvx-review-wrapper .rvx-review-card .rvx-review-user__name{
                 color: <?php 
-        echo esc_attr($rvx_reviews_items_reviewer_name_text_color);
+        echo \esc_attr($rvx_reviews_items_reviewer_name_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_items_reviewer_name_text_font_size);
+        echo \esc_attr($rvx_reviews_items_reviewer_name_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-wrapper .rvx-review-card .rvx-review-info__title,
             .rvx-review-wrapper .rvx-review-card .rvx-review-info__title{
                 color: <?php 
-        echo esc_attr($rvx_reviews_items_title_text_color);
+        echo \esc_attr($rvx_reviews_items_title_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_items_title_text_font_size);
+        echo \esc_attr($rvx_reviews_items_title_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-wrapper .rvx-review-card .rvx-review-info__date,
             .rvx-review-wrapper .rvx-review-card .rvx-review-info__date{
                 color: <?php 
-        echo esc_attr($rvx_reviews_items_date_text_color);
+        echo \esc_attr($rvx_reviews_items_date_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_items_date_text_font_size);
+        echo \esc_attr($rvx_reviews_items_date_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-wrapper .rvx-review-card .rvx-review-info__feedback,
             .rvx-review-wrapper .rvx-review-card .rvx-review-info__feedback{
                 color: <?php 
-        echo esc_attr($rvx_reviews_items_description_text_color);
+        echo \esc_attr($rvx_reviews_items_description_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_reviews_items_description_text_font_size);
+        echo \esc_attr($rvx_reviews_items_description_text_font_size);
         ?>px !important;
             }
             
@@ -471,123 +471,123 @@ class WidgetCustomizeOutputCSSHandler
             #rvx-storefront-widget #rvx-review-form__wrapper,
             #rvx-review-form__wrapper{
                 background-color: <?php 
-        echo esc_attr($rvx_input_form_background_color);
+        echo \esc_attr($rvx_input_form_background_color);
         ?> !important;
                 border:solid 1px <?php 
-        echo esc_attr($rvx_input_form_border_color);
+        echo \esc_attr($rvx_input_form_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_input_form_border_radius);
+        echo \esc_attr($rvx_input_form_border_radius);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__title,
             .rvx-review-form__title{
                 color: <?php 
-        echo esc_attr($rvx_input_form_title_text_color);
+        echo \esc_attr($rvx_input_form_title_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_title_text_font_size);
+        echo \esc_attr($rvx_input_form_title_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__product--title,
             .rvx-review-form__product--title{
                 color: <?php 
-        echo esc_attr($rvx_input_form_product_name_text_color);
+        echo \esc_attr($rvx_input_form_product_name_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_product_name_text_font_size);
+        echo \esc_attr($rvx_input_form_product_name_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__multicriteria--name,
             .rvx-review-form__multicriteria--name{
                 color: <?php 
-        echo esc_attr($rvx_input_form_criteria_title_text_color);
+        echo \esc_attr($rvx_input_form_criteria_title_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_criteria_title_text_font_size);
+        echo \esc_attr($rvx_input_form_criteria_title_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-form__title--name,
             .rvx-review-form__title--name{
                 color: <?php 
-        echo esc_attr($rvx_input_form_review_title_text_color);
+        echo \esc_attr($rvx_input_form_review_title_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_review_title_text_font_size);
+        echo \esc_attr($rvx_input_form_review_title_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__description-title,
             .rvx-review-form__description-title{
                 color: <?php 
-        echo esc_attr($rvx_input_form_description_title_text_color);
+        echo \esc_attr($rvx_input_form_description_title_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_description_title_text_font_size);
+        echo \esc_attr($rvx_input_form_description_title_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__user--name,
             .rvx-review-form__user--name{
                 color: <?php 
-        echo esc_attr($rvx_input_form_full_name_text_color);
+        echo \esc_attr($rvx_input_form_full_name_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_full_name_text_font_size);
+        echo \esc_attr($rvx_input_form_full_name_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__email--name,
             .rvx-review-form__email--name{
                 color: <?php 
-        echo esc_attr($rvx_input_form_email_address_text_color);
+        echo \esc_attr($rvx_input_form_email_address_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_email_address_text_font_size);
+        echo \esc_attr($rvx_input_form_email_address_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__attachment--name,
             .rvx-review-form__attachment--name{
                 color: <?php 
-        echo esc_attr($rvx_input_form_attachment_title_text_color);
+        echo \esc_attr($rvx_input_form_attachment_title_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_attachment_title_text_font_size);
+        echo \esc_attr($rvx_input_form_attachment_title_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__mark-anonymous,
             .rvx-review-form__mark-anonymous{
                 color: <?php 
-        echo esc_attr($rvx_input_form_mark_anonymous_text_color);
+        echo \esc_attr($rvx_input_form_mark_anonymous_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_mark_anonymous_text_font_size);
+        echo \esc_attr($rvx_input_form_mark_anonymous_text_font_size);
         ?>px !important;
             }
             
             #rvx-storefront-widget .rvx-review-form__recommended--name,
             .rvx-review-form__recommended--name{
                 color: <?php 
-        echo esc_attr($rvx_input_form_recommended_text_color);
+        echo \esc_attr($rvx_input_form_recommended_text_color);
         ?> !important;
                 font-size: <?php 
-        echo esc_attr($rvx_input_form_recommended_text_font_size);
+        echo \esc_attr($rvx_input_form_recommended_text_font_size);
         ?>px !important;
             }
 
             #rvx-storefront-widget .rvx-review-form__submit--button,
             .rvx-review-form__submit--button{
                 border:solid 1px <?php 
-        echo esc_attr($rvx_submit_review_button_border_color);
+        echo \esc_attr($rvx_submit_review_button_border_color);
         ?> !important;
                 border-radius: <?php 
-        echo esc_attr($rvx_submit_review_button_border_radius);
+        echo \esc_attr($rvx_submit_review_button_border_radius);
         ?>px !important;
             }
         </style>

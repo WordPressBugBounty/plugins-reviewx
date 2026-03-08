@@ -6,6 +6,6 @@ class WcAccountFormTag
 {
     public function __invoke()
     {
-        echo 'enctype="multipart/form-data"';
+        \printf(' %s ', \esc_attr('enctype="multipart/form-data"'));
     }
 }
