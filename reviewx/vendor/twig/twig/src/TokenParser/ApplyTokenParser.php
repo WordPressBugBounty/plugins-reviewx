@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\TokenParser;
+namespace ReviewX\Twig\TokenParser;
 
-use Rvx\Twig\Node\Expression\TempNameExpression;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\PrintNode;
-use Rvx\Twig\Node\SetNode;
-use Rvx\Twig\Token;
+use ReviewX\Twig\Node\Expression\TempNameExpression;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Node\PrintNode;
+use ReviewX\Twig\Node\SetNode;
+use ReviewX\Twig\Token;
 /**
  * Applies filters on a section of a template.
  *

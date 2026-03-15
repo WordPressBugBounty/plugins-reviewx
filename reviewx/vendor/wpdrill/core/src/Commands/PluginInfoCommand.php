@@ -1,14 +1,14 @@
 <?php
 
-namespace Rvx\WPDrill\Commands;
+namespace ReviewX\WPDrill\Commands;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Helper\Table;
-use Rvx\Symfony\Component\Console\Helper\TableSeparator;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\WPDrill\DB\Migration\Migrator;
-use Rvx\WPDrill\Facades\Config;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Helper\Table;
+use ReviewX\Symfony\Component\Console\Helper\TableSeparator;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\WPDrill\DB\Migration\Migrator;
+use ReviewX\WPDrill\Facades\Config;
 class PluginInfoCommand extends BaseCommand
 {
     protected function configure()

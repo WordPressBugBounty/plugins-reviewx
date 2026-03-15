@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Command;
+namespace ReviewX\Symfony\Component\Console\Command;
 
-use Rvx\Symfony\Component\Console\Application;
-use Rvx\Symfony\Component\Console\Completion\CompletionInput;
-use Rvx\Symfony\Component\Console\Completion\CompletionSuggestions;
-use Rvx\Symfony\Component\Console\Helper\HelperSet;
-use Rvx\Symfony\Component\Console\Input\InputDefinition;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Application;
+use ReviewX\Symfony\Component\Console\Completion\CompletionInput;
+use ReviewX\Symfony\Component\Console\Completion\CompletionSuggestions;
+use ReviewX\Symfony\Component\Console\Helper\HelperSet;
+use ReviewX\Symfony\Component\Console\Input\InputDefinition;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

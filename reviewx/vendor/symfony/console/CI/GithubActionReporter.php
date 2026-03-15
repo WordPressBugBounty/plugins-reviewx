@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\CI;
+namespace ReviewX\Symfony\Component\Console\CI;
 
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Utility class for Github actions.
  *

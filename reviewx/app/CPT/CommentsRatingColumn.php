@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\CPT;
+namespace ReviewX\CPT;
 
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class CommentsRatingColumn
 {
     protected $cptHelper;
@@ -91,7 +91,7 @@ class CommentsRatingColumn
             }
             $stars .= $star_symbol;
         }
-        return "<span class='rvx-stars' title='" . \esc_attr($rating) . "' style='font-size: " . \esc_attr($star_size) . "; color: #f5a623;'>" . $stars . "</span>";
+        return "<span class='reviewx-stars' title='" . \esc_attr($rating) . "' style='font-size: " . \esc_attr($star_size) . "; color: #f5a623;'>" . $stars . "</span>";
     }
     /**
      * Sort comments based on the 'rating' column.

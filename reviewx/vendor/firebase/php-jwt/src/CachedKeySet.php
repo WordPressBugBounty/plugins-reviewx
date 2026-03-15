@@ -1,15 +1,15 @@
 <?php
 
-namespace Rvx\Firebase\JWT;
+namespace ReviewX\Firebase\JWT;
 
 use ArrayAccess;
 use InvalidArgumentException;
 use LogicException;
 use OutOfBoundsException;
-use Rvx\Psr\Cache\CacheItemInterface;
-use Rvx\Psr\Cache\CacheItemPoolInterface;
-use Rvx\Psr\Http\Client\ClientInterface;
-use Rvx\Psr\Http\Message\RequestFactoryInterface;
+use ReviewX\Psr\Cache\CacheItemInterface;
+use ReviewX\Psr\Cache\CacheItemPoolInterface;
+use ReviewX\Psr\Http\Client\ClientInterface;
+use ReviewX\Psr\Http\Message\RequestFactoryInterface;
 use RuntimeException;
 use UnexpectedValueException;
 /**

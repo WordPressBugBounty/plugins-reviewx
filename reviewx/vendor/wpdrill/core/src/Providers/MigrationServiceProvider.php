@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill\Providers;
+namespace ReviewX\WPDrill\Providers;
 
-use Rvx\WPDrill\DB\Migration\Migrator;
-use Rvx\WPDrill\Routing\RouteManager;
-use Rvx\WPDrill\ServiceProvider;
+use ReviewX\WPDrill\DB\Migration\Migrator;
+use ReviewX\WPDrill\Routing\RouteManager;
+use ReviewX\WPDrill\ServiceProvider;
 class MigrationServiceProvider extends ServiceProvider
 {
     public function register() : void

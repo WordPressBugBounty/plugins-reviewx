@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\CPT\Shared;
+namespace ReviewX\CPT\Shared;
 
-use Rvx\Api\ProductApi;
-use Rvx\CPT\CptHelper;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\TransactionManager;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\ProductApi;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\TransactionManager;
+use ReviewX\WPDrill\Response;
 class CptPostHandler
 {
     protected $cptHelper;
@@ -211,7 +211,7 @@ class CptPostHandler
         $check = \get_post_meta($post_id, 'rvx_star_count_1', \true);
         // Backward compatibility: If meta doesn't exist, calculate it now.
         if ($check === '' || $check === \false) {
-            \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
+            \ReviewX\CPT\CptAverageRating::update_average_rating($post_id);
         }
         return ["one" => (int) \get_post_meta($post_id, 'rvx_star_count_1', \true), "two" => (int) \get_post_meta($post_id, 'rvx_star_count_2', \true), "three" => (int) \get_post_meta($post_id, 'rvx_star_count_3', \true), "four" => (int) \get_post_meta($post_id, 'rvx_star_count_4', \true), "five" => (int) \get_post_meta($post_id, 'rvx_star_count_5', \true)];
     }
@@ -231,6 +231,7 @@ class CptPostHandler
             add_post_type_support($post_type, 'comments');
         }
         // Update the comment status in the database
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct update on posts table to open comments for a known post ID
         $updated = $wpdb->update(
             $wpdb->posts,
             ['comment_status' => 'open'],
@@ -253,7 +254,7 @@ class CptPostHandler
         $count = \get_post_meta($post_id, 'rvx_total_reviews', \true);
         // Backward compatibility: If meta doesn't exist, calculate it now.
         if ($count === '' || $count === \false) {
-            \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
+            \ReviewX\CPT\CptAverageRating::update_average_rating($post_id);
             $count = \get_post_meta($post_id, 'rvx_total_reviews', \true);
         }
         return (int) $count;
@@ -263,7 +264,7 @@ class CptPostHandler
         $rating = \get_post_meta($post_id, 'rvx_avg_rating', \true);
         // Backward compatibility: If meta doesn't exist, calculate it now.
         if ($rating === '' || $rating === \false) {
-            \Rvx\CPT\CptAverageRating::update_average_rating($post_id);
+            \ReviewX\CPT\CptAverageRating::update_average_rating($post_id);
             $rating = \get_post_meta($post_id, 'rvx_avg_rating', \true);
         }
         return (float) ($rating ?: 0.0);

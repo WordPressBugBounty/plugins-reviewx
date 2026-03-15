@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Apiz\Http\Clients;
+namespace ReviewX\Apiz\Http\Clients;
 
 use Exception;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 abstract class AbstractClient
 {
     /**

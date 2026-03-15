@@ -9,14 +9,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\TokenParser;
+namespace ReviewX\Twig\TokenParser;
 
-use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Node\BlockNode;
-use Rvx\Twig\Node\BlockReferenceNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\PrintNode;
-use Rvx\Twig\Token;
+use ReviewX\Twig\Error\SyntaxError;
+use ReviewX\Twig\Node\BlockNode;
+use ReviewX\Twig\Node\BlockReferenceNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Node\PrintNode;
+use ReviewX\Twig\Token;
 /**
  * Marks a section of a template as being reusable.
  *

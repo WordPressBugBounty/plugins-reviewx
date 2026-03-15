@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Contracts\Service\Attribute;
+namespace ReviewX\Symfony\Contracts\Service\Attribute;
 
-use Rvx\Symfony\Contracts\Service\ServiceSubscriberTrait;
+use ReviewX\Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Use with {@see ServiceSubscriberTrait} to mark a method's return type
  * as a subscribed service.

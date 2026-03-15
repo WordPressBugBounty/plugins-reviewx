@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Enum;
+namespace ReviewX\Enum;
 
 class ReviewStatusEnum
 {

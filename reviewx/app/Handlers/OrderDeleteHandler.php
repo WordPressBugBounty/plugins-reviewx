@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\OrderApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\OrderApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
 class OrderDeleteHandler
 {
     public function __construct()

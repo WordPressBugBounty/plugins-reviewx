@@ -9,12 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node;
+namespace ReviewX\Twig\Node;
 
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Expression\AbstractExpression;
-use Rvx\Twig\Node\Expression\ConstantExpression;
-use Rvx\Twig\Source;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Node\Expression\AbstractExpression;
+use ReviewX\Twig\Node\Expression\ConstantExpression;
+use ReviewX\Twig\Source;
 /**
  * Represents a module node.
  *
@@ -81,11 +81,11 @@ final class ModuleNode extends Node
     }
     protected function compileClassHeader(Compiler $compiler)
     {
-        $compiler->write("\n\nnamespace Rvx;\n\n");
+        $compiler->write("\n\nnamespace ReviewX;\n\n");
         if (!$this->getAttribute('index')) {
-            $compiler->write("use \\Rvx\\Twig\\Environment;\n")->write("use \\Rvx\\Twig\\Error\\LoaderError;\n")->write("use \\Rvx\\Twig\\Error\\RuntimeError;\n")->write("use \\Rvx\\Twig\\Extension\\SandboxExtension;\n")->write("use \\Rvx\\Twig\\Markup;\n")->write("use \\Rvx\\Twig\\Sandbox\\SecurityError;\n")->write("use \\Rvx\\Twig\\Sandbox\\SecurityNotAllowedTagError;\n")->write("use \\Rvx\\Twig\\Sandbox\\SecurityNotAllowedFilterError;\n")->write("use \\Rvx\\Twig\\Sandbox\\SecurityNotAllowedFunctionError;\n")->write("use \\Rvx\\Twig\\Source;\n")->write("use \\Rvx\\Twig\\Template;\n\n");
+            $compiler->write("use \\ReviewX\\Twig\\Environment;\n")->write("use \\ReviewX\\Twig\\Error\\LoaderError;\n")->write("use \\ReviewX\\Twig\\Error\\RuntimeError;\n")->write("use \\ReviewX\\Twig\\Extension\\SandboxExtension;\n")->write("use \\ReviewX\\Twig\\Markup;\n")->write("use \\ReviewX\\Twig\\Sandbox\\SecurityError;\n")->write("use \\ReviewX\\Twig\\Sandbox\\SecurityNotAllowedTagError;\n")->write("use \\ReviewX\\Twig\\Sandbox\\SecurityNotAllowedFilterError;\n")->write("use \\ReviewX\\Twig\\Sandbox\\SecurityNotAllowedFunctionError;\n")->write("use \\ReviewX\\Twig\\Source;\n")->write("use \\ReviewX\\Twig\\Template;\n\n");
         }
-        $compiler->write('/* ' . \str_replace('*/', '* /', $this->getSourceContext()->getName()) . " */\n")->write('class ' .  \substr( $compiler->getEnvironment()->getTemplateClass($this->getSourceContext()->getName(), $this->getAttribute('index')), 5 ) )->raw(" extends Template\n")->write("{\n")->indent()->write("private \$source;\n")->write("private \$macros = [];\n\n");
+        $compiler->write('/* ' . \str_replace('*/', '* /', $this->getSourceContext()->getName()) . " */\n")->write('class ' .  \substr( $compiler->getEnvironment()->getTemplateClass($this->getSourceContext()->getName(), $this->getAttribute('index')), 9 ) )->raw(" extends Template\n")->write("{\n")->indent()->write("private \$source;\n")->write("private \$macros = [];\n\n");
     }
     protected function compileConstructor(Compiler $compiler)
     {

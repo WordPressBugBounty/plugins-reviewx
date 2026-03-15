@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker\ParameterResolver;
+namespace ReviewX\Invoker\ParameterResolver;
 
 use ReflectionException;
 use ReflectionFunctionAbstract;

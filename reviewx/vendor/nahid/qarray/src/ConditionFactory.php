@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Nahid\QArray;
+namespace ReviewX\Nahid\QArray;
 
-use Rvx\Nahid\QArray\Exceptions\KeyNotPresentException;
+use ReviewX\Nahid\QArray\Exceptions\KeyNotPresentException;
 final class ConditionFactory
 {
     /**

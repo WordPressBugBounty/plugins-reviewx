@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Definition\ArrayDefinition;
-use Rvx\DI\Definition\AutowireDefinition;
-use Rvx\DI\Definition\DecoratorDefinition;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\FactoryDefinition;
-use Rvx\DI\Definition\Helper\DefinitionHelper;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\ValueDefinition;
+use ReviewX\DI\Definition\ArrayDefinition;
+use ReviewX\DI\Definition\AutowireDefinition;
+use ReviewX\DI\Definition\DecoratorDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\FactoryDefinition;
+use ReviewX\DI\Definition\Helper\DefinitionHelper;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\ValueDefinition;
 /**
  * Turns raw definitions/definition helpers into definitions ready
  * to be resolved or compiled.

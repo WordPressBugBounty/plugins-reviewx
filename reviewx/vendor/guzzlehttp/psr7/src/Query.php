@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
 final class Query
 {

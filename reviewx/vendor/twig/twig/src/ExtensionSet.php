@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
-use Rvx\Twig\Error\RuntimeError;
-use Rvx\Twig\Extension\ExtensionInterface;
-use Rvx\Twig\Extension\GlobalsInterface;
-use Rvx\Twig\Extension\StagingExtension;
-use Rvx\Twig\Node\Expression\Binary\AbstractBinary;
-use Rvx\Twig\Node\Expression\Unary\AbstractUnary;
-use Rvx\Twig\NodeVisitor\NodeVisitorInterface;
-use Rvx\Twig\TokenParser\TokenParserInterface;
+use ReviewX\Twig\Error\RuntimeError;
+use ReviewX\Twig\Extension\ExtensionInterface;
+use ReviewX\Twig\Extension\GlobalsInterface;
+use ReviewX\Twig\Extension\StagingExtension;
+use ReviewX\Twig\Node\Expression\Binary\AbstractBinary;
+use ReviewX\Twig\Node\Expression\Unary\AbstractUnary;
+use ReviewX\Twig\NodeVisitor\NodeVisitorInterface;
+use ReviewX\Twig\TokenParser\TokenParserInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *

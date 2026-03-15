@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\CPT;
+namespace ReviewX\CPT;
 
 use WP_Post;
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class CptAverageRating
 {
     /**
-     * Initialize or update the rvx_avg_rating meta key for a post.
+     * Initialize or update the reviewx_avg_rating meta key for a post.
      * add_action comment_post
      */
     public static function handle_comment_rating($comment_id, $comment_approved, $comment = null)
@@ -43,7 +43,7 @@ class CptAverageRating
         self::update_average_rating($post_id);
     }
     /**
-     * Calculate and update the rvx_avg_rating meta key for a given post.
+     * Calculate and update the reviewx_avg_rating meta key for a given post.
      *
      * @param int $post_id ID of the post.
      */
@@ -57,7 +57,12 @@ class CptAverageRating
         }
         global $wpdb;
         // Fetch all approved comment ratings for the post, only for parent comments.
-        $ratings = $wpdb->get_col($wpdb->prepare("SELECT cm.meta_value \n            FROM {$wpdb->commentmeta} AS cm\n            INNER JOIN {$wpdb->comments} AS c\n            ON cm.comment_id = c.comment_ID\n            WHERE cm.meta_key = 'rating'\n            AND c.comment_post_ID = %d\n            AND c.comment_approved = '1'\n            AND c.comment_parent = 0", $post_id));
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Aggregation query runs only during rating recalculation
+        $ratings = $wpdb->get_col($wpdb->prepare(
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Required filter for rating metadata
+            "SELECT cm.meta_value \n            FROM {$wpdb->commentmeta} AS cm\n            INNER JOIN {$wpdb->comments} AS c\n            ON cm.comment_id = c.comment_ID\n            WHERE cm.meta_key = 'rating'\n            AND c.comment_post_ID = %d\n            AND c.comment_approved = '1'\n            AND c.comment_parent = 0",
+            $post_id
+        ));
         $average_rating = \get_post_meta($post_id, 'rvx_avg_rating', \true);
         if (empty($average_rating)) {
             $average_rating = 0.0;
@@ -95,12 +100,12 @@ class CptAverageRating
         }
     }
     /**
-     * Hook into the post save action to add the rvx_avg_rating meta key.
+     * Hook into the post save action to add the reviewx_avg_rating meta key.
      *
      * @param int $post_id The post ID.
      * @param WP_Post $post The post object.
      */
-    public static function rvx_avg_rating_on_save($post_id, $post)
+    public static function reviewx_avg_rating_on_save($post_id, $post)
     {
         // Ensure we are not triggering on autosave
         if (\defined('DOING_AUTOSAVE') && \DOING_AUTOSAVE) {
@@ -112,9 +117,9 @@ class CptAverageRating
         if (!isset($enabled_post_types[$post_type]) && $post_type !== 'product') {
             return;
         }
-        // Check if the rvx_avg_rating key already exists
+        // Check if the reviewx_avg_rating key already exists
         if (!\get_post_meta($post_id, 'rvx_avg_rating', \true)) {
-            // Add the rvx_avg_rating meta key with an initial value (0.00)
+            // Add the reviewx_avg_rating meta key with an initial value (0.00)
             \update_post_meta($post_id, 'rvx_avg_rating', (float) 0.0);
             \update_post_meta($post_id, 'rating', (float) 0.0);
         }

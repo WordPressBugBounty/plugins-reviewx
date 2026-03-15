@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\DeepCopy;
+namespace ReviewX\DeepCopy;
 
 use function function_exists;
-if (\false === function_exists('Rvx\\DeepCopy\\deep_copy')) {
+if (\false === function_exists('ReviewX\\DeepCopy\\deep_copy')) {
     /**
      * Deep copies the given value.
      *

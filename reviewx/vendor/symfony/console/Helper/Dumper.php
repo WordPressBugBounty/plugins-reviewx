@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Helper;
+namespace ReviewX\Symfony\Component\Console\Helper;
 
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\VarDumper\Cloner\ClonerInterface;
-use Rvx\Symfony\Component\VarDumper\Cloner\VarCloner;
-use Rvx\Symfony\Component\VarDumper\Dumper\CliDumper;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use ReviewX\Symfony\Component\VarDumper\Cloner\VarCloner;
+use ReviewX\Symfony\Component\VarDumper\Dumper\CliDumper;
 /**
  * @author Roland Franssen <franssen.roland@gmail.com>
  */

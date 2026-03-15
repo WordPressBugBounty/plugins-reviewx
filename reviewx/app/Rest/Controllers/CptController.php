@@ -1,16 +1,16 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\CPT\CptHelper;
-use Rvx\Services\CptService;
-use Rvx\Services\DataSyncService;
-use Rvx\Services\SettingService;
-use Rvx\Utilities\Helper;
-use Rvx\Services\CacheServices;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Services\CptService;
+use ReviewX\Services\DataSyncService;
+use ReviewX\Services\SettingService;
+use ReviewX\Utilities\Helper;
+use ReviewX\Services\CacheServices;
 use Throwable;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Response;
 class CptController
 {
     protected CptService $cptService;
@@ -57,7 +57,7 @@ class CptController
                 // Update (_rvx_ettings_{post_type}) CPT Settings
                 $post_type = $resData->data['data']['post_type'] ? \strtolower($resData->data['data']['post_type']) : '';
                 if (!empty($post_type)) {
-                    $review_response = (new \Rvx\Rest\Controllers\SettingController())->getApiReviewSettingsOnSync($post_type);
+                    $review_response = (new \ReviewX\Rest\Controllers\SettingController())->getApiReviewSettingsOnSync($post_type);
                     // Update Review settings
                     $review_settings = $review_response['data']['review_settings'];
                     (new SettingService())->updateReviewSettingsOnSync($review_settings, \strtolower($post_type));

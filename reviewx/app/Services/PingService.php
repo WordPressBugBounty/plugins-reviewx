@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-class PingService extends \Rvx\Services\Service
+class PingService extends \ReviewX\Services\Service
 {
     public function __construct()
     {
@@ -19,7 +19,7 @@ class PingService extends \Rvx\Services\Service
         // Get migration status
         $migration_status = \get_option('_rvx_db_upgrade_216', '0');
         $rollback_status = \get_option('_rvx_current_rollback', '0');
-        return ['environment' => ['php' => ['version' => \PHP_VERSION, 'memory_limit' => \ini_get('memory_limit'), 'max_execution_time' => \ini_get('max_execution_time'), 'extensions' => \get_loaded_extensions(), 'opcache_enabled' => \extension_loaded('opcache') && \opcache_get_status()['opcache_enabled'], 'apcu_enabled' => \extension_loaded('apcu') && \ini_get('apc.enabled')], 'server' => ['software' => isset($_SERVER['SERVER_SOFTWARE']) ? \sanitize_text_field(\wp_unslash($_SERVER['SERVER_SOFTWARE'])) : 'N/A', 'protocol' => isset($_SERVER['SERVER_PROTOCOL']) ? \sanitize_text_field(\wp_unslash($_SERVER['SERVER_PROTOCOL'])) : 'N/A', 'https' => is_ssl(), 'db_version' => $wpdb->db_version(), 'fs_method' => \defined('FS_METHOD') ? FS_METHOD : 'direct']], 'wordpress' => ['version' => $wp_version, 'locale' => get_locale(), 'multisite' => is_multisite(), 'debug' => ['wp_debug' => WP_DEBUG, 'wp_debug_log' => WP_DEBUG_LOG, 'wp_debug_display' => WP_DEBUG_DISPLAY, 'script_debug' => SCRIPT_DEBUG], 'memory' => ['wp_memory_limit' => WP_MEMORY_LIMIT, 'wp_max_memory_limit' => WP_MAX_MEMORY_LIMIT, 'current_usage' => \round(\memory_get_usage() / 1024 / 1024, 2) . 'M'], 'cron' => ['jobs_count' => \count(_get_cron_array()), 'alternate_wp_cron' => \defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON], 'cache' => $this->get_cache_status()], 'reviewx' => ['version' => RVX_VERSION, 'migration' => ['status' => (bool) $migration_status], 'rollback' => ['status' => (bool) $rollback_status], 'paths' => ['dir_name' => RVX_DIR_NAME, 'dir_path' => RVX_DIR_PATH, 'dir_url' => RVX_URL]], 'plugins' => $this->get_plugins_status(), 'theme' => $this->get_theme_details()];
+        return ['environment' => ['php' => ['version' => \PHP_VERSION, 'memory_limit' => \ini_get('memory_limit'), 'max_execution_time' => \ini_get('max_execution_time'), 'extensions' => \get_loaded_extensions(), 'opcache_enabled' => \extension_loaded('opcache') && \opcache_get_status()['opcache_enabled'], 'apcu_enabled' => \extension_loaded('apcu') && \ini_get('apc.enabled')], 'server' => ['software' => isset($_SERVER['SERVER_SOFTWARE']) ? \sanitize_text_field(\wp_unslash($_SERVER['SERVER_SOFTWARE'])) : 'N/A', 'protocol' => isset($_SERVER['SERVER_PROTOCOL']) ? \sanitize_text_field(\wp_unslash($_SERVER['SERVER_PROTOCOL'])) : 'N/A', 'https' => is_ssl(), 'db_version' => $wpdb->db_version(), 'fs_method' => \defined('FS_METHOD') ? FS_METHOD : 'direct']], 'wordpress' => ['version' => $wp_version, 'locale' => get_locale(), 'multisite' => is_multisite(), 'debug' => ['wp_debug' => WP_DEBUG, 'wp_debug_log' => WP_DEBUG_LOG, 'wp_debug_display' => WP_DEBUG_DISPLAY, 'script_debug' => SCRIPT_DEBUG], 'memory' => ['wp_memory_limit' => WP_MEMORY_LIMIT, 'wp_max_memory_limit' => WP_MAX_MEMORY_LIMIT, 'current_usage' => \round(\memory_get_usage() / 1024 / 1024, 2) . 'M'], 'cron' => ['jobs_count' => \count(_get_cron_array()), 'alternate_wp_cron' => \defined('ALTERNATE_WP_CRON') && ALTERNATE_WP_CRON], 'cache' => $this->get_cache_status()], 'reviewx' => ['version' => REVIEWX_VERSION, 'migration' => ['status' => (bool) $migration_status], 'rollback' => ['status' => (bool) $rollback_status], 'paths' => ['dir_name' => REVIEWX_DIR_NAME, 'dir_path' => REVIEWX_DIR_PATH, 'dir_url' => REVIEWX_URL]], 'plugins' => $this->get_plugins_status(), 'theme' => $this->get_theme_details()];
     }
     private function get_cache_status()
     {
@@ -55,7 +55,7 @@ class PingService extends \Rvx\Services\Service
     }
     private function get_plugins_status()
     {
-        if (!\function_exists('Rvx\\get_plugins')) {
+        if (!\function_exists('ReviewX\\get_plugins')) {
             require_once \ABSPATH . 'wp-admin/includes/plugin.php';
         }
         $plugins = [];

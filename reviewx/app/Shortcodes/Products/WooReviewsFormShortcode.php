@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Shortcodes\Products;
+namespace ReviewX\Shortcodes\Products;
 
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Contracts\ShortcodeContract;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Contracts\ShortcodeContract;
 class WooReviewsFormShortcode implements ShortcodeContract
 {
     public function render(array $attrs, ?string $content = null) : string

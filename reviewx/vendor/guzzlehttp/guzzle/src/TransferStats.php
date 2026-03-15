@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * Represents data at the point after it was transferred either successfully
  * or after a network error.

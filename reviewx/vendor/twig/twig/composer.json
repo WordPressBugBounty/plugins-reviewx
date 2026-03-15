@@ -36,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Twig\\": "src\/"
+            "ReviewX\\Twig\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\Twig\\Tests\\": "tests\/"
+            "ReviewX\\Twig\\Tests\\": "tests\/"
         }
     }
 }

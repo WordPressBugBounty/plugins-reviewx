@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Noodlehaus\Writer;
+namespace ReviewX\Noodlehaus\Writer;
 
-use Rvx\Noodlehaus\Exception\WriteException;
+use ReviewX\Noodlehaus\Exception\WriteException;
 /**
  * Config file parser interface.
  *

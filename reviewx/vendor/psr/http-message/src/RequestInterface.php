@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Psr\Http\Message;
+namespace ReviewX\Psr\Http\Message;
 
 /**
  * Representation of an outgoing, client-side request.

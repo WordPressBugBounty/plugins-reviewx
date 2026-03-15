@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Elementor\Traits;
+namespace ReviewX\Elementor\Traits;
 
-use Rvx\Elementor\Core\Settings\Manager as Settings_Manager;
+use ReviewX\Elementor\Core\Settings\Manager as Settings_Manager;
 /**
  * Trait Addons
- * @package Rvx\Elementor\Traits
+ * @package ReviewX\Elementor\Traits
  */
 trait Addons
 {
@@ -52,10 +52,10 @@ trait Addons
     }
     public function cpt_register_element($widgets_manager)
     {
-        $new_path = RVX_DIR_PATH . '/app/Elementor/Elements/Cpt_Widget.php';
+        $new_path = REVIEWX_DIR_PATH . '/app/Elementor/Elements/Cpt_Widget.php';
         if (\file_exists($new_path)) {
             require_once $new_path;
-            $widgets_manager->register(new \Rvx\Cpt_Widgets());
+            $widgets_manager->register(new \ReviewX\Cpt_Widgets());
         }
         if (!\file_exists($new_path)) {
             // File Path Not found

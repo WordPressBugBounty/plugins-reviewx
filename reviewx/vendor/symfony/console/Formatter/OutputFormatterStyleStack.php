@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Formatter;
+namespace ReviewX\Symfony\Component\Console\Formatter;
 
-use Rvx\Symfony\Component\Console\Exception\InvalidArgumentException;
-use Rvx\Symfony\Contracts\Service\ResetInterface;
+use ReviewX\Symfony\Component\Console\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */

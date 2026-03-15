@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * Resolves a URI reference in the context of a base URI and the opposite way.
  *

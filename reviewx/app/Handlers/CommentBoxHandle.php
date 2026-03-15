@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\View;
-use Rvx\Form\ReviewFormHelper;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Facades\View;
+use ReviewX\Form\ReviewFormHelper;
 class CommentBoxHandle
 {
     protected $reviewFormHelper;

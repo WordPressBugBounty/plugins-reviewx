@@ -1,29 +1,29 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 \defined('ABSPATH') || exit;
-use Rvx\Rest\Middleware\AdminMiddleware;
-use Rvx\WPDrill\Facades\Route;
-use Rvx\Rest\Middleware\AuthMiddleware;
-use Rvx\Rest\Controllers\UserController;
-use Rvx\Rest\Controllers\AuthController;
-use Rvx\Rest\Controllers\ReviewController;
-use Rvx\Rest\Controllers\SettingController;
-use Rvx\Rest\Controllers\CategoryController;
-use Rvx\Rest\Controllers\DiscountController;
-use Rvx\Rest\Controllers\DashboardController;
-use Rvx\Rest\Controllers\GoogleReviewController;
-use Rvx\Rest\Controllers\ImportExportController;
-use Rvx\Rest\Controllers\EmailTemplateController;
-use Rvx\Rest\Controllers\Products\ProductController;
-use Rvx\Rest\Controllers\StoreFrontReviewController;
-use Rvx\Rest\Controllers\AccessController;
-use Rvx\Rest\Controllers\DataSyncController;
-use Rvx\Rest\Controllers\LogController;
-use Rvx\Rest\Controllers\CptController;
-use Rvx\Rest\Controllers\PingController;
-use Rvx\Rest\Middleware\AuthSaasMiddleware;
+use ReviewX\Rest\Middleware\AdminMiddleware;
+use ReviewX\WPDrill\Facades\Route;
+use ReviewX\Rest\Middleware\AuthMiddleware;
+use ReviewX\Rest\Controllers\UserController;
+use ReviewX\Rest\Controllers\AuthController;
+use ReviewX\Rest\Controllers\ReviewController;
+use ReviewX\Rest\Controllers\SettingController;
+use ReviewX\Rest\Controllers\CategoryController;
+use ReviewX\Rest\Controllers\DiscountController;
+use ReviewX\Rest\Controllers\DashboardController;
+use ReviewX\Rest\Controllers\GoogleReviewController;
+use ReviewX\Rest\Controllers\ImportExportController;
+use ReviewX\Rest\Controllers\EmailTemplateController;
+use ReviewX\Rest\Controllers\Products\ProductController;
+use ReviewX\Rest\Controllers\StoreFrontReviewController;
+use ReviewX\Rest\Controllers\AccessController;
+use ReviewX\Rest\Controllers\DataSyncController;
+use ReviewX\Rest\Controllers\LogController;
+use ReviewX\Rest\Controllers\CptController;
+use ReviewX\Rest\Controllers\PingController;
+use ReviewX\Rest\Middleware\AuthSaasMiddleware;
 Route::group(['prefix' => '/api/v1'], function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/login/key', [AuthController::class, 'license_key']);
@@ -236,7 +236,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/review/request/email/unsubscribe', [EmailTemplateController::class, 'requestEmailUnsubscribe']);
 });
 Route::group(['prefix' => '/api/v1', 'middleware' => AdminMiddleware::class], function () {
-    Route::get('/rvx/error/log/', [LogController::class, 'rvxRecentLog']);
+    Route::get('/reviewx/error/log/', [LogController::class, 'rvxRecentLog']);
     Route::get('/append/json/', [LogController::class, 'appendJsonSync']);
     Route::get('/data/manual/sync', [DataSyncController::class, 'dataManualSync']);
 });

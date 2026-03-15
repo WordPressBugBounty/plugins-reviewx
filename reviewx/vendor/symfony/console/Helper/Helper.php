@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Helper;
+namespace ReviewX\Symfony\Component\Console\Helper;
 
-use Rvx\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Rvx\Symfony\Component\String\UnicodeString;
+use ReviewX\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use ReviewX\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *

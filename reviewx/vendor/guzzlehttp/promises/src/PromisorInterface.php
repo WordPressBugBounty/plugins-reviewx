@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Promise;
+namespace ReviewX\GuzzleHttp\Promise;
 
 /**
  * Interface used with classes that return a promise.

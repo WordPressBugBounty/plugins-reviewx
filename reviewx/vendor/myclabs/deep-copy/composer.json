@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\DeepCopy\\": "src\/DeepCopy\/"
+            "ReviewX\\DeepCopy\\": "src\/DeepCopy\/"
         },
         "files": [
             "src\/DeepCopy\/deep_copy.php"
@@ -33,8 +33,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\DeepCopyTest\\": "tests\/DeepCopyTest\/",
-            "Rvx\\DeepCopy\\": "fixtures\/"
+            "ReviewX\\DeepCopyTest\\": "tests\/DeepCopyTest\/",
+            "ReviewX\\DeepCopy\\": "fixtures\/"
         }
     },
     "config": {

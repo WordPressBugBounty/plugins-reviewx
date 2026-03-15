@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Symfony\\Polyfill\\Mbstring\\": ""
+            "ReviewX\\Symfony\\Polyfill\\Mbstring\\": ""
         },
         "files": [
             "bootstrap.php"

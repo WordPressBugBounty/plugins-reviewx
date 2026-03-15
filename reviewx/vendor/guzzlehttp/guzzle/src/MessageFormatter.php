@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\Psr\Http\Message\MessageInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\MessageInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 /**
  * Formats log messages using variable substitutions for requests, responses,
  * and other transactional data.

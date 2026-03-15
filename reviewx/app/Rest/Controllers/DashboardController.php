@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\Services\DashboardServices;
-use Rvx\Utilities\Helper;
+use ReviewX\Services\DashboardServices;
+use ReviewX\Utilities\Helper;
 use Throwable;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class DashboardController implements InvokableContract
 {
     protected $dashboardServices;

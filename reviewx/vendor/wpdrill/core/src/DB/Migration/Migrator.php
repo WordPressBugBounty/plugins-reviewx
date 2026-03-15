@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\WPDrill\DB\Migration;
+namespace ReviewX\WPDrill\DB\Migration;
 
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\WPDrill\Contracts\MigrationContract;
-use Rvx\WPDrill\Facades\Config;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\WPDrill\Contracts\MigrationContract;
+use ReviewX\WPDrill\Facades\Config;
 class Migrator
 {
     private string $migrationPath;

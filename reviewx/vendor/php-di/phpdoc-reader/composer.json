@@ -9,12 +9,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Rvx\\PhpDocReader\\": "src\/PhpDocReader"
+            "ReviewX\\PhpDocReader\\": "src\/PhpDocReader"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\UnitTest\\PhpDocReader\\": "tests\/"
+            "ReviewX\\UnitTest\\PhpDocReader\\": "tests\/"
         }
     },
     "require": {

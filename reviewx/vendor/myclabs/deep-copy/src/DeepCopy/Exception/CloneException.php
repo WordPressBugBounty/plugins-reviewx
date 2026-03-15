@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\Exception;
+namespace ReviewX\DeepCopy\Exception;
 
 use UnexpectedValueException;
 class CloneException extends UnexpectedValueException

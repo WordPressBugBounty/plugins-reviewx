@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\DB;
+namespace ReviewX\WPDrill\DB;
 
 class Exception extends \Exception
 {

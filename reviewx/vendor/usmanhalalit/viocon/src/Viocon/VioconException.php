@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Viocon;
+namespace ReviewX\Viocon;
 
 class VioconException extends \Exception
 {

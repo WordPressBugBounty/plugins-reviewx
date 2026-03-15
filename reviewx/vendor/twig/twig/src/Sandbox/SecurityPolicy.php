@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Sandbox;
+namespace ReviewX\Twig\Sandbox;
 
-use Rvx\Twig\Markup;
-use Rvx\Twig\Template;
+use ReviewX\Twig\Markup;
+use ReviewX\Twig\Template;
 /**
  * Represents a security policy which need to be enforced when sandbox mode is enabled.
  *

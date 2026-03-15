@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Psr\Container;
+namespace ReviewX\Psr\Container;
 
 /**
  * No entry was found in the container.

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Helper;
+namespace ReviewX\Symfony\Component\Console\Helper;
 
-use Rvx\Symfony\Component\Console\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\Console\Exception\LogicException;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\Console\Exception\LogicException;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */

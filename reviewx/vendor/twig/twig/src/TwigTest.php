@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
-use Rvx\Twig\Node\Expression\TestExpression;
+use ReviewX\Twig\Node\Expression\TestExpression;
 /**
  * Represents a template test.
  *

@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\Services\CategoryService;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Services\CategoryService;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class CategoryController implements InvokableContract
 {
     protected $categoryService;

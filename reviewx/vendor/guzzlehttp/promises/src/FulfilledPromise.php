@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Promise;
+namespace ReviewX\GuzzleHttp\Promise;
 
 /**
  * A promise that has been fulfilled.

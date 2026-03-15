@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Completion;
+namespace ReviewX\Symfony\Component\Console\Completion;
 
-use Rvx\Symfony\Component\Console\Input\InputOption;
+use ReviewX\Symfony\Component\Console\Input\InputOption;
 /**
  * Stores all completion suggestions for the current input.
  *

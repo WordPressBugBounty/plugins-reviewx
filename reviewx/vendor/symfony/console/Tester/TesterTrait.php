@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Tester;
+namespace ReviewX\Symfony\Component\Console\Tester;
 
-use Rvx\PHPUnit\Framework\Assert;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\ConsoleOutput;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\Console\Output\StreamOutput;
-use Rvx\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
+use ReviewX\PHPUnit\Framework\Assert;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\ConsoleOutput;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Output\StreamOutput;
+use ReviewX\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
 /**
  * @author Amrouche Hamza <hamza.simperfit@gmail.com>
  */

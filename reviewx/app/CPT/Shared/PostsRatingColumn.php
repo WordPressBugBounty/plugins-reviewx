@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\CPT\Shared;
+namespace ReviewX\CPT\Shared;
 
 \defined('ABSPATH') || exit;
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class PostsRatingColumn
 {
     protected $cptHelper;
@@ -95,7 +95,7 @@ class PostsRatingColumn
             }
             $stars .= $star_symbol;
         }
-        return "<span class='rvx-stars' title='" . \esc_attr($rating) . "' style='font-size: " . \esc_attr($star_size) . "; color: #f5a623;'>" . $stars . "</span>";
+        return "<span class='reviewx-stars' title='" . \esc_attr($rating) . "' style='font-size: " . \esc_attr($star_size) . "; color: #f5a623;'>" . $stars . "</span>";
     }
     /**
      * Make the rating column sortable.

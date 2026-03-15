@@ -14,12 +14,12 @@
     "type": "library",
     "autoload": {
         "psr-4": {
-            "Rvx\\Invoker\\": "src\/"
+            "ReviewX\\Invoker\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\Invoker\\Test\\": "tests\/"
+            "ReviewX\\Invoker\\Test\\": "tests\/"
         }
     },
     "require": {

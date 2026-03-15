@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Event;
+namespace ReviewX\Symfony\Component\Console\Event;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Contracts\EventDispatcher\Event;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Contracts\EventDispatcher\Event;
 /**
  * Allows to inspect input and output of a command.
  *

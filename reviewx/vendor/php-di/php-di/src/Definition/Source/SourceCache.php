@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Definition\AutowireDefinition;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\AutowireDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\ObjectDefinition;
 /**
  * Decorator that caches another definition source.
  *

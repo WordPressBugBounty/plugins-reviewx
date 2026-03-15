@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
+use ReviewX\Apiz\Http\Response;
 use Exception;
-class AuthApi extends \Rvx\Api\BaseApi
+class AuthApi extends \ReviewX\Api\BaseApi
 {
     /**
      * @param array $data
@@ -23,7 +23,7 @@ class AuthApi extends \Rvx\Api\BaseApi
     public function register(array $data) : Response
     {
         if ($data['domain'] === 'localhost') {
-            $ip = (new \Rvx\Api\BaseApi())->getIp();
+            $ip = (new \ReviewX\Api\BaseApi())->getIp();
             $data['url'] = $ip;
         }
         return $this->withJson($data)->post('register');

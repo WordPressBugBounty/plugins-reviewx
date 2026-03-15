@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Exception\GuzzleException;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Exception\GuzzleException;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * Client interface for sending HTTP requests.
  */

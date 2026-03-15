@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-class CacheServices extends \Rvx\Services\Service
+class CacheServices extends \ReviewX\Services\Service
 {
     public function allReviewApproveCount() : int
     {

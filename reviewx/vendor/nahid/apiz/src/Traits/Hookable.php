@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Apiz\Traits;
+namespace ReviewX\Apiz\Traits;
 
 trait Hookable
 {

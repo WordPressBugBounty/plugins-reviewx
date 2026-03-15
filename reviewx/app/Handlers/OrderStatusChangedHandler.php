@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\OrderApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
-use Rvx\Utilities\TransactionManager;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\OrderApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
+use ReviewX\Utilities\TransactionManager;
+use ReviewX\WPDrill\Response;
 class OrderStatusChangedHandler
 {
     public function __invoke($order_id, $old_status, $new_status, $order)
@@ -66,16 +66,10 @@ class OrderStatusChangedHandler
     }
     public function wooOrderState($order, $new_status, $old_status)
     {
-        global $wpdb;
-        $order_id = $order->get_id();
-        $cache_key = 'rvx_wc_order_stats_' . $order_id;
-        $wpWcOrderStats = \wp_cache_get($cache_key, 'reviewx');
-        if (\false === $wpWcOrderStats) {
-            $wpWcOrderStats = $wpdb->get_row($wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id));
-            \wp_cache_set($cache_key, $wpWcOrderStats, 'reviewx', 3600);
-        }
-        $fulfilled_at = $wpWcOrderStats && $wpWcOrderStats->date_completed ? \wp_date('Y-m-d H:i:s', \strtotime($wpWcOrderStats->date_completed)) : null;
-        $paid_at = $wpWcOrderStats && $wpWcOrderStats->date_paid ? \wp_date('Y-m-d H:i:s', \strtotime($wpWcOrderStats->date_paid)) : null;
+        $date_completed = $order->get_date_completed();
+        $fulfilled_at = $date_completed ? \wp_date('Y-m-d H:i:s', $date_completed->getTimestamp()) : null;
+        $date_paid = $order->get_date_paid();
+        $paid_at = $date_paid ? \wp_date('Y-m-d H:i:s', $date_paid->getTimestamp()) : null;
         if ($new_status === 'completed' && !$fulfilled_at) {
             $fulfilled_at = \wp_date('Y-m-d H:i:s');
         }

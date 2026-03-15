@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\WpApi;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Facades\View;
+use ReviewX\Api\WpApi;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Facades\View;
 class StoreFrontReviewDataHandller implements InvokableContract
 {
     protected WpApi $wpApi;

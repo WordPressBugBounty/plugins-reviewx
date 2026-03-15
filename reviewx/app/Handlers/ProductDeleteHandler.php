@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\ProductApi;
-use Rvx\CPT\CptHelper;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
-use Rvx\Services\CacheServices;
+use ReviewX\Api\ProductApi;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
+use ReviewX\Services\CacheServices;
 class ProductDeleteHandler
 {
     protected $cptHelper;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Psr\Http\Client;
+namespace ReviewX\Psr\Http\Client;
 
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 interface ClientInterface
 {
     /**

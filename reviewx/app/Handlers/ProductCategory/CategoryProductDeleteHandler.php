@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\ProductCategory\Handlers;
+namespace ReviewX\ProductCategory\Handlers;
 
-use Rvx\Api\CategoryApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\CategoryApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
 class CategoryProductDeleteHandler
 {
     public function __invoke($term_id)

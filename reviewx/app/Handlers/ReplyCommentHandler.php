@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Services\CacheServices;
+use ReviewX\Api\ReviewsApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Services\CacheServices;
 class ReplyCommentHandler
 {
     protected $cacheServices;

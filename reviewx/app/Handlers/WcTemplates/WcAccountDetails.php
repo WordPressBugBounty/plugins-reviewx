@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers\WcTemplates;
+namespace ReviewX\Handlers\WcTemplates;
 
 \defined('ABSPATH') || exit;
-use Rvx\Api\UserApi;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Api\UserApi;
+use ReviewX\Utilities\Auth\Client;
 class WcAccountDetails
 {
     public function __invoke($user_id)

@@ -1,14 +1,14 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use WP_REST_Request;
-use Rvx\CPT\CptHelper;
-use Rvx\Models\Site;
-use Rvx\Services\DataSyncService;
-use Rvx\Services\SettingService;
-use Rvx\Utilities\Helper;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Models\Site;
+use ReviewX\Services\DataSyncService;
+use ReviewX\Services\SettingService;
+use ReviewX\Utilities\Helper;
 use Throwable;
 class DataSyncController
 {
@@ -50,20 +50,20 @@ class DataSyncController
     public function updateSettingsOnSync()
     {
         // Save '_rvx_cpt_settings' data after sync is completed from Sass API to WP DB
-        $response = (new \Rvx\Rest\Controllers\CptController())->cptGetOnSync();
+        $response = (new \ReviewX\Rest\Controllers\CptController())->cptGetOnSync();
         if ($response[0] === \true) {
             // Get the enabled post types array
             $used_post_types = (new CptHelper())->usedCPTOnSync('used');
             // Loop through each post type and call getApiReviewSettings
             foreach ($used_post_types as $post_type) {
-                $review_response = (new \Rvx\Rest\Controllers\SettingController())->getApiReviewSettingsOnSync($post_type);
+                $review_response = (new \ReviewX\Rest\Controllers\SettingController())->getApiReviewSettingsOnSync($post_type);
                 // Update Review settings
                 $review_settings = $review_response['data']['review_settings'];
                 $this->settingService->updateReviewSettingsOnSync($review_settings, \strtolower($post_type));
             }
         }
         // Get widget settings
-        $widget_response = (new \Rvx\Rest\Controllers\SettingController())->getApiWidgetSettingsOnSync();
+        $widget_response = (new \ReviewX\Rest\Controllers\SettingController())->getApiWidgetSettingsOnSync();
         $widget_settings = $widget_response['data']['widget_settings'];
         // Update widget settings
         $this->settingService->updateWidgetSettings($widget_settings);

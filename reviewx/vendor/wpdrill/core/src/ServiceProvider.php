@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill;
+namespace ReviewX\WPDrill;
 
 abstract class ServiceProvider
 {

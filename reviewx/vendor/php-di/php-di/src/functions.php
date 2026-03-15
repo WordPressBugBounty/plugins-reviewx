@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI;
+namespace ReviewX\DI;
 
-use Rvx\DI\Definition\ArrayDefinitionExtension;
-use Rvx\DI\Definition\EnvironmentVariableDefinition;
-use Rvx\DI\Definition\Helper\AutowireDefinitionHelper;
-use Rvx\DI\Definition\Helper\CreateDefinitionHelper;
-use Rvx\DI\Definition\Helper\FactoryDefinitionHelper;
-use Rvx\DI\Definition\Reference;
-use Rvx\DI\Definition\StringDefinition;
-use Rvx\DI\Definition\ValueDefinition;
-if (!\function_exists('Rvx\\DI\\value')) {
+use ReviewX\DI\Definition\ArrayDefinitionExtension;
+use ReviewX\DI\Definition\EnvironmentVariableDefinition;
+use ReviewX\DI\Definition\Helper\AutowireDefinitionHelper;
+use ReviewX\DI\Definition\Helper\CreateDefinitionHelper;
+use ReviewX\DI\Definition\Helper\FactoryDefinitionHelper;
+use ReviewX\DI\Definition\Reference;
+use ReviewX\DI\Definition\StringDefinition;
+use ReviewX\DI\Definition\ValueDefinition;
+if (!\function_exists('ReviewX\\DI\\value')) {
     /**
      * Helper for defining a value.
      *
@@ -22,7 +22,7 @@ if (!\function_exists('Rvx\\DI\\value')) {
         return new ValueDefinition($value);
     }
 }
-if (!\function_exists('Rvx\\DI\\create')) {
+if (!\function_exists('ReviewX\\DI\\create')) {
     /**
      * Helper for defining an object.
      *
@@ -34,7 +34,7 @@ if (!\function_exists('Rvx\\DI\\create')) {
         return new CreateDefinitionHelper($className);
     }
 }
-if (!\function_exists('Rvx\\DI\\autowire')) {
+if (!\function_exists('ReviewX\\DI\\autowire')) {
     /**
      * Helper for autowiring an object.
      *
@@ -46,7 +46,7 @@ if (!\function_exists('Rvx\\DI\\autowire')) {
         return new AutowireDefinitionHelper($className);
     }
 }
-if (!\function_exists('Rvx\\DI\\factory')) {
+if (!\function_exists('ReviewX\\DI\\factory')) {
     /**
      * Helper for defining a container entry using a factory function/callable.
      *
@@ -58,7 +58,7 @@ if (!\function_exists('Rvx\\DI\\factory')) {
         return new FactoryDefinitionHelper($factory);
     }
 }
-if (!\function_exists('Rvx\\DI\\decorate')) {
+if (!\function_exists('ReviewX\\DI\\decorate')) {
     /**
      * Decorate the previous definition using a callable.
      *
@@ -76,7 +76,7 @@ if (!\function_exists('Rvx\\DI\\decorate')) {
         return new FactoryDefinitionHelper($callable, \true);
     }
 }
-if (!\function_exists('Rvx\\DI\\get')) {
+if (!\function_exists('ReviewX\\DI\\get')) {
     /**
      * Helper for referencing another container entry in an object definition.
      */
@@ -85,7 +85,7 @@ if (!\function_exists('Rvx\\DI\\get')) {
         return new Reference($entryName);
     }
 }
-if (!\function_exists('Rvx\\DI\\env')) {
+if (!\function_exists('ReviewX\\DI\\env')) {
     /**
      * Helper for referencing environment variables.
      *
@@ -99,7 +99,7 @@ if (!\function_exists('Rvx\\DI\\env')) {
         return new EnvironmentVariableDefinition($variableName, $isOptional, $defaultValue);
     }
 }
-if (!\function_exists('Rvx\\DI\\add')) {
+if (!\function_exists('ReviewX\\DI\\add')) {
     /**
      * Helper for extending another definition.
      *
@@ -125,7 +125,7 @@ if (!\function_exists('Rvx\\DI\\add')) {
         return new ArrayDefinitionExtension($values);
     }
 }
-if (!\function_exists('Rvx\\DI\\string')) {
+if (!\function_exists('ReviewX\\DI\\string')) {
     /**
      * Helper for concatenating strings.
      *

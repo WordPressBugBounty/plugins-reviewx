@@ -57,7 +57,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Symfony\\Component\\Console\\": ""
+            "ReviewX\\Symfony\\Component\\Console\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

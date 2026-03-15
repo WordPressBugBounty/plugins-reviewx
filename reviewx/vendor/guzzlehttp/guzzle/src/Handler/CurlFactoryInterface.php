@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
 interface CurlFactoryInterface
 {
     /**

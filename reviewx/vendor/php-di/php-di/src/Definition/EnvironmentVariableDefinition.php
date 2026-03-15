@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
 /**
  * Defines a reference to an environment variable, with fallback to a default

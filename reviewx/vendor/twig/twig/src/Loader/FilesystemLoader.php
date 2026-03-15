@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Loader;
+namespace ReviewX\Twig\Loader;
 
-use Rvx\Twig\Error\LoaderError;
-use Rvx\Twig\Source;
+use ReviewX\Twig\Error\LoaderError;
+use ReviewX\Twig\Source;
 /**
  * Loads template from the filesystem.
  *

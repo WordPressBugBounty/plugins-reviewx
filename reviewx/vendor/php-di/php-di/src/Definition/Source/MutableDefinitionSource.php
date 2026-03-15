@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Definition\Definition;
+use ReviewX\DI\Definition\Definition;
 /**
  * Describes a definition source to which we can add new definitions.
  *

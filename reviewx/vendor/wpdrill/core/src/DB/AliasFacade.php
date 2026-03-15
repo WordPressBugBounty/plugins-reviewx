@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\WPDrill\DB;
+namespace ReviewX\WPDrill\DB;
 
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
+use ReviewX\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 /**
  * This class gives the ability to access non-static methods statically
  *

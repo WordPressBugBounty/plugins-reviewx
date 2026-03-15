@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\AbstractApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
+use ReviewX\Apiz\AbstractApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
 class BaseApi extends AbstractApi
 {
-    protected $response = \Rvx\Api\ApiResponse::class;
+    protected $response = \ReviewX\Api\ApiResponse::class;
     protected array $config = ['http_errors' => \false];
     /**
      * @return string
@@ -35,6 +35,6 @@ class BaseApi extends AbstractApi
      */
     public function getDefaultHeaders() : array
     {
-        return ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-url' => home_url(), 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => wp_get_theme()->get('Name'), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Wp-Version' => get_bloginfo("version"), 'X-Reviewx-Version' => RVX_VERSION, 'X-Environment' => Helper::plugin()->isProduction() ? 'production' : 'development'];
+        return ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . Helper::getAuthToken(), 'X-url' => home_url(), 'X-Domain' => Helper::getWpDomainNameOnly(), 'X-Theme' => wp_get_theme()->get('Name'), 'X-Site-Locale' => get_locale(), 'X-Request-Id' => \sha1(\time() . Client::getUid()), 'X-Wp-Version' => get_bloginfo("version"), 'X-Reviewx-Version' => REVIEWX_VERSION, 'X-Environment' => Helper::plugin()->isProduction() ? 'production' : 'development'];
     }
 }

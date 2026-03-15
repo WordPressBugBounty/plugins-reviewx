@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\ObjectDefinition;
+namespace ReviewX\DI\Definition\ObjectDefinition;
 
 /**
  * Describe an injection in a class property.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Utilities;
+namespace ReviewX\Utilities;
 
 \defined("ABSPATH") || exit;
 use Exception;
@@ -19,10 +19,12 @@ class TransactionManager
         global $wpdb;
         try {
             // Start WP Transaction
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Raw transaction start
             $wpdb->query('START TRANSACTION');
             // 1. Perform WP updates
             $wpResult = $wpCallback();
             if ($wpResult === \false || \is_wp_error($wpResult)) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Raw transaction rollback
                 $wpdb->query('ROLLBACK');
                 return $wpResult;
             }
@@ -36,13 +38,16 @@ class TransactionManager
             }
             if (!$isSuccess) {
                 // SaaS failed, rollback WP
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Raw transaction rollback
                 $wpdb->query('ROLLBACK');
                 return $saasResponse;
             }
             // Both succeeded
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Raw transaction commit
             $wpdb->query('COMMIT');
             return $saasResponse;
         } catch (Throwable $e) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Raw transaction rollback
             $wpdb->query('ROLLBACK');
             throw $e;
         }

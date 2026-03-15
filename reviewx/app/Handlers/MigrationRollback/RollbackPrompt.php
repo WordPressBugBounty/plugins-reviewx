@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers\MigrationRollback;
+namespace ReviewX\Handlers\MigrationRollback;
 
-use Rvx\Services\SettingService;
+use ReviewX\Services\SettingService;
 class RollbackPrompt
 {
     // Constructor
@@ -10,22 +10,22 @@ class RollbackPrompt
     {
     }
     // Entry point for the rollback process
-    public function rvx_retrieve_sass_plugin_reviews_meta_updater()
+    public function reviewx_retrieve_sass_plugin_reviews_meta_updater()
     {
         \printf('<h3>%s</h3>', \esc_html__('Rollback started.', 'reviewx'));
         // Rollback options data
-        $this->rvx_retrieve_saas_plugin_options_data();
+        $this->reviewx_retrieve_saas_plugin_options_data();
         \printf('%s<br>', \esc_html__('Options data rollback completed.', 'reviewx'));
         // Rollback multi-criteria reviews
-        $reviews_data = $this->rvx_retrieve_saas_plugin_criterias_reviews_converter();
+        $reviews_data = $this->reviewx_retrieve_saas_plugin_criterias_reviews_converter();
         \printf('%s<br>', \esc_html__('Multi-criteria data rollback completed.', 'reviewx'));
         // Rollback attachments for reviews
-        $this->rvx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data);
+        $this->reviewx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data);
         \printf('%s<br>', \esc_html__('Reviews attachments data rollback completed.', 'reviewx'));
         \printf('<h3>%s</h3><br>', \esc_html__('Rollback done.', 'reviewx'));
     }
     // Handles the rollback of plugin options data
-    public function rvx_retrieve_saas_plugin_options_data()
+    public function reviewx_retrieve_saas_plugin_options_data()
     {
         $settings_data = (array) (new SettingService())->getSettingsData()['setting'] ?? [];
         // If settings data is an array, extract and update widget/review settings
@@ -35,7 +35,7 @@ class RollbackPrompt
             $this->update_widget_settings($widget_settings);
             $this->update_review_settings($review_settings);
         }
-        $sharedMethods = new \Rvx\Handlers\MigrationRollback\SharedMethods();
+        $sharedMethods = new \ReviewX\Handlers\MigrationRollback\SharedMethods();
         // Convert multi-criteria data if available
         if (isset($existing_data['reviews']['multicriteria'])) {
             $oldCriteriaData = $sharedMethods->rvxRollbackReverseReviewCriteriaConverter($existing_data['reviews']['multicriteria']);
@@ -79,9 +79,9 @@ class RollbackPrompt
         }
     }
     // Handles rollback for multi-criteria reviews
-    public function rvx_retrieve_saas_plugin_criterias_reviews_converter()
+    public function reviewx_retrieve_saas_plugin_criterias_reviews_converter()
     {
-        $reviews_with_meta = $this->rvx_retrieve_saas_plugin_reviews_data();
+        $reviews_with_meta = $this->reviewx_retrieve_saas_plugin_reviews_data();
         if (empty($reviews_with_meta)) {
             return [];
         }
@@ -94,14 +94,14 @@ class RollbackPrompt
         foreach ($reviews_with_meta as $comment_id => $review_data) {
             $criterias = $review_data['meta_data']['rvx_criterias'] ?? null;
             if (\is_array($criterias)) {
-                $converted_criterias = $this->rvx_convert_criterias_to_serialized_format($criterias, $oldCriteria);
+                $converted_criterias = $this->reviewx_convert_criterias_to_serialized_format($criterias, $oldCriteria);
                 \update_comment_meta($comment_id, 'rvx_criterias', $converted_criterias);
             }
         }
         return $reviews_with_meta;
     }
     // Retrieves reviews with their metadata
-    public function rvx_retrieve_saas_plugin_reviews_data()
+    public function reviewx_retrieve_saas_plugin_reviews_data()
     {
         global $wpdb;
         $meta_key = 'rvx_review_version';
@@ -123,7 +123,7 @@ class RollbackPrompt
         if (\false === $reviews_data) {
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Bulk fetching comments by IDs for rollback
             $reviews_data = $wpdb->get_results(
-                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $placeholders is a safe array_fill of %d
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is a safe array_fill of %d
                 $wpdb->prepare("SELECT * FROM {$wpdb->comments} WHERE comment_ID IN ({$placeholders})", $comment_ids_int),
                 ARRAY_A
             );
@@ -134,7 +134,7 @@ class RollbackPrompt
         if (\false === $meta_data) {
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Bulk fetching comment meta for rollback
             $meta_data = $wpdb->get_results(
-                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $placeholders is a safe array_fill of %d
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is a safe array_fill of %d
                 $wpdb->prepare("SELECT comment_id, meta_key, meta_value FROM {$wpdb->commentmeta} WHERE comment_id IN ({$placeholders})", $comment_ids_int),
                 ARRAY_A
             );
@@ -154,7 +154,7 @@ class RollbackPrompt
         return $reviews_with_meta;
     }
     // Converts criteria data into serialized format
-    private function rvx_convert_criterias_to_serialized_format($criterias, $oldCriteria)
+    private function reviewx_convert_criterias_to_serialized_format($criterias, $oldCriteria)
     {
         $key_base = 'ctr_h8S';
         $serialized_array = [];
@@ -166,14 +166,14 @@ class RollbackPrompt
         return maybe_serialize($serialized_array);
     }
     // Converts review attachments to match the required rollback format
-    public function rvx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data)
+    public function reviewx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data)
     {
         if (!\is_array($reviews_data)) {
             return;
         }
         foreach ($reviews_data as $review_data) {
             $comment_id = $review_data['review_data']['comment_ID'] ?? null;
-            $attachments = $review_data['meta_data']['reviewx_attachments'] ?? null;
+            $attachments = $review_data['meta_data']['rvx_attachments'] ?? null;
             if (\is_array($attachments)) {
                 $attachment_data = [];
                 foreach ($attachments as $attachment_url) {
@@ -186,7 +186,7 @@ class RollbackPrompt
                 }
                 if (!empty($attachment_data)) {
                     $attachment_data_collection = ['images' => $attachment_data];
-                    \update_comment_meta($comment_id, 'reviewx_attachments', $attachment_data_collection);
+                    \update_comment_meta($comment_id, 'rvx_attachments', $attachment_data_collection);
                 }
             }
         }

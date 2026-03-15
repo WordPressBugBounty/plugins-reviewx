@@ -1,5 +1,5 @@
 declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<import('vue').ExtractPropTypes<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<{
-    placement?: "bottom" | "left" | "right" | "top" | "auto" | undefined;
+    placement?: "bottom" | "top" | "left" | "right" | "auto" | undefined;
     gap?: number | undefined;
     width?: number | undefined;
     tooltipContainerClass?: string | undefined;
@@ -8,7 +8,7 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     gap: number;
     width: number;
 }>>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {}, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<{
-    placement?: "bottom" | "left" | "right" | "top" | "auto" | undefined;
+    placement?: "bottom" | "top" | "left" | "right" | "auto" | undefined;
     gap?: number | undefined;
     width?: number | undefined;
     tooltipContainerClass?: string | undefined;
@@ -18,8 +18,8 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     width: number;
 }>>> & Readonly<{}>, {
     width: number;
+    placement: "bottom" | "top" | "left" | "right" | "auto";
     gap: number;
-    placement: "bottom" | "left" | "right" | "top" | "auto";
 }, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>, {
     default?(_: {}): any;
     tooltip?(_: {}): any;

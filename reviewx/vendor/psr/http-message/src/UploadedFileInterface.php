@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Psr\Http\Message;
+namespace ReviewX\Psr\Http\Message;
 
 /**
  * Value object representing a file uploaded through an HTTP request.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Apiz\Exceptions;
+namespace ReviewX\Apiz\Exceptions;
 
 use Exception;
 class NoResponseException extends Exception

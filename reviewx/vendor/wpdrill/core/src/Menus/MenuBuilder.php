@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Menus;
+namespace ReviewX\WPDrill\Menus;
 
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Plugin;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Plugin;
 class MenuBuilder
 {
     protected Plugin $plugin;

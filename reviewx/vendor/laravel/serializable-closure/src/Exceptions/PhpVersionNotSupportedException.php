@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure\Exceptions;
+namespace ReviewX\Laravel\SerializableClosure\Exceptions;
 
 use Exception;
 class PhpVersionNotSupportedException extends Exception

@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure;
+namespace ReviewX\Laravel\SerializableClosure;
 
 use Closure;
-use Rvx\Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
-use Rvx\Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
-use Rvx\Laravel\SerializableClosure\Serializers\Signed;
-use Rvx\Laravel\SerializableClosure\Signers\Hmac;
+use ReviewX\Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
+use ReviewX\Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
+use ReviewX\Laravel\SerializableClosure\Serializers\Signed;
+use ReviewX\Laravel\SerializableClosure\Signers\Hmac;
 class SerializableClosure
 {
     /**

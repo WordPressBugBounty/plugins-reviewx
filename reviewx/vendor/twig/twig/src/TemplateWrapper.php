@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
 /**
  * Exposes a template to userland.
@@ -21,7 +21,7 @@ final class TemplateWrapper
     private $template;
     /**
      * This method is for internal use only and should never be called
-     * directly (use \\Rvx\\Twig\\Environment::load() instead).
+     * directly (use \\ReviewX\\Twig\\Environment::load() instead).
      *
      * @internal
      */

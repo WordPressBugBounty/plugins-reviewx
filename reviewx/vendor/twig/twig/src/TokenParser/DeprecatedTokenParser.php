@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\TokenParser;
+namespace ReviewX\Twig\TokenParser;
 
-use Rvx\Twig\Node\DeprecatedNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Token;
+use ReviewX\Twig\Node\DeprecatedNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Token;
 /**
  * Deprecates a section of a template.
  *

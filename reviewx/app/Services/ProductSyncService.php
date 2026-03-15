@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
 use Exception;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\DB;
-use Rvx\Services\CategorySyncService;
-class ProductSyncService extends \Rvx\Services\Service
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Facades\DB;
+use ReviewX\Services\CategorySyncService;
+class ProductSyncService extends \ReviewX\Services\Service
 {
     protected $postMetaPriceRelation;
     protected $productCount = 0;
@@ -65,7 +65,7 @@ class ProductSyncService extends \Rvx\Services\Service
                         continue;
                     }
                     // --- Rating Prioritization Logic ---
-                    // Priority: _wc_average_rating > rvx_avg_rating > rating
+                    // Priority: _wc_average_rating > reviewx_avg_rating > rating
                     if ($key === '_wc_average_rating' || $key === 'rvx_avg_rating' || $key === 'rating') {
                         // Assign only if not already assigned by a higher-priority field
                         if (!isset($this->postMetaAverageRatingRelation[$pid])) {
@@ -110,11 +110,11 @@ class ProductSyncService extends \Rvx\Services\Service
     {
         $reviewsCount = isset($this->postMetaReviewsCountRelation[$product->ID]) ? (int) $this->postMetaReviewsCountRelation[$product->ID] : 0;
         $ratingCount = $this->postMetaRatingCountPercentageRelation[$product->ID] ?? [];
-        // Handle CPT Star Counts (from rvx_ meta)
+        // Handle CPT Star Counts (from reviewx_ meta)
         if ($product->post_type !== 'product') {
             // Self-Healing: If star data is missing, calculate it NOW.
             if (!isset($this->postMetaStarCountsRelation[$product->ID])) {
-                \Rvx\CPT\CptAverageRating::update_average_rating($product->ID);
+                \ReviewX\CPT\CptAverageRating::update_average_rating($product->ID);
                 // Fetch fresh data immediately
                 $freshStars = [];
                 for ($i = 1; $i <= 5; $i++) {

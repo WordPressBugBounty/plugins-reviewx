@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\EachPromise;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\GuzzleHttp\Promise\PromisorInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\EachPromise;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\GuzzleHttp\Promise\PromisorInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
 /**
  * Sends an iterator of requests concurrently using a capped pool size.
  *

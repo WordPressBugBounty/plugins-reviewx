@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
 /**
  * This class contains a list of built-in Guzzle request options.

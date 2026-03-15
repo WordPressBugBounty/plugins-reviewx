@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter;
+namespace ReviewX\DeepCopy\Filter;
 
 /**
  * Defines a decorator filter that will not stop the chain of filters.

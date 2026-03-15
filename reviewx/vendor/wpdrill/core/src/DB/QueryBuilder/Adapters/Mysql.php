@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\DB\QueryBuilder\Adapters;
+namespace ReviewX\WPDrill\DB\QueryBuilder\Adapters;
 
 class Mysql extends BaseAdapter
 {

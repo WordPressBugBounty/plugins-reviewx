@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\PhpDocReader\PhpParser;
+namespace ReviewX\PhpDocReader\PhpParser;
 
 use SplFileObject;
 /**

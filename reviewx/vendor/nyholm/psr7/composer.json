@@ -36,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Nyholm\\Psr7\\": "src\/"
+            "ReviewX\\Nyholm\\Psr7\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\Tests\\Nyholm\\Psr7\\": "tests\/"
+            "ReviewX\\Tests\\Nyholm\\Psr7\\": "tests\/"
         }
     },
     "extra": {

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ServerRequestInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ServerRequestInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 final class Utils
 {
     /**

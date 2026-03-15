@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 use Exception;
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Services\CacheServices;
+use ReviewX\Api\ReviewsApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Services\CacheServices;
 use WP_Screen;
 class WooReviewTableHandler
 {
@@ -30,7 +30,7 @@ class WooReviewTableHandler
             $this->handleReviewAction($new_status, $old_status, $wpUniqueId);
         }
         if ($comment && $comment->comment_post_ID) {
-            \Rvx\CPT\CptAverageRating::update_average_rating($comment->comment_post_ID);
+            \ReviewX\CPT\CptAverageRating::update_average_rating($comment->comment_post_ID);
         }
         $this->cacheServices->removeCache();
     }

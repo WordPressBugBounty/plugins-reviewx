@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Tester;
+namespace ReviewX\Symfony\Component\Console\Tester;
 
-use Rvx\Symfony\Component\Console\Application;
-use Rvx\Symfony\Component\Console\Input\ArrayInput;
+use ReviewX\Symfony\Component\Console\Application;
+use ReviewX\Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console applications.
  *

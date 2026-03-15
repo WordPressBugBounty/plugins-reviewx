@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7;
+namespace ReviewX\Nyholm\Psr7;
 
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Symfony\Component\Debug\ErrorHandler as SymfonyLegacyErrorHandler;
-use Rvx\Symfony\Component\ErrorHandler\ErrorHandler as SymfonyErrorHandler;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Symfony\Component\Debug\ErrorHandler as SymfonyLegacyErrorHandler;
+use ReviewX\Symfony\Component\ErrorHandler\ErrorHandler as SymfonyErrorHandler;
 if (\PHP_VERSION_ID >= 70400 || (new \ReflectionMethod(StreamInterface::class, '__toString'))->hasReturnType()) {
     /**
      * @internal

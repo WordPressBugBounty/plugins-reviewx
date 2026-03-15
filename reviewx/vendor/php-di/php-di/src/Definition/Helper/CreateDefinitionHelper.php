@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Helper;
+namespace ReviewX\DI\Definition\Helper;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\ObjectDefinition\MethodInjection;
-use Rvx\DI\Definition\ObjectDefinition\PropertyInjection;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\ObjectDefinition\MethodInjection;
+use ReviewX\DI\Definition\ObjectDefinition\PropertyInjection;
 /**
  * Helps defining how to create an instance of a class.
  *

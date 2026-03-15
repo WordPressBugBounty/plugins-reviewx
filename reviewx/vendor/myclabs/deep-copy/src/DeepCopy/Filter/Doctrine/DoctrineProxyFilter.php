@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter\Doctrine;
+namespace ReviewX\DeepCopy\Filter\Doctrine;
 
-use Rvx\DeepCopy\Filter\Filter;
+use ReviewX\DeepCopy\Filter\Filter;
 /**
  * @final
  */

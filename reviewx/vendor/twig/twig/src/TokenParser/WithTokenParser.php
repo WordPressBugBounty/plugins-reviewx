@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\TokenParser;
+namespace ReviewX\Twig\TokenParser;
 
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\WithNode;
-use Rvx\Twig\Token;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Node\WithNode;
+use ReviewX\Twig\Token;
 /**
  * Creates a nested scope.
  *

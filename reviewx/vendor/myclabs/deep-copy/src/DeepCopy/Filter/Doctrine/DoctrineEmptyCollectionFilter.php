@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter\Doctrine;
+namespace ReviewX\DeepCopy\Filter\Doctrine;
 
-use Rvx\DeepCopy\Filter\Filter;
-use Rvx\DeepCopy\Reflection\ReflectionHelper;
-use Rvx\Doctrine\Common\Collections\ArrayCollection;
+use ReviewX\DeepCopy\Filter\Filter;
+use ReviewX\DeepCopy\Reflection\ReflectionHelper;
+use ReviewX\Doctrine\Common\Collections\ArrayCollection;
 /**
  * @final
  */

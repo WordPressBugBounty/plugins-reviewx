@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Noodlehaus\Writer;
+namespace ReviewX\Noodlehaus\Writer;
 
-use Rvx\Symfony\Component\Yaml\Yaml as YamlParser;
+use ReviewX\Symfony\Component\Yaml\Yaml as YamlParser;
 /**
  * Yaml Writer.
  *

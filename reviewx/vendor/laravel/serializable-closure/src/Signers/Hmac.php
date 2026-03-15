@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure\Signers;
+namespace ReviewX\Laravel\SerializableClosure\Signers;
 
-use Rvx\Laravel\SerializableClosure\Contracts\Signer;
+use ReviewX\Laravel\SerializableClosure\Contracts\Signer;
 class Hmac implements Signer
 {
     /**

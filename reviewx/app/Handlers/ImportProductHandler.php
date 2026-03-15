@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 class ImportProductHandler
 {
@@ -14,7 +14,7 @@ class ImportProductHandler
                         $currentProduct = wc_get_product($product->ID);
                         $payload = $this->prepareImportedData($currentProduct);
                         $this->appendToJsonl($payload, 'imported_product.jsonl');
-                        (new \Rvx\Handlers\ImportProductHandler())->productJsonlFileRead();
+                        (new \ReviewX\Handlers\ImportProductHandler())->productJsonlFileRead();
                         break;
                 }
             }
@@ -22,7 +22,7 @@ class ImportProductHandler
     }
     public function appendToJsonl($payload, $file_name = 'imported_product.jsonl')
     {
-        $file_path = RVX_DIR_PATH . $file_name;
+        $file_path = REVIEWX_DIR_PATH . $file_name;
         $json_data = wp_json_encode($payload) . \PHP_EOL;
         global $wp_filesystem;
         if (empty($wp_filesystem)) {
@@ -47,7 +47,7 @@ class ImportProductHandler
         $categories = [];
         if (!empty($terms) && !\is_wp_error($terms)) {
             foreach ($terms as $term) {
-                $categories[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . $term->term_id;
+                $categories[] = \ReviewX\Utilities\Auth\Client::getUid() . '-' . $term->term_id;
             }
         }
         return $categories;
@@ -65,7 +65,7 @@ class ImportProductHandler
     }
     public function productJsonlFileRead()
     {
-        $url = RVX_DIR_PATH . 'imported_product.jsonl';
+        $url = REVIEWX_DIR_PATH . 'imported_product.jsonl';
         global $wp_filesystem;
         if (empty($wp_filesystem)) {
             require_once \ABSPATH . 'wp-admin/includes/file.php';
@@ -84,7 +84,7 @@ class ImportProductHandler
                 $result = \json_decode($line);
                 if ($result) {
                     $payload = $this->productPrepareForSync($result);
-                    $sync_file = RVX_DIR_PATH . 'product_sync.jsonl';
+                    $sync_file = REVIEWX_DIR_PATH . 'product_sync.jsonl';
                     $sync_json = wp_json_encode($payload) . \PHP_EOL;
                     $current_sync = $wp_filesystem->exists($sync_file) ? $wp_filesystem->get_contents($sync_file) : '';
                     $wp_filesystem->put_contents($sync_file, $current_sync . $sync_json, \FS_CHMOD_FILE);

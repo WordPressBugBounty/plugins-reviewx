@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+            "ReviewX\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
         },
         "files": [
             "bootstrap.php"

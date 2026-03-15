@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\TwigFunction;
+use ReviewX\Twig\TwigFunction;
 final class StringLoaderExtension extends AbstractExtension
 {
     public function getFunctions() : array
@@ -18,10 +18,10 @@ final class StringLoaderExtension extends AbstractExtension
         return [new TwigFunction('template_from_string', 'twig_template_from_string', ['needs_environment' => \true])];
     }
 }
-namespace Rvx;
+namespace ReviewX;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\TemplateWrapper;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\TemplateWrapper;
 /**
  * Loads a template from a string.
  *

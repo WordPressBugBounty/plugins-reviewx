@@ -32,15 +32,15 @@
     ],
     "autoload": {
         "psr-4": {
-            "Rvx\\Apiz\\": "src\/",
-            "Rvx\\Tests\\": "Tests\/"
+            "ReviewX\\Apiz\\": "src\/",
+            "ReviewX\\Tests\\": "Tests\/"
         },
         "files": []
     },
     "minimum-stability": "stable",
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\Api\\": "api\/"
+            "ReviewX\\Api\\": "api\/"
         }
     },
     "prefer-stable": true

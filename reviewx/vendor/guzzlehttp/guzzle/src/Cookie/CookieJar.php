@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Cookie;
+namespace ReviewX\GuzzleHttp\Cookie;
 
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 /**
  * Cookie jar that stores cookies as an array
  */

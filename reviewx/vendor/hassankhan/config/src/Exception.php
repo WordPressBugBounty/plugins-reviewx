@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Noodlehaus;
+namespace ReviewX\Noodlehaus;
 
 class Exception extends \Exception
 {

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI;
+namespace ReviewX\DI;
 
-use Rvx\Psr\Container\ContainerExceptionInterface;
+use ReviewX\Psr\Container\ContainerExceptionInterface;
 /**
  * Exception for the Container.
  */

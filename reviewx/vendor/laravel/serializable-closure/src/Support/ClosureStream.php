@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure\Support;
+namespace ReviewX\Laravel\SerializableClosure\Support;
 
 #[\AllowDynamicProperties]
 class ClosureStream

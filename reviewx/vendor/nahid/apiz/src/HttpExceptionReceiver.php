@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Apiz;
+namespace ReviewX\Apiz;
 
-use Rvx\Apiz\Http\Response;
+use ReviewX\Apiz\Http\Response;
 class HttpExceptionReceiver
 {
     protected $exceptions;

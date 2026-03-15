@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure;
+namespace ReviewX\Laravel\SerializableClosure;
 
 use Closure;
-use Rvx\Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
+use ReviewX\Laravel\SerializableClosure\Exceptions\PhpVersionNotSupportedException;
 class UnsignedSerializableClosure
 {
     /**

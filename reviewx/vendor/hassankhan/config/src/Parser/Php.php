@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Noodlehaus\Parser;
+namespace ReviewX\Noodlehaus\Parser;
 
 use Exception;
-use Rvx\Noodlehaus\Exception\ParseException;
-use Rvx\Noodlehaus\Exception\UnsupportedFormatException;
+use ReviewX\Noodlehaus\Exception\ParseException;
+use ReviewX\Noodlehaus\Exception\UnsupportedFormatException;
 /**
  * PHP parser
  *

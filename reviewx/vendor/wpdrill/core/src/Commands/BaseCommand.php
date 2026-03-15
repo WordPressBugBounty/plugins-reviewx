@@ -1,14 +1,14 @@
 <?php
 
-namespace Rvx\WPDrill\Commands;
+namespace ReviewX\WPDrill\Commands;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\Console\Question\Question;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Input\ArgvInput;
-use Rvx\Symfony\Component\Console\Output\BufferedOutput;
-use Rvx\Symfony\Component\Process\Process;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Question\Question;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Input\ArgvInput;
+use ReviewX\Symfony\Component\Console\Output\BufferedOutput;
+use ReviewX\Symfony\Component\Process\Process;
 class BaseCommand extends Command
 {
     protected InputInterface $input;

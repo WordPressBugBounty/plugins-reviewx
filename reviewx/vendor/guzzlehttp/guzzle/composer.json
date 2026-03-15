@@ -117,7 +117,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\GuzzleHttp\\": "src\/"
+            "ReviewX\\GuzzleHttp\\": "src\/"
         },
         "files": [
             "src\/functions_include.php"
@@ -125,7 +125,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\GuzzleHttp\\Tests\\": "tests\/"
+            "ReviewX\\GuzzleHttp\\Tests\\": "tests\/"
         }
     }
 }

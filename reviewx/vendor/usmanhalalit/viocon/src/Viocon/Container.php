@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Viocon;
+namespace ReviewX\Viocon;
 
 class Container
 {
@@ -18,7 +18,7 @@ class Container
     {
         if ($alias) {
             AliasFacade::setVioconInstance($this);
-            \class_alias('Rvx\\Viocon\\AliasFacade', $alias);
+            \class_alias('ReviewX\\Viocon\\AliasFacade', $alias);
         }
     }
     /**

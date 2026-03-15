@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 /*
  * This file is part of the Symfony package.
@@ -10,7 +10,7 @@ namespace Rvx;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Rvx\Symfony\Polyfill\Intl\Grapheme as p;
+use ReviewX\Symfony\Polyfill\Intl\Grapheme as p;
 if (\PHP_VERSION_ID >= 80000) {
     return require __DIR__ . '/bootstrap80.php';
 }
@@ -77,7 +77,7 @@ if (!\function_exists('grapheme_substr')) {
         return p\Grapheme::grapheme_substr($string, $offset, $length);
     }
 }
-if (!\function_exists('Rvx\\grapheme_str_split')) {
+if (!\function_exists('ReviewX\\grapheme_str_split')) {
     function grapheme_str_split($string, $length = 1)
     {
         return p\Grapheme::grapheme_str_split($string, $length);

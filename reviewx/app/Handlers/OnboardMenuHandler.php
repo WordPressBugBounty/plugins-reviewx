@@ -1,23 +1,23 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Handlers\MigrationRollback\SharedMethods;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Facades\View;
+use ReviewX\Handlers\MigrationRollback\SharedMethods;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Facades\View;
 class OnboardMenuHandler implements InvokableContract
 {
     public function __invoke()
     {
         global $wpdb;
-        $rvxSites = $wpdb->prefix . 'rvx_sites';
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
-        $wpdb->query("TRUNCATE TABLE {$rvxSites}");
+        $rvxSites = esc_sql($wpdb->prefix . 'rvx_sites');
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time cleanup action
+        $wpdb->query('TRUNCATE TABLE `' . $rvxSites . '`');
         $sharedMethods = new SharedMethods();
-        $is_pro_active = $sharedMethods->rvx_is_old_pro_plugin_active();
+        $is_pro_active = $sharedMethods->reviewx_is_old_pro_plugin_active();
         if ($is_pro_active === \true) {
             // Old Pro version is detected, let's deactivate
-            $sharedMethods->rvx_deactivate_old_pro_plugin();
+            $sharedMethods->reviewx_deactivate_old_pro_plugin();
             // Reload the page once to remove Old Pro plugin's notices
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Simple flag check, no form data processing
             if (!isset($_GET['rvx_reloaded'])) {

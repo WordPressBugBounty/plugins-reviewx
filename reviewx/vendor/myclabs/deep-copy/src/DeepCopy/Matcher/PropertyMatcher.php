@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\Matcher;
+namespace ReviewX\DeepCopy\Matcher;
 
 /**
  * @final

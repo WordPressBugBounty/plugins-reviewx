@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\Psr\Http\Message\MessageInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\MessageInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 final class Message
 {
     /**

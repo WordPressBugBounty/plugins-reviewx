@@ -1,15 +1,15 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Api\ReviewsApi;
+use ReviewX\Utilities\Auth\Client;
 class WoocommerceCommentStatusChangeHandler
 {
     public function __invoke($comment_id, $status)
     {
         $screen = \get_current_screen();
-        if ($screen instanceof \Rvx\Handlers\WP_Screen || $screen->id == "edit-comments") {
+        if ($screen instanceof \ReviewX\Handlers\WP_Screen || $screen->id == "edit-comments") {
             $this->prepareData($comment_id, $status);
         }
         if (wp_doing_ajax()) {

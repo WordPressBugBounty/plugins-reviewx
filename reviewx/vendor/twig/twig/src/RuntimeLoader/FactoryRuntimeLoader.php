@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\RuntimeLoader;
+namespace ReviewX\Twig\RuntimeLoader;
 
 /**
  * Lazy loads the runtime implementations for a Twig element.

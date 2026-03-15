@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Nahid\QArray;
+namespace ReviewX\Nahid\QArray;
 
-use Rvx\Nahid\QArray\QueryEngine;
+use ReviewX\Nahid\QArray\QueryEngine;
 class ArrayQuery extends QueryEngine
 {
     /**

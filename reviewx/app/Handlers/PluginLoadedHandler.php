@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Contracts\InvokableContract;
 class PluginLoadedHandler implements InvokableContract
 {
     public function __invoke()

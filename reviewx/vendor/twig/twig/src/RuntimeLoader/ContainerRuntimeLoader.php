@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\RuntimeLoader;
+namespace ReviewX\Twig\RuntimeLoader;
 
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\Psr\Container\ContainerInterface;
 /**
  * Lazily loads Twig runtime implementations from a PSR-11 container.
  *

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
 /**
  * Decorator used to return only a subset of a stream.
  */
@@ -50,9 +50,8 @@ final class LimitStream implements StreamInterface
             return null;
         } elseif ($this->limit === -1) {
             return $length - $this->offset;
-        } else {
-            return \min($this->limit, $length - $this->offset);
         }
+        return \min($this->limit, $length - $this->offset);
     }
     /**
      * Allow for a bounded seek on the read limited stream

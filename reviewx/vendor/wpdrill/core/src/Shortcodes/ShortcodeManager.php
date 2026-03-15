@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\WPDrill\Shortcodes;
+namespace ReviewX\WPDrill\Shortcodes;
 
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Contracts\ShortcodeContract;
-use Rvx\WPDrill\Menus\Menu;
-use Rvx\WPDrill\Plugin;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Contracts\ShortcodeContract;
+use ReviewX\WPDrill\Menus\Menu;
+use ReviewX\WPDrill\Plugin;
 class ShortcodeManager
 {
     protected Plugin $plugin;

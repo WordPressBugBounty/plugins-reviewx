@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\CPT\Shared;
+namespace ReviewX\CPT\Shared;
 
-use Rvx\CPT\CptHelper;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Utilities\Auth\Client;
 /**
  * Filters comments/reviews from the WP Comments admin page for post types
  * that are enabled in ReviewX.
@@ -51,6 +51,7 @@ class CommentsReviewsFilter
         if (!\is_array($current_post_not_in)) {
             $current_post_not_in = [];
         }
+        // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Admin comments screen filtering requires explicit exclusions
         $query->query_vars['post__not_in'] = \array_merge($current_post_not_in, $post_ids_to_exclude);
     }
     /**
@@ -67,6 +68,7 @@ class CommentsReviewsFilter
         }
         // Build placeholders for IN clause
         $placeholders = \implode(', ', \array_fill(0, \count($post_types), '%s'));
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Admin-only lookup for enabled post types
         $post_ids = $wpdb->get_col($wpdb->prepare(
             // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $placeholders is safe array_fill of %s
             "SELECT ID FROM {$wpdb->posts} WHERE post_type IN ({$placeholders})",

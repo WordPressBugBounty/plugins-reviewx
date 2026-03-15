@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
 /**
  * A definition that extends a previous definition with the same name.

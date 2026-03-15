@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Exception;
+namespace ReviewX\GuzzleHttp\Exception;
 
 class TooManyRedirectsException extends RequestException
 {

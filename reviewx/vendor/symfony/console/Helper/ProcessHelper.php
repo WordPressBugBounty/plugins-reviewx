@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Helper;
+namespace ReviewX\Symfony\Component\Console\Helper;
 
-use Rvx\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\Process\Exception\ProcessFailedException;
-use Rvx\Symfony\Component\Process\Process;
+use ReviewX\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Process\Exception\ProcessFailedException;
+use ReviewX\Symfony\Component\Process\Process;
 /**
  * The ProcessHelper class provides helpers to run external processes.
  *

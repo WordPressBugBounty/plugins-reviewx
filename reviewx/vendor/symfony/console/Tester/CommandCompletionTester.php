@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Tester;
+namespace ReviewX\Symfony\Component\Console\Tester;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Completion\CompletionInput;
-use Rvx\Symfony\Component\Console\Completion\CompletionSuggestions;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Completion\CompletionInput;
+use ReviewX\Symfony\Component\Console\Completion\CompletionSuggestions;
 /**
  * Eases the testing of command completion.
  *

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Profiler\Dumper;
+namespace ReviewX\Twig\Profiler\Dumper;
 
-use Rvx\Twig\Profiler\Profile;
+use ReviewX\Twig\Profiler\Profile;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker;
+namespace ReviewX\Invoker;
 
-use Rvx\Invoker\Exception\InvocationException;
-use Rvx\Invoker\Exception\NotCallableException;
-use Rvx\Invoker\Exception\NotEnoughParametersException;
+use ReviewX\Invoker\Exception\InvocationException;
+use ReviewX\Invoker\Exception\NotCallableException;
+use ReviewX\Invoker\Exception\NotEnoughParametersException;
 /**
  * Invoke a callable.
  */

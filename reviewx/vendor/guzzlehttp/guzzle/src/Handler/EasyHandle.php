@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\GuzzleHttp\Psr7\Response;
-use Rvx\GuzzleHttp\Utils;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
+use ReviewX\GuzzleHttp\Psr7\Response;
+use ReviewX\GuzzleHttp\Utils;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
 /**
  * Represents a cURL easy handle and the data it populates.
  *

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\DeepCopy\TypeFilter\Spl;
+namespace ReviewX\DeepCopy\TypeFilter\Spl;
 
-use Rvx\DeepCopy\DeepCopy;
-use Rvx\DeepCopy\TypeFilter\TypeFilter;
+use ReviewX\DeepCopy\DeepCopy;
+use ReviewX\DeepCopy\TypeFilter\TypeFilter;
 /**
  * In PHP 7.4 the storage of an ArrayObject isn't returned as
  * ReflectionProperty. So we deep copy its array copy.

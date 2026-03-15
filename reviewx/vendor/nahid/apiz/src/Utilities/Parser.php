@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Apiz\Utilities;
+namespace ReviewX\Apiz\Utilities;
 
 use SimpleXMLElement;
-use Rvx\Apiz\Constants\MimeType;
+use ReviewX\Apiz\Constants\MimeType;
 class Parser
 {
     /**

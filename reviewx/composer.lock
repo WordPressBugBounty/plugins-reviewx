@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "632a0b14b16749d6f455934f4ce21156",
+    "content-hash": "6a69e101ef296441eeb61e17ef37bd50",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -280,16 +280,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "21dc724a0583619cd1652f673303492272778051"
+                "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/21dc724a0583619cd1652f673303492272778051",
-                "reference": "21dc724a0583619cd1652f673303492272778051",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/7d0ed42f28e42d61352a7a79de682e5e67fec884",
+                "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884",
                 "shasum": ""
             },
             "require": {
@@ -305,6 +305,7 @@
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
                 "http-interop/http-factory-tests": "0.9.0",
+                "jshttp/mime-db": "1.54.0.1",
                 "phpunit/phpunit": "^8.5.44 || ^9.6.25"
             },
             "suggest": {
@@ -376,7 +377,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.8.0"
+                "source": "https://github.com/guzzle/psr7/tree/2.9.0"
             },
             "funding": [
                 {
@@ -392,7 +393,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-23T21:21:41+00:00"
+            "time": "2026-03-10T16:41:02+00:00"
         },
         {
             "name": "hassankhan/config",
@@ -2289,12 +2290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPDrill/core.git",
-                "reference": "82e40c540dc0489bde622e76a8ad6f4ea90456b0"
+                "reference": "e3c4087828c04da9a37533851202658375678d57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPDrill/core/zipball/82e40c540dc0489bde622e76a8ad6f4ea90456b0",
-                "reference": "82e40c540dc0489bde622e76a8ad6f4ea90456b0",
+                "url": "https://api.github.com/repos/WPDrill/core/zipball/e3c4087828c04da9a37533851202658375678d57",
+                "reference": "e3c4087828c04da9a37533851202658375678d57",
                 "shasum": ""
             },
             "require": {
@@ -2335,7 +2336,7 @@
                 "source": "https://github.com/WPDrill/core/tree/master",
                 "issues": "https://github.com/WPDrill/core/issues"
             },
-            "time": "2026-02-11T09:28:13+00:00"
+            "time": "2026-03-10T06:38:29+00:00"
         }
     ],
     "packages-dev": [
@@ -3181,12 +3182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "76dc93d1c3fc15d94c3173dbc66ca7624278a3d8"
+                "reference": "a71778ade547d17881d1039314375ec273a0b32f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/76dc93d1c3fc15d94c3173dbc66ca7624278a3d8",
-                "reference": "76dc93d1c3fc15d94c3173dbc66ca7624278a3d8",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a71778ade547d17881d1039314375ec273a0b32f",
+                "reference": "a71778ade547d17881d1039314375ec273a0b32f",
                 "shasum": ""
             },
             "require": {
@@ -3264,27 +3265,11 @@
             },
             "funding": [
                 {
-                    "url": "https://phpunit.de/sponsors.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                },
-                {
-                    "url": "https://liberapay.com/sebastianbergmann",
-                    "type": "liberapay"
-                },
-                {
-                    "url": "https://thanks.dev/u/gh/sebastianbergmann",
-                    "type": "thanks_dev"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpunit/phpunit",
-                    "type": "tidelift"
+                    "url": "https://phpunit.de/sponsoring.html",
+                    "type": "other"
                 }
             ],
-            "time": "2026-02-12T05:52:58+00:00"
+            "time": "2026-03-03T16:43:55+00:00"
         },
         {
             "name": "sebastian/cli-parser",

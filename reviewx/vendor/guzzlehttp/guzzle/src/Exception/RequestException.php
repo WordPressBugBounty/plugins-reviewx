@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Exception;
+namespace ReviewX\GuzzleHttp\Exception;
 
-use Rvx\GuzzleHttp\BodySummarizer;
-use Rvx\GuzzleHttp\BodySummarizerInterface;
-use Rvx\Psr\Http\Client\RequestExceptionInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\GuzzleHttp\BodySummarizer;
+use ReviewX\GuzzleHttp\BodySummarizerInterface;
+use ReviewX\Psr\Http\Client\RequestExceptionInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 /**
  * HTTP Request exception
  */
@@ -65,7 +65,7 @@ class RequestException extends TransferException implements RequestExceptionInte
             $label = 'Unsuccessful request';
             $className = __CLASS__;
         }
-        $uri = \Rvx\GuzzleHttp\Psr7\Utils::redactUserInfo($request->getUri());
+        $uri = \ReviewX\GuzzleHttp\Psr7\Utils::redactUserInfo($request->getUri());
         // Client Error: `GET /` resulted in a `404 Not Found` response:
         // <html> ... (truncated)
         $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri->__toString(), $response->getStatusCode(), $response->getReasonPhrase());

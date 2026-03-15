@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\ExpressionParser;
-use Rvx\Twig\Node\Expression\Binary\AbstractBinary;
-use Rvx\Twig\Node\Expression\Unary\AbstractUnary;
-use Rvx\Twig\NodeVisitor\NodeVisitorInterface;
-use Rvx\Twig\TokenParser\TokenParserInterface;
-use Rvx\Twig\TwigFilter;
-use Rvx\Twig\TwigFunction;
-use Rvx\Twig\TwigTest;
+use ReviewX\Twig\ExpressionParser;
+use ReviewX\Twig\Node\Expression\Binary\AbstractBinary;
+use ReviewX\Twig\Node\Expression\Unary\AbstractUnary;
+use ReviewX\Twig\NodeVisitor\NodeVisitorInterface;
+use ReviewX\Twig\TokenParser\TokenParserInterface;
+use ReviewX\Twig\TwigFilter;
+use ReviewX\Twig\TwigFunction;
+use ReviewX\Twig\TwigTest;
 /**
  * Interface implemented by extension classes.
  *

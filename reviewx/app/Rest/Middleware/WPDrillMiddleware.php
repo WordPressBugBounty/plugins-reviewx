@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Rest\Middleware;
+namespace ReviewX\Rest\Middleware;
 
 \defined("ABSPATH") || exit;
 class WPDrillMiddleware

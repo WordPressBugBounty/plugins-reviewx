@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Form;
+namespace ReviewX\Form;
 
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class ReviewFormHelper
 {
     protected $cptHelper;
@@ -16,8 +16,8 @@ class ReviewFormHelper
         $builder_status_data = $this->builderStatusData();
         switch ($builder_status_data['builder_name']) {
             case 'elementor':
-                global $builderElementorSetting;
-                return !empty($builderElementorSetting) ? \json_encode($builderElementorSetting, \JSON_UNESCAPED_UNICODE) : $this->rvxDefaultReviewFormLevelData();
+                global $reviewx_builderElementorSetting;
+                return !empty($reviewx_builderElementorSetting) ? \json_encode($reviewx_builderElementorSetting, \JSON_UNESCAPED_UNICODE) : $this->rvxDefaultReviewFormLevelData();
             default:
                 return $this->rvxDefaultReviewFormLevelData();
         }
@@ -49,7 +49,7 @@ class ReviewFormHelper
         if (!is_singular($enabled_post_types)) {
             ?>
             <style>
-                #rvx-storefront-widget {
+                #reviewx-storefront-widget {
                     display: none;
                 }
             </style>

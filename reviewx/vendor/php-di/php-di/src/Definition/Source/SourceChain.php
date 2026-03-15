@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\ExtendsPreviousDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\ExtendsPreviousDefinition;
 /**
  * Manages a chain of other definition sources.
  *

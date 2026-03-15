@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\CPT\Shared;
+namespace ReviewX\CPT\Shared;
 
 \defined('ABSPATH') || exit;
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 /**
  * Blocks editing of comments/reviews for post types that are managed by ReviewX.
  * Uses wp_die() to prevent the edit form from loading entirely — the WordPress-standard approach.

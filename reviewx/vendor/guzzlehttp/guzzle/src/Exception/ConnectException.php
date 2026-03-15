@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Exception;
+namespace ReviewX\GuzzleHttp\Exception;
 
-use Rvx\Psr\Http\Client\NetworkExceptionInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Client\NetworkExceptionInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
 /**
  * Exception thrown when a connection cannot be established.
  *

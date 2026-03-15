@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+            "ReviewX\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
         },
         "files": [
             "bootstrap.php"

@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Handlers\Customize;
+namespace ReviewX\Handlers\Customize;
 
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\View;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Facades\View;
 class WCUserDashboardAddReview
 {
     /**
-     * Renders the RVX review form on the WooCommerce user dashboard.
+     * Renders the REVIEWX review form on the WooCommerce user dashboard.
      *
      * This outputs the review form view for the WooCommerce user dashboard.
      *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\Routing;
+namespace ReviewX\WPDrill\Routing;
 
 class Group
 {

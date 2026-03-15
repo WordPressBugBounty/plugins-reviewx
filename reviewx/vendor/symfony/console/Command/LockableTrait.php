@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Command;
+namespace ReviewX\Symfony\Component\Console\Command;
 
-use Rvx\Symfony\Component\Console\Exception\LogicException;
-use Rvx\Symfony\Component\Lock\LockFactory;
-use Rvx\Symfony\Component\Lock\LockInterface;
-use Rvx\Symfony\Component\Lock\Store\FlockStore;
-use Rvx\Symfony\Component\Lock\Store\SemaphoreStore;
+use ReviewX\Symfony\Component\Console\Exception\LogicException;
+use ReviewX\Symfony\Component\Lock\LockFactory;
+use ReviewX\Symfony\Component\Lock\LockInterface;
+use ReviewX\Symfony\Component\Lock\Store\FlockStore;
+use ReviewX\Symfony\Component\Lock\Store\SemaphoreStore;
 /**
  * Basic lock feature for commands.
  *

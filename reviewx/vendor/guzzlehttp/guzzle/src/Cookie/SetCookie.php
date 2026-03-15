@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Cookie;
+namespace ReviewX\GuzzleHttp\Cookie;
 
 /**
  * Set-Cookie object

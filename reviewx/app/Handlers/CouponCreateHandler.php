@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Contracts\InvokableContract;
 class CouponCreateHandler implements InvokableContract
 {
     public function __invoke($coupon)

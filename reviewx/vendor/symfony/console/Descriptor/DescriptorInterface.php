@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Descriptor;
+namespace ReviewX\Symfony\Component\Console\Descriptor;
 
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Descriptor interface.
  *

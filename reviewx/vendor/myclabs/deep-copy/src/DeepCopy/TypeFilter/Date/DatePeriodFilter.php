@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\DeepCopy\TypeFilter\Date;
+namespace ReviewX\DeepCopy\TypeFilter\Date;
 
 use DatePeriod;
-use Rvx\DeepCopy\TypeFilter\TypeFilter;
+use ReviewX\DeepCopy\TypeFilter\TypeFilter;
 /**
  * @final
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\TypeMatcher;
+namespace ReviewX\DeepCopy\TypeMatcher;
 
 class TypeMatcher
 {

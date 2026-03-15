@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI;
+namespace ReviewX\DI;
 
-use Rvx\DI\Compiler\Compiler;
-use Rvx\DI\Definition\Source\AnnotationBasedAutowiring;
-use Rvx\DI\Definition\Source\DefinitionArray;
-use Rvx\DI\Definition\Source\DefinitionFile;
-use Rvx\DI\Definition\Source\DefinitionSource;
-use Rvx\DI\Definition\Source\NoAutowiring;
-use Rvx\DI\Definition\Source\ReflectionBasedAutowiring;
-use Rvx\DI\Definition\Source\SourceCache;
-use Rvx\DI\Definition\Source\SourceChain;
-use Rvx\DI\Proxy\ProxyFactory;
+use ReviewX\DI\Compiler\Compiler;
+use ReviewX\DI\Definition\Source\AnnotationBasedAutowiring;
+use ReviewX\DI\Definition\Source\DefinitionArray;
+use ReviewX\DI\Definition\Source\DefinitionFile;
+use ReviewX\DI\Definition\Source\DefinitionSource;
+use ReviewX\DI\Definition\Source\NoAutowiring;
+use ReviewX\DI\Definition\Source\ReflectionBasedAutowiring;
+use ReviewX\DI\Definition\Source\SourceCache;
+use ReviewX\DI\Definition\Source\SourceChain;
+use ReviewX\DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\Psr\Container\ContainerInterface;
 /**
  * Helper to create and configure a Container.
  *

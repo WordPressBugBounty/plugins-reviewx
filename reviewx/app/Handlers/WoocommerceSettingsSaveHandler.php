@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Services\SettingService;
-use Rvx\Utilities\Helper;
+use ReviewX\Services\SettingService;
+use ReviewX\Utilities\Helper;
 use Throwable;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Response;
 class WoocommerceSettingsSaveHandler
 {
     public function wooProductSaveHandler()

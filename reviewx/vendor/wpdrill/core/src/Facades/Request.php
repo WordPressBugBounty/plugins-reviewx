@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\Facade;
-use Rvx\Psr\Http\Message\ServerRequestInterface;
+use ReviewX\WPDrill\Facade;
+use ReviewX\Psr\Http\Message\ServerRequestInterface;
 /**
  * @method static array getServerParams()
  * @method static array getAttributes()

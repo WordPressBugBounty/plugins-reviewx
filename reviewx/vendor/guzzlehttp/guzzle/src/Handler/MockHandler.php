@@ -1,16 +1,16 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\GuzzleHttp\Exception\RequestException;
-use Rvx\GuzzleHttp\HandlerStack;
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\GuzzleHttp\TransferStats;
-use Rvx\GuzzleHttp\Utils;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
+use ReviewX\GuzzleHttp\Exception\RequestException;
+use ReviewX\GuzzleHttp\HandlerStack;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\GuzzleHttp\TransferStats;
+use ReviewX\GuzzleHttp\Utils;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
 /**
  * Handler that returns responses or throw exceptions from a queue.
  *

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Apiz\Constants;
+namespace ReviewX\Apiz\Constants;
 
 interface MimeType
 {

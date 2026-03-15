@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\DB\QueryBuilder;
+namespace ReviewX\WPDrill\DB\QueryBuilder;
 
-use Rvx\WPDrill\DB\Connection;
-use Rvx\WPDrill\DB\Exception;
+use ReviewX\WPDrill\DB\Connection;
+use ReviewX\WPDrill\DB\Exception;
 class QueryBuilderHandler
 {
     /**
@@ -34,6 +34,14 @@ class QueryBuilderHandler
      * @var \WPDrill\DB\QueryBuilder\Adapters\BaseAdapter
      */
     protected $adapterInstance;
+    /**
+     * @var string
+     */
+    protected $adapter;
+    /**
+     * @var array
+     */
+    protected $adapterConfig;
     /**
      * The PDO fetch parameters to use
      *
@@ -107,7 +115,7 @@ class QueryBuilderHandler
      */
     public function query($sql, $bindings = array())
     {
-        $this->dbStatement = $this->container->build('Rvx\\WPDrill\\DB\\QueryBuilder\\QueryObject', array($sql, $bindings))->getRawSql();
+        $this->dbStatement = $this->container->build('ReviewX\\WPDrill\\DB\\QueryBuilder\\QueryObject', array($sql, $bindings))->getRawSql();
         return $this;
     }
     /**
@@ -232,7 +240,7 @@ class QueryBuilderHandler
             throw new Exception($type . ' is not a known type.', 2);
         }
         $queryArr = $this->adapterInstance->{$type}($this->statements, $dataToBePassed);
-        return $this->container->build('Rvx\\WPDrill\\DB\\QueryBuilder\\QueryObject', array($queryArr['sql'], $queryArr['bindings']));
+        return $this->container->build('ReviewX\\WPDrill\\DB\\QueryBuilder\\QueryObject', array($queryArr['sql'], $queryArr['bindings']));
     }
     /**
      * @param QueryBuilderHandler $queryBuilder
@@ -679,7 +687,7 @@ class QueryBuilderHandler
         }
         // Build a new JoinBuilder class, keep it by reference so any changes made
         // in the closure should reflect here
-        $joinBuilder = $this->container->build('Rvx\\WPDrill\\DB\\QueryBuilder\\JoinBuilder', array($this->connection));
+        $joinBuilder = $this->container->build('ReviewX\\WPDrill\\DB\\QueryBuilder\\JoinBuilder', array($this->connection));
         $joinBuilder =& $joinBuilder;
         // Call the closure with our new joinBuilder object
         $key($joinBuilder);
@@ -701,7 +709,7 @@ class QueryBuilderHandler
             // Begin the PDO transaction
             $this->db->query('START TRANSACTION');
             // Get the Transaction class
-            $transaction = $this->container->build('Rvx\\WPDrill\\DB\\QueryBuilder\\Transaction', array($this->connection));
+            $transaction = $this->container->build('ReviewX\\WPDrill\\DB\\QueryBuilder\\Transaction', array($this->connection));
             // Call closure
             $callback($transaction);
             // If no errors have been thrown or the transaction wasn't completed within
@@ -763,7 +771,7 @@ class QueryBuilderHandler
      */
     public function raw($value, $bindings = array())
     {
-        return $this->container->build('Rvx\\WPDrill\\DB\\QueryBuilder\\Raw', array($value, $bindings));
+        return $this->container->build('ReviewX\\WPDrill\\DB\\QueryBuilder\\Raw', array($value, $bindings));
     }
     /**
      * Return db instance

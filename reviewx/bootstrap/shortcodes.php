@@ -1,21 +1,19 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 \defined('ABSPATH') || exit;
-use Rvx\WPDrill\Facades\Shortcode;
-use Rvx\WPDrill\Plugin;
+use ReviewX\WPDrill\Facades\Shortcode;
+use ReviewX\WPDrill\Plugin;
 return function (Plugin $plugin) {
-    Shortcode::add('rvx-reviews', \Rvx\Shortcodes\Products\ReviewShowWIthIdsShortcode::class);
-    Shortcode::add('rvx-review-list', \Rvx\Shortcodes\Products\ReviewListShortcode::class);
-    Shortcode::add('rvx-criteria-graph', \Rvx\Shortcodes\Products\ReviewGraphShortcode::class);
-    Shortcode::add('rvx-summary', \Rvx\Shortcodes\Products\ReviewSummaryShortcode::class);
-    Shortcode::add('rvx-stats', \Rvx\Shortcodes\Products\ReviewStatshortcode::class);
-    Shortcode::add('rvx-star-count', \Rvx\Shortcodes\Products\ReviewStarCountShortcode::class);
-    Shortcode::add('rvx-google-review', \Rvx\Shortcodes\GoogleReviewLIst::class);
-    Shortcode::add('rvx-review-form', \Rvx\Shortcodes\Products\ReviewListFormShortcode::class);
-    // main for [rvx-woo-reviews]
-    Shortcode::add('rvx-woo-reviews', \Rvx\Shortcodes\Products\WooReviewsFormShortcode::class);
-    // used [rvx-review-form] into this
-    // Shortcode::add('rvx_user_avatar', \Rvx\Shortcodes\Users\UserAvatarShortcode::class); // future implementation
+    Shortcode::add('rvx-reviews', \ReviewX\Shortcodes\Products\ReviewShowWIthIdsShortcode::class);
+    Shortcode::add('rvx-review-list', \ReviewX\Shortcodes\Products\ReviewListShortcode::class);
+    Shortcode::add('rvx-criteria-graph', \ReviewX\Shortcodes\Products\ReviewGraphShortcode::class);
+    Shortcode::add('rvx-summary', \ReviewX\Shortcodes\Products\ReviewSummaryShortcode::class);
+    Shortcode::add('rvx-stats', \ReviewX\Shortcodes\Products\ReviewStatshortcode::class);
+    Shortcode::add('rvx-star-count', \ReviewX\Shortcodes\Products\ReviewStarCountShortcode::class);
+    Shortcode::add('rvx-google-review', \ReviewX\Shortcodes\GoogleReviewLIst::class);
+    Shortcode::add('rvx-review-form', \ReviewX\Shortcodes\Products\ReviewListFormShortcode::class);
+    Shortcode::add('rvx-woo-reviews', \ReviewX\Shortcodes\Products\WooReviewsFormShortcode::class);
+    // Shortcode::add('rvx_user_avatar', \ReviewX\Shortcodes\Users\UserAvatarShortcode::class); // future implementation
 };

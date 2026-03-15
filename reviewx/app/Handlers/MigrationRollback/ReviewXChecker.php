@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Handlers\MigrationRollback;
+namespace ReviewX\Handlers\MigrationRollback;
 
 class ReviewXChecker
 {

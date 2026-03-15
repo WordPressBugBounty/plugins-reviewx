@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 /**
  * Middleware that retries requests based on the boolean result of
  * invoking the provided "decider" function.

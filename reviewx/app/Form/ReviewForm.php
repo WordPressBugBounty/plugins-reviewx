@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Form;
+namespace ReviewX\Form;
 
-use Rvx\CPT\CptHelper;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Utilities\Auth\Client;
 class ReviewForm
 {
     protected $cptHelper;
@@ -36,8 +36,8 @@ class ReviewForm
                     // Do nothing on WooCommerce front-end user dashboard
                 } else {
                     // Invoke custom handler
-                    if (\class_exists('Rvx\\Handlers\\CommentBoxHandle')) {
-                        (new \Rvx\Handlers\CommentBoxHandle())->__invoke();
+                    if (\class_exists('ReviewX\\Handlers\\CommentBoxHandle')) {
+                        (new \ReviewX\Handlers\CommentBoxHandle())->__invoke();
                     }
                     // Load custom template if it exists
                     $custom_template = \dirname(__FILE__) . '/widget.php';

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Proxy;
+namespace ReviewX\DI\Proxy;
 
-use Rvx\ProxyManager\Configuration;
-use Rvx\ProxyManager\Factory\LazyLoadingValueHolderFactory;
-use Rvx\ProxyManager\FileLocator\FileLocator;
-use Rvx\ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
-use Rvx\ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
-use Rvx\ProxyManager\Proxy\LazyLoadingInterface;
+use ReviewX\ProxyManager\Configuration;
+use ReviewX\ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use ReviewX\ProxyManager\FileLocator\FileLocator;
+use ReviewX\ProxyManager\GeneratorStrategy\EvaluatingGeneratorStrategy;
+use ReviewX\ProxyManager\GeneratorStrategy\FileWriterGeneratorStrategy;
+use ReviewX\ProxyManager\Proxy\LazyLoadingInterface;
 /**
  * Creates proxy classes.
  *

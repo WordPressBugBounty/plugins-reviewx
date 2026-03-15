@@ -1,20 +1,20 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
 use Exception;
-use Rvx\Api\DataSyncApi;
-use Rvx\Api\WebhookRequestApi;
-use Rvx\Handlers\DataSyncHandler;
-use Rvx\Services\Service;
-use Rvx\Services\OrderService;
-use Rvx\Services\OrderItemSyncService;
-use Rvx\Services\UserSyncService;
-use Rvx\Services\ProductSyncService;
-use Rvx\Services\ReviewSyncService;
-// use Rvx\Services\CategorySyncService;
-use Rvx\Utilities\Helper;
+use ReviewX\Api\DataSyncApi;
+use ReviewX\Api\WebhookRequestApi;
+use ReviewX\Handlers\DataSyncHandler;
+use ReviewX\Services\Service;
+use ReviewX\Services\OrderService;
+use ReviewX\Services\OrderItemSyncService;
+use ReviewX\Services\UserSyncService;
+use ReviewX\Services\ProductSyncService;
+use ReviewX\Services\ReviewSyncService;
+// use ReviewX\Services\CategorySyncService;
+use ReviewX\Utilities\Helper;
 class DataSyncService extends Service
 {
     protected DataSyncHandler $dataSyncHandler;

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Helper;
+namespace ReviewX\Symfony\Component\Console\Helper;
 
-use Rvx\Symfony\Component\Console\Formatter\OutputFormatter;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\Console\Question\ChoiceQuestion;
-use Rvx\Symfony\Component\Console\Question\ConfirmationQuestion;
-use Rvx\Symfony\Component\Console\Question\Question;
-use Rvx\Symfony\Component\Console\Style\SymfonyStyle;
+use ReviewX\Symfony\Component\Console\Formatter\OutputFormatter;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Question\ChoiceQuestion;
+use ReviewX\Symfony\Component\Console\Question\ConfirmationQuestion;
+use ReviewX\Symfony\Component\Console\Question\Question;
+use ReviewX\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Symfony Style Guide compliant question helper.
  *

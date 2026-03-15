@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Handlers\Product;
+namespace ReviewX\Handlers\Product;
 
-use Rvx\Api\ProductApi;
-use Rvx\CPT\CptHelper;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\ProductApi;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
 class ProductUntrashHandler
 {
     protected $cptHelper;

@@ -9,9 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node\Expression;
+namespace ReviewX\Twig\Node\Expression;
 
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Node\Node;
 /**
  * Abstract class for all nodes that represents an expression.
  *

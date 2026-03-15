@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI;
+namespace ReviewX\DI;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\FactoryDefinition;
-use Rvx\DI\Definition\Helper\DefinitionHelper;
-use Rvx\DI\Definition\InstanceDefinition;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\Resolver\DefinitionResolver;
-use Rvx\DI\Definition\Resolver\ResolverDispatcher;
-use Rvx\DI\Definition\Source\DefinitionArray;
-use Rvx\DI\Definition\Source\MutableDefinitionSource;
-use Rvx\DI\Definition\Source\ReflectionBasedAutowiring;
-use Rvx\DI\Definition\Source\SourceChain;
-use Rvx\DI\Definition\ValueDefinition;
-use Rvx\DI\Invoker\DefinitionParameterResolver;
-use Rvx\DI\Proxy\ProxyFactory;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\FactoryDefinition;
+use ReviewX\DI\Definition\Helper\DefinitionHelper;
+use ReviewX\DI\Definition\InstanceDefinition;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\Resolver\DefinitionResolver;
+use ReviewX\DI\Definition\Resolver\ResolverDispatcher;
+use ReviewX\DI\Definition\Source\DefinitionArray;
+use ReviewX\DI\Definition\Source\MutableDefinitionSource;
+use ReviewX\DI\Definition\Source\ReflectionBasedAutowiring;
+use ReviewX\DI\Definition\Source\SourceChain;
+use ReviewX\DI\Definition\ValueDefinition;
+use ReviewX\DI\Invoker\DefinitionParameterResolver;
+use ReviewX\DI\Proxy\ProxyFactory;
 use InvalidArgumentException;
-use Rvx\Invoker\Invoker;
-use Rvx\Invoker\InvokerInterface;
-use Rvx\Invoker\ParameterResolver\AssociativeArrayResolver;
-use Rvx\Invoker\ParameterResolver\Container\TypeHintContainerResolver;
-use Rvx\Invoker\ParameterResolver\DefaultValueResolver;
-use Rvx\Invoker\ParameterResolver\NumericArrayResolver;
-use Rvx\Invoker\ParameterResolver\ResolverChain;
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\Invoker\Invoker;
+use ReviewX\Invoker\InvokerInterface;
+use ReviewX\Invoker\ParameterResolver\AssociativeArrayResolver;
+use ReviewX\Invoker\ParameterResolver\Container\TypeHintContainerResolver;
+use ReviewX\Invoker\ParameterResolver\DefaultValueResolver;
+use ReviewX\Invoker\ParameterResolver\NumericArrayResolver;
+use ReviewX\Invoker\ParameterResolver\ResolverChain;
+use ReviewX\Psr\Container\ContainerInterface;
 /**
  * Dependency Injection Container.
  *

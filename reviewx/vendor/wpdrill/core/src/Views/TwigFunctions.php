@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Views;
+namespace ReviewX\WPDrill\Views;
 
-use Rvx\Twig\Extension\AbstractExtension;
-use Rvx\WPDrill\Facades\Config;
+use ReviewX\Twig\Extension\AbstractExtension;
+use ReviewX\WPDrill\Facades\Config;
 class TwigFunctions extends AbstractExtension
 {
     public function getFunctions()
@@ -11,7 +11,7 @@ class TwigFunctions extends AbstractExtension
         $functions = Config::get('view.functions', []);
         $twigFuncs = [];
         foreach ($functions as $name => $function) {
-            $twigFuncs[] = new \Rvx\Twig\TwigFunction($name, $function);
+            $twigFuncs[] = new \ReviewX\Twig\TwigFunction($name, $function);
         }
         return $twigFuncs;
     }

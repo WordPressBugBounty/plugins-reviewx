@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7;
+namespace ReviewX\Nyholm\Psr7;
 
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>

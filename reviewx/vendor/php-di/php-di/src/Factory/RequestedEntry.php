@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Factory;
+namespace ReviewX\DI\Factory;
 
 /**
  * Represents the container entry that was requested.

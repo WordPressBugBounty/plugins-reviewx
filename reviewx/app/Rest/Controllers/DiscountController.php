@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\Services\DiscountService;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
+use ReviewX\Services\DiscountService;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
 use Throwable;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Response;
 class DiscountController
 {
     protected $couponService;

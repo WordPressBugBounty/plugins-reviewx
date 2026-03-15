@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Models;
+namespace ReviewX\Models;
 
 \defined("ABSPATH") || exit;
-use Rvx\WPDrill\Models\Model;
+use ReviewX\WPDrill\Models\Model;
 class Category extends Model
 {
     protected static $table = 'terms';

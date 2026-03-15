@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\DeepCopy\Matcher;
+namespace ReviewX\DeepCopy\Matcher;
 
-use Rvx\DeepCopy\Reflection\ReflectionHelper;
+use ReviewX\DeepCopy\Reflection\ReflectionHelper;
 use ReflectionException;
 /**
  * Matches a property by its type.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\CPT;
+namespace ReviewX\CPT;
 
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class CptCommentsLinkMeta
 {
     protected $cptHelper;
@@ -25,7 +25,7 @@ class CptCommentsLinkMeta
             return $count;
             // No changes
         }
-        $reviewCount = (new \Rvx\CPT\CptReviewsCount())->newCount($post_id);
+        $reviewCount = (new \ReviewX\CPT\CptReviewsCount())->newCount($post_id);
         if (!empty($reviewCount[0]) && $reviewCount[0] > 0) {
             // Return the filtered review count without replies
             return $reviewCount[0];

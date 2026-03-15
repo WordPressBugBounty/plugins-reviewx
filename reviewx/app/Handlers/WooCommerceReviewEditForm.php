@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Services\ReviewService;
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Services\CacheServices;
+use ReviewX\Services\ReviewService;
+use ReviewX\Api\ReviewsApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Services\CacheServices;
 class WooCommerceReviewEditForm
 {
     protected $cacheServices;

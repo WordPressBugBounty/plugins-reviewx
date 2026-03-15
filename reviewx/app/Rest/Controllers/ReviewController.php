@@ -1,15 +1,15 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Exception;
 use Throwable;
-use Rvx\Services\ReviewService;
-use Rvx\Utilities\Helper;
-use Rvx\Services\CacheServices;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Services\ReviewService;
+use ReviewX\Utilities\Helper;
+use ReviewX\Services\CacheServices;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class ReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;

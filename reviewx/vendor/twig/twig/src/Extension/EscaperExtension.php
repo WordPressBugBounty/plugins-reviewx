@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\FileExtensionEscapingStrategy;
-use Rvx\Twig\NodeVisitor\EscaperNodeVisitor;
-use Rvx\Twig\TokenParser\AutoEscapeTokenParser;
-use Rvx\Twig\TwigFilter;
+use ReviewX\Twig\FileExtensionEscapingStrategy;
+use ReviewX\Twig\NodeVisitor\EscaperNodeVisitor;
+use ReviewX\Twig\TokenParser\AutoEscapeTokenParser;
+use ReviewX\Twig\TwigFilter;
 final class EscaperExtension extends AbstractExtension
 {
     private $defaultStrategy;
@@ -113,14 +113,14 @@ final class EscaperExtension extends AbstractExtension
         }
     }
 }
-namespace Rvx;
+namespace ReviewX;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\Error\RuntimeError;
-use Rvx\Twig\Extension\EscaperExtension;
-use Rvx\Twig\Markup;
-use Rvx\Twig\Node\Expression\ConstantExpression;
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Error\RuntimeError;
+use ReviewX\Twig\Extension\EscaperExtension;
+use ReviewX\Twig\Markup;
+use ReviewX\Twig\Node\Expression\ConstantExpression;
+use ReviewX\Twig\Node\Node;
 /**
  * Marks a variable as being safe.
  *

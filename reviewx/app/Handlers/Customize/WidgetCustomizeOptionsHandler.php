@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Handlers\Customize;
+namespace ReviewX\Handlers\Customize;
 
 \defined('ABSPATH') || exit;
 use WP_Customize_Color_Control;
@@ -9,37 +9,37 @@ class WidgetCustomizeOptionsHandler
     public function __invoke($wp_customize) : void
     {
         //if (!did_action('elementor/loaded')) {
-        $this->rvx_customizer_options_data($wp_customize);
+        $this->reviewx_customizer_options_data($wp_customize);
         //}
     }
-    public static function rvx_customize_preview_js() : void
+    public static function reviewx_customize_preview_js() : void
     {
         \add_action('customize_preview_init', function () {
-            wp_enqueue_script('reviewx-customize', RVX_CUSTOMIZER_URL . 'assets/js/rvx-customize.js', array('jquery', 'customize-preview'), RVX_VERSION, \true);
+            wp_enqueue_script('reviewx-customize', REVIEWX_CUSTOMIZER_URL . 'assets/js/reviewx-customize.js', array('jquery', 'customize-preview'), REVIEWX_VERSION, \true);
         });
     }
-    public function rvx_customizer_options_data($wp_customize) : void
+    public function reviewx_customizer_options_data($wp_customize) : void
     {
         // ReviewX Customize options - live preview js
-        $this->rvx_customize_preview_js();
+        $this->reviewx_customize_preview_js();
         // ReviewX Customize options Data
-        $wp_customize->add_panel('reviewx_form_input', ['title' => \__('ReviewX', 'reviewx'), 'description' => \__('Customize ReviewX Settings', 'reviewx'), 'priority' => 160]);
+        $wp_customize->add_panel('rvx_form_input', ['title' => \__('ReviewX', 'reviewx'), 'description' => \__('Customize ReviewX Settings', 'reviewx'), 'priority' => 160]);
         // Add Section to the Panel [ReviewX -> Reviews Overview Section]
         /** 
         $wp_customize->add_section('rvx_general_settings_section', array(
             'title' => __('General Settings', 'reviewx'),
-            'panel' => 'reviewx_form_input',
+            'panel' => 'rvx_form_input',
             'priority' => 10,
         ));
         */
         // Add Section to the Panel [ReviewX -> Reviews Overview Section]
-        $wp_customize->add_section('rvx_reviews_overview_section', array('title' => \__('Reviews Overview', 'reviewx'), 'panel' => 'reviewx_form_input', 'priority' => 10));
+        $wp_customize->add_section('rvx_reviews_overview_section', array('title' => \__('Reviews Overview', 'reviewx'), 'panel' => 'rvx_form_input', 'priority' => 10));
         // Add Section to the Panel [ReviewX -> Filter Buttons Section]
-        $wp_customize->add_section('rvx_filter_section', array('title' => \__('Filter Buttons', 'reviewx'), 'panel' => 'reviewx_form_input', 'priority' => 10));
+        $wp_customize->add_section('rvx_filter_section', array('title' => \__('Filter Buttons', 'reviewx'), 'panel' => 'rvx_form_input', 'priority' => 10));
         // Add Section to the Panel [ReviewX -> Review Items Section]
-        $wp_customize->add_section('rvx_review_items_section', array('title' => \__('Review Items', 'reviewx'), 'panel' => 'reviewx_form_input', 'priority' => 10));
+        $wp_customize->add_section('rvx_review_items_section', array('title' => \__('Review Items', 'reviewx'), 'panel' => 'rvx_form_input', 'priority' => 10));
         // Add Section to the Panel [ReviewX -> Review Form Section]
-        $wp_customize->add_section('rvx_form_section', array('title' => \__('Review Form', 'reviewx'), 'panel' => 'reviewx_form_input', 'priority' => 10));
+        $wp_customize->add_section('rvx_form_section', array('title' => \__('Review Form', 'reviewx'), 'panel' => 'rvx_form_input', 'priority' => 10));
         /**
          * ReviewX - General Settings
          */

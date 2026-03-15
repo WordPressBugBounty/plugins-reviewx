@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\WPDrill;
+namespace ReviewX\WPDrill;
 
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Response;
 class Helpers
 {
     public static function rest(array $data) : Response

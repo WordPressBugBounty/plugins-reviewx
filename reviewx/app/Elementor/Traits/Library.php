@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Elementor\Traits;
+namespace ReviewX\Elementor\Traits;
 
 if (!\defined('ABSPATH')) {
     exit;
@@ -8,7 +8,7 @@ if (!\defined('ABSPATH')) {
 // Exit if accessed directly
 /**
  * Trait Library
- * @package Rvx\Elementor\Traits
+ * @package ReviewX\Elementor\Traits
  */
 trait Library
 {

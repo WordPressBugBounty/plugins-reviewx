@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\DB;
+namespace ReviewX\WPDrill\DB;
 
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
-use Rvx\WPDrill\DB\QueryBuilder\Raw;
+use ReviewX\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
+use ReviewX\WPDrill\DB\QueryBuilder\Raw;
 class EventHandler
 {
     /**

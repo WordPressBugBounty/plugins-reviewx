@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Services\OrderService;
+use ReviewX\Services\OrderService;
 class OrderUpdateHandler
 {
     protected $orderService;

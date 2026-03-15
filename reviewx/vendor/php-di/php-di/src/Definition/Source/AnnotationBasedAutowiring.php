@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Annotation\Inject;
-use Rvx\DI\Annotation\Injectable;
-use Rvx\DI\Definition\Exception\InvalidAnnotation;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\ObjectDefinition\MethodInjection;
-use Rvx\DI\Definition\ObjectDefinition\PropertyInjection;
-use Rvx\DI\Definition\Reference;
-use Rvx\Doctrine\Common\Annotations\AnnotationRegistry;
-use Rvx\Doctrine\Common\Annotations\Reader;
-use Rvx\Doctrine\Common\Annotations\SimpleAnnotationReader;
+use ReviewX\DI\Annotation\Inject;
+use ReviewX\DI\Annotation\Injectable;
+use ReviewX\DI\Definition\Exception\InvalidAnnotation;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\ObjectDefinition\MethodInjection;
+use ReviewX\DI\Definition\ObjectDefinition\PropertyInjection;
+use ReviewX\DI\Definition\Reference;
+use ReviewX\Doctrine\Common\Annotations\AnnotationRegistry;
+use ReviewX\Doctrine\Common\Annotations\Reader;
+use ReviewX\Doctrine\Common\Annotations\SimpleAnnotationReader;
 use InvalidArgumentException;
-use Rvx\PhpDocReader\PhpDocReader;
+use ReviewX\PhpDocReader\PhpDocReader;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -103,7 +103,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     private function readProperty(ReflectionProperty $property, ObjectDefinition $definition, $classname = null)
     {
         // Look for @Inject annotation
-        $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'Rvx\\DI\\Annotation\\Inject');
+        $annotation = $this->getAnnotationReader()->getPropertyAnnotation($property, 'ReviewX\\DI\\Annotation\\Inject');
         if (!$annotation instanceof Inject) {
             return;
         }
@@ -146,7 +146,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     {
         // Look for @Inject annotation
         try {
-            $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'Rvx\\DI\\Annotation\\Inject');
+            $annotation = $this->getAnnotationReader()->getMethodAnnotation($method, 'ReviewX\\DI\\Annotation\\Inject');
         } catch (InvalidAnnotation $e) {
             throw new InvalidAnnotation(\sprintf('@Inject annotation on %s::%s is malformed. %s', $method->getDeclaringClass()->getName(), $method->getName(), $e->getMessage()), 0, $e);
         }
@@ -201,7 +201,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
         if ($this->annotationReader === null) {
             AnnotationRegistry::registerLoader('class_exists');
             $this->annotationReader = new SimpleAnnotationReader();
-            $this->annotationReader->addNamespace('Rvx\\DI\\Annotation');
+            $this->annotationReader->addNamespace('ReviewX\\DI\\Annotation');
         }
         return $this->annotationReader;
     }
@@ -219,7 +219,7 @@ class AnnotationBasedAutowiring implements DefinitionSource, Autowiring
     {
         try {
             /** @var Injectable|null $annotation */
-            $annotation = $this->getAnnotationReader()->getClassAnnotation($class, 'Rvx\\DI\\Annotation\\Injectable');
+            $annotation = $this->getAnnotationReader()->getClassAnnotation($class, 'ReviewX\\DI\\Annotation\\Injectable');
         } catch (UnexpectedValueException $e) {
             throw new InvalidAnnotation(\sprintf('Error while reading @Injectable on %s: %s', $class->getName(), $e->getMessage()), 0, $e);
         }

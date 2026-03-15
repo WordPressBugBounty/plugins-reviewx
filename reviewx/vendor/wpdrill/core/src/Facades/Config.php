@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\Facade;
-use Rvx\WPDrill\ConfigManager;
-use Rvx\Noodlehaus\ConfigInterface;
+use ReviewX\WPDrill\Facade;
+use ReviewX\WPDrill\ConfigManager;
+use ReviewX\Noodlehaus\ConfigInterface;
 /**
  * @method static mixed get(string $key, mixed $default = null)
  * @method static void set(string $key, mixed $value)

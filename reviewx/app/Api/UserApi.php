@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
-class UserApi extends \Rvx\Api\BaseApi
+use ReviewX\Apiz\Http\Response;
+class UserApi extends \ReviewX\Api\BaseApi
 {
     /**
      * @return Response

@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Elementor\Classes;
+namespace ReviewX\Elementor\Classes;
 
 \defined('ABSPATH') || exit;
-use Rvx\Elementor\Traits\Addons;
-use Rvx\Elementor\Traits\Library;
+use ReviewX\Elementor\Traits\Addons;
+use ReviewX\Elementor\Traits\Library;
 /**
  * Class Starter
- * @package Rvx\Elementor\Classes
+ * @package ReviewX\Elementor\Classes
  */
 class Starter
 {
@@ -40,12 +40,12 @@ class Starter
     private function __construct()
     {
         // elements classmap
-        $this->registered_elements = ['rxcall-to-review' => ['class' => 'Rvx\\Elementor\\Elements\\Data_Tabs'], 'rxcall-to-review-widget' => ['class' => 'Rvx\\Elementor\\Elements\\Review_Widget']];
+        $this->registered_elements = ['rxcall-to-review' => ['class' => 'ReviewX\\Elementor\\Elements\\Data_Tabs'], 'rxcall-to-review-widget' => ['class' => 'ReviewX\\Elementor\\Elements\\Review_Widget']];
         // extensions classmap
         //        $this->registered_extensions = apply_filters('rx/registered_extensions', Helper::arrayGet(config('settings'), 'rxextensions'));
         //
         //        // additional settings
-        $this->additional_settings = apply_filters('rx/additional_settings', ['quick_tools' => \true]);
+        $this->additional_settings = apply_filters('reviewx/additional_settings', ['quick_tools' => \true]);
         // register hooks
         $this->register_hooks();
     }

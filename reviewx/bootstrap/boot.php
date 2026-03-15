@@ -1,16 +1,16 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 \defined('ABSPATH') || exit;
-use Rvx\WPDrill\Plugin;
+use ReviewX\WPDrill\Plugin;
 return function (string $file) {
     $plugin = new Plugin($file);
-    \Rvx\WPDrill\Facade::setFacadeApplication($plugin);
-    \Rvx\WPDrill\Models\Model::setFacadeApplication($plugin);
+    \ReviewX\WPDrill\Facade::setFacadeApplication($plugin);
+    \ReviewX\WPDrill\Models\Model::setFacadeApplication($plugin);
     $fn = null;
     if (\php_sapi_name() !== 'cli') {
-        $fn = function (\Rvx\WPDrill\Routing\RouteManager $route) {
+        $fn = function (\ReviewX\WPDrill\Routing\RouteManager $route) {
             $route->loadRoutes();
         };
     }

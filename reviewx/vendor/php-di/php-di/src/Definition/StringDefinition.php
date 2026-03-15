@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
-use Rvx\DI\DependencyException;
-use Rvx\Psr\Container\ContainerInterface;
-use Rvx\Psr\Container\NotFoundExceptionInterface;
+use ReviewX\DI\DependencyException;
+use ReviewX\Psr\Container\ContainerInterface;
+use ReviewX\Psr\Container\NotFoundExceptionInterface;
 /**
  * Definition of a string composed of other strings.
  *

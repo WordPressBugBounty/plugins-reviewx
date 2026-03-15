@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\String\Slugger;
+namespace ReviewX\Symfony\Component\String\Slugger;
 
-use Rvx\Symfony\Component\String\AbstractUnicodeString;
-use Rvx\Symfony\Component\String\UnicodeString;
-use Rvx\Symfony\Contracts\Translation\LocaleAwareInterface;
+use ReviewX\Symfony\Component\String\AbstractUnicodeString;
+use ReviewX\Symfony\Component\String\UnicodeString;
+use ReviewX\Symfony\Contracts\Translation\LocaleAwareInterface;
 if (!\interface_exists(LocaleAwareInterface::class)) {
     throw new \LogicException('You cannot use the "Symfony\\Component\\String\\Slugger\\AsciiSlugger" as the "symfony/translation-contracts" package is not installed. Try running "composer require symfony/translation-contracts".');
 }

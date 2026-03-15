@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Apiz\Http\Response;
-use Rvx\Api\GoogleReviewApi;
-class GoogleReviewService extends \Rvx\Services\Service
+use ReviewX\Apiz\Http\Response;
+use ReviewX\Api\GoogleReviewApi;
+class GoogleReviewService extends \ReviewX\Services\Service
 {
     /**
      * @return Response
@@ -23,7 +23,7 @@ class GoogleReviewService extends \Rvx\Services\Service
     }
     public function googleRecaptchaVerify($data)
     {
-        $secret = (new \Rvx\Services\SettingService())->getReviewSettings()['reviews']['recaptcha']['secret_key'];
+        $secret = (new \ReviewX\Services\SettingService())->getReviewSettings()['reviews']['recaptcha']['secret_key'];
         $token = $data['token'];
         $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . \urlencode($secret) . '&response=' . \urlencode($token);
         $response = wp_remote_get($recaptcha_url);

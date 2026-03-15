@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\String;
+namespace ReviewX\Symfony\Component\String;
 
-use Rvx\Symfony\Component\String\Exception\ExceptionInterface;
-use Rvx\Symfony\Component\String\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\String\Exception\RuntimeException;
+use ReviewX\Symfony\Component\String\Exception\ExceptionInterface;
+use ReviewX\Symfony\Component\String\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract characters.
  *

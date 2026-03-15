@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Firebase\JWT;
+namespace ReviewX\Firebase\JWT;
 
 class SignatureInvalidException extends \UnexpectedValueException
 {

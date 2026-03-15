@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\CommandLoader;
+namespace ReviewX\Symfony\Component\Console\CommandLoader;
 
-use Rvx\Psr\Container\ContainerInterface;
-use Rvx\Symfony\Component\Console\Exception\CommandNotFoundException;
+use ReviewX\Psr\Container\ContainerInterface;
+use ReviewX\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * Loads commands from a PSR-11 container.
  *

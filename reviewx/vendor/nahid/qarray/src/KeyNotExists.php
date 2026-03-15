@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Nahid\QArray;
+namespace ReviewX\Nahid\QArray;
 
 /**
  * This class represents a query result where a given

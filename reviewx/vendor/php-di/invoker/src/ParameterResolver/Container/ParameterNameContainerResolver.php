@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker\ParameterResolver\Container;
+namespace ReviewX\Invoker\ParameterResolver\Container;
 
-use Rvx\Invoker\ParameterResolver\ParameterResolver;
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\Invoker\ParameterResolver\ParameterResolver;
+use ReviewX\Psr\Container\ContainerInterface;
 use ReflectionFunctionAbstract;
 /**
  * Inject entries from a DI container using the parameter names.

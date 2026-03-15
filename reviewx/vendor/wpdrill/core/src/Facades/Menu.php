@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\Facade;
-use Rvx\WPDrill\Menus\Menu as MenuOption;
+use ReviewX\WPDrill\Facade;
+use ReviewX\WPDrill\Menus\Menu as MenuOption;
 /**
  * @method static MenuOption add(string $pageTitle, $handler, string $capability)
  * @method static void remove(string $slug, ?string $submenuSlug = null)

@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\Services\UserServices;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Services\UserServices;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class UserController implements InvokableContract
 {
     protected UserServices $userServices;

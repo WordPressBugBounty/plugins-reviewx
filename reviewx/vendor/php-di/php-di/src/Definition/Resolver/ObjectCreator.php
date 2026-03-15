@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Resolver;
+namespace ReviewX\DI\Definition\Resolver;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\ObjectDefinition\PropertyInjection;
-use Rvx\DI\DependencyException;
-use Rvx\DI\Proxy\ProxyFactory;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\ObjectDefinition\PropertyInjection;
+use ReviewX\DI\DependencyException;
+use ReviewX\DI\Proxy\ProxyFactory;
 use Exception;
-use Rvx\ProxyManager\Proxy\LazyLoadingInterface;
-use Rvx\Psr\Container\NotFoundExceptionInterface;
+use ReviewX\ProxyManager\Proxy\LazyLoadingInterface;
+use ReviewX\Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionProperty;
 /**

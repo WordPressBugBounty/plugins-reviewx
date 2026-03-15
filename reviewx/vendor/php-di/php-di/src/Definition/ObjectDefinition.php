@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
-use Rvx\DI\Definition\Dumper\ObjectDefinitionDumper;
-use Rvx\DI\Definition\ObjectDefinition\MethodInjection;
-use Rvx\DI\Definition\ObjectDefinition\PropertyInjection;
-use Rvx\DI\Definition\Source\DefinitionArray;
+use ReviewX\DI\Definition\Dumper\ObjectDefinitionDumper;
+use ReviewX\DI\Definition\ObjectDefinition\MethodInjection;
+use ReviewX\DI\Definition\ObjectDefinition\PropertyInjection;
+use ReviewX\DI\Definition\Source\DefinitionArray;
 use ReflectionClass;
 /**
  * Defines how an object can be instantiated.

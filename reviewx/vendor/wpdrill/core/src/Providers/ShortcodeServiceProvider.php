@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Providers;
+namespace ReviewX\WPDrill\Providers;
 
-use Rvx\WPDrill\ServiceProvider;
-use Rvx\WPDrill\Shortcodes\ShortcodeManager;
+use ReviewX\WPDrill\ServiceProvider;
+use ReviewX\WPDrill\Shortcodes\ShortcodeManager;
 class ShortcodeServiceProvider extends ServiceProvider
 {
     protected ShortcodeManager $shortcode;

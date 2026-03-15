@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker\Reflection;
+namespace ReviewX\Invoker\Reflection;
 
 use Closure;
-use Rvx\Invoker\Exception\NotCallableException;
+use ReviewX\Invoker\Exception\NotCallableException;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;

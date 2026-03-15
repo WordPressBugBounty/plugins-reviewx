@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Rest\Middleware;
+namespace ReviewX\Rest\Middleware;
 
 \defined("ABSPATH") || exit;
 use Exception;
 use WP_REST_Request;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Firebase\JWT\JWT;
-use Rvx\Firebase\JWT\Key;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Firebase\JWT\JWT;
+use ReviewX\Firebase\JWT\Key;
 class AuthSaasMiddleware
 {
     /**

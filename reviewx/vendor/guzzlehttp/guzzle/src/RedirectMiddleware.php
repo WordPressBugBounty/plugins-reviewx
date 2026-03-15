@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Exception\BadResponseException;
-use Rvx\GuzzleHttp\Exception\TooManyRedirectsException;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Exception\BadResponseException;
+use ReviewX\GuzzleHttp\Exception\TooManyRedirectsException;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * Request redirect middleware.
  *

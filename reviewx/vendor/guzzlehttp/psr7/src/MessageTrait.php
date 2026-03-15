@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\Psr\Http\Message\MessageInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\MessageInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
 /**
  * Trait implementing functionality common to requests and responses.
  */
@@ -22,6 +22,9 @@ trait MessageTrait
     {
         return $this->protocol;
     }
+    /**
+     * @return static
+     */
     public function withProtocolVersion($version) : MessageInterface
     {
         if ($this->protocol === $version) {
@@ -52,6 +55,9 @@ trait MessageTrait
     {
         return \implode(', ', $this->getHeader($header));
     }
+    /**
+     * @return static
+     */
     public function withHeader($header, $value) : MessageInterface
     {
         $this->assertHeader($header);
@@ -65,6 +71,9 @@ trait MessageTrait
         $new->headers[$header] = $value;
         return $new;
     }
+    /**
+     * @return static
+     */
     public function withAddedHeader($header, $value) : MessageInterface
     {
         $this->assertHeader($header);
@@ -80,6 +89,9 @@ trait MessageTrait
         }
         return $new;
     }
+    /**
+     * @return static
+     */
     public function withoutHeader($header) : MessageInterface
     {
         $normalized = \strtolower($header);
@@ -98,6 +110,9 @@ trait MessageTrait
         }
         return $this->stream;
     }
+    /**
+     * @return static
+     */
     public function withBody(StreamInterface $body) : MessageInterface
     {
         if ($body === $this->stream) {

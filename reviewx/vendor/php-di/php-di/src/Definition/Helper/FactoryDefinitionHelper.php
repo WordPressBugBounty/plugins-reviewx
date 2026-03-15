@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Helper;
+namespace ReviewX\DI\Definition\Helper;
 
-use Rvx\DI\Definition\DecoratorDefinition;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\FactoryDefinition;
+use ReviewX\DI\Definition\DecoratorDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\FactoryDefinition;
 /**
  * Helps defining how to create an instance of a class using a factory (callable).
  *

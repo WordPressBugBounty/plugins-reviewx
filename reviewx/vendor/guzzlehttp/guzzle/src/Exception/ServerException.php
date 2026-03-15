@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Exception;
+namespace ReviewX\GuzzleHttp\Exception;
 
 /**
  * Exception when a server error is encountered (5xx codes)

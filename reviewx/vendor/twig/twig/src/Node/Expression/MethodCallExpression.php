@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node\Expression;
+namespace ReviewX\Twig\Node\Expression;
 
-use Rvx\Twig\Compiler;
+use ReviewX\Twig\Compiler;
 class MethodCallExpression extends AbstractExpression
 {
     public function __construct(AbstractExpression $node, string $method, ArrayExpression $arguments, int $lineno)

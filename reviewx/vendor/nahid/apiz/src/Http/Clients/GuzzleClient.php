@@ -1,14 +1,14 @@
 <?php
 
-namespace Rvx\Apiz\Http\Clients;
+namespace ReviewX\Apiz\Http\Clients;
 
-use Rvx\GuzzleHttp\Client;
-use Rvx\GuzzleHttp\Psr7\Request;
-use Rvx\GuzzleHttp\Psr7\Response;
-use Rvx\GuzzleHttp\Psr7\Uri;
-use Rvx\GuzzleHttp\Exception\GuzzleException;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\GuzzleHttp\Client;
+use ReviewX\GuzzleHttp\Psr7\Request;
+use ReviewX\GuzzleHttp\Psr7\Response;
+use ReviewX\GuzzleHttp\Psr7\Uri;
+use ReviewX\GuzzleHttp\Exception\GuzzleException;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 class GuzzleClient extends AbstractClient
 {
     /**

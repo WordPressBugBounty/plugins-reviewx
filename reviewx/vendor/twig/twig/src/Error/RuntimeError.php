@@ -9,7 +9,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Error;
+namespace ReviewX\Twig\Error;
 
 /**
  * Exception thrown when an error occurs at runtime.

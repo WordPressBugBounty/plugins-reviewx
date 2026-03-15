@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Psr\Http\Client;
+namespace ReviewX\Psr\Http\Client;
 
 /**
  * Every HTTP client related exception MUST implement this interface.

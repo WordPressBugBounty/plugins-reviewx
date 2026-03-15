@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\Facade;
-use Rvx\WPDrill\Routing\RouteManager;
-use Rvx\Noodlehaus\ConfigInterface;
+use ReviewX\WPDrill\Facade;
+use ReviewX\WPDrill\Routing\RouteManager;
+use ReviewX\Noodlehaus\ConfigInterface;
 /**
  * @method static mixed get(string $uri, $action)
  * @method static mixed post(string $uri, $action)

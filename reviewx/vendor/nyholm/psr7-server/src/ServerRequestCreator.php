@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7Server;
+namespace ReviewX\Nyholm\Psr7Server;
 
-use Rvx\Psr\Http\Message\ServerRequestFactoryInterface;
-use Rvx\Psr\Http\Message\ServerRequestInterface;
-use Rvx\Psr\Http\Message\StreamFactoryInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Psr\Http\Message\UploadedFileFactoryInterface;
-use Rvx\Psr\Http\Message\UploadedFileInterface;
-use Rvx\Psr\Http\Message\UriFactoryInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\ServerRequestFactoryInterface;
+use ReviewX\Psr\Http\Message\ServerRequestInterface;
+use ReviewX\Psr\Http\Message\StreamFactoryInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\UploadedFileFactoryInterface;
+use ReviewX\Psr\Http\Message\UploadedFileInterface;
+use ReviewX\Psr\Http\Message\UriFactoryInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  * @author Martijn van der Ven <martijn@vanderven.se>

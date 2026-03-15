@@ -28,7 +28,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Symfony\\Polyfill\\Ctype\\": ""
+            "ReviewX\\Symfony\\Polyfill\\Ctype\\": ""
         },
         "files": [
             "bootstrap.php"

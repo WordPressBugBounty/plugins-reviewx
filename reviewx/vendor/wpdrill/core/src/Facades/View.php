@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\Facade;
-use Rvx\WPDrill\Views\ViewManager;
+use ReviewX\WPDrill\Facade;
+use ReviewX\WPDrill\Views\ViewManager;
 /**
  * @method static string render(string $view, array $data = [])
  * @method static void output(string $view, array $data = [])

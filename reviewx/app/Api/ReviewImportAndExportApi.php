@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
+use ReviewX\Apiz\Http\Response;
 use Exception;
-use Rvx\Utilities\Auth\Client;
-class ReviewImportAndExportApi extends \Rvx\Api\BaseApi
+use ReviewX\Utilities\Auth\Client;
+class ReviewImportAndExportApi extends \ReviewX\Api\BaseApi
 {
     /**
      * @param array $data

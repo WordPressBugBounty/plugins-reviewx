@@ -26,7 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Nahid\\QArray\\": "src\/"
+            "ReviewX\\Nahid\\QArray\\": "src\/"
         },
         "files": [
             "helpers\/qarray.php"
@@ -34,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\Nahid\\JsonQ\\Tests\\": "tests\/"
+            "ReviewX\\Nahid\\JsonQ\\Tests\\": "tests\/"
         }
     },
     "minimum-stability": "stable",

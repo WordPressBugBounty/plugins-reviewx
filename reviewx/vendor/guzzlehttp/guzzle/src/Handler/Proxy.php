@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\GuzzleHttp\RequestOptions;
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\GuzzleHttp\RequestOptions;
+use ReviewX\Psr\Http\Message\RequestInterface;
 /**
  * Provides basic proxies for handlers.
  *

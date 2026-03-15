@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Output;
+namespace ReviewX\Symfony\Component\Console\Output;
 
-use Rvx\Symfony\Component\Console\Formatter\OutputFormatter;
-use Rvx\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use ReviewX\Symfony\Component\Console\Formatter\OutputFormatter;
+use ReviewX\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * Base class for output classes.
  *

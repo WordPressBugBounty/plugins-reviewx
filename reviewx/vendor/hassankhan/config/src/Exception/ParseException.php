@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Noodlehaus\Exception;
+namespace ReviewX\Noodlehaus\Exception;
 
-use Rvx\Noodlehaus\ErrorException;
+use ReviewX\Noodlehaus\ErrorException;
 class ParseException extends ErrorException
 {
     public function __construct(array $error)

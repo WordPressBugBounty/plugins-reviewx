@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Builder;
+namespace ReviewX\Builder;
 
 abstract class BaseBuilder
 {

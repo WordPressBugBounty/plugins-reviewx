@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Invoker;
+namespace ReviewX\DI\Invoker;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Helper\DefinitionHelper;
-use Rvx\DI\Definition\Resolver\DefinitionResolver;
-use Rvx\Invoker\ParameterResolver\ParameterResolver;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Helper\DefinitionHelper;
+use ReviewX\DI\Definition\Resolver\DefinitionResolver;
+use ReviewX\Invoker\ParameterResolver\ParameterResolver;
 use ReflectionFunctionAbstract;
 /**
  * Resolves callable parameters using definitions.

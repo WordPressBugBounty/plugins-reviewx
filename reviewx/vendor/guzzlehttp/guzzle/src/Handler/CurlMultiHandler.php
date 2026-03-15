@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
 use Closure;
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\Promise;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\GuzzleHttp\Utils;
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\Promise;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\GuzzleHttp\Utils;
+use ReviewX\Psr\Http\Message\RequestInterface;
 /**
  * Returns an asynchronous response using curl_multi_* functions.
  *

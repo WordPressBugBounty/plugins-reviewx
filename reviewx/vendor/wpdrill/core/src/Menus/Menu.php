@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\Menus;
+namespace ReviewX\WPDrill\Menus;
 
 class Menu
 {

@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Apiz;
+namespace ReviewX\Apiz;
 
-use Rvx\Apiz\GraphQL\AbstractRequest;
-use Rvx\Apiz\Http\Clients\AbstractClient;
-use Rvx\Apiz\Http\Clients\GuzzleClient;
-use Rvx\Apiz\Http\Request;
-use Rvx\Apiz\Http\Response;
-use Rvx\Apiz\Traits\Hookable;
+use ReviewX\Apiz\GraphQL\AbstractRequest;
+use ReviewX\Apiz\Http\Clients\AbstractClient;
+use ReviewX\Apiz\Http\Clients\GuzzleClient;
+use ReviewX\Apiz\Http\Request;
+use ReviewX\Apiz\Http\Response;
+use ReviewX\Apiz\Traits\Hookable;
 use Exception;
-use Rvx\GuzzleHttp\Psr7\Utils;
-use Rvx\GuzzleHttp\RequestOptions;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Apiz\Exceptions\InvalidResponseClassException;
+use ReviewX\GuzzleHttp\Psr7\Utils;
+use ReviewX\GuzzleHttp\RequestOptions;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Apiz\Exceptions\InvalidResponseClassException;
 /**
  * Class AbstractApi
  * @template Resp

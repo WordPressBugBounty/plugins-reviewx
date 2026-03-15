@@ -1,15 +1,15 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 \defined('ABSPATH') || exit;
-use Rvx\Api\AuthApi;
-use Rvx\CPT\CptHelper;
-use Rvx\Services\Api\LoginService;
-use Rvx\Services\DataSyncService;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\DB\Migration\Migrator;
-use Rvx\Services\CacheServices;
+use ReviewX\Api\AuthApi;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Services\Api\LoginService;
+use ReviewX\Services\DataSyncService;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\DB\Migration\Migrator;
+use ReviewX\Services\CacheServices;
 use Exception;
 class PluginActivatedHandler implements InvokableContract
 {
@@ -27,19 +27,19 @@ class PluginActivatedHandler implements InvokableContract
     public function __invoke()
     {
         \add_action('activated_plugin', function ($plugin) {
-            if (RVX_DIR_NAME . '/reviewx.php' !== $plugin) {
+            if (REVIEWX_DIR_NAME . '/reviewx.php' !== $plugin) {
                 return;
             }
             global $wpdb;
             // Initialize tables and reset sync flag
-            (new \Rvx\Handlers\RvxInit\LoadReviewxCreateSiteTable())->init();
+            (new \ReviewX\Handlers\ReviewXInit\LoadReviewxCreateSiteTable())->init();
             \set_transient('rvx_reset_sync_flag', \true, 300);
             // 5 mins TTL
             $this->migrator->run();
             $cache_key = 'rvx_site_uid';
             $uid = \wp_cache_get($cache_key, 'reviewx');
             if (\false === $uid) {
-                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Table name from $wpdb->prefix, safe
                 $uid = $wpdb->get_var("SELECT uid FROM {$wpdb->prefix}rvx_sites ORDER BY id DESC LIMIT 1");
                 if ($uid) {
                     \wp_cache_set($cache_key, $uid, 'reviewx', 86400);
@@ -48,10 +48,11 @@ class PluginActivatedHandler implements InvokableContract
             }
             if ($uid) {
                 // Mark as not synced initially
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Local state modification
                 $wpdb->update("{$wpdb->prefix}rvx_sites", ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
                 try {
                     // Attempt SaaS activation
-                    (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => \defined('RVX_VERSION') ? RVX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
+                    (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
                     // Start initial sync
                     $dataResponse = $this->dataSyncService->dataSync('login', 'product');
                     if ($dataResponse) {

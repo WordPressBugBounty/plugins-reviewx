@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill;
+namespace ReviewX\WPDrill;
 
 class Response extends \WP_REST_Response
 {

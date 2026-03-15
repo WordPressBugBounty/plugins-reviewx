@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Command;
+namespace ReviewX\Symfony\Component\Console\Command;
 
-use Rvx\Symfony\Component\Console\Completion\CompletionInput;
-use Rvx\Symfony\Component\Console\Completion\CompletionSuggestions;
-use Rvx\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
-use Rvx\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
-use Rvx\Symfony\Component\Console\Exception\CommandNotFoundException;
-use Rvx\Symfony\Component\Console\Exception\ExceptionInterface;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Input\InputOption;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Completion\CompletionInput;
+use ReviewX\Symfony\Component\Console\Completion\CompletionSuggestions;
+use ReviewX\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
+use ReviewX\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
+use ReviewX\Symfony\Component\Console\Exception\CommandNotFoundException;
+use ReviewX\Symfony\Component\Console\Exception\ExceptionInterface;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Input\InputOption;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Responsible for providing the values to the shell completion.
  *

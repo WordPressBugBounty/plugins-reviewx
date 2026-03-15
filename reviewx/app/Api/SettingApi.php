@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
-use Rvx\Utilities\Auth\Client;
-class SettingApi extends \Rvx\Api\BaseApi
+use ReviewX\Apiz\Http\Response;
+use ReviewX\Utilities\Auth\Client;
+class SettingApi extends \ReviewX\Api\BaseApi
 {
     public function getApiReviewSettings($data) : Response
     {

@@ -1,17 +1,17 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\GuzzleHttp\Exception\ConnectException;
-use Rvx\GuzzleHttp\Exception\RequestException;
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\FulfilledPromise;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\GuzzleHttp\Psr7\LazyOpenStream;
-use Rvx\GuzzleHttp\TransferStats;
-use Rvx\GuzzleHttp\Utils;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Exception\ConnectException;
+use ReviewX\GuzzleHttp\Exception\RequestException;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\FulfilledPromise;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\GuzzleHttp\Psr7\LazyOpenStream;
+use ReviewX\GuzzleHttp\TransferStats;
+use ReviewX\GuzzleHttp\Utils;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * Creates curl resources from a request
  *
@@ -184,7 +184,7 @@ class CurlFactory implements CurlFactoryInterface
         $sanitizedError = self::sanitizeCurlError($ctx['error'] ?? '', $uri);
         $message = \sprintf('cURL error %s: %s (%s)', $ctx['errno'], $sanitizedError, 'see https://curl.haxx.se/libcurl/c/libcurl-errors.html');
         if ('' !== $sanitizedError) {
-            $redactedUriString = \Rvx\GuzzleHttp\Psr7\Utils::redactUserInfo($uri)->__toString();
+            $redactedUriString = \ReviewX\GuzzleHttp\Psr7\Utils::redactUserInfo($uri)->__toString();
             if ($redactedUriString !== '' && \false === \strpos($sanitizedError, $redactedUriString)) {
                 $message .= \sprintf(' for %s', $redactedUriString);
             }
@@ -203,7 +203,7 @@ class CurlFactory implements CurlFactoryInterface
         if ('' === $baseUriString) {
             return $error;
         }
-        $redactedUriString = \Rvx\GuzzleHttp\Psr7\Utils::redactUserInfo($baseUri)->__toString();
+        $redactedUriString = \ReviewX\GuzzleHttp\Psr7\Utils::redactUserInfo($baseUri)->__toString();
         return \str_replace($baseUriString, $redactedUriString, $error);
     }
     /**
@@ -354,11 +354,11 @@ class CurlFactory implements CurlFactoryInterface
         }
         if (!isset($options['sink'])) {
             // Use a default temp stream if no sink was set.
-            $options['sink'] = \Rvx\GuzzleHttp\Psr7\Utils::tryFopen('php://temp', 'w+');
+            $options['sink'] = \ReviewX\GuzzleHttp\Psr7\Utils::tryFopen('php://temp', 'w+');
         }
         $sink = $options['sink'];
         if (!\is_string($sink)) {
-            $sink = \Rvx\GuzzleHttp\Psr7\Utils::streamFor($sink);
+            $sink = \ReviewX\GuzzleHttp\Psr7\Utils::streamFor($sink);
         } elseif (!\is_dir(\dirname($sink))) {
             // Ensure that the directory exists before failing in curl.
             throw new \RuntimeException(\sprintf('Directory %s does not exist for sink value of %s', \dirname($sink), $sink));

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 if (!\function_exists('getallheaders')) {
     /**

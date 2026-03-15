@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\TypeFilter;
+namespace ReviewX\DeepCopy\TypeFilter;
 
 interface TypeFilter
 {

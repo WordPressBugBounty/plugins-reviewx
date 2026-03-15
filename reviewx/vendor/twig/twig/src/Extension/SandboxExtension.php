@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\NodeVisitor\SandboxNodeVisitor;
-use Rvx\Twig\Sandbox\SecurityNotAllowedMethodError;
-use Rvx\Twig\Sandbox\SecurityNotAllowedPropertyError;
-use Rvx\Twig\Sandbox\SecurityPolicyInterface;
-use Rvx\Twig\Source;
-use Rvx\Twig\TokenParser\SandboxTokenParser;
+use ReviewX\Twig\NodeVisitor\SandboxNodeVisitor;
+use ReviewX\Twig\Sandbox\SecurityNotAllowedMethodError;
+use ReviewX\Twig\Sandbox\SecurityNotAllowedPropertyError;
+use ReviewX\Twig\Sandbox\SecurityPolicyInterface;
+use ReviewX\Twig\Source;
+use ReviewX\Twig\TokenParser\SandboxTokenParser;
 final class SandboxExtension extends AbstractExtension
 {
     private $sandboxedGlobally;

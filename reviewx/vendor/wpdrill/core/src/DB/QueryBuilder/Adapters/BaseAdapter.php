@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill\DB\QueryBuilder\Adapters;
+namespace ReviewX\WPDrill\DB\QueryBuilder\Adapters;
 
-use Rvx\WPDrill\DB\Connection;
-use Rvx\WPDrill\DB\Exception;
-use Rvx\WPDrill\DB\QueryBuilder\Raw;
+use ReviewX\WPDrill\DB\Connection;
+use ReviewX\WPDrill\DB\Exception;
+use ReviewX\WPDrill\DB\QueryBuilder\Raw;
 abstract class BaseAdapter
 {
     /**
@@ -292,7 +292,7 @@ abstract class BaseAdapter
                 // We have a closure, a nested criteria
                 // Build a new NestedCriteria class, keep it by reference so any changes made
                 // in the closure should reflect here
-                $nestedCriteria = $this->container->build('Rvx\\WPDrill\\DB\\QueryBuilder\\NestedCriteria', array($this->connection));
+                $nestedCriteria = $this->container->build('ReviewX\\WPDrill\\DB\\QueryBuilder\\NestedCriteria', array($this->connection));
                 $nestedCriteria =& $nestedCriteria;
                 // Call the closure with our new nestedCriteria object
                 $key($nestedCriteria);

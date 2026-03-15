@@ -1,16 +1,16 @@
 <?php
 
-namespace Rvx\WPDrill\Views;
+namespace ReviewX\WPDrill\Views;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
-use Rvx\Twig\Environment;
-use Rvx\Twig\Lexer;
-use Rvx\Twig\Loader\FilesystemLoader;
-use Rvx\WPDrill\Exception;
-use Rvx\WPDrill\Facades\Config;
-use Rvx\WPDrill\Plugin;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Lexer;
+use ReviewX\Twig\Loader\FilesystemLoader;
+use ReviewX\WPDrill\Exception;
+use ReviewX\WPDrill\Facades\Config;
+use ReviewX\WPDrill\Plugin;
 class ViewManager
 {
     protected Plugin $plugin;

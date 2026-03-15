@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Utilities;
+namespace ReviewX\Utilities;
 
 \defined("ABSPATH") || exit;
-use Rvx\Firebase\JWT\JWT;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Firebase\JWT\JWT;
+use ReviewX\Utilities\Auth\Client;
 use Throwable;
-use Rvx\WPDrill\Plugin;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Plugin;
+use ReviewX\WPDrill\Response;
 class Helper
 {
     public static function plugin() : Plugin
@@ -20,7 +20,7 @@ class Helper
     }
     public static function pluginPath(string $path = "") : string
     {
-        return RVX_DIR_PATH . \ltrim($path, "/");
+        return REVIEWX_DIR_PATH . \ltrim($path, "/");
     }
     public static function resourcePath(string $path = "") : string
     {
@@ -32,7 +32,7 @@ class Helper
     }
     public static function pluginFile() : string
     {
-        return RVX_FILE;
+        return REVIEWX_FILE;
     }
     public static function getAuthToken() : string
     {
@@ -109,6 +109,7 @@ class Helper
     }
     public static function debugLog($message = "")
     {
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
         $logMessage = \is_array($message) ? "Output is: " . \print_r($message, \true) : "Output is: " . $message;
         return $logMessage;
     }
@@ -135,12 +136,19 @@ class Helper
     public static function retrieveReviewId($order_id, $prod_id, $user_id)
     {
         if (isset($order_id, $prod_id, $user_id)) {
-            global $wpdb;
-            $rx_comment = $wpdb->prefix . "comments";
-            $rx_commentmeta = $wpdb->prefix . "commentmeta";
-            $data = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT {$rx_commentmeta}.comment_id FROM {$rx_commentmeta} \n                        INNER JOIN {$rx_comment} \n                        ON {$rx_commentmeta}.comment_id = {$rx_comment}.comment_ID \n                        WHERE {$rx_commentmeta}.meta_key = 'reviewx_order' \n                        AND {$rx_commentmeta}.meta_value = %d \n                        AND {$rx_comment}.comment_post_ID = %d \n                        AND {$rx_comment}.user_id = %d", $order_id, $prod_id, $user_id));
-            if ($data && !empty($data[0]->comment_id)) {
-                return $data[0]->comment_id;
+            $comments = \get_comments([
+                'post_id' => $prod_id,
+                'user_id' => $user_id,
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Required to match review by order identifier
+                'meta_key' => 'rvx_order',
+                // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Required to match review by order identifier
+                'meta_value' => $order_id,
+                'fields' => 'ids',
+                'number' => 1,
+                'no_found_rows' => \true,
+            ]);
+            if (!empty($comments)) {
+                return $comments[0];
             }
         }
         return 0;
@@ -155,7 +163,7 @@ class Helper
     public static function loadTemplate($template_name, $data = [])
     {
         \extract($data);
-        $template_path = RVX_DIR_PATH . "widget/components/" . $template_name . ".php";
+        $template_path = REVIEWX_DIR_PATH . "widget/components/" . $template_name . ".php";
         if (\file_exists($template_path)) {
             include $template_path;
         } else {
@@ -168,7 +176,7 @@ class Helper
     }
     public static function prepareLangArray() : array
     {
-        $json_file_path = RVX_DIR_PATH . "/translation.json";
+        $json_file_path = REVIEWX_DIR_PATH . "/translation.json";
         $json_content = \file_get_contents($json_file_path);
         $translations = \json_decode($json_content, \true);
         $result = [];
@@ -201,12 +209,18 @@ class Helper
             require_once \ABSPATH . 'wp-admin/includes/file.php';
             \WP_Filesystem();
         }
-        $log_folder = RVX_DIR_PATH . 'log/';
+        $log_folder = REVIEWX_DIR_PATH . 'log/';
         if (!$wp_filesystem->is_dir($log_folder)) {
             return;
         }
         $log_file = $log_folder . 'log-' . \wp_date('Y-m-d') . '.log';
-        $formatted_message = \sprintf("[%s] [%s]: %s\n", \wp_date('Y-m-d H:i:s'), \strtoupper($context), \print_r($message, \true));
+        $formatted_message = \sprintf(
+            "[%s] [%s]: %s\n",
+            \wp_date('Y-m-d H:i:s'),
+            \strtoupper($context),
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
+            \print_r($message, \true)
+        );
         $current = $wp_filesystem->exists($log_file) ? $wp_filesystem->get_contents($log_file) : '';
         $wp_filesystem->put_contents($log_file, $current . $formatted_message, \FS_CHMOD_FILE);
     }
@@ -274,6 +288,6 @@ class Helper
         $current_user = wp_get_current_user();
         $first_name = $current_user->first_name ?: $current_user->user_login;
         $last_name = $current_user->last_name ?: '';
-        return ['domain' => \Rvx\Utilities\Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => \sanitize_text_field($first_name), 'last_name' => \sanitize_text_field($last_name)];
+        return ['domain' => \ReviewX\Utilities\Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => \sanitize_text_field($first_name), 'last_name' => \sanitize_text_field($last_name)];
     }
 }

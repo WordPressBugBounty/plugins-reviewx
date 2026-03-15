@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Noodlehaus;
+namespace ReviewX\Noodlehaus;
 
 use ArrayAccess;
 use Iterator;

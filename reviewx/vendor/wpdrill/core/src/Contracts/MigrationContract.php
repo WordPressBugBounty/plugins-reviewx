@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Contracts;
+namespace ReviewX\WPDrill\Contracts;
 
-use Rvx\WPDrill\DB\Migration\Sql;
-use Rvx\WPDrill\Plugin;
+use ReviewX\WPDrill\DB\Migration\Sql;
+use ReviewX\WPDrill\Plugin;
 interface MigrationContract
 {
     public function up() : Sql;

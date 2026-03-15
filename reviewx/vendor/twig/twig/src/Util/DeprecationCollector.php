@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Util;
+namespace ReviewX\Twig\Util;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Source;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Error\SyntaxError;
+use ReviewX\Twig\Source;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

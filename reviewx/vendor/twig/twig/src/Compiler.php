@@ -9,9 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Node\Node;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

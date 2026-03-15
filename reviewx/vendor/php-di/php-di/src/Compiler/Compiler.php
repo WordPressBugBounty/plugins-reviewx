@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Compiler;
+namespace ReviewX\DI\Compiler;
 
 use function chmod;
-use Rvx\DI\Definition\ArrayDefinition;
-use Rvx\DI\Definition\DecoratorDefinition;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\EnvironmentVariableDefinition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\FactoryDefinition;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\Reference;
-use Rvx\DI\Definition\Source\DefinitionSource;
-use Rvx\DI\Definition\StringDefinition;
-use Rvx\DI\Definition\ValueDefinition;
-use Rvx\DI\DependencyException;
-use Rvx\DI\Proxy\ProxyFactory;
+use ReviewX\DI\Definition\ArrayDefinition;
+use ReviewX\DI\Definition\DecoratorDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\EnvironmentVariableDefinition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\FactoryDefinition;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\Reference;
+use ReviewX\DI\Definition\Source\DefinitionSource;
+use ReviewX\DI\Definition\StringDefinition;
+use ReviewX\DI\Definition\ValueDefinition;
+use ReviewX\DI\DependencyException;
+use ReviewX\DI\Proxy\ProxyFactory;
 use function dirname;
 use function file_put_contents;
 use InvalidArgumentException;
-use Rvx\Laravel\SerializableClosure\Support\ReflectionClosure;
+use ReviewX\Laravel\SerializableClosure\Support\ReflectionClosure;
 use function rename;
 use function sprintf;
 use function tempnam;

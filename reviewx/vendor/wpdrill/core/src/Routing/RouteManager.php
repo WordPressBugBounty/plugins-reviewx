@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill\Routing;
+namespace ReviewX\WPDrill\Routing;
 
-use Rvx\WPDrill\Plugin;
-use Rvx\WPDrill\ConfigManager;
-use Rvx\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Plugin;
+use ReviewX\WPDrill\ConfigManager;
+use ReviewX\WPDrill\Contracts\InvokableContract;
 class RouteManager
 {
     protected array $routes = [];

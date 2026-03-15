@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\DB;
-use Rvx\Handlers\DataSyncHandler;
-class CategorySyncService extends \Rvx\Services\Service
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Facades\DB;
+use ReviewX\Handlers\DataSyncHandler;
+class CategorySyncService extends \ReviewX\Services\Service
 {
     protected $categories;
     protected $taxonomyRelation;

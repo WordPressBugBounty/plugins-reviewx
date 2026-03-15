@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\Psr\Container\ContainerInterface;
 /**
  * Definition of a value for dependency injection.
  *

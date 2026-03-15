@@ -9,9 +9,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node\Expression\Binary;
+namespace ReviewX\Twig\Node\Expression\Binary;
 
-use Rvx\Twig\Compiler;
+use ReviewX\Twig\Compiler;
 class OrBinary extends AbstractBinary
 {
     public function operator(Compiler $compiler) : Compiler

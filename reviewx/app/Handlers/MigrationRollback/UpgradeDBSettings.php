@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Handlers\MigrationRollback;
+namespace ReviewX\Handlers\MigrationRollback;
 
-use Rvx\Rest\Controllers\DataSyncController;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Rest\Controllers\DataSyncController;
+use ReviewX\Utilities\Auth\Client;
 class UpgradeDBSettings
 {
     protected $dataSyncController;

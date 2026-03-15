@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\CategoryApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\CategoryApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class CategorySync implements InvokableContract
 {
     public function __invoke()

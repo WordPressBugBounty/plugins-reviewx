@@ -9,11 +9,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
-use Rvx\Twig\Error\Error;
-use Rvx\Twig\Error\LoaderError;
-use Rvx\Twig\Error\RuntimeError;
+use ReviewX\Twig\Error\Error;
+use ReviewX\Twig\Error\LoaderError;
+use ReviewX\Twig\Error\RuntimeError;
 /**
  * Default base class for compiled templates.
  *

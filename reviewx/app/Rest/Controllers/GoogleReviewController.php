@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Throwable;
-use Rvx\Services\GoogleReviewService;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Services\GoogleReviewService;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class GoogleReviewController implements InvokableContract
 {
     protected $googleReviewService;

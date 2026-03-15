@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter;
+namespace ReviewX\DeepCopy\Filter;
 
-use Rvx\DeepCopy\Reflection\ReflectionHelper;
+use ReviewX\DeepCopy\Reflection\ReflectionHelper;
 /**
  * @final
  */

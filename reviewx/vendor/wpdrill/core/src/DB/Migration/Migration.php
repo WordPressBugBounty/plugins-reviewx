@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\DB\Migration;
+namespace ReviewX\WPDrill\DB\Migration;
 
-use Rvx\WPDrill\Contracts\MigrationContract;
-use Rvx\WPDrill\Facades\Config;
+use ReviewX\WPDrill\Contracts\MigrationContract;
+use ReviewX\WPDrill\Facades\Config;
 abstract class Migration implements MigrationContract
 {
     public function __construct()

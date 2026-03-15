@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\GuzzleHttp\Utils;
+use ReviewX\GuzzleHttp\Utils;
 /**
  * @internal
  */

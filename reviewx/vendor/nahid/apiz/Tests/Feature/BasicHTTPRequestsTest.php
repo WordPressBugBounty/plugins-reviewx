@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Tests\Feature;
+namespace ReviewX\Tests\Feature;
 
-use Rvx\Apiz\Http\Response;
-use Rvx\PHPUnit\Framework\TestCase;
-use Rvx\Tests\Feature\Mocks\BasicHTTPAPI;
+use ReviewX\Apiz\Http\Response;
+use ReviewX\PHPUnit\Framework\TestCase;
+use ReviewX\Tests\Feature\Mocks\BasicHTTPAPI;
 class BasicHTTPRequestsTest extends TestCase
 {
     public function testGet()

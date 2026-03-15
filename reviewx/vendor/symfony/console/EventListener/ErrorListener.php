@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\EventListener;
+namespace ReviewX\Symfony\Component\Console\EventListener;
 
-use Rvx\Psr\Log\LoggerInterface;
-use Rvx\Symfony\Component\Console\ConsoleEvents;
-use Rvx\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use Rvx\Symfony\Component\Console\Event\ConsoleEvent;
-use Rvx\Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use Rvx\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use ReviewX\Psr\Log\LoggerInterface;
+use ReviewX\Symfony\Component\Console\ConsoleEvents;
+use ReviewX\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use ReviewX\Symfony\Component\Console\Event\ConsoleEvent;
+use ReviewX\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use ReviewX\Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * @author James Halsall <james.t.halsall@googlemail.com>
  * @author Robin Chalas <robin.chalas@gmail.com>

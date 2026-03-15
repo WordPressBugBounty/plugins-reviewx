@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
-use Rvx\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
 /**
  * Extends an array definition by adding new elements into it.
  *

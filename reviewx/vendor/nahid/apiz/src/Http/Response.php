@@ -1,14 +1,14 @@
 <?php
 
-namespace Rvx\Apiz\Http;
+namespace ReviewX\Apiz\Http;
 
 use Exception;
-use Rvx\Nahid\QArray\QueryEngine;
-use Rvx\Apiz\Exceptions\NoResponseException;
-use Rvx\Apiz\QueryBuilder;
-use Rvx\Apiz\Utilities\Parser;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
+use ReviewX\Nahid\QArray\QueryEngine;
+use ReviewX\Apiz\Exceptions\NoResponseException;
+use ReviewX\Apiz\QueryBuilder;
+use ReviewX\Apiz\Utilities\Parser;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
 class Response
 {
     /**

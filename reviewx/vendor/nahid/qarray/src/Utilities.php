@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Nahid\QArray;
+namespace ReviewX\Nahid\QArray;
 
 class Utilities
 {

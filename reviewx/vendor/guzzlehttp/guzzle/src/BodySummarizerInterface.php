@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\Psr\Http\Message\MessageInterface;
+use ReviewX\Psr\Http\Message\MessageInterface;
 interface BodySummarizerInterface
 {
     /**

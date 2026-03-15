@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\Contracts;
+namespace ReviewX\WPDrill\Contracts;
 
 interface InvokableContract
 {

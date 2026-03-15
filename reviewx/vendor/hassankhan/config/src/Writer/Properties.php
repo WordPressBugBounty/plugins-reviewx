@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Noodlehaus\Writer;
+namespace ReviewX\Noodlehaus\Writer;
 
 /**
  * Properties Writer.

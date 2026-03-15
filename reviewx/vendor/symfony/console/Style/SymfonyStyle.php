@@ -8,25 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Style;
+namespace ReviewX\Symfony\Component\Console\Style;
 
-use Rvx\Symfony\Component\Console\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\Console\Exception\RuntimeException;
-use Rvx\Symfony\Component\Console\Formatter\OutputFormatter;
-use Rvx\Symfony\Component\Console\Helper\Helper;
-use Rvx\Symfony\Component\Console\Helper\ProgressBar;
-use Rvx\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
-use Rvx\Symfony\Component\Console\Helper\Table;
-use Rvx\Symfony\Component\Console\Helper\TableCell;
-use Rvx\Symfony\Component\Console\Helper\TableSeparator;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\Console\Output\TrimmedBufferOutput;
-use Rvx\Symfony\Component\Console\Question\ChoiceQuestion;
-use Rvx\Symfony\Component\Console\Question\ConfirmationQuestion;
-use Rvx\Symfony\Component\Console\Question\Question;
-use Rvx\Symfony\Component\Console\Terminal;
+use ReviewX\Symfony\Component\Console\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\Console\Exception\RuntimeException;
+use ReviewX\Symfony\Component\Console\Formatter\OutputFormatter;
+use ReviewX\Symfony\Component\Console\Helper\Helper;
+use ReviewX\Symfony\Component\Console\Helper\ProgressBar;
+use ReviewX\Symfony\Component\Console\Helper\SymfonyQuestionHelper;
+use ReviewX\Symfony\Component\Console\Helper\Table;
+use ReviewX\Symfony\Component\Console\Helper\TableCell;
+use ReviewX\Symfony\Component\Console\Helper\TableSeparator;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Output\TrimmedBufferOutput;
+use ReviewX\Symfony\Component\Console\Question\ChoiceQuestion;
+use ReviewX\Symfony\Component\Console\Question\ConfirmationQuestion;
+use ReviewX\Symfony\Component\Console\Question\Question;
+use ReviewX\Symfony\Component\Console\Terminal;
 /**
  * Output decorator helpers for the Symfony Style Guide.
  *

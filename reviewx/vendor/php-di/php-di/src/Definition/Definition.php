@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition;
+namespace ReviewX\DI\Definition;
 
-use Rvx\DI\Factory\RequestedEntry;
+use ReviewX\DI\Factory\RequestedEntry;
 /**
  * Definition.
  *

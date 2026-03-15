@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Handlers\WcTemplates;
+namespace ReviewX\Handlers\WcTemplates;
 
 class WcAccountDetailsError
 {

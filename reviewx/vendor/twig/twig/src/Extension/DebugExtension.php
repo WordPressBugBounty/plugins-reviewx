@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\TwigFunction;
+use ReviewX\Twig\TwigFunction;
 final class DebugExtension extends AbstractExtension
 {
     public function getFunctions() : array
@@ -20,11 +20,11 @@ final class DebugExtension extends AbstractExtension
         return [new TwigFunction('dump', 'twig_var_dump', ['is_safe' => $isDumpOutputHtmlSafe ? ['html'] : [], 'needs_context' => \true, 'needs_environment' => \true, 'is_variadic' => \true])];
     }
 }
-namespace Rvx;
+namespace ReviewX;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\Template;
-use Rvx\Twig\TemplateWrapper;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Template;
+use ReviewX\Twig\TemplateWrapper;
 function twig_var_dump(Environment $env, $context, ...$vars)
 {
     if (!$env->isDebug()) {

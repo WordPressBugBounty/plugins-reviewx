@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\DB;
-class UserSyncService extends \Rvx\Services\Service
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Facades\DB;
+class UserSyncService extends \ReviewX\Services\Service
 {
     protected $users;
     public function syncUser(&$file)

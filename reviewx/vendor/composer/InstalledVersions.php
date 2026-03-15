@@ -9,10 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Composer;
+namespace ReviewX\Composer;
 
-use Rvx\Composer\Autoload\ClassLoader;
-use Rvx\Composer\Semver\VersionParser;
+use ReviewX\Composer\Autoload\ClassLoader;
+use ReviewX\Composer\Semver\VersionParser;
 /**
  * This class is copied in every Composer installed project and available to all
  *
@@ -286,7 +286,7 @@ class InstalledVersions
     private static function getInstalled()
     {
         if (null === self::$canGetVendors) {
-            self::$canGetVendors = \method_exists('Rvx\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
+            self::$canGetVendors = \method_exists('ReviewX\\Composer\\Autoload\\ClassLoader', 'getRegisteredLoaders');
         }
         $installed = array();
         $copiedLocalDir = \false;

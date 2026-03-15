@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Utilities\Auth;
+namespace ReviewX\Utilities\Auth;
 
 \defined("ABSPATH") || exit;
-use Rvx\WPDrill\Facade;
+use ReviewX\WPDrill\Facade;
 /**
  * Class WpUser
  *
@@ -16,6 +16,6 @@ class WpUser extends Facade
 {
     public static function getFacadeAccessor() : string
     {
-        return \Rvx\Utilities\Auth\WpUserManager::class;
+        return \ReviewX\Utilities\Auth\WpUserManager::class;
     }
 }

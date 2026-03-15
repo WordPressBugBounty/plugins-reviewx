@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Utilities\Auth;
+namespace ReviewX\Utilities\Auth;
 
 \defined("ABSPATH") || exit;
 class WpUserManager

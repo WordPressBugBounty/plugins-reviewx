@@ -1,15 +1,15 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Handlers\MigrationRollback\MigrationPrompt;
-use Rvx\Handlers\MigrationRollback\ReviewXChecker;
-use Rvx\Utilities\Helper;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Facades\DB;
-use Rvx\Services\ReviewService;
-class ReviewSyncService extends \Rvx\Services\Service
+use ReviewX\Handlers\MigrationRollback\MigrationPrompt;
+use ReviewX\Handlers\MigrationRollback\ReviewXChecker;
+use ReviewX\Utilities\Helper;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Facades\DB;
+use ReviewX\Services\ReviewService;
+class ReviewSyncService extends \ReviewX\Services\Service
 {
     protected $reviewMetaTitle;
     protected $reviewRelationId;
@@ -37,7 +37,7 @@ class ReviewSyncService extends \Rvx\Services\Service
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
             $this->criteria = \get_option('_rx_option_review_criteria') ?? [];
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
-            $this->criteria = (new \Rvx\Services\SettingService())->getReviewSettings('product')['reviews']['multicriteria']["criterias"] ?? [];
+            $this->criteria = (new \ReviewX\Services\SettingService())->getReviewSettings('product')['reviews']['multicriteria']["criterias"] ?? [];
         } else {
             $this->criteria = [];
         }
@@ -110,7 +110,7 @@ class ReviewSyncService extends \Rvx\Services\Service
     }
     public function syncReviewMata() : void
     {
-        DB::table('commentmeta')->whereIn('meta_key', ['rvx_review_version', 'reviewx_title', 'verified', 'rating', 'rvx_criterias', 'reviewx_rating', 'reviewx_attachments', 'reviewx_video_url', 'is_recommended', 'reviewx_recommended', 'is_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time', 'reviewx_order', 'rvx_comment_order_item'])->chunk(100, function ($allCommentMeta) {
+        DB::table('commentmeta')->whereIn('meta_key', ['rvx_review_version', 'reviewx_title', 'verified', 'rating', 'rvx_criterias', 'reviewx_rating', 'reviewx_attachments', 'reviewx_video_url', 'is_recommended', 'reviewx_recommended', 'is_anonymous', 'reviewx_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time', 'reviewx_order', 'rvx_comment_order_item'])->chunk(100, function ($allCommentMeta) {
             $orderIds = [];
             foreach ($allCommentMeta as $commentMeta) {
                 $commentId = $commentMeta->comment_id;

@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Rest\Controllers\Products;
+namespace ReviewX\Rest\Controllers\Products;
 
-use Rvx\Services\ProductService;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Services\ProductService;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class ProductController implements InvokableContract
 {
     protected $productService;

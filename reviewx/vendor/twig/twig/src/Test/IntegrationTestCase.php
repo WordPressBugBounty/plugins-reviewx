@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Test;
+namespace ReviewX\Twig\Test;
 
-use Rvx\PHPUnit\Framework\TestCase;
-use Rvx\Twig\Environment;
-use Rvx\Twig\Error\Error;
-use Rvx\Twig\Extension\ExtensionInterface;
-use Rvx\Twig\Loader\ArrayLoader;
-use Rvx\Twig\RuntimeLoader\RuntimeLoaderInterface;
-use Rvx\Twig\TwigFilter;
-use Rvx\Twig\TwigFunction;
-use Rvx\Twig\TwigTest;
+use ReviewX\PHPUnit\Framework\TestCase;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Error\Error;
+use ReviewX\Twig\Extension\ExtensionInterface;
+use ReviewX\Twig\Loader\ArrayLoader;
+use ReviewX\Twig\RuntimeLoader\RuntimeLoaderInterface;
+use ReviewX\Twig\TwigFilter;
+use ReviewX\Twig\TwigFunction;
+use ReviewX\Twig\TwigTest;
 /**
  * Integration test helper.
  *
@@ -156,7 +156,7 @@ abstract class IntegrationTestCase extends TestCase
             // avoid using the same PHP class name for different cases
             $p = new \ReflectionProperty($twig, 'templateClassPrefix');
             $p->setAccessible(\true);
-            $p->setValue($twig, '\\Rvx\\__TwigTemplate_' . \hash(\PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128', \uniqid(\mt_rand(), \true), \false) . '_');
+            $p->setValue($twig, '\\ReviewX\\__TwigTemplate_' . \hash(\PHP_VERSION_ID < 80100 ? 'sha256' : 'xxh128', \uniqid(\mt_rand(), \true), \false) . '_');
             $deprecations = [];
             try {
                 $prevHandler = \set_error_handler(function ($type, $msg, $file, $line, $context = []) use(&$deprecations, &$prevHandler) {
@@ -192,7 +192,7 @@ abstract class IntegrationTestCase extends TestCase
             }
             if (\false !== $exception) {
                 list($class) = \explode(':', $exception);
-                $constraintClass = \class_exists('Rvx\\PHPUnit\\Framework\\Constraint\\Exception') ? 'PHPUnit\\Framework\\Constraint\\Exception' : 'PHPUnit_Framework_Constraint_Exception';
+                $constraintClass = \class_exists('ReviewX\\PHPUnit\\Framework\\Constraint\\Exception') ? 'PHPUnit\\Framework\\Constraint\\Exception' : 'PHPUnit_Framework_Constraint_Exception';
                 $this->assertThat(null, new $constraintClass($class));
             }
             $expected = \trim($match[3], "\n ");

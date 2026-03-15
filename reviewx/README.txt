@@ -7,7 +7,7 @@ Tested up to: 6.9
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 10.5
-Stable tag: 2.3.5
+Stable tag: 2.3.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -220,6 +220,14 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.3.6 - 03-15-2026 =
+- Core Refactor: Standardized all 'Rvx' namespaces, shortcodes, and classes to fully qualified 'ReviewX' terminology.
+- Core Refactor: Standardized frontend HTML IDs and CSS classes from 'rvx-*' to 'reviewx-*'.
+- Improvement: Improved Code Quality and overall plugin Performance.
+- Security: Improved Security and resolved existing WP Coding Standard warnings.
+- Fix: Addressed minor import and UI element rendering bugs reported by users in previous versions.
+- Fix: Fixed direct database query caching issues by wrapping calculations with proper standard practices.
+
 = 2.3.5 - 03-08-2026 =
 - Regular Update
 - Improve Code Quality and Performance
@@ -980,5 +988,4 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 == Upgrade Notice ==
 This is a major update to the plugin. The codebase has been completely revamped to provide better performance, new features, and improved usability.
-* Important: Some old features may have been deprecated or replaced**. Please review the new plugin before upgrading if you rely on specific features of previous versions.
 ** Backup your site ** before upgrading, especially if you rely on customizations or integrations with previous versions.

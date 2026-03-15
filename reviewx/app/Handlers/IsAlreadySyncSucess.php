@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 \defined('ABSPATH') || exit;
 class IsAlreadySyncSucess

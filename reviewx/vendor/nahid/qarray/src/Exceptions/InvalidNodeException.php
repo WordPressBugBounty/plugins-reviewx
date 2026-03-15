@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Nahid\QArray\Exceptions;
+namespace ReviewX\Nahid\QArray\Exceptions;
 
 class InvalidNodeException extends \Exception
 {

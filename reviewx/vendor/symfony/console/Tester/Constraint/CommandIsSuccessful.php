@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Tester\Constraint;
+namespace ReviewX\Symfony\Component\Console\Tester\Constraint;
 
-use Rvx\PHPUnit\Framework\Constraint\Constraint;
-use Rvx\Symfony\Component\Console\Command\Command;
+use ReviewX\PHPUnit\Framework\Constraint\Constraint;
+use ReviewX\Symfony\Component\Console\Command\Command;
 final class CommandIsSuccessful extends Constraint
 {
     /**

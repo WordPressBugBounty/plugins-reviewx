@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Exception;
+namespace ReviewX\DI\Definition\Exception;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\Psr\Container\ContainerExceptionInterface;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\Psr\Container\ContainerExceptionInterface;
 /**
  * Invalid DI definitions.
  *

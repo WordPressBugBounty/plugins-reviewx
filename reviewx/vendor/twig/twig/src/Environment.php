@@ -8,29 +8,29 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
-use Rvx\Twig\Cache\CacheInterface;
-use Rvx\Twig\Cache\FilesystemCache;
-use Rvx\Twig\Cache\NullCache;
-use Rvx\Twig\Error\Error;
-use Rvx\Twig\Error\LoaderError;
-use Rvx\Twig\Error\RuntimeError;
-use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Extension\CoreExtension;
-use Rvx\Twig\Extension\EscaperExtension;
-use Rvx\Twig\Extension\ExtensionInterface;
-use Rvx\Twig\Extension\OptimizerExtension;
-use Rvx\Twig\Loader\ArrayLoader;
-use Rvx\Twig\Loader\ChainLoader;
-use Rvx\Twig\Loader\LoaderInterface;
-use Rvx\Twig\Node\Expression\Binary\AbstractBinary;
-use Rvx\Twig\Node\Expression\Unary\AbstractUnary;
-use Rvx\Twig\Node\ModuleNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\NodeVisitor\NodeVisitorInterface;
-use Rvx\Twig\RuntimeLoader\RuntimeLoaderInterface;
-use Rvx\Twig\TokenParser\TokenParserInterface;
+use ReviewX\Twig\Cache\CacheInterface;
+use ReviewX\Twig\Cache\FilesystemCache;
+use ReviewX\Twig\Cache\NullCache;
+use ReviewX\Twig\Error\Error;
+use ReviewX\Twig\Error\LoaderError;
+use ReviewX\Twig\Error\RuntimeError;
+use ReviewX\Twig\Error\SyntaxError;
+use ReviewX\Twig\Extension\CoreExtension;
+use ReviewX\Twig\Extension\EscaperExtension;
+use ReviewX\Twig\Extension\ExtensionInterface;
+use ReviewX\Twig\Extension\OptimizerExtension;
+use ReviewX\Twig\Loader\ArrayLoader;
+use ReviewX\Twig\Loader\ChainLoader;
+use ReviewX\Twig\Loader\LoaderInterface;
+use ReviewX\Twig\Node\Expression\Binary\AbstractBinary;
+use ReviewX\Twig\Node\Expression\Unary\AbstractUnary;
+use ReviewX\Twig\Node\ModuleNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\NodeVisitor\NodeVisitorInterface;
+use ReviewX\Twig\RuntimeLoader\RuntimeLoaderInterface;
+use ReviewX\Twig\TokenParser\TokenParserInterface;
 /**
  * Stores the Twig configuration and renders templates.
  *
@@ -57,7 +57,7 @@ class Environment
     private $resolvedGlobals;
     private $loadedTemplates;
     private $strictVariables;
-    private $templateClassPrefix = '\\Rvx\\__TwigTemplate_';
+    private $templateClassPrefix = '\\ReviewX\\__TwigTemplate_';
     private $originalCache;
     private $extensionSet;
     private $runtimeLoaders = [];

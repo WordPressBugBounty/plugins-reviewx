@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Exception;
+namespace ReviewX\DI\Definition\Exception;
 
 /**
  * Error in the definitions using annotations.

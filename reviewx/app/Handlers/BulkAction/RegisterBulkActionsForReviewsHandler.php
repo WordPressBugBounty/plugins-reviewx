@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers\BulkAction;
+namespace ReviewX\Handlers\BulkAction;
 
-use Rvx\Services\CacheServices;
+use ReviewX\Services\CacheServices;
 class RegisterBulkActionsForReviewsHandler
 {
     protected $cacheServices;

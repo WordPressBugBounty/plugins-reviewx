@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Psr\\Http\\Message\\": "src\/"
+            "ReviewX\\Psr\\Http\\Message\\": "src\/"
         }
     },
     "extra": {

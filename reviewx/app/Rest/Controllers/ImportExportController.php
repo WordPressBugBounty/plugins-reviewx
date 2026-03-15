@@ -1,14 +1,14 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Throwable;
-use Rvx\WPDrill\Response;
-use Rvx\Utilities\Helper;
-use Rvx\Services\CacheServices;
-use Rvx\Services\ImportExportServices;
-use Rvx\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
+use ReviewX\Utilities\Helper;
+use ReviewX\Services\CacheServices;
+use ReviewX\Services\ImportExportServices;
+use ReviewX\WPDrill\Contracts\InvokableContract;
 class ImportExportController implements InvokableContract
 {
     protected ImportExportServices $importExportServices;

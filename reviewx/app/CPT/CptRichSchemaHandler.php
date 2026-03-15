@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\CPT;
+namespace ReviewX\CPT;
 
 \defined('ABSPATH') || exit;
-use Rvx\Services\SettingService;
+use ReviewX\Services\SettingService;
 use WP_Post;
 /**
  * Handles rich schema generation for non-product post types (CPTs, pages, posts, etc.).

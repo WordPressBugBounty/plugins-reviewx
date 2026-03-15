@@ -10,7 +10,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Rvx\\WPDrill\\": "src\/"
+            "ReviewX\\WPDrill\\": "src\/"
         }
     },
     "authors": [

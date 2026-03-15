@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Apiz;
+namespace ReviewX\Apiz;
 
-use Rvx\Nahid\QArray\QueryEngine;
+use ReviewX\Nahid\QArray\QueryEngine;
 class QueryBuilder extends QueryEngine
 {
     public function parseData($data)

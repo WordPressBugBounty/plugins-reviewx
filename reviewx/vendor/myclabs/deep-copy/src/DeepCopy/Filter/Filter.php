@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter;
+namespace ReviewX\DeepCopy\Filter;
 
 /**
  * Filter to apply to a property while copying an object

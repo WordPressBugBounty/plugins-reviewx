@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Error;
+namespace ReviewX\Twig\Error;
 
-use Rvx\Twig\Source;
-use Rvx\Twig\Template;
+use ReviewX\Twig\Source;
+use ReviewX\Twig\Template;
 /**
  * Twig base exception.
  *

@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\WPDrill\Commands;
+namespace ReviewX\WPDrill\Commands;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\WPDrill\DB\Migration\Migrator;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\WPDrill\DB\Migration\Migrator;
 class MigrateRollbackCommand extends BaseCommand
 {
     protected function configure()

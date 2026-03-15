@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Resolver;
+namespace ReviewX\DI\Definition\Resolver;
 
-use Rvx\DI\Definition\ArrayDefinition;
-use Rvx\DI\Definition\DecoratorDefinition;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\EnvironmentVariableDefinition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\FactoryDefinition;
-use Rvx\DI\Definition\InstanceDefinition;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\SelfResolvingDefinition;
-use Rvx\DI\Proxy\ProxyFactory;
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\DI\Definition\ArrayDefinition;
+use ReviewX\DI\Definition\DecoratorDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\EnvironmentVariableDefinition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\FactoryDefinition;
+use ReviewX\DI\Definition\InstanceDefinition;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\SelfResolvingDefinition;
+use ReviewX\DI\Proxy\ProxyFactory;
+use ReviewX\Psr\Container\ContainerInterface;
 /**
  * Dispatches to more specific resolvers.
  *

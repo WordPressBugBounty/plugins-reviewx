@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7Server;
+namespace ReviewX\Nyholm\Psr7Server;
 
-use Rvx\Psr\Http\Message\ServerRequestInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\ServerRequestInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  * @author Martijn van der Ven <martijn@vanderven.se>

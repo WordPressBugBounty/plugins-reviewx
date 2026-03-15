@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Dumper;
+namespace ReviewX\DI\Definition\Dumper;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\ObjectDefinition\MethodInjection;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionException;
 /**
  * Dumps object definitions to string for debugging purposes.

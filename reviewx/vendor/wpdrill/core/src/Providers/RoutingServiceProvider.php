@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill\Providers;
+namespace ReviewX\WPDrill\Providers;
 
-use Rvx\WPDrill\ConfigManager;
-use Rvx\WPDrill\Routing\RouteManager;
-use Rvx\WPDrill\ServiceProvider;
+use ReviewX\WPDrill\ConfigManager;
+use ReviewX\WPDrill\Routing\RouteManager;
+use ReviewX\WPDrill\ServiceProvider;
 class RoutingServiceProvider extends ServiceProvider
 {
     public function register() : void

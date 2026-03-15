@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Contracts\Service;
+namespace ReviewX\Symfony\Contracts\Service;
 
-use Rvx\Psr\Container\ContainerInterface;
+use ReviewX\Psr\Container\ContainerInterface;
 /**
  * A ServiceProviderInterface exposes the identifiers and the types of services provided by a container.
  *

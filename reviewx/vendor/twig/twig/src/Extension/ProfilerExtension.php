@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\Profiler\NodeVisitor\ProfilerNodeVisitor;
-use Rvx\Twig\Profiler\Profile;
+use ReviewX\Twig\Profiler\NodeVisitor\ProfilerNodeVisitor;
+use ReviewX\Twig\Profiler\Profile;
 class ProfilerExtension extends AbstractExtension
 {
     private $actives = [];

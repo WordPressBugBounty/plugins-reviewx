@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Noodlehaus\Parser;
+namespace ReviewX\Noodlehaus\Parser;
 
-use Rvx\Noodlehaus\Exception\ParseException;
+use ReviewX\Noodlehaus\Exception\ParseException;
 /**
  * XML parser
  *

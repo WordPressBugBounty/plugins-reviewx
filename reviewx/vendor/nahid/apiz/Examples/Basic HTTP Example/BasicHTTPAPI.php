@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Examples;
+namespace ReviewX\Examples;
 
-use Rvx\Apiz\AbstractApi;
+use ReviewX\Apiz\AbstractApi;
 class BasicHTTPAPI extends AbstractApi
 {
     /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\ProductApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\ProductApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
 class ProductUpdateHandler
 {
     public function __invoke($product_id)

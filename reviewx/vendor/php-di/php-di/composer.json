@@ -15,7 +15,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Rvx\\DI\\": "src\/"
+            "ReviewX\\DI\\": "src\/"
         },
         "files": [
             "src\/functions.php"
@@ -23,8 +23,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\DI\\Test\\IntegrationTest\\": "tests\/IntegrationTest\/",
-            "Rvx\\DI\\Test\\UnitTest\\": "tests\/UnitTest\/"
+            "ReviewX\\DI\\Test\\IntegrationTest\\": "tests\/IntegrationTest\/",
+            "ReviewX\\DI\\Test\\UnitTest\\": "tests\/UnitTest\/"
         }
     },
     "scripts": {

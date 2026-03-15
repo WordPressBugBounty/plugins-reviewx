@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\WPDrill;
+namespace ReviewX\WPDrill;
 
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Routing\RouteManager;
-use Rvx\DI\Container;
-use Rvx\DI\ContainerBuilder;
-use Rvx\Psr\Container\ContainerInterface;
-use Rvx\WPDrill\Helpers;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Routing\RouteManager;
+use ReviewX\DI\Container;
+use ReviewX\DI\ContainerBuilder;
+use ReviewX\Psr\Container\ContainerInterface;
+use ReviewX\WPDrill\Helpers;
 class Plugin
 {
     protected static ?self $instance = null;

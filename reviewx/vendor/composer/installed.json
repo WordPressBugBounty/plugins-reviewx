@@ -35,7 +35,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Firebase\\JWT\\": "src"
+                    "ReviewX\\Firebase\\JWT\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -119,7 +119,7 @@
                     "src\/functions_include.php"
                 ],
                 "psr-4": {
-                    "Rvx\\GuzzleHttp\\": "src\/"
+                    "ReviewX\\GuzzleHttp\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -228,7 +228,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\GuzzleHttp\\Promise\\": "src\/"
+                    "ReviewX\\GuzzleHttp\\Promise\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -283,17 +283,17 @@
         },
         {
             "name": "guzzlehttp\/psr7",
-            "version": "2.8.0",
-            "version_normalized": "2.8.0.0",
+            "version": "2.9.0",
+            "version_normalized": "2.9.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/guzzle\/psr7.git",
-                "reference": "21dc724a0583619cd1652f673303492272778051"
+                "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/guzzle\/psr7\/zipball\/21dc724a0583619cd1652f673303492272778051",
-                "reference": "21dc724a0583619cd1652f673303492272778051",
+                "url": "https:\/\/api.github.com\/repos\/guzzle\/psr7\/zipball\/7d0ed42f28e42d61352a7a79de682e5e67fec884",
+                "reference": "7d0ed42f28e42d61352a7a79de682e5e67fec884",
                 "shasum": ""
             },
             "require": {
@@ -309,12 +309,13 @@
             "require-dev": {
                 "bamarni\/composer-bin-plugin": "^1.8.2",
                 "http-interop\/http-factory-tests": "0.9.0",
+                "jshttp\/mime-db": "1.54.0.1",
                 "phpunit\/phpunit": "^8.5.44 || ^9.6.25"
             },
             "suggest": {
                 "laminas\/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
-            "time": "2025-08-23T21:21:41+00:00",
+            "time": "2026-03-10T16:41:02+00:00",
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -325,7 +326,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\GuzzleHttp\\Psr7\\": "src\/"
+                    "ReviewX\\GuzzleHttp\\Psr7\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -382,7 +383,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/guzzle\/psr7\/issues",
-                "source": "https:\/\/github.com\/guzzle\/psr7\/tree\/2.8.0"
+                "source": "https:\/\/github.com\/guzzle\/psr7\/tree\/2.9.0"
             },
             "funding": [
                 {
@@ -432,7 +433,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Noodlehaus\\": "src"
+                    "ReviewX\\Noodlehaus\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -500,7 +501,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Laravel\\SerializableClosure\\": "src\/"
+                    "ReviewX\\Laravel\\SerializableClosure\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -565,7 +566,7 @@
                     "src\/DeepCopy\/deep_copy.php"
                 ],
                 "psr-4": {
-                    "Rvx\\DeepCopy\\": "src\/DeepCopy\/"
+                    "ReviewX\\DeepCopy\\": "src\/DeepCopy\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -630,8 +631,8 @@
             "autoload": {
                 "files": [],
                 "psr-4": {
-                    "Rvx\\Apiz\\": "src\/",
-                    "Rvx\\Tests\\": "Tests\/"
+                    "ReviewX\\Apiz\\": "src\/",
+                    "ReviewX\\Tests\\": "Tests\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -687,7 +688,7 @@
                     "helpers\/qarray.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Nahid\\QArray\\": "src\/"
+                    "ReviewX\\Nahid\\QArray\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -755,7 +756,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Nyholm\\Psr7\\": "src\/"
+                    "ReviewX\\Nyholm\\Psr7\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -824,7 +825,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Nyholm\\Psr7Server\\": "src\/"
+                    "ReviewX\\Nyholm\\Psr7Server\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -892,7 +893,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Invoker\\": "src\/"
+                    "ReviewX\\Invoker\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -966,7 +967,7 @@
                     "src\/functions.php"
                 ],
                 "psr-4": {
-                    "Rvx\\DI\\": "src\/"
+                    "ReviewX\\DI\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1027,7 +1028,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\PhpDocReader\\": "src\/PhpDocReader"
+                    "ReviewX\\PhpDocReader\\": "src\/PhpDocReader"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1068,7 +1069,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Psr\\Container\\": "src\/"
+                    "ReviewX\\Psr\\Container\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1125,7 +1126,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Psr\\Http\\Client\\": "src\/"
+                    "ReviewX\\Psr\\Http\\Client\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1180,7 +1181,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Psr\\Http\\Message\\": "src\/"
+                    "ReviewX\\Psr\\Http\\Message\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1237,7 +1238,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Psr\\Http\\Message\\": "src\/"
+                    "ReviewX\\Psr\\Http\\Message\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1367,7 +1368,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Symfony\\Component\\Console\\": ""
+                    "ReviewX\\Symfony\\Component\\Console\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -1522,7 +1523,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Polyfill\\Ctype\\": ""
+                    "ReviewX\\Symfony\\Polyfill\\Ctype\\": ""
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1605,7 +1606,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
+                    "ReviewX\\Symfony\\Polyfill\\Intl\\Grapheme\\": ""
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1690,7 +1691,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+                    "ReviewX\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
                 },
                 "classmap": [
                     "Resources\/stubs"
@@ -1782,7 +1783,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Polyfill\\Mbstring\\": ""
+                    "ReviewX\\Symfony\\Polyfill\\Mbstring\\": ""
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1863,7 +1864,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Polyfill\\Php73\\": ""
+                    "ReviewX\\Symfony\\Polyfill\\Php73\\": ""
                 },
                 "classmap": [
                     "Resources\/stubs"
@@ -1946,7 +1947,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Polyfill\\Php80\\": ""
+                    "ReviewX\\Symfony\\Polyfill\\Php80\\": ""
                 },
                 "classmap": [
                     "Resources\/stubs"
@@ -2025,7 +2026,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Symfony\\Component\\Process\\": ""
+                    "ReviewX\\Symfony\\Component\\Process\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -2110,7 +2111,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Symfony\\Contracts\\Service\\": ""
+                    "ReviewX\\Symfony\\Contracts\\Service\\": ""
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2196,7 +2197,7 @@
                     "Resources\/functions.php"
                 ],
                 "psr-4": {
-                    "Rvx\\Symfony\\Component\\String\\": ""
+                    "ReviewX\\Symfony\\Component\\String\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -2274,7 +2275,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Twig\\": "src\/"
+                    "ReviewX\\Twig\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2345,7 +2346,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\Viocon\\": "src\/Viocon\/"
+                    "ReviewX\\Viocon\\": "src\/Viocon\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2380,12 +2381,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/WPDrill\/core.git",
-                "reference": "82e40c540dc0489bde622e76a8ad6f4ea90456b0"
+                "reference": "e3c4087828c04da9a37533851202658375678d57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/WPDrill\/core\/zipball\/82e40c540dc0489bde622e76a8ad6f4ea90456b0",
-                "reference": "82e40c540dc0489bde622e76a8ad6f4ea90456b0",
+                "url": "https:\/\/api.github.com\/repos\/WPDrill\/core\/zipball\/e3c4087828c04da9a37533851202658375678d57",
+                "reference": "e3c4087828c04da9a37533851202658375678d57",
                 "shasum": ""
             },
             "require": {
@@ -2400,13 +2401,13 @@
                 "twig\/twig": "^3.0 <3.8",
                 "usmanhalalit\/viocon": "1.0.*@dev"
             },
-            "time": "2026-02-11T09:28:13+00:00",
+            "time": "2026-03-10T06:38:29+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rvx\\WPDrill\\": "src\/"
+                    "ReviewX\\WPDrill\\": "src\/"
                 }
             },
             "license": [

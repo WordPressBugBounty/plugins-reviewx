@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Noodlehaus\Parser;
+namespace ReviewX\Noodlehaus\Parser;
 
 use Exception;
-use Rvx\Symfony\Component\Yaml\Yaml as YamlParser;
-use Rvx\Noodlehaus\Exception\ParseException;
+use ReviewX\Symfony\Component\Yaml\Yaml as YamlParser;
+use ReviewX\Noodlehaus\Exception\ParseException;
 /**
  * YAML parser
  *

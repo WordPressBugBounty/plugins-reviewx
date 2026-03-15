@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
+use ReviewX\Apiz\Http\Response;
 use Exception;
-class GoogleReviewApi extends \Rvx\Api\BaseApi
+class GoogleReviewApi extends \ReviewX\Api\BaseApi
 {
     /**
      * @return Response

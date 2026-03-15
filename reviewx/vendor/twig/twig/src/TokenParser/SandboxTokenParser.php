@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\TokenParser;
+namespace ReviewX\Twig\TokenParser;
 
-use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Node\IncludeNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\SandboxNode;
-use Rvx\Twig\Node\TextNode;
-use Rvx\Twig\Token;
+use ReviewX\Twig\Error\SyntaxError;
+use ReviewX\Twig\Node\IncludeNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Node\SandboxNode;
+use ReviewX\Twig\Node\TextNode;
+use ReviewX\Twig\Token;
 /**
  * Marks a section of a template as untrusted code that must be evaluated in the sandbox mode.
  *

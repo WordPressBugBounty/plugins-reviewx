@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Process;
+namespace ReviewX\Symfony\Component\Process;
 
-use Rvx\Symfony\Component\Process\Exception\LogicException;
-use Rvx\Symfony\Component\Process\Exception\RuntimeException;
+use ReviewX\Symfony\Component\Process\Exception\LogicException;
+use ReviewX\Symfony\Component\Process\Exception\RuntimeException;
 /**
  * PhpProcess runs a PHP script in an independent process.
  *

@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Apiz\Http\Response;
-use Rvx\Api\CptApi;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Apiz\Http\Response;
+use ReviewX\Api\CptApi;
+use ReviewX\Utilities\Auth\Client;
 class CptService
 {
     /**

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\CommandLoader;
+namespace ReviewX\Symfony\Component\Console\CommandLoader;
 
-use Rvx\Symfony\Component\Console\Exception\CommandNotFoundException;
+use ReviewX\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * A simple command loader using factories to instantiate commands lazily.
  *

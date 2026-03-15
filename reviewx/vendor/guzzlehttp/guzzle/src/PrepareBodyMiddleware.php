@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
 /**
  * Prepares requests that contain a body, adding the Content-Length,
  * Content-Type, and Expect headers.

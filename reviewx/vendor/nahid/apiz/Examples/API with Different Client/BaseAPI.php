@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Examples;
+namespace ReviewX\Examples;
 
-use Rvx\Apiz\AbstractApi;
+use ReviewX\Apiz\AbstractApi;
 abstract class BaseAPI extends AbstractApi
 {
     public function __construct()

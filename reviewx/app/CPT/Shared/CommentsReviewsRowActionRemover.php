@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\CPT\Shared;
+namespace ReviewX\CPT\Shared;
 
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class CommentsReviewsRowActionRemover
 {
     protected $cptHelper;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers\MigrationRollback;
+namespace ReviewX\Handlers\MigrationRollback;
 
 class SharedMethods
 {
-    public function rvx_is_old_pro_plugin_active()
+    public function reviewx_is_old_pro_plugin_active()
     {
         // Check for the older ReviewX Pro versions
         $pro_version = \defined('REVIEWX_PRO_VERSION') ? REVIEWX_PRO_VERSION : null;
@@ -14,10 +14,10 @@ class SharedMethods
             return \false;
         }
     }
-    public function rvx_activate_old_pro_plugin()
+    public function reviewx_activate_old_pro_plugin()
     {
         // Ensure WordPress functions are available
-        if (!\function_exists('Rvx\\get_plugins') || !\function_exists('Rvx\\activate_plugin')) {
+        if (!\function_exists('ReviewX\\get_plugins') || !\function_exists('ReviewX\\activate_plugin')) {
             return;
             // Exit if WordPress is not fully loaded
         }
@@ -48,9 +48,9 @@ class SharedMethods
             // Optionally, display a notice if the plugin is not found
         }
     }
-    public function rvx_deactivate_old_pro_plugin()
+    public function reviewx_deactivate_old_pro_plugin()
     {
-        if (!\function_exists('Rvx\\get_plugins') || !\function_exists('Rvx\\deactivate_plugins')) {
+        if (!\function_exists('ReviewX\\get_plugins') || !\function_exists('ReviewX\\deactivate_plugins')) {
             return;
             // Exit if WordPress is not fully loaded
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 /*
  * This file is part of the Symfony package.
@@ -10,7 +10,7 @@ namespace Rvx;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Rvx\Symfony\Polyfill\Mbstring as p;
+use ReviewX\Symfony\Polyfill\Mbstring as p;
 if (!\function_exists('mb_convert_encoding')) {
     function mb_convert_encoding(array|string|null $string, ?string $to_encoding, array|string|null $from_encoding = null) : array|string|false
     {
@@ -241,37 +241,37 @@ if (!\function_exists('mb_str_split')) {
         return p\Mbstring::mb_str_split((string) $string, (int) $length, $encoding);
     }
 }
-if (!\function_exists('Rvx\\mb_str_pad')) {
+if (!\function_exists('ReviewX\\mb_str_pad')) {
     function mb_str_pad(string $string, int $length, string $pad_string = ' ', int $pad_type = \STR_PAD_RIGHT, ?string $encoding = null) : string
     {
         return p\Mbstring::mb_str_pad($string, $length, $pad_string, $pad_type, $encoding);
     }
 }
-if (!\function_exists('Rvx\\mb_ucfirst')) {
+if (!\function_exists('ReviewX\\mb_ucfirst')) {
     function mb_ucfirst(string $string, ?string $encoding = null) : string
     {
         return p\Mbstring::mb_ucfirst($string, $encoding);
     }
 }
-if (!\function_exists('Rvx\\mb_lcfirst')) {
+if (!\function_exists('ReviewX\\mb_lcfirst')) {
     function mb_lcfirst(string $string, ?string $encoding = null) : string
     {
         return p\Mbstring::mb_lcfirst($string, $encoding);
     }
 }
-if (!\function_exists('Rvx\\mb_trim')) {
+if (!\function_exists('ReviewX\\mb_trim')) {
     function mb_trim(string $string, ?string $characters = null, ?string $encoding = null) : string
     {
         return p\Mbstring::mb_trim($string, $characters, $encoding);
     }
 }
-if (!\function_exists('Rvx\\mb_ltrim')) {
+if (!\function_exists('ReviewX\\mb_ltrim')) {
     function mb_ltrim(string $string, ?string $characters = null, ?string $encoding = null) : string
     {
         return p\Mbstring::mb_ltrim($string, $characters, $encoding);
     }
 }
-if (!\function_exists('Rvx\\mb_rtrim')) {
+if (!\function_exists('ReviewX\\mb_rtrim')) {
     function mb_rtrim(string $string, ?string $characters = null, ?string $encoding = null) : string
     {
         return p\Mbstring::mb_rtrim($string, $characters, $encoding);

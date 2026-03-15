@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI;
+namespace ReviewX\DI;
 
-use Rvx\DI\Compiler\RequestedEntryHolder;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Invoker\FactoryParameterResolver;
-use Rvx\Invoker\Exception\NotCallableException;
-use Rvx\Invoker\Exception\NotEnoughParametersException;
-use Rvx\Invoker\Invoker;
-use Rvx\Invoker\InvokerInterface;
-use Rvx\Invoker\ParameterResolver\AssociativeArrayResolver;
-use Rvx\Invoker\ParameterResolver\DefaultValueResolver;
-use Rvx\Invoker\ParameterResolver\NumericArrayResolver;
-use Rvx\Invoker\ParameterResolver\ResolverChain;
+use ReviewX\DI\Compiler\RequestedEntryHolder;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Invoker\FactoryParameterResolver;
+use ReviewX\Invoker\Exception\NotCallableException;
+use ReviewX\Invoker\Exception\NotEnoughParametersException;
+use ReviewX\Invoker\Invoker;
+use ReviewX\Invoker\InvokerInterface;
+use ReviewX\Invoker\ParameterResolver\AssociativeArrayResolver;
+use ReviewX\Invoker\ParameterResolver\DefaultValueResolver;
+use ReviewX\Invoker\ParameterResolver\NumericArrayResolver;
+use ReviewX\Invoker\ParameterResolver\ResolverChain;
 /**
  * Compiled version of the dependency injection container.
  *

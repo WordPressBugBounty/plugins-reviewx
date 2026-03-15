@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\CPT\Shared;
+namespace ReviewX\CPT\Shared;
 
-use Rvx\CPT\CptHelper;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Utilities\Auth\Client;
 /**
  * Handles WooCommerce Reviews page redirection notice and hides reviews
  * when product post type is managed by ReviewX.

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
+use ReviewX\Apiz\Http\Response;
 class ApiResponse extends Response
 {
     /**

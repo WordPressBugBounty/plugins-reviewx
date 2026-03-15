@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Profiler\Node;
+namespace ReviewX\Twig\Profiler\Node;
 
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Node\Node;
 /**
  * Represents a profile leave node.
  *

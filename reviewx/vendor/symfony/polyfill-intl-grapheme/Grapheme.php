@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Polyfill\Intl\Grapheme;
+namespace ReviewX\Symfony\Polyfill\Intl\Grapheme;
 
 \define('SYMFONY_GRAPHEME_CLUSTER_RX', ((float) \PCRE_VERSION < 10 ? (float) \PCRE_VERSION >= 8.32 : (float) \PCRE_VERSION >= 10.39) ? '\\X' : Grapheme::GRAPHEME_CLUSTER_RX);
 /**

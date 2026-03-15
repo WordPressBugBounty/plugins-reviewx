@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 class DataSyncHandler
 {
@@ -52,6 +52,7 @@ class DataSyncHandler
         }
         // Fallback to DB-only method if API fails or WooCommerce is disabled
         global $wpdb;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Fallback query when API fails
         return $wpdb->get_col($wpdb->prepare("\n            SELECT DISTINCT tt.taxonomy\n            FROM {$wpdb->term_relationships} tr\n            INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id\n            INNER JOIN {$wpdb->posts} p ON tr.object_id = p.ID\n            WHERE p.post_type = %s\n        ", 'product')) ?: [];
     }
 }

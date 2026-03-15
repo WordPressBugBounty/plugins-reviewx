@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Command;
+namespace ReviewX\Symfony\Component\Console\Command;
 
-use Rvx\Symfony\Component\Console\Application;
-use Rvx\Symfony\Component\Console\Attribute\AsCommand;
-use Rvx\Symfony\Component\Console\Completion\CompletionInput;
-use Rvx\Symfony\Component\Console\Completion\CompletionSuggestions;
-use Rvx\Symfony\Component\Console\Exception\ExceptionInterface;
-use Rvx\Symfony\Component\Console\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\Console\Exception\LogicException;
-use Rvx\Symfony\Component\Console\Helper\HelperSet;
-use Rvx\Symfony\Component\Console\Input\InputArgument;
-use Rvx\Symfony\Component\Console\Input\InputDefinition;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Input\InputOption;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Application;
+use ReviewX\Symfony\Component\Console\Attribute\AsCommand;
+use ReviewX\Symfony\Component\Console\Completion\CompletionInput;
+use ReviewX\Symfony\Component\Console\Completion\CompletionSuggestions;
+use ReviewX\Symfony\Component\Console\Exception\ExceptionInterface;
+use ReviewX\Symfony\Component\Console\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\Console\Exception\LogicException;
+use ReviewX\Symfony\Component\Console\Helper\HelperSet;
+use ReviewX\Symfony\Component\Console\Input\InputArgument;
+use ReviewX\Symfony\Component\Console\Input\InputDefinition;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Input\InputOption;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Base class for all commands.
  *
@@ -237,7 +237,7 @@ class Command
                         \cli_set_process_title($this->processTitle);
                     }
                 }
-            } elseif (\function_exists('Rvx\\setproctitle')) {
+            } elseif (\function_exists('ReviewX\\setproctitle')) {
                 setproctitle($this->processTitle);
             } elseif (OutputInterface::VERBOSITY_VERY_VERBOSE === $output->getVerbosity()) {
                 $output->writeln('<comment>Install the proctitle PECL to be able to change the process title.</comment>');

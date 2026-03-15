@@ -1,70 +1,76 @@
 <?php
 
-namespace Rvx\Providers;
+namespace ReviewX\Providers;
 
 \defined('ABSPATH') || exit;
-use Rvx\CPT\CptAverageRating;
-use Rvx\CPT\CptCommentsLinkMeta;
-use Rvx\CPT\CptRichSchemaHandler;
-// use Rvx\CPT\CommentsRatingColumn;
-use Rvx\CPT\Shared\CommentsReviewsMetaBoxRemover;
-use Rvx\CPT\Shared\CommentsReviewsFilter;
-use Rvx\CPT\Shared\CommentsReviewsRowActionRemover;
-use Rvx\CPT\Shared\WooReviewsRedirectHandler;
-use Rvx\CPT\Shared\CommentEditBlockHandler;
-use Rvx\CPT\Shared\CptPostHandler;
-use Rvx\CPT\Shared\PostsRatingColumn;
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Form\ReviewForm;
-use Rvx\Handlers\BulkAction\CustomBulkActionsForReviewsHandler;
-use Rvx\Handlers\BulkAction\RegisterBulkActionsForReviewsHandler;
-use Rvx\Handlers\CategoryCreateHandler;
-use Rvx\Handlers\CategoryDeleteHandler;
-use Rvx\Handlers\CategoryUpdateHandler;
-use Rvx\Handlers\Customize\WidgetCustomizeOptionsHandler;
-use Rvx\Handlers\Customize\WidgetCustomizeOutputCSSHandler;
-use Rvx\Handlers\MigrationRollback\UpgradeDBSettings;
-use Rvx\Handlers\Notice\ReviewxAdminNoticeHandler;
-use Rvx\Handlers\OrderCreateHandler;
-use Rvx\Handlers\OrderDeleteHandler;
-use Rvx\Handlers\OrderStatusChangedHandler;
-use Rvx\Handlers\OrderUpdateHandler;
-use Rvx\Handlers\OrderUpdateProcessHandler;
-use Rvx\Handlers\PluginRemovalHandler;
-use Rvx\Handlers\Product\ProductImportHandler;
-use Rvx\Handlers\Product\ProductUntrashHandler;
-use Rvx\Handlers\ProductDeleteHandler;
-use Rvx\Handlers\ReplyCommentHandler;
-use Rvx\Handlers\RichSchema\WoocommerceRichSchemaHandler;
-use Rvx\Handlers\RvxInit\PageBuilderHandler;
-use Rvx\Handlers\RvxInit\ResetProductMetaHandler;
-use Rvx\Handlers\RvxInit\ReviewXoldPluginDeactivateHandler;
-use Rvx\Handlers\RvxInit\UpgradeReviewxDeactiveProHandler;
-use Rvx\Handlers\UserDeleteHandler;
-use Rvx\Handlers\UserHandler;
-use Rvx\Handlers\UserUpdateHandler;
-use Rvx\Handlers\WChooks\StorefrontReviewLinkClickScroll;
-use Rvx\Handlers\WcTemplates\WcAccountDetails;
-use Rvx\Handlers\WcTemplates\WcAccountFormTag;
-use Rvx\Handlers\WcTemplates\WcEditAccountForm;
-use Rvx\Handlers\WcTemplates\WcSendEmailPermissionHandler;
-use Rvx\Handlers\WcTemplates\WoocommerceLocateTemplateHandler;
-use Rvx\Handlers\WooCommerceReviewEditForm;
-use Rvx\Handlers\WoocommerceSettingsSaveHandler;
-use Rvx\Handlers\WooReviewTableHandler;
-use Rvx\Models\Site;
-use Rvx\Utilities\Auth\ClientManager;
-use Rvx\Utilities\Auth\WpUserManager;
-use Rvx\Utilities\Auth\WpUser;
-use Rvx\WPDrill\ServiceProvider;
-// use Rvx\Handlers\WcTemplates\WcAccountDetailsError;
+use ReviewX\CPT\CptAverageRating;
+use ReviewX\CPT\CptCommentsLinkMeta;
+use ReviewX\CPT\CptRichSchemaHandler;
+// use ReviewX\CPT\CommentsRatingColumn;
+use ReviewX\CPT\Shared\CommentsReviewsMetaBoxRemover;
+use ReviewX\CPT\Shared\CommentsReviewsFilter;
+use ReviewX\CPT\Shared\CommentsReviewsRowActionRemover;
+use ReviewX\CPT\Shared\WooReviewsRedirectHandler;
+use ReviewX\CPT\Shared\CommentEditBlockHandler;
+use ReviewX\CPT\Shared\CptPostHandler;
+use ReviewX\CPT\Shared\PostsRatingColumn;
+use ReviewX\Api\ReviewsApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Form\ReviewForm;
+use ReviewX\Handlers\BulkAction\CustomBulkActionsForReviewsHandler;
+use ReviewX\Handlers\BulkAction\RegisterBulkActionsForReviewsHandler;
+use ReviewX\Handlers\CategoryCreateHandler;
+use ReviewX\Handlers\CategoryDeleteHandler;
+use ReviewX\Handlers\CategoryUpdateHandler;
+use ReviewX\Handlers\Customize\WidgetCustomizeOptionsHandler;
+use ReviewX\Handlers\Customize\WidgetCustomizeOutputCSSHandler;
+use ReviewX\Handlers\MigrationRollback\UpgradeDBSettings;
+use ReviewX\Handlers\Notice\ReviewxAdminNoticeHandler;
+use ReviewX\Handlers\OrderCreateHandler;
+use ReviewX\Handlers\OrderDeleteHandler;
+use ReviewX\Handlers\OrderStatusChangedHandler;
+use ReviewX\Handlers\OrderUpdateHandler;
+use ReviewX\Handlers\OrderUpdateProcessHandler;
+use ReviewX\Handlers\PluginRemovalHandler;
+use ReviewX\Handlers\Product\ProductImportHandler;
+use ReviewX\Handlers\Product\ProductUntrashHandler;
+use ReviewX\Handlers\ProductDeleteHandler;
+use ReviewX\Handlers\ReplyCommentHandler;
+use ReviewX\Handlers\RichSchema\WoocommerceRichSchemaHandler;
+use ReviewX\Handlers\ReviewXInit\PageBuilderHandler;
+use ReviewX\Handlers\ReviewXInit\ResetProductMetaHandler;
+use ReviewX\Handlers\ReviewXInit\ReviewXoldPluginDeactivateHandler;
+use ReviewX\Handlers\ReviewXInit\UpgradeReviewxDeactiveProHandler;
+use ReviewX\Handlers\UserDeleteHandler;
+use ReviewX\Handlers\UserHandler;
+use ReviewX\Handlers\UserUpdateHandler;
+use ReviewX\Handlers\WChooks\StorefrontReviewLinkClickScroll;
+use ReviewX\Handlers\WcTemplates\WcAccountDetails;
+use ReviewX\Handlers\WcTemplates\WcAccountFormTag;
+use ReviewX\Handlers\WcTemplates\WcEditAccountForm;
+use ReviewX\Handlers\WcTemplates\WcSendEmailPermissionHandler;
+use ReviewX\Handlers\WcTemplates\WoocommerceLocateTemplateHandler;
+use ReviewX\Handlers\WooCommerceReviewEditForm;
+use ReviewX\Handlers\WoocommerceSettingsSaveHandler;
+use ReviewX\Handlers\WooReviewTableHandler;
+use ReviewX\Models\Site;
+use ReviewX\Utilities\Auth\ClientManager;
+use ReviewX\Utilities\Auth\WpUserManager;
+use ReviewX\Utilities\Auth\WpUser;
+use ReviewX\WPDrill\ServiceProvider;
+// use ReviewX\Handlers\WcTemplates\WcAccountDetailsError;
 class PluginServiceProvider extends ServiceProvider
 {
     public function register() : void
     {
         $this->plugin->bind(ClientManager::class, function () {
-            $site = Site::first();
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'rvx_sites';
+            $site = null;
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name)) === $table_name) {
+                $site = Site::first();
+            }
             return new ClientManager($site);
         });
         $this->plugin->bind(WpUserManager::class, function () {
@@ -75,7 +81,7 @@ class PluginServiceProvider extends ServiceProvider
     {
         \add_action('plugins_loaded', function () {
             if (\is_admin() && \get_transient('rvx_reset_sync_flag')) {
-                (new \Rvx\Handlers\IsAlreadySyncSucess())->resetSyncFlag();
+                (new \ReviewX\Handlers\IsAlreadySyncSucess())->resetSyncFlag();
             }
             require_once \ABSPATH . 'wp-admin/includes/image.php';
         }, 15);
@@ -274,7 +280,7 @@ class PluginServiceProvider extends ServiceProvider
     }
     public function localizeScripts() : void
     {
-        $locals = ['rvx_localization_data_for_admin' => \Rvx\Utilities\Helper::prepareLangArray(), 'rvx_full_domain_name' => \Rvx\Utilities\Helper::domainSupport(), 'rvx_full_domain_api' => \Rvx\Utilities\Helper::getRestAPIurl()];
+        $locals = ['rvx_localization_data_for_admin' => \ReviewX\Utilities\Helper::prepareLangArray(), 'rvx_full_domain_name' => \ReviewX\Utilities\Helper::domainSupport(), 'rvx_full_domain_api' => \ReviewX\Utilities\Helper::getRestAPIurl()];
         // Localize for admin handles if they exist
         wp_localize_script('rvx_user_access_script', 'rvx_locals', $locals);
         // Localize for frontend handles if needed

@@ -9,12 +9,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\TokenParser;
+namespace ReviewX\Twig\TokenParser;
 
-use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Node\IfNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Token;
+use ReviewX\Twig\Error\SyntaxError;
+use ReviewX\Twig\Node\IfNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Token;
 /**
  * Tests a condition.
  *

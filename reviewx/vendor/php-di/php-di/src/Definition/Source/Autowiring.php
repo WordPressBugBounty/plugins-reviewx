@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\ObjectDefinition;
 /**
  * Source of definitions for entries of the container.
  *

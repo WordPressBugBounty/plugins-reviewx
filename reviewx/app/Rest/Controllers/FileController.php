@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\InvokableContract;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\InvokableContract;
 class FileController implements InvokableContract
 {
     public function __invoke()

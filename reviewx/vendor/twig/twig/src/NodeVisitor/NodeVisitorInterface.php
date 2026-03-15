@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\NodeVisitor;
+namespace ReviewX\Twig\NodeVisitor;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Node\Node;
 /**
  * Interface for node visitor classes.
  *

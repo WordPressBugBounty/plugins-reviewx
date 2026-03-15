@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 \defined("ABSPATH") || exit;
-return ['name' => 'ReviewX', 'slug' => 'reviewx', 'prefix' => 'rvx', 'rest_api_namespace' => 'reviewx', 'version' => '0.0.1', 'initial_handlers' => ['activated' => \Rvx\Handlers\PluginActivatedHandler::class, 'deactivated' => \Rvx\Handlers\PluginDeactivatedHandler::class, 'uninstalled' => [\Rvx\Handlers\PluginUninstallerHandler::class, 'handleUninstall']], 'providers' => [\Rvx\WPDrill\Providers\ShortcodeServiceProvider::class, \Rvx\WPDrill\Providers\DBServiceProvider::class, \Rvx\WPDrill\Providers\RequestServiceProvider::class, \Rvx\WPDrill\Providers\MenuServiceProvider::class, \Rvx\WPDrill\Providers\ViewServiceProvider::class, \Rvx\WPDrill\Providers\ConfigServiceProvider::class, \Rvx\WPDrill\Providers\EnqueueServiceProvider::class, \Rvx\WPDrill\Providers\RoutingServiceProvider::class, \Rvx\WPDrill\Providers\MigrationServiceProvider::class, \Rvx\WPDrill\Providers\CommonServiceProvider::class, \Rvx\Providers\PluginServiceProvider::class], 'build' => ['output_dir' => '.dist', 'commands' => ['before' => [], 'after' => [['composer', 'dump-autoload']]], 'cleanup' => [
+return ['name' => 'ReviewX', 'slug' => 'reviewx', 'prefix' => 'rvx', 'rest_api_namespace' => 'reviewx', 'version' => '0.0.1', 'initial_handlers' => ['activated' => \ReviewX\Handlers\PluginActivatedHandler::class, 'deactivated' => \ReviewX\Handlers\PluginDeactivatedHandler::class, 'uninstalled' => [\ReviewX\Handlers\PluginUninstallerHandler::class, 'handleUninstall']], 'providers' => [\ReviewX\WPDrill\Providers\ShortcodeServiceProvider::class, \ReviewX\WPDrill\Providers\DBServiceProvider::class, \ReviewX\WPDrill\Providers\RequestServiceProvider::class, \ReviewX\WPDrill\Providers\MenuServiceProvider::class, \ReviewX\WPDrill\Providers\ViewServiceProvider::class, \ReviewX\WPDrill\Providers\ConfigServiceProvider::class, \ReviewX\WPDrill\Providers\EnqueueServiceProvider::class, \ReviewX\WPDrill\Providers\RoutingServiceProvider::class, \ReviewX\WPDrill\Providers\MigrationServiceProvider::class, \ReviewX\WPDrill\Providers\CommonServiceProvider::class, \ReviewX\Providers\PluginServiceProvider::class], 'build' => ['output_dir' => '.dist', 'commands' => ['before' => [], 'after' => [['composer', 'dump-autoload']]], 'cleanup' => [
     // 'composer.json',
     // 'composer.lock',
     'scoper.inc.php',

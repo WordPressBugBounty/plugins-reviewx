@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter;
+namespace ReviewX\DeepCopy\Filter;
 
 class KeepFilter implements Filter
 {

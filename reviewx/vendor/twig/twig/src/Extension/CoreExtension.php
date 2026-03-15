@@ -8,69 +8,69 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Extension;
+namespace ReviewX\Twig\Extension;
 
-use Rvx\Twig\ExpressionParser;
-use Rvx\Twig\Node\Expression\Binary\AddBinary;
-use Rvx\Twig\Node\Expression\Binary\AndBinary;
-use Rvx\Twig\Node\Expression\Binary\BitwiseAndBinary;
-use Rvx\Twig\Node\Expression\Binary\BitwiseOrBinary;
-use Rvx\Twig\Node\Expression\Binary\BitwiseXorBinary;
-use Rvx\Twig\Node\Expression\Binary\ConcatBinary;
-use Rvx\Twig\Node\Expression\Binary\DivBinary;
-use Rvx\Twig\Node\Expression\Binary\EndsWithBinary;
-use Rvx\Twig\Node\Expression\Binary\EqualBinary;
-use Rvx\Twig\Node\Expression\Binary\FloorDivBinary;
-use Rvx\Twig\Node\Expression\Binary\GreaterBinary;
-use Rvx\Twig\Node\Expression\Binary\GreaterEqualBinary;
-use Rvx\Twig\Node\Expression\Binary\HasEveryBinary;
-use Rvx\Twig\Node\Expression\Binary\HasSomeBinary;
-use Rvx\Twig\Node\Expression\Binary\InBinary;
-use Rvx\Twig\Node\Expression\Binary\LessBinary;
-use Rvx\Twig\Node\Expression\Binary\LessEqualBinary;
-use Rvx\Twig\Node\Expression\Binary\MatchesBinary;
-use Rvx\Twig\Node\Expression\Binary\ModBinary;
-use Rvx\Twig\Node\Expression\Binary\MulBinary;
-use Rvx\Twig\Node\Expression\Binary\NotEqualBinary;
-use Rvx\Twig\Node\Expression\Binary\NotInBinary;
-use Rvx\Twig\Node\Expression\Binary\OrBinary;
-use Rvx\Twig\Node\Expression\Binary\PowerBinary;
-use Rvx\Twig\Node\Expression\Binary\RangeBinary;
-use Rvx\Twig\Node\Expression\Binary\SpaceshipBinary;
-use Rvx\Twig\Node\Expression\Binary\StartsWithBinary;
-use Rvx\Twig\Node\Expression\Binary\SubBinary;
-use Rvx\Twig\Node\Expression\Filter\DefaultFilter;
-use Rvx\Twig\Node\Expression\NullCoalesceExpression;
-use Rvx\Twig\Node\Expression\Test\ConstantTest;
-use Rvx\Twig\Node\Expression\Test\DefinedTest;
-use Rvx\Twig\Node\Expression\Test\DivisiblebyTest;
-use Rvx\Twig\Node\Expression\Test\EvenTest;
-use Rvx\Twig\Node\Expression\Test\NullTest;
-use Rvx\Twig\Node\Expression\Test\OddTest;
-use Rvx\Twig\Node\Expression\Test\SameasTest;
-use Rvx\Twig\Node\Expression\Unary\NegUnary;
-use Rvx\Twig\Node\Expression\Unary\NotUnary;
-use Rvx\Twig\Node\Expression\Unary\PosUnary;
-use Rvx\Twig\NodeVisitor\MacroAutoImportNodeVisitor;
-use Rvx\Twig\TokenParser\ApplyTokenParser;
-use Rvx\Twig\TokenParser\BlockTokenParser;
-use Rvx\Twig\TokenParser\DeprecatedTokenParser;
-use Rvx\Twig\TokenParser\DoTokenParser;
-use Rvx\Twig\TokenParser\EmbedTokenParser;
-use Rvx\Twig\TokenParser\ExtendsTokenParser;
-use Rvx\Twig\TokenParser\FlushTokenParser;
-use Rvx\Twig\TokenParser\ForTokenParser;
-use Rvx\Twig\TokenParser\FromTokenParser;
-use Rvx\Twig\TokenParser\IfTokenParser;
-use Rvx\Twig\TokenParser\ImportTokenParser;
-use Rvx\Twig\TokenParser\IncludeTokenParser;
-use Rvx\Twig\TokenParser\MacroTokenParser;
-use Rvx\Twig\TokenParser\SetTokenParser;
-use Rvx\Twig\TokenParser\UseTokenParser;
-use Rvx\Twig\TokenParser\WithTokenParser;
-use Rvx\Twig\TwigFilter;
-use Rvx\Twig\TwigFunction;
-use Rvx\Twig\TwigTest;
+use ReviewX\Twig\ExpressionParser;
+use ReviewX\Twig\Node\Expression\Binary\AddBinary;
+use ReviewX\Twig\Node\Expression\Binary\AndBinary;
+use ReviewX\Twig\Node\Expression\Binary\BitwiseAndBinary;
+use ReviewX\Twig\Node\Expression\Binary\BitwiseOrBinary;
+use ReviewX\Twig\Node\Expression\Binary\BitwiseXorBinary;
+use ReviewX\Twig\Node\Expression\Binary\ConcatBinary;
+use ReviewX\Twig\Node\Expression\Binary\DivBinary;
+use ReviewX\Twig\Node\Expression\Binary\EndsWithBinary;
+use ReviewX\Twig\Node\Expression\Binary\EqualBinary;
+use ReviewX\Twig\Node\Expression\Binary\FloorDivBinary;
+use ReviewX\Twig\Node\Expression\Binary\GreaterBinary;
+use ReviewX\Twig\Node\Expression\Binary\GreaterEqualBinary;
+use ReviewX\Twig\Node\Expression\Binary\HasEveryBinary;
+use ReviewX\Twig\Node\Expression\Binary\HasSomeBinary;
+use ReviewX\Twig\Node\Expression\Binary\InBinary;
+use ReviewX\Twig\Node\Expression\Binary\LessBinary;
+use ReviewX\Twig\Node\Expression\Binary\LessEqualBinary;
+use ReviewX\Twig\Node\Expression\Binary\MatchesBinary;
+use ReviewX\Twig\Node\Expression\Binary\ModBinary;
+use ReviewX\Twig\Node\Expression\Binary\MulBinary;
+use ReviewX\Twig\Node\Expression\Binary\NotEqualBinary;
+use ReviewX\Twig\Node\Expression\Binary\NotInBinary;
+use ReviewX\Twig\Node\Expression\Binary\OrBinary;
+use ReviewX\Twig\Node\Expression\Binary\PowerBinary;
+use ReviewX\Twig\Node\Expression\Binary\RangeBinary;
+use ReviewX\Twig\Node\Expression\Binary\SpaceshipBinary;
+use ReviewX\Twig\Node\Expression\Binary\StartsWithBinary;
+use ReviewX\Twig\Node\Expression\Binary\SubBinary;
+use ReviewX\Twig\Node\Expression\Filter\DefaultFilter;
+use ReviewX\Twig\Node\Expression\NullCoalesceExpression;
+use ReviewX\Twig\Node\Expression\Test\ConstantTest;
+use ReviewX\Twig\Node\Expression\Test\DefinedTest;
+use ReviewX\Twig\Node\Expression\Test\DivisiblebyTest;
+use ReviewX\Twig\Node\Expression\Test\EvenTest;
+use ReviewX\Twig\Node\Expression\Test\NullTest;
+use ReviewX\Twig\Node\Expression\Test\OddTest;
+use ReviewX\Twig\Node\Expression\Test\SameasTest;
+use ReviewX\Twig\Node\Expression\Unary\NegUnary;
+use ReviewX\Twig\Node\Expression\Unary\NotUnary;
+use ReviewX\Twig\Node\Expression\Unary\PosUnary;
+use ReviewX\Twig\NodeVisitor\MacroAutoImportNodeVisitor;
+use ReviewX\Twig\TokenParser\ApplyTokenParser;
+use ReviewX\Twig\TokenParser\BlockTokenParser;
+use ReviewX\Twig\TokenParser\DeprecatedTokenParser;
+use ReviewX\Twig\TokenParser\DoTokenParser;
+use ReviewX\Twig\TokenParser\EmbedTokenParser;
+use ReviewX\Twig\TokenParser\ExtendsTokenParser;
+use ReviewX\Twig\TokenParser\FlushTokenParser;
+use ReviewX\Twig\TokenParser\ForTokenParser;
+use ReviewX\Twig\TokenParser\FromTokenParser;
+use ReviewX\Twig\TokenParser\IfTokenParser;
+use ReviewX\Twig\TokenParser\ImportTokenParser;
+use ReviewX\Twig\TokenParser\IncludeTokenParser;
+use ReviewX\Twig\TokenParser\MacroTokenParser;
+use ReviewX\Twig\TokenParser\SetTokenParser;
+use ReviewX\Twig\TokenParser\UseTokenParser;
+use ReviewX\Twig\TokenParser\WithTokenParser;
+use ReviewX\Twig\TwigFilter;
+use ReviewX\Twig\TwigFunction;
+use ReviewX\Twig\TwigTest;
 final class CoreExtension extends AbstractExtension
 {
     private $dateFormats = ['F j, Y H:i', '%d days'];
@@ -149,45 +149,45 @@ final class CoreExtension extends AbstractExtension
     {
         return [
             // formatting filters
-            new TwigFilter('date', '\\Rvx\\twig_date_format_filter', ['needs_environment' => \true]),
-            new TwigFilter('date_modify', '\\Rvx\\twig_date_modify_filter', ['needs_environment' => \true]),
-            new TwigFilter('format', '\\Rvx\\twig_sprintf'),
-            new TwigFilter('replace', '\\Rvx\\twig_replace_filter'),
-            new TwigFilter('number_format', '\\Rvx\\twig_number_format_filter', ['needs_environment' => \true]),
+            new TwigFilter('date', '\\ReviewX\\twig_date_format_filter', ['needs_environment' => \true]),
+            new TwigFilter('date_modify', '\\ReviewX\\twig_date_modify_filter', ['needs_environment' => \true]),
+            new TwigFilter('format', '\\ReviewX\\twig_sprintf'),
+            new TwigFilter('replace', '\\ReviewX\\twig_replace_filter'),
+            new TwigFilter('number_format', '\\ReviewX\\twig_number_format_filter', ['needs_environment' => \true]),
             new TwigFilter('abs', 'abs'),
-            new TwigFilter('round', '\\Rvx\\twig_round'),
+            new TwigFilter('round', '\\ReviewX\\twig_round'),
             // encoding
-            new TwigFilter('url_encode', '\\Rvx\\twig_urlencode_filter'),
+            new TwigFilter('url_encode', '\\ReviewX\\twig_urlencode_filter'),
             new TwigFilter('json_encode', 'json_encode'),
-            new TwigFilter('convert_encoding', '\\Rvx\\twig_convert_encoding'),
+            new TwigFilter('convert_encoding', '\\ReviewX\\twig_convert_encoding'),
             // string filters
-            new TwigFilter('title', '\\Rvx\\twig_title_string_filter', ['needs_environment' => \true]),
-            new TwigFilter('capitalize', '\\Rvx\\twig_capitalize_string_filter', ['needs_environment' => \true]),
-            new TwigFilter('upper', '\\Rvx\\twig_upper_filter', ['needs_environment' => \true]),
-            new TwigFilter('lower', '\\Rvx\\twig_lower_filter', ['needs_environment' => \true]),
-            new TwigFilter('striptags', '\\Rvx\\twig_striptags'),
-            new TwigFilter('trim', '\\Rvx\\twig_trim_filter'),
-            new TwigFilter('nl2br', '\\Rvx\\twig_nl2br', ['pre_escape' => 'html', 'is_safe' => ['html']]),
-            new TwigFilter('spaceless', '\\Rvx\\twig_spaceless', ['is_safe' => ['html']]),
+            new TwigFilter('title', '\\ReviewX\\twig_title_string_filter', ['needs_environment' => \true]),
+            new TwigFilter('capitalize', '\\ReviewX\\twig_capitalize_string_filter', ['needs_environment' => \true]),
+            new TwigFilter('upper', '\\ReviewX\\twig_upper_filter', ['needs_environment' => \true]),
+            new TwigFilter('lower', '\\ReviewX\\twig_lower_filter', ['needs_environment' => \true]),
+            new TwigFilter('striptags', '\\ReviewX\\twig_striptags'),
+            new TwigFilter('trim', '\\ReviewX\\twig_trim_filter'),
+            new TwigFilter('nl2br', '\\ReviewX\\twig_nl2br', ['pre_escape' => 'html', 'is_safe' => ['html']]),
+            new TwigFilter('spaceless', '\\ReviewX\\twig_spaceless', ['is_safe' => ['html']]),
             // array helpers
-            new TwigFilter('join', '\\Rvx\\twig_join_filter'),
-            new TwigFilter('split', '\\Rvx\\twig_split_filter', ['needs_environment' => \true]),
-            new TwigFilter('sort', '\\Rvx\\twig_sort_filter', ['needs_environment' => \true]),
-            new TwigFilter('merge', '\\Rvx\\twig_array_merge'),
-            new TwigFilter('batch', '\\Rvx\\twig_array_batch'),
-            new TwigFilter('column', '\\Rvx\\twig_array_column'),
-            new TwigFilter('filter', '\\Rvx\\twig_array_filter', ['needs_environment' => \true]),
-            new TwigFilter('map', '\\Rvx\\twig_array_map', ['needs_environment' => \true]),
-            new TwigFilter('reduce', '\\Rvx\\twig_array_reduce', ['needs_environment' => \true]),
+            new TwigFilter('join', '\\ReviewX\\twig_join_filter'),
+            new TwigFilter('split', '\\ReviewX\\twig_split_filter', ['needs_environment' => \true]),
+            new TwigFilter('sort', '\\ReviewX\\twig_sort_filter', ['needs_environment' => \true]),
+            new TwigFilter('merge', '\\ReviewX\\twig_array_merge'),
+            new TwigFilter('batch', '\\ReviewX\\twig_array_batch'),
+            new TwigFilter('column', '\\ReviewX\\twig_array_column'),
+            new TwigFilter('filter', '\\ReviewX\\twig_array_filter', ['needs_environment' => \true]),
+            new TwigFilter('map', '\\ReviewX\\twig_array_map', ['needs_environment' => \true]),
+            new TwigFilter('reduce', '\\ReviewX\\twig_array_reduce', ['needs_environment' => \true]),
             // string/array filters
-            new TwigFilter('reverse', '\\Rvx\\twig_reverse_filter', ['needs_environment' => \true]),
-            new TwigFilter('length', '\\Rvx\\twig_length_filter', ['needs_environment' => \true]),
-            new TwigFilter('slice', '\\Rvx\\twig_slice', ['needs_environment' => \true]),
-            new TwigFilter('first', '\\Rvx\\twig_first', ['needs_environment' => \true]),
-            new TwigFilter('last', '\\Rvx\\twig_last', ['needs_environment' => \true]),
+            new TwigFilter('reverse', '\\ReviewX\\twig_reverse_filter', ['needs_environment' => \true]),
+            new TwigFilter('length', '\\ReviewX\\twig_length_filter', ['needs_environment' => \true]),
+            new TwigFilter('slice', '\\ReviewX\\twig_slice', ['needs_environment' => \true]),
+            new TwigFilter('first', '\\ReviewX\\twig_first', ['needs_environment' => \true]),
+            new TwigFilter('last', '\\ReviewX\\twig_last', ['needs_environment' => \true]),
             // iteration and runtime
-            new TwigFilter('default', '\\Rvx\\_twig_default_filter', ['node_class' => DefaultFilter::class]),
-            new TwigFilter('keys', '\\Rvx\\twig_get_array_keys_filter'),
+            new TwigFilter('default', '\\ReviewX\\_twig_default_filter', ['node_class' => DefaultFilter::class]),
+            new TwigFilter('keys', '\\ReviewX\\twig_get_array_keys_filter'),
         ];
     }
     public function getFunctions() : array
@@ -207,17 +207,17 @@ final class CoreExtension extends AbstractExtension
         return [['not' => ['precedence' => 50, 'class' => NotUnary::class], '-' => ['precedence' => 500, 'class' => NegUnary::class], '+' => ['precedence' => 500, 'class' => PosUnary::class]], ['or' => ['precedence' => 10, 'class' => OrBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'and' => ['precedence' => 15, 'class' => AndBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'b-or' => ['precedence' => 16, 'class' => BitwiseOrBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'b-xor' => ['precedence' => 17, 'class' => BitwiseXorBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'b-and' => ['precedence' => 18, 'class' => BitwiseAndBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '==' => ['precedence' => 20, 'class' => EqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '!=' => ['precedence' => 20, 'class' => NotEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '<=>' => ['precedence' => 20, 'class' => SpaceshipBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '<' => ['precedence' => 20, 'class' => LessBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '>' => ['precedence' => 20, 'class' => GreaterBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '>=' => ['precedence' => 20, 'class' => GreaterEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '<=' => ['precedence' => 20, 'class' => LessEqualBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'not in' => ['precedence' => 20, 'class' => NotInBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'in' => ['precedence' => 20, 'class' => InBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'matches' => ['precedence' => 20, 'class' => MatchesBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'starts with' => ['precedence' => 20, 'class' => StartsWithBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'ends with' => ['precedence' => 20, 'class' => EndsWithBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'has some' => ['precedence' => 20, 'class' => HasSomeBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'has every' => ['precedence' => 20, 'class' => HasEveryBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '..' => ['precedence' => 25, 'class' => RangeBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '+' => ['precedence' => 30, 'class' => AddBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '-' => ['precedence' => 30, 'class' => SubBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '~' => ['precedence' => 40, 'class' => ConcatBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '*' => ['precedence' => 60, 'class' => MulBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '/' => ['precedence' => 60, 'class' => DivBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '//' => ['precedence' => 60, 'class' => FloorDivBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], '%' => ['precedence' => 60, 'class' => ModBinary::class, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'is' => ['precedence' => 100, 'associativity' => ExpressionParser::OPERATOR_LEFT], 'is not' => ['precedence' => 100, 'associativity' => ExpressionParser::OPERATOR_LEFT], '**' => ['precedence' => 200, 'class' => PowerBinary::class, 'associativity' => ExpressionParser::OPERATOR_RIGHT], '??' => ['precedence' => 300, 'class' => NullCoalesceExpression::class, 'associativity' => ExpressionParser::OPERATOR_RIGHT]]];
     }
 }
-namespace Rvx;
+namespace ReviewX;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\Error\LoaderError;
-use Rvx\Twig\Error\RuntimeError;
-use Rvx\Twig\Extension\CoreExtension;
-use Rvx\Twig\Extension\SandboxExtension;
-use Rvx\Twig\Markup;
-use Rvx\Twig\Source;
-use Rvx\Twig\Template;
-use Rvx\Twig\TemplateWrapper;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Error\LoaderError;
+use ReviewX\Twig\Error\RuntimeError;
+use ReviewX\Twig\Extension\CoreExtension;
+use ReviewX\Twig\Extension\SandboxExtension;
+use ReviewX\Twig\Markup;
+use ReviewX\Twig\Source;
+use ReviewX\Twig\Template;
+use ReviewX\Twig\TemplateWrapper;
 /**
  * Cycles over a value.
  *
@@ -1445,7 +1445,7 @@ function twig_array_every(Environment $env, $array, $arrow)
 }
 function twig_check_arrow_in_sandbox(Environment $env, $arrow, $thing, $type)
 {
-    if (!$arrow instanceof \Closure && $env->hasExtension('Rvx\\Twig\\Extension\\SandboxExtension') && $env->getExtension('Rvx\\Twig\\Extension\\SandboxExtension')->isSandboxed()) {
+    if (!$arrow instanceof \Closure && $env->hasExtension('ReviewX\\Twig\\Extension\\SandboxExtension') && $env->getExtension('ReviewX\\Twig\\Extension\\SandboxExtension')->isSandboxed()) {
         throw new RuntimeError(\sprintf('The callable passed to the "%s" %s must be a Closure in sandbox mode.', $thing, $type));
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker;
+namespace ReviewX\Invoker;
 
 use Closure;
-use Rvx\Invoker\Exception\NotCallableException;
-use Rvx\Psr\Container\ContainerInterface;
-use Rvx\Psr\Container\NotFoundExceptionInterface;
+use ReviewX\Invoker\Exception\NotCallableException;
+use ReviewX\Psr\Container\ContainerInterface;
+use ReviewX\Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
 use ReflectionMethod;
 /**

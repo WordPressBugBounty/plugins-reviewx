@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Process\Pipes;
+namespace ReviewX\Symfony\Component\Process\Pipes;
 
-use Rvx\Symfony\Component\Process\Process;
+use ReviewX\Symfony\Component\Process\Process;
 /**
  * UnixPipes implementation uses unix pipes as handles.
  *

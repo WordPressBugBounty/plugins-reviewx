@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 use Exception;
-use Rvx\Api\CategoryApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\CPT\CptHelper;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\CategoryApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\CPT\CptHelper;
+use ReviewX\WPDrill\Response;
 class CategoryUpdateHandler
 {
     protected $cptHelper;
@@ -15,8 +15,8 @@ class CategoryUpdateHandler
     public function __construct()
     {
         $this->cptHelper = new CptHelper();
-        $this->taxonomyHandler = new \Rvx\Handlers\TaxonomyHandler();
-        $this->dataSyncHandler = new \Rvx\Handlers\DataSyncHandler();
+        $this->taxonomyHandler = new \ReviewX\Handlers\TaxonomyHandler();
+        $this->dataSyncHandler = new \ReviewX\Handlers\DataSyncHandler();
     }
     public function __invoke($term_id)
     {

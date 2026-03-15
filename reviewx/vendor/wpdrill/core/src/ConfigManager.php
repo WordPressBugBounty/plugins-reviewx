@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\WPDrill;
+namespace ReviewX\WPDrill;
 
-use Rvx\Noodlehaus\Exception\EmptyDirectoryException;
-use Rvx\Noodlehaus\Parser\ParserInterface;
-class ConfigManager extends \Rvx\Noodlehaus\Config
+use ReviewX\Noodlehaus\Exception\EmptyDirectoryException;
+use ReviewX\Noodlehaus\Parser\ParserInterface;
+class ConfigManager extends \ReviewX\Noodlehaus\Config
 {
     /**
      * Loads configuration from file.

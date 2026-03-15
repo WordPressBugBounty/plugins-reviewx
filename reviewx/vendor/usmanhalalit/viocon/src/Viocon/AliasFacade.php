@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Viocon;
+namespace ReviewX\Viocon;
 
 /**
  * This class gives the ability to access non-static methods statically

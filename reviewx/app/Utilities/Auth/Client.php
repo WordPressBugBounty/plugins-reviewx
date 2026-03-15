@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Utilities\Auth;
+namespace ReviewX\Utilities\Auth;
 
 \defined("ABSPATH") || exit;
-use Rvx\WPDrill\Facade;
+use ReviewX\WPDrill\Facade;
 /**
  * Class Client
  *
@@ -16,12 +16,12 @@ use Rvx\WPDrill\Facade;
  * @method static string getUrl()
  * @method static bool getSync()
  * @method static string getSecret()
- * @package Rvx\Utilities\Auth
+ * @package ReviewX\Utilities\Auth
  */
 class Client extends Facade
 {
     public static function getFacadeAccessor() : string
     {
-        return \Rvx\Utilities\Auth\ClientManager::class;
+        return \ReviewX\Utilities\Auth\ClientManager::class;
     }
 }

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console;
+namespace ReviewX\Symfony\Component\Console;
 
-use Rvx\Symfony\Component\Console\Event\ConsoleCommandEvent;
-use Rvx\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use Rvx\Symfony\Component\Console\Event\ConsoleSignalEvent;
-use Rvx\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use ReviewX\Symfony\Component\Console\Event\ConsoleCommandEvent;
+use ReviewX\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use ReviewX\Symfony\Component\Console\Event\ConsoleSignalEvent;
+use ReviewX\Symfony\Component\Console\Event\ConsoleTerminateEvent;
 /**
  * Contains all events dispatched by an Application.
  *

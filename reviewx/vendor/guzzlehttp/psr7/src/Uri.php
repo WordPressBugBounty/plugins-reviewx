@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\GuzzleHttp\Psr7\Exception\MalformedUriException;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Psr7\Exception\MalformedUriException;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * PSR-7 URI implementation.
  *
@@ -34,7 +34,7 @@ class Uri implements UriInterface, \JsonSerializable
      * @see https://datatracker.ietf.org/doc/html/rfc3986#section-2.2
      */
     private const CHAR_SUB_DELIMS = '!\\$&\'\\(\\)\\*\\+,;=';
-    private const QUERY_SEPARATORS_REPLACEMENT = ['=' => '%3D', '&' => '%26'];
+    private const QUERY_SEPARATORS_REPLACEMENT = ['=' => '%3D', '&' => '%26', '+' => '%2B'];
     /** @var string Uri scheme. */
     private $scheme = '';
     /** @var string Uri user info. */
@@ -508,7 +508,8 @@ class Uri implements UriInterface, \JsonSerializable
     }
     private static function generateQueryString(string $key, ?string $value) : string
     {
-        // Query string separators ("=", "&") within the key or value need to be encoded
+        // Query string separators ("=", "&") and literal plus signs ("+") within the
+        // key or value need to be encoded
         // (while preventing double-encoding) before setting the query string. All other
         // chars that need percent-encoding will be encoded by withQuery().
         $queryString = \strtr($key, self::QUERY_SEPARATORS_REPLACEMENT);

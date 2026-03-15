@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 /*
  * This file is part of the Symfony package.

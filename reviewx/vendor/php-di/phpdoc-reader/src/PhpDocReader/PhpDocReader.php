@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\PhpDocReader;
+namespace ReviewX\PhpDocReader;
 
-use Rvx\PhpDocReader\PhpParser\UseStatementParser;
+use ReviewX\PhpDocReader\PhpParser\UseStatementParser;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\UserApi;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\UserApi;
+use ReviewX\WPDrill\Response;
 class UserHandler
 {
     public function __construct()

@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers\BulkAction;
+namespace ReviewX\Handlers\BulkAction;
 
-use Rvx\Api\ReviewsApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Services\CacheServices;
+use ReviewX\Api\ReviewsApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Services\CacheServices;
 class CustomBulkActionsForReviewsHandler
 {
     protected $cacheServices;
@@ -16,7 +16,7 @@ class CustomBulkActionsForReviewsHandler
     {
         $screen = \get_current_screen();
         // Ensure we are on the 'edit-comments' screen
-        if (!$screen instanceof \Rvx\Handlers\BulkAction\WP_Screen || $screen->id !== 'edit-comments') {
+        if (!$screen instanceof \ReviewX\Handlers\BulkAction\WP_Screen || $screen->id !== 'edit-comments') {
             return;
         }
         if (empty($_REQUEST['action']) || empty($_REQUEST['delete_comments'])) {

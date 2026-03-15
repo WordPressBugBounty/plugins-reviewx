@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Test;
+namespace ReviewX\Twig\Test;
 
-use Rvx\PHPUnit\Framework\TestCase;
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Environment;
-use Rvx\Twig\Loader\ArrayLoader;
-use Rvx\Twig\Node\Node;
+use ReviewX\PHPUnit\Framework\TestCase;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Loader\ArrayLoader;
+use ReviewX\Twig\Node\Node;
 abstract class NodeTestCase extends TestCase
 {
     public abstract function getTests();

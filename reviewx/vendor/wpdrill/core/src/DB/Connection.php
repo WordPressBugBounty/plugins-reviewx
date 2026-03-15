@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\WPDrill\DB;
+namespace ReviewX\WPDrill\DB;
 
-use Rvx\Viocon\Container;
-use Rvx\WPDrill\DB\QueryBuilder\Adapters\Mysql;
-use Rvx\WPDrill\DB\EventHandler;
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
+use ReviewX\Viocon\Container;
+use ReviewX\WPDrill\DB\QueryBuilder\Adapters\Mysql;
+use ReviewX\WPDrill\DB\EventHandler;
+use ReviewX\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
 class Connection
 {
     /**

@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7\Factory;
+namespace ReviewX\Nyholm\Psr7\Factory;
 
-use Rvx\Http\Message\MessageFactory;
-use Rvx\Http\Message\StreamFactory;
-use Rvx\Http\Message\UriFactory;
-use Rvx\Nyholm\Psr7\Request;
-use Rvx\Nyholm\Psr7\Response;
-use Rvx\Nyholm\Psr7\Stream;
-use Rvx\Nyholm\Psr7\Uri;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Http\Message\MessageFactory;
+use ReviewX\Http\Message\StreamFactory;
+use ReviewX\Http\Message\UriFactory;
+use ReviewX\Nyholm\Psr7\Request;
+use ReviewX\Nyholm\Psr7\Response;
+use ReviewX\Nyholm\Psr7\Stream;
+use ReviewX\Nyholm\Psr7\Uri;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 if (!\interface_exists(MessageFactory::class)) {
     throw new \LogicException('You cannot use "Nyholm\\Psr7\\Factory\\HttplugFactory" as the "php-http/message-factory" package is not installed. Try running "composer require php-http/message-factory". Note that this package is deprecated, use "psr/http-factory" instead');
 }

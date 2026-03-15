@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Noodlehaus\Exception;
+namespace ReviewX\Noodlehaus\Exception;
 
-use Rvx\Noodlehaus\Exception;
+use ReviewX\Noodlehaus\Exception;
 class UnsupportedFormatException extends Exception
 {
 }

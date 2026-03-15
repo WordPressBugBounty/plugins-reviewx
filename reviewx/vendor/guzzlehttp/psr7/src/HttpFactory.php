@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\GuzzleHttp\Psr7;
+namespace ReviewX\GuzzleHttp\Psr7;
 
-use Rvx\Psr\Http\Message\RequestFactoryInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseFactoryInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\ServerRequestFactoryInterface;
-use Rvx\Psr\Http\Message\ServerRequestInterface;
-use Rvx\Psr\Http\Message\StreamFactoryInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Psr\Http\Message\UploadedFileFactoryInterface;
-use Rvx\Psr\Http\Message\UploadedFileInterface;
-use Rvx\Psr\Http\Message\UriFactoryInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\RequestFactoryInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseFactoryInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\ServerRequestFactoryInterface;
+use ReviewX\Psr\Http\Message\ServerRequestInterface;
+use ReviewX\Psr\Http\Message\StreamFactoryInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\UploadedFileFactoryInterface;
+use ReviewX\Psr\Http\Message\UploadedFileInterface;
+use ReviewX\Psr\Http\Message\UriFactoryInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * Implements all of the PSR-17 interfaces.
  *

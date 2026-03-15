@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Shortcodes\Products;
+namespace ReviewX\Shortcodes\Products;
 
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\ShortcodeContract;
-use Rvx\WPDrill\Facades\View;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\ShortcodeContract;
+use ReviewX\WPDrill\Facades\View;
 class ReviewShowWIthIdsShortcode implements ShortcodeContract
 {
     public function render(array $attrs, ?string $content = null) : string

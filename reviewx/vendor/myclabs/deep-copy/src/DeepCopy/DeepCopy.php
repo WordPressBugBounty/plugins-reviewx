@@ -1,23 +1,23 @@
 <?php
 
-namespace Rvx\DeepCopy;
+namespace ReviewX\DeepCopy;
 
 use ArrayObject;
 use DateInterval;
 use DatePeriod;
 use DateTimeInterface;
 use DateTimeZone;
-use Rvx\DeepCopy\Exception\CloneException;
-use Rvx\DeepCopy\Filter\ChainableFilter;
-use Rvx\DeepCopy\Filter\Filter;
-use Rvx\DeepCopy\Matcher\Matcher;
-use Rvx\DeepCopy\Reflection\ReflectionHelper;
-use Rvx\DeepCopy\TypeFilter\Date\DateIntervalFilter;
-use Rvx\DeepCopy\TypeFilter\Date\DatePeriodFilter;
-use Rvx\DeepCopy\TypeFilter\Spl\ArrayObjectFilter;
-use Rvx\DeepCopy\TypeFilter\Spl\SplDoublyLinkedListFilter;
-use Rvx\DeepCopy\TypeFilter\TypeFilter;
-use Rvx\DeepCopy\TypeMatcher\TypeMatcher;
+use ReviewX\DeepCopy\Exception\CloneException;
+use ReviewX\DeepCopy\Filter\ChainableFilter;
+use ReviewX\DeepCopy\Filter\Filter;
+use ReviewX\DeepCopy\Matcher\Matcher;
+use ReviewX\DeepCopy\Reflection\ReflectionHelper;
+use ReviewX\DeepCopy\TypeFilter\Date\DateIntervalFilter;
+use ReviewX\DeepCopy\TypeFilter\Date\DatePeriodFilter;
+use ReviewX\DeepCopy\TypeFilter\Spl\ArrayObjectFilter;
+use ReviewX\DeepCopy\TypeFilter\Spl\SplDoublyLinkedListFilter;
+use ReviewX\DeepCopy\TypeFilter\TypeFilter;
+use ReviewX\DeepCopy\TypeMatcher\TypeMatcher;
 use ReflectionObject;
 use ReflectionProperty;
 use SplDoublyLinkedList;

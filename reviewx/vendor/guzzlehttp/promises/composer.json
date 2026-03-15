@@ -36,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\GuzzleHttp\\Promise\\": "src\/"
+            "ReviewX\\GuzzleHttp\\Promise\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\GuzzleHttp\\Promise\\Tests\\": "tests\/"
+            "ReviewX\\GuzzleHttp\\Promise\\Tests\\": "tests\/"
         }
     },
     "extra": {

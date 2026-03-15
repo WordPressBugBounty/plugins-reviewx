@@ -10159,7 +10159,8 @@ const Nb = ["width", "height"], mu = /* @__PURE__ */ se({
   props: /* @__PURE__ */ nn({
     options: {},
     placeholder: { default: "Select" },
-    buttonClass: {}
+    buttonClass: {},
+    placement: { default: "bottom" }
   }, {
     modelValue: {},
     modelModifiers: {}
@@ -10216,7 +10217,11 @@ const Nb = ["width", "height"], mu = /* @__PURE__ */ se({
             "leave-to-class": "rvx-opacity-0"
           }, {
             default: ee(() => [
-              $(K(cb), { class: "rvx-absolute rvx-mt-1 rvx-max-h-60 rvx-w-full rvx-overflow-auto rvx-rounded-md rvx-bg-white rvx-py-1 rvx-shadow-lg rvx-ring-1 rvx-ring-black/5 focus:rvx-outline-none rvx-z-10 scrollbar rvx-text-normal" }, {
+              $(K(cb), {
+                class: xe(["rvx-absolute rvx-max-h-60 rvx-w-full rvx-overflow-auto rvx-rounded-md rvx-bg-white rvx-py-1 rvx-shadow-lg rvx-ring-1 rvx-ring-black/5 focus:rvx-outline-none rvx-z-10 scrollbar rvx-text-normal", [
+                  n.placement === "top" ? "rvx-bottom-full rvx-mb-1" : "rvx-top-full rvx-mt-1"
+                ]])
+              }, {
                 default: ee(() => [
                   (J(!0), ve(He, null, mt(n.options, (a) => (J(), ge(K(fb), {
                     key: a.id,
@@ -10249,7 +10254,7 @@ const Nb = ["width", "height"], mu = /* @__PURE__ */ se({
                   }, 1032, ["value"]))), 128))
                 ]),
                 _: 1
-              })
+              }, 8, ["class"])
             ]),
             _: 1
           })
@@ -23353,63 +23358,63 @@ var H6 = U6;
   var n = jn, r = H6, o = t && !t.nodeType && t, a = o && !0 && e && !e.nodeType && e, i = a && a.exports === o, l = i ? n.Buffer : void 0, s = l ? l.isBuffer : void 0, u = s || r;
   e.exports = u;
 })(z6, mo);
-var Y6 = qn, Q6 = Fu, W6 = kn, G6 = "[object Arguments]", K6 = "[object Array]", X6 = "[object Boolean]", Z6 = "[object Date]", J6 = "[object Error]", _6 = "[object Function]", $6 = "[object Map]", eC = "[object Number]", tC = "[object Object]", nC = "[object RegExp]", rC = "[object Set]", oC = "[object String]", aC = "[object WeakMap]", iC = "[object ArrayBuffer]", lC = "[object DataView]", sC = "[object Float32Array]", uC = "[object Float64Array]", cC = "[object Int8Array]", fC = "[object Int16Array]", dC = "[object Int32Array]", vC = "[object Uint8Array]", hC = "[object Uint8ClampedArray]", pC = "[object Uint16Array]", gC = "[object Uint32Array]", ht = {};
-ht[sC] = ht[uC] = ht[cC] = ht[fC] = ht[dC] = ht[vC] = ht[hC] = ht[pC] = ht[gC] = !0;
-ht[G6] = ht[K6] = ht[iC] = ht[X6] = ht[lC] = ht[Z6] = ht[J6] = ht[_6] = ht[$6] = ht[eC] = ht[tC] = ht[nC] = ht[rC] = ht[oC] = ht[aC] = !1;
-function mC(e) {
+var Y6 = qn, Q6 = Fu, W6 = kn, G6 = "[object Arguments]", K6 = "[object Array]", X6 = "[object Boolean]", Z6 = "[object Date]", J6 = "[object Error]", _6 = "[object Function]", $6 = "[object Map]", e8 = "[object Number]", t8 = "[object Object]", n8 = "[object RegExp]", r8 = "[object Set]", o8 = "[object String]", a8 = "[object WeakMap]", i8 = "[object ArrayBuffer]", l8 = "[object DataView]", s8 = "[object Float32Array]", u8 = "[object Float64Array]", c8 = "[object Int8Array]", f8 = "[object Int16Array]", d8 = "[object Int32Array]", v8 = "[object Uint8Array]", h8 = "[object Uint8ClampedArray]", p8 = "[object Uint16Array]", g8 = "[object Uint32Array]", ht = {};
+ht[s8] = ht[u8] = ht[c8] = ht[f8] = ht[d8] = ht[v8] = ht[h8] = ht[p8] = ht[g8] = !0;
+ht[G6] = ht[K6] = ht[i8] = ht[X6] = ht[l8] = ht[Z6] = ht[J6] = ht[_6] = ht[$6] = ht[e8] = ht[t8] = ht[n8] = ht[r8] = ht[o8] = ht[a8] = !1;
+function m8(e) {
   return W6(e) && Q6(e.length) && !!ht[Y6(e)];
 }
-var yC = mC, bC = yC, wC = _h, Af = ha, Of = Af && Af.isTypedArray, xC = Of ? wC(Of) : bC, qu = xC, AC = V6, OC = Ru, CC = Dn, EC = mo, SC = Bu, TC = qu, DC = Object.prototype, kC = DC.hasOwnProperty;
-function PC(e, t) {
-  var n = CC(e), r = !n && OC(e), o = !n && !r && EC(e), a = !n && !r && !o && TC(e), i = n || r || o || a, l = i ? AC(e.length, String) : [], s = l.length;
+var y8 = m8, b8 = y8, w8 = _h, Af = ha, Of = Af && Af.isTypedArray, x8 = Of ? w8(Of) : b8, qu = x8, A8 = V6, O8 = Ru, C8 = Dn, E8 = mo, S8 = Bu, T8 = qu, D8 = Object.prototype, k8 = D8.hasOwnProperty;
+function P8(e, t) {
+  var n = C8(e), r = !n && O8(e), o = !n && !r && E8(e), a = !n && !r && !o && T8(e), i = n || r || o || a, l = i ? A8(e.length, String) : [], s = l.length;
   for (var u in e)
-    (t || kC.call(e, u)) && !(i && // Safari 9 has enumerable `arguments.length` in strict mode.
+    (t || k8.call(e, u)) && !(i && // Safari 9 has enumerable `arguments.length` in strict mode.
     (u == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
     o && (u == "offset" || u == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
     a && (u == "buffer" || u == "byteLength" || u == "byteOffset") || // Skip index properties.
-    SC(u, s))) && l.push(u);
+    S8(u, s))) && l.push(u);
   return l;
 }
-var np = PC, IC = Object.prototype;
-function NC(e) {
-  var t = e && e.constructor, n = typeof t == "function" && t.prototype || IC;
+var np = P8, I8 = Object.prototype;
+function N8(e) {
+  var t = e && e.constructor, n = typeof t == "function" && t.prototype || I8;
   return e === n;
 }
-var Vu = NC;
-function MC(e, t) {
+var Vu = N8;
+function M8(e, t) {
   return function(n) {
     return e(t(n));
   };
 }
-var rp = MC, LC = rp, RC = LC(Object.keys, Object), BC = RC, FC = Vu, jC = BC, qC = Object.prototype, VC = qC.hasOwnProperty;
-function zC(e) {
-  if (!FC(e))
-    return jC(e);
+var rp = M8, L8 = rp, R8 = L8(Object.keys, Object), B8 = R8, F8 = Vu, j8 = B8, q8 = Object.prototype, V8 = q8.hasOwnProperty;
+function z8(e) {
+  if (!F8(e))
+    return j8(e);
   var t = [];
   for (var n in Object(e))
-    VC.call(e, n) && n != "constructor" && t.push(n);
+    V8.call(e, n) && n != "constructor" && t.push(n);
   return t;
 }
-var UC = zC, HC = Qr, YC = Fu;
-function QC(e) {
-  return e != null && YC(e.length) && !HC(e);
+var U8 = z8, H8 = Qr, Y8 = Fu;
+function Q8(e) {
+  return e != null && Y8(e.length) && !H8(e);
 }
-var Na = QC, WC = np, GC = UC, KC = Na;
-function XC(e) {
-  return KC(e) ? WC(e) : GC(e);
+var Na = Q8, W8 = np, G8 = U8, K8 = Na;
+function X8(e) {
+  return K8(e) ? W8(e) : G8(e);
 }
-var zu = XC, ZC = D6, JC = j6, _C = zu;
-function $C(e) {
-  return ZC(e, _C, JC);
+var zu = X8, Z8 = D6, J8 = j6, _8 = zu;
+function $8(e) {
+  return Z8(e, _8, J8);
 }
-var e8 = $C, Cf = e8, t8 = 1, n8 = Object.prototype, r8 = n8.hasOwnProperty;
-function o8(e, t, n, r, o, a) {
-  var i = n & t8, l = Cf(e), s = l.length, u = Cf(t), f = u.length;
+var eC = $8, Cf = eC, tC = 1, nC = Object.prototype, rC = nC.hasOwnProperty;
+function oC(e, t, n, r, o, a) {
+  var i = n & tC, l = Cf(e), s = l.length, u = Cf(t), f = u.length;
   if (s != f && !i)
     return !1;
   for (var d = s; d--; ) {
     var c = l[d];
-    if (!(i ? c in t : r8.call(t, c)))
+    if (!(i ? c in t : rC.call(t, c)))
       return !1;
   }
   var v = a.get(e), h = a.get(t);
@@ -23434,26 +23439,26 @@ function o8(e, t, n, r, o, a) {
   }
   return a.delete(e), a.delete(t), m;
 }
-var a8 = o8, i8 = Wr, l8 = jn, s8 = i8(l8, "DataView"), u8 = s8, c8 = Wr, f8 = jn, d8 = c8(f8, "Promise"), v8 = d8, h8 = Wr, p8 = jn, g8 = h8(p8, "Set"), m8 = g8, y8 = Wr, b8 = jn, w8 = y8(b8, "WeakMap"), x8 = w8, Fs = u8, js = Nu, qs = v8, Vs = m8, zs = x8, op = qn, Po = Qh, Ef = "[object Map]", A8 = "[object Object]", Sf = "[object Promise]", Tf = "[object Set]", Df = "[object WeakMap]", kf = "[object DataView]", O8 = Po(Fs), C8 = Po(js), E8 = Po(qs), S8 = Po(Vs), T8 = Po(zs), Pr = op;
+var aC = oC, iC = Wr, lC = jn, sC = iC(lC, "DataView"), uC = sC, cC = Wr, fC = jn, dC = cC(fC, "Promise"), vC = dC, hC = Wr, pC = jn, gC = hC(pC, "Set"), mC = gC, yC = Wr, bC = jn, wC = yC(bC, "WeakMap"), xC = wC, Fs = uC, js = Nu, qs = vC, Vs = mC, zs = xC, op = qn, Po = Qh, Ef = "[object Map]", AC = "[object Object]", Sf = "[object Promise]", Tf = "[object Set]", Df = "[object WeakMap]", kf = "[object DataView]", OC = Po(Fs), CC = Po(js), EC = Po(qs), SC = Po(Vs), TC = Po(zs), Pr = op;
 (Fs && Pr(new Fs(new ArrayBuffer(1))) != kf || js && Pr(new js()) != Ef || qs && Pr(qs.resolve()) != Sf || Vs && Pr(new Vs()) != Tf || zs && Pr(new zs()) != Df) && (Pr = function(e) {
-  var t = op(e), n = t == A8 ? e.constructor : void 0, r = n ? Po(n) : "";
+  var t = op(e), n = t == AC ? e.constructor : void 0, r = n ? Po(n) : "";
   if (r)
     switch (r) {
-      case O8:
+      case OC:
         return kf;
-      case C8:
+      case CC:
         return Ef;
-      case E8:
+      case EC:
         return Sf;
-      case S8:
+      case SC:
         return Tf;
-      case T8:
+      case TC:
         return Df;
     }
   return t;
 });
-var D8 = Pr, ns = ju, k8 = ep, P8 = A6, I8 = a8, Pf = D8, If = Dn, Nf = mo, N8 = qu, M8 = 1, Mf = "[object Arguments]", Lf = "[object Array]", ei = "[object Object]", L8 = Object.prototype, Rf = L8.hasOwnProperty;
-function R8(e, t, n, r, o, a) {
+var DC = Pr, ns = ju, kC = ep, PC = A6, IC = aC, Pf = DC, If = Dn, Nf = mo, NC = qu, MC = 1, Mf = "[object Arguments]", Lf = "[object Array]", ei = "[object Object]", LC = Object.prototype, Rf = LC.hasOwnProperty;
+function RC(e, t, n, r, o, a) {
   var i = If(e), l = If(t), s = i ? Lf : Pf(e), u = l ? Lf : Pf(t);
   s = s == Mf ? ei : s, u = u == Mf ? ei : u;
   var f = s == ei, d = u == ei, c = s == u;
@@ -23463,22 +23468,22 @@ function R8(e, t, n, r, o, a) {
     i = !0, f = !1;
   }
   if (c && !f)
-    return a || (a = new ns()), i || N8(e) ? k8(e, t, n, r, o, a) : P8(e, t, s, n, r, o, a);
-  if (!(n & M8)) {
+    return a || (a = new ns()), i || NC(e) ? kC(e, t, n, r, o, a) : PC(e, t, s, n, r, o, a);
+  if (!(n & MC)) {
     var v = f && Rf.call(e, "__wrapped__"), h = d && Rf.call(t, "__wrapped__");
     if (v || h) {
       var m = v ? e.value() : e, g = h ? t.value() : t;
       return a || (a = new ns()), o(m, g, n, r, a);
     }
   }
-  return c ? (a || (a = new ns()), I8(e, t, n, r, o, a)) : !1;
+  return c ? (a || (a = new ns()), IC(e, t, n, r, o, a)) : !1;
 }
-var B8 = R8, F8 = B8, Bf = kn;
+var BC = RC, FC = BC, Bf = kn;
 function ap(e, t, n, r, o) {
-  return e === t ? !0 : e == null || t == null || !Bf(e) && !Bf(t) ? e !== e && t !== t : F8(e, t, n, r, ap, o);
+  return e === t ? !0 : e == null || t == null || !Bf(e) && !Bf(t) ? e !== e && t !== t : FC(e, t, n, r, ap, o);
 }
-var ip = ap, j8 = ju, q8 = ip, V8 = 1, z8 = 2;
-function U8(e, t, n, r) {
+var ip = ap, jC = ju, qC = ip, VC = 1, zC = 2;
+function UC(e, t, n, r) {
   var o = n.length, a = o, i = !r;
   if (e == null)
     return !a;
@@ -23494,38 +23499,38 @@ function U8(e, t, n, r) {
       if (u === void 0 && !(s in e))
         return !1;
     } else {
-      var d = new j8();
+      var d = new jC();
       if (r)
         var c = r(u, f, s, e, t, d);
-      if (!(c === void 0 ? q8(f, u, V8 | z8, r, d) : c))
+      if (!(c === void 0 ? qC(f, u, VC | zC, r, d) : c))
         return !1;
     }
   }
   return !0;
 }
-var H8 = U8, Y8 = rr;
-function Q8(e) {
-  return e === e && !Y8(e);
+var HC = UC, YC = rr;
+function QC(e) {
+  return e === e && !YC(e);
 }
-var lp = Q8, W8 = lp, G8 = zu;
-function K8(e) {
-  for (var t = G8(e), n = t.length; n--; ) {
+var lp = QC, WC = lp, GC = zu;
+function KC(e) {
+  for (var t = GC(e), n = t.length; n--; ) {
     var r = t[n], o = e[r];
-    t[n] = [r, o, W8(o)];
+    t[n] = [r, o, WC(o)];
   }
   return t;
 }
-var X8 = K8;
-function Z8(e, t) {
+var XC = KC;
+function ZC(e, t) {
   return function(n) {
     return n == null ? !1 : n[e] === t && (t !== void 0 || e in Object(n));
   };
 }
-var sp = Z8, J8 = H8, _8 = X8, $8 = sp;
+var sp = ZC, JC = HC, _C = XC, $C = sp;
 function e9(e) {
-  var t = _8(e);
-  return t.length == 1 && t[0][2] ? $8(t[0][0], t[0][1]) : function(n) {
-    return n === e || J8(n, e, t);
+  var t = _C(e);
+  return t.length == 1 && t[0][2] ? $C(t[0][0], t[0][1]) : function(n) {
+    return n === e || JC(n, e, t);
   };
 }
 var t9 = e9, n9 = Kh, r9 = rl;

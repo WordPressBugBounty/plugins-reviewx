@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 /*
  * This file is part of the Symfony package.
@@ -10,8 +10,8 @@ namespace Rvx;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-use Rvx\Symfony\Polyfill\Intl\Grapheme as p;
-if (!\function_exists('Rvx\\grapheme_str_split')) {
+use ReviewX\Symfony\Polyfill\Intl\Grapheme as p;
+if (!\function_exists('ReviewX\\grapheme_str_split')) {
     function grapheme_str_split(string $string, int $length = 1) : array|false
     {
         return p\Grapheme::grapheme_str_split($string, $length);

@@ -1,19 +1,19 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Cookie\CookieJar;
-use Rvx\GuzzleHttp\Exception\GuzzleException;
-use Rvx\GuzzleHttp\Exception\InvalidArgumentException;
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Cookie\CookieJar;
+use ReviewX\GuzzleHttp\Exception\GuzzleException;
+use ReviewX\GuzzleHttp\Exception\InvalidArgumentException;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * @final
  */
-class Client implements ClientInterface, \Rvx\Psr\Http\Client\ClientInterface
+class Client implements ClientInterface, \ReviewX\Psr\Http\Client\ClientInterface
 {
     use ClientTrait;
     /**

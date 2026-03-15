@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Symfony\\Component\\Process\\": ""
+            "ReviewX\\Symfony\\Component\\Process\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

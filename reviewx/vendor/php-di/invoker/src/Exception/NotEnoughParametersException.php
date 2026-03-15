@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker\Exception;
+namespace ReviewX\Invoker\Exception;
 
 /**
  * Not enough parameters could be resolved to invoke the callable.

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node\Expression\Filter;
+namespace ReviewX\Twig\Node\Expression\Filter;
 
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Expression\ConditionalExpression;
-use Rvx\Twig\Node\Expression\ConstantExpression;
-use Rvx\Twig\Node\Expression\FilterExpression;
-use Rvx\Twig\Node\Expression\GetAttrExpression;
-use Rvx\Twig\Node\Expression\NameExpression;
-use Rvx\Twig\Node\Expression\Test\DefinedTest;
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Node\Expression\ConditionalExpression;
+use ReviewX\Twig\Node\Expression\ConstantExpression;
+use ReviewX\Twig\Node\Expression\FilterExpression;
+use ReviewX\Twig\Node\Expression\GetAttrExpression;
+use ReviewX\Twig\Node\Expression\NameExpression;
+use ReviewX\Twig\Node\Expression\Test\DefinedTest;
+use ReviewX\Twig\Node\Node;
 /**
  * Returns the value or the default value when it is undefined or empty.
  *

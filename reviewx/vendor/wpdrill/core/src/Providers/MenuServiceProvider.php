@@ -1,16 +1,16 @@
 <?php
 
-namespace Rvx\WPDrill\Providers;
+namespace ReviewX\WPDrill\Providers;
 
-use Rvx\WPDrill\Menus\MenuBuilder;
-use Rvx\WPDrill\ServiceProvider;
+use ReviewX\WPDrill\Menus\MenuBuilder;
+use ReviewX\WPDrill\ServiceProvider;
 class MenuServiceProvider extends ServiceProvider
 {
     protected MenuBuilder $builder;
     public function register() : void
     {
         $this->plugin->bind('menu', function () {
-            $this->builder = new \Rvx\WPDrill\Menus\MenuBuilder($this->plugin);
+            $this->builder = new \ReviewX\WPDrill\Menus\MenuBuilder($this->plugin);
             return $this->builder;
         });
     }

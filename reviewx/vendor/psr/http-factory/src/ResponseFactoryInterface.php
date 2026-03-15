@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Psr\Http\Message;
+namespace ReviewX\Psr\Http\Message;
 
 interface ResponseFactoryInterface
 {

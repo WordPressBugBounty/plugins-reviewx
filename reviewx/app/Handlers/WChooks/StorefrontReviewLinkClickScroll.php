@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers\WChooks;
+namespace ReviewX\Handlers\WChooks;
 
-use Rvx\CPT\CptHelper;
+use ReviewX\CPT\CptHelper;
 class StorefrontReviewLinkClickScroll
 {
     protected $cptHelper;
@@ -24,7 +24,7 @@ class StorefrontReviewLinkClickScroll
             return;
         }
         // Check if WooCommerce is active and we are on a product page
-        if (\function_exists('Rvx\\wc_get_product') && 'product' === $post_type) {
+        if (\function_exists('ReviewX\\wc_get_product') && 'product' === $post_type) {
             ?>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
@@ -60,7 +60,7 @@ class StorefrontReviewLinkClickScroll
                             e.preventDefault(); // Prevent default link behavior
     
                             // Scroll to the reviews tab
-                            const reviewsTab = document.getElementById('rvx-storefront-widget--aggregation__summary');
+                            const reviewsTab = document.getElementById('reviewx-storefront-widget--aggregation__summary');
                             if (reviewsTab) {
                                 reviewsTab.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Smooth scroll
     

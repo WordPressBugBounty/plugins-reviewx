@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Noodlehaus;
+namespace ReviewX\Noodlehaus;
 
-use Rvx\Noodlehaus\Exception\FileNotFoundException;
-use Rvx\Noodlehaus\Exception\UnsupportedFormatException;
-use Rvx\Noodlehaus\Exception\EmptyDirectoryException;
-use Rvx\Noodlehaus\Parser\ParserInterface;
-use Rvx\Noodlehaus\Writer\WriterInterface;
+use ReviewX\Noodlehaus\Exception\FileNotFoundException;
+use ReviewX\Noodlehaus\Exception\UnsupportedFormatException;
+use ReviewX\Noodlehaus\Exception\EmptyDirectoryException;
+use ReviewX\Noodlehaus\Parser\ParserInterface;
+use ReviewX\Noodlehaus\Writer\WriterInterface;
 /**
  * Configuration reader and writer for PHP.
  *
@@ -24,13 +24,13 @@ class Config extends AbstractConfig
      *
      * @var array
      */
-    protected $supportedParsers = ['Rvx\\Noodlehaus\\Parser\\Php', 'Rvx\\Noodlehaus\\Parser\\Ini', 'Rvx\\Noodlehaus\\Parser\\Json', 'Rvx\\Noodlehaus\\Parser\\Xml', 'Rvx\\Noodlehaus\\Parser\\Yaml', 'Rvx\\Noodlehaus\\Parser\\Properties', 'Rvx\\Noodlehaus\\Parser\\Serialize'];
+    protected $supportedParsers = ['ReviewX\\Noodlehaus\\Parser\\Php', 'ReviewX\\Noodlehaus\\Parser\\Ini', 'ReviewX\\Noodlehaus\\Parser\\Json', 'ReviewX\\Noodlehaus\\Parser\\Xml', 'ReviewX\\Noodlehaus\\Parser\\Yaml', 'ReviewX\\Noodlehaus\\Parser\\Properties', 'ReviewX\\Noodlehaus\\Parser\\Serialize'];
     /**
      * All formats supported by Config.
      *
      * @var array
      */
-    protected $supportedWriters = ['Rvx\\Noodlehaus\\Writer\\Ini', 'Rvx\\Noodlehaus\\Writer\\Json', 'Rvx\\Noodlehaus\\Writer\\Xml', 'Rvx\\Noodlehaus\\Writer\\Yaml', 'Rvx\\Noodlehaus\\Writer\\Properties', 'Rvx\\Noodlehaus\\Writer\\Serialize'];
+    protected $supportedWriters = ['ReviewX\\Noodlehaus\\Writer\\Ini', 'ReviewX\\Noodlehaus\\Writer\\Json', 'ReviewX\\Noodlehaus\\Writer\\Xml', 'ReviewX\\Noodlehaus\\Writer\\Yaml', 'ReviewX\\Noodlehaus\\Writer\\Properties', 'ReviewX\\Noodlehaus\\Writer\\Serialize'];
     /**
      * Static method for loading a Config instance.
      *

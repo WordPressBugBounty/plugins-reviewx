@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Helper;
+namespace ReviewX\Symfony\Component\Console\Helper;
 
-use Rvx\Symfony\Component\Console\Descriptor\DescriptorInterface;
-use Rvx\Symfony\Component\Console\Descriptor\JsonDescriptor;
-use Rvx\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
-use Rvx\Symfony\Component\Console\Descriptor\TextDescriptor;
-use Rvx\Symfony\Component\Console\Descriptor\XmlDescriptor;
-use Rvx\Symfony\Component\Console\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Descriptor\DescriptorInterface;
+use ReviewX\Symfony\Component\Console\Descriptor\JsonDescriptor;
+use ReviewX\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
+use ReviewX\Symfony\Component\Console\Descriptor\TextDescriptor;
+use ReviewX\Symfony\Component\Console\Descriptor\XmlDescriptor;
+use ReviewX\Symfony\Component\Console\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * This class adds helper method to describe objects in various formats.
  *

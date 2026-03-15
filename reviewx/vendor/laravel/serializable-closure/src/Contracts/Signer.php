@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure\Contracts;
+namespace ReviewX\Laravel\SerializableClosure\Contracts;
 
 interface Signer
 {

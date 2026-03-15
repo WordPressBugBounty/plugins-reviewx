@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Style;
+namespace ReviewX\Symfony\Component\Console\Style;
 
-use Rvx\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use Rvx\Symfony\Component\Console\Helper\ProgressBar;
-use Rvx\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use ReviewX\Symfony\Component\Console\Helper\ProgressBar;
+use ReviewX\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Decorates output to add console style guide helpers.
  *

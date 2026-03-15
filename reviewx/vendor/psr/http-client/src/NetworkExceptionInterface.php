@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Psr\Http\Client;
+namespace ReviewX\Psr\Http\Client;
 
-use Rvx\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
 /**
  * Thrown when the request cannot be completed because of network issues.
  *

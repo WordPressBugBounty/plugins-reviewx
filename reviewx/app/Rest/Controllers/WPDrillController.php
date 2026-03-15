@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
+use ReviewX\WPDrill\Response;
 class WPDrillController implements InvokableContract
 {
     protected QueryBuilderHandler $db;
@@ -23,7 +23,7 @@ class WPDrillController implements InvokableContract
     {
         //        $user = User::where('id', 1)->first();
         //        //$user = $this->db->table('users')->where('id', 1)->first();
-        //        return rvx_rest($site)
+        //        return reviewx_rest($site)
         //            ->setHeader('Content-Type', 'application/json')
         //            ->details('User fetched successfully')
         //            ->success("User found");

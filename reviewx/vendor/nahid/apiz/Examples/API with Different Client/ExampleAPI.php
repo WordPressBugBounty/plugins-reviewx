@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Examples;
+namespace ReviewX\Examples;
 
 class ExampleAPI extends BaseAPI
 {

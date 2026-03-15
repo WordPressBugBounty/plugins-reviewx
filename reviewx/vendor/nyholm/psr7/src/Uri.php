@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7;
+namespace ReviewX\Nyholm\Psr7;
 
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * PSR-7 URI implementation.
  *

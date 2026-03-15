@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Source;
+namespace ReviewX\DI\Definition\Source;
 
-use Rvx\DI\Definition\ObjectDefinition;
-use Rvx\DI\Definition\ObjectDefinition\MethodInjection;
-use Rvx\DI\Definition\Reference;
+use ReviewX\DI\Definition\ObjectDefinition;
+use ReviewX\DI\Definition\ObjectDefinition\MethodInjection;
+use ReviewX\DI\Definition\Reference;
 use ReflectionNamedType;
 /**
  * Reads DI class definitions using reflection.

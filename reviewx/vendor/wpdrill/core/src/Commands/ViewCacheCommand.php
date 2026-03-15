@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\WPDrill\Commands;
+namespace ReviewX\WPDrill\Commands;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\WPDrill\Plugin;
-use Rvx\WPDrill\Views\ViewManager;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\WPDrill\Plugin;
+use ReviewX\WPDrill\Views\ViewManager;
 class ViewCacheCommand extends BaseCommand
 {
     protected ViewManager $view;

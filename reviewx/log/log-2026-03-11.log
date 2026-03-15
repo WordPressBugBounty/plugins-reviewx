@@ -1,0 +1,98 @@
+[2026-03-11 14:12:44] [DEBUG]: reviewEmptyTrash started
+[2026-03-11 14:12:44] [DEBUG]: Array
+(
+    [extracted_review_ids] => Array
+        (
+        )
+
+)
+
+[2026-03-11 14:12:44] [DEBUG]: Array
+(
+    [cleared_ids] => Array
+        (
+        )
+
+)
+
+[2026-03-11 14:16:42] [DEBUG]: reviewEmptyTrash started with payload:
+[2026-03-11 14:16:42] [DEBUG]: Array
+(
+)
+
+[2026-03-11 14:16:42] [DEBUG]: Array
+(
+    [extracted_review_ids] => Array
+        (
+        )
+
+)
+
+[2026-03-11 14:16:42] [DEBUG]: Array
+(
+    [cleared_ids] => Array
+        (
+        )
+
+)
+
+[2026-03-11 14:16:42] [DEBUG]: Executing GLOBAL empty trash
+[2026-03-11 14:18:46] [USER DONE]: 1
+[2026-03-11 14:18:47] [PRODUCT DONE]: 117
+[2026-03-11 14:18:47] [ORDER DONE]: 7
+[2026-03-11 14:18:47] [ORDER ITEM DONE]: 11
+[2026-03-11 14:18:48] [PRODUCT DONE]: 10
+[2026-03-11 14:25:09] [DEBUG]: reviewEmptyTrash started with payload:
+[2026-03-11 14:25:09] [DEBUG]: Array
+(
+)
+
+[2026-03-11 14:25:09] [DEBUG]: Array
+(
+    [extracted_review_ids] => Array
+        (
+        )
+
+)
+
+[2026-03-11 14:25:09] [DEBUG]: Array
+(
+    [cleared_ids] => Array
+        (
+        )
+
+)
+
+[2026-03-11 14:25:09] [DEBUG]: Executing GLOBAL empty trash
+[2026-03-11 14:50:36] [DEBUG]: Processing attachments for review 277: https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png
+[2026-03-11 14:50:38] [DEBUG]: Processing attachments for review 279: https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630 ,  https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg
+[2026-03-11 14:50:44] [DEBUG]: Logging import history to SaaS...
+[2026-03-11 14:50:45] [DEBUG]: SaaS logImportHistory response status: 400
+[2026-03-11 14:50:45] [PRODUCT DONE]: 10
+[2026-03-11 14:50:45] [USER DONE]: 1
+[2026-03-11 14:50:46] [PRODUCT DONE]: 117
+[2026-03-11 14:50:46] [ORDER DONE]: 7
+[2026-03-11 14:50:46] [ORDER ITEM DONE]: 11
+[2026-03-11 14:54:07] [DEBUG]: Processing attachments for review 284: https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png
+[2026-03-11 14:54:10] [DEBUG]: Processing attachments for review 286: https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630 ,  https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg
+[2026-03-11 14:54:15] [DEBUG]: Logging import history to SaaS... Payload: {"name":"reviewx-import-5.csv","map":{"rating":"Rating","customer_name":"Reviewer_Name","customer_email":"Email","review_title":"Review_Title","created_at":"Date (YYYY-MM-DD H:M)","feedback":"Review_Description","attachment":"Media","review_reply":"Review_Reply","replied_at":"Replied_At","product_id":"Product_ID"},"wp_review_ids":[284,286,287,288,290],"stats":{"total_reviews":5,"success_reviews":5,"failed_reviews":0}}
+[2026-03-11 14:54:16] [DEBUG]: SaaS logImportHistory response status: 400 Body: {"status":"ERROR","code":42703,"message":"SQLSTATE[42703]: Undefined column: 7 ERROR:  column \"wp_review_ids\" of relation \"imports\" does not exist\nLINE 1: insert into \"imports\" (\"site_id\", \"name\", \"meta\", \"wp_review...\n                                                          ^ (Connection: pgsql, SQL: insert into \"imports\" (\"site_id\", \"name\", \"meta\", \"wp_review_ids\", \"status\", \"completed_at\", \"mime\", \"uid\", \"updated_at\", \"created_at\") values (8132, reviewx-import-5.csv, {\"map\":{\"rating\":\"Rating\",\"customer_name\":\"Reviewer_Name\",\"customer_email\":\"Email\",\"review_title\":\"Review_Title\",\"created_at\":\"Date (YYYY-MM-DD H:M)\",\"feedback\":\"Review_Description\",\"attachment\":\"Media\",\"review_reply\":\"Review_Reply\",\"replied_at\":\"Replied_At\",\"product_id\":\"Product_ID\"},\"stats\":{\"total_reviews\":5,\"success_reviews\":5,\"failed_reviews\":0}}, [284,286,287,288,290], 2, 2026-03-11 08:54:16, WP-CSV, im-F4kR-YY4s1S1C-nSW1, 2026-03-11 08:54:16, 2026-03-11 08:54:16) returning \"id\")","details":"","locale":"en","data":{"errors":{"Type":"Unknown error","Exception":"Illuminate\\Database\\QueryException"}}}
+[2026-03-11 14:54:16] [PRODUCT DONE]: 10
+[2026-03-11 14:54:17] [USER DONE]: 1
+[2026-03-11 14:54:17] [PRODUCT DONE]: 117
+[2026-03-11 14:54:17] [ORDER DONE]: 7
+[2026-03-11 14:54:17] [ORDER ITEM DONE]: 11
+[2026-03-11 15:02:47] [DEBUG]: Processing attachments for review 291: https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png
+[2026-03-11 15:02:50] [DEBUG]: Processing attachments for review 293: https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630 ,  https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg
+[2026-03-11 15:02:55] [DEBUG]: Logging import history to SaaS... Payload: {"uid":"si-VbKX-PQvORLK7-k4B4","name":"reviewx-import-5.csv","map":{"rating":"Rating","customer_name":"Reviewer_Name","customer_email":"Email","review_title":"Review_Title","created_at":"Date (YYYY-MM-DD H:M)","feedback":"Review_Description","attachment":"Media","review_reply":"Review_Reply","replied_at":"Replied_At","product_id":"Product_ID"},"wp_review_ids":[291,293,294,295,297],"stats":{"total_reviews":5,"success_reviews":5,"failed_reviews":0}}
+[2026-03-11 15:02:56] [DEBUG]: SaaS logImportHistory response status: 400 Body: {"status":"ERROR","code":42703,"message":"SQLSTATE[42703]: Undefined column: 7 ERROR:  column \"wp_review_ids\" of relation \"imports\" does not exist\nLINE 1: insert into \"imports\" (\"site_id\", \"name\", \"meta\", \"wp_review...\n                                                          ^ (Connection: pgsql, SQL: insert into \"imports\" (\"site_id\", \"name\", \"meta\", \"wp_review_ids\", \"status\", \"completed_at\", \"mime\", \"uid\", \"updated_at\", \"created_at\") values (8132, reviewx-import-5.csv, {\"map\":{\"rating\":\"Rating\",\"customer_name\":\"Reviewer_Name\",\"customer_email\":\"Email\",\"review_title\":\"Review_Title\",\"created_at\":\"Date (YYYY-MM-DD H:M)\",\"feedback\":\"Review_Description\",\"attachment\":\"Media\",\"review_reply\":\"Review_Reply\",\"replied_at\":\"Replied_At\",\"product_id\":\"Product_ID\"},\"stats\":{\"total_reviews\":5,\"success_reviews\":5,\"failed_reviews\":0}}, [291,293,294,295,297], 2, 2026-03-11 09:02:56, WP-CSV, im-9B6L-hLEoMcsS-pIHT, 2026-03-11 09:02:56, 2026-03-11 09:02:56) returning \"id\")","details":"","locale":"en","data":{"errors":{"Type":"Unknown error","Exception":"Illuminate\\Database\\QueryException"}}}
+[2026-03-11 15:02:56] [PRODUCT DONE]: 10
+[2026-03-11 15:02:57] [USER DONE]: 1
+[2026-03-11 15:02:57] [PRODUCT DONE]: 117
+[2026-03-11 15:02:57] [ORDER DONE]: 7
+[2026-03-11 15:02:57] [ORDER ITEM DONE]: 11
+[2026-03-11 15:33:47] [USER DONE]: 1
+[2026-03-11 15:33:48] [PRODUCT DONE]: 117
+[2026-03-11 15:33:48] [ORDER DONE]: 7
+[2026-03-11 15:33:48] [ORDER ITEM DONE]: 11
+[2026-03-11 15:33:50] [PRODUCT DONE]: 10

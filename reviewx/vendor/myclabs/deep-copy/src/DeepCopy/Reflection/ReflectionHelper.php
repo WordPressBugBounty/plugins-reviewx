@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\DeepCopy\Reflection;
+namespace ReviewX\DeepCopy\Reflection;
 
-use Rvx\DeepCopy\Exception\PropertyException;
+use ReviewX\DeepCopy\Exception\PropertyException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;

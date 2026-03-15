@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI;
+namespace ReviewX\DI;
 
-use Rvx\Psr\Container\NotFoundExceptionInterface;
+use ReviewX\Psr\Container\NotFoundExceptionInterface;
 /**
  * Exception thrown when a class or a value is not found in the container.
  */

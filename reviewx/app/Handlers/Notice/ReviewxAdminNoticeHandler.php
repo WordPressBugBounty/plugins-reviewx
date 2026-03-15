@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Handlers\Notice;
+namespace ReviewX\Handlers\Notice;
 
-use Rvx\WPDrill\Facades\View;
+use ReviewX\WPDrill\Facades\View;
 class ReviewxAdminNoticeHandler
 {
     public function adminNoticeHandler()
@@ -17,7 +17,7 @@ class ReviewxAdminNoticeHandler
         // Render the notice
         View::output('storeadmin/notice/notice', ['nonce' => $nonce]);
     }
-    public function rvx_admin_deal_notice_until()
+    public function reviewx_admin_deal_notice_until()
     {
         // Verify nonce
         if (!isset($_POST['nonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_POST['nonce'])), 'rvx_dismiss_notice_nonce')) {

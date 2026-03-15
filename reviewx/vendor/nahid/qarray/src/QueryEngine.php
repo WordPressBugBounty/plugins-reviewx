@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Nahid\QArray;
+namespace ReviewX\Nahid\QArray;
 
-use Rvx\Nahid\QArray\Exceptions\ConditionNotAllowedException;
-use Rvx\Nahid\QArray\Exceptions\InvalidNodeException;
-use Rvx\Nahid\QArray\Exceptions\KeyNotPresentException;
-use function Rvx\DeepCopy\deep_copy;
+use ReviewX\Nahid\QArray\Exceptions\ConditionNotAllowedException;
+use ReviewX\Nahid\QArray\Exceptions\InvalidNodeException;
+use ReviewX\Nahid\QArray\Exceptions\KeyNotPresentException;
+use function ReviewX\DeepCopy\deep_copy;
 abstract class QueryEngine extends Clause implements \ArrayAccess, \Iterator, \Countable
 {
     /**

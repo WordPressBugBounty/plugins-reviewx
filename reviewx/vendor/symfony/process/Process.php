@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Process;
+namespace ReviewX\Symfony\Component\Process;
 
-use Rvx\Symfony\Component\Process\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\Process\Exception\LogicException;
-use Rvx\Symfony\Component\Process\Exception\ProcessFailedException;
-use Rvx\Symfony\Component\Process\Exception\ProcessSignaledException;
-use Rvx\Symfony\Component\Process\Exception\ProcessTimedOutException;
-use Rvx\Symfony\Component\Process\Exception\RuntimeException;
-use Rvx\Symfony\Component\Process\Pipes\PipesInterface;
-use Rvx\Symfony\Component\Process\Pipes\UnixPipes;
-use Rvx\Symfony\Component\Process\Pipes\WindowsPipes;
+use ReviewX\Symfony\Component\Process\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\Process\Exception\LogicException;
+use ReviewX\Symfony\Component\Process\Exception\ProcessFailedException;
+use ReviewX\Symfony\Component\Process\Exception\ProcessSignaledException;
+use ReviewX\Symfony\Component\Process\Exception\ProcessTimedOutException;
+use ReviewX\Symfony\Component\Process\Exception\RuntimeException;
+use ReviewX\Symfony\Component\Process\Pipes\PipesInterface;
+use ReviewX\Symfony\Component\Process\Pipes\UnixPipes;
+use ReviewX\Symfony\Component\Process\Pipes\WindowsPipes;
 /**
  * Process is a thin wrapper around proc_* functions to easily
  * start independent PHP processes.

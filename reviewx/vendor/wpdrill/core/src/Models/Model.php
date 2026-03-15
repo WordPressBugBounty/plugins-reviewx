@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Models;
+namespace ReviewX\WPDrill\Models;
 
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
-use Rvx\WPDrill\Facade;
+use ReviewX\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
+use ReviewX\WPDrill\Facade;
 /**
  * @method static self select(string ...$columns)
  * @method static array|object|null get()

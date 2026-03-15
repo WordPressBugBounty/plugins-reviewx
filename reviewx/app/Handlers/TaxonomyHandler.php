@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
 use Exception;
-use Rvx\Api\CategoryApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\CategoryApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
 class TaxonomyHandler
 {
     public function getPostTypesByTermId(int $term_id) : array
@@ -120,6 +120,7 @@ class TaxonomyHandler
         $exists = \wp_cache_get($cache_key, 'reviewx');
         if (\false === $exists) {
             global $wpdb;
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- taxonomy cache miss fallback
             $exists = (bool) $wpdb->get_var($wpdb->prepare("SELECT count(*) FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s", $taxonomy));
             \wp_cache_set($cache_key, (int) $exists, 'reviewx', 86400);
         }

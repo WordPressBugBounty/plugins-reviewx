@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\DB\QueryBuilder;
+namespace ReviewX\WPDrill\DB\QueryBuilder;
 
 class Transaction extends QueryBuilderHandler
 {

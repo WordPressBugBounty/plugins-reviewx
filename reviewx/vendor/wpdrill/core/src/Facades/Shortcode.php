@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\Facade;
+use ReviewX\WPDrill\Facade;
 /**
  * @method static string add(string $code, $handler)
  */

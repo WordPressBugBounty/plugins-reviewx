@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
 use WC_Coupon;
 use Exception;
-use Rvx\Api\DiscountApi;
-class DiscountService extends \Rvx\Services\Service
+use ReviewX\Api\DiscountApi;
+class DiscountService extends \ReviewX\Services\Service
 {
     public function wpDiscountCreate($data)
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Exception;
 use WP_REST_Response;
-use Rvx\Services\PingService;
-use Rvx\Utilities\Helper;
+use ReviewX\Services\PingService;
+use ReviewX\Utilities\Helper;
 class PingController
 {
     protected PingService $pingService;

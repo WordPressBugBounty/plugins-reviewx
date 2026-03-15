@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Resolver;
+namespace ReviewX\DI\Definition\Resolver;
 
-use Rvx\DI\Definition\ArrayDefinition;
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\DependencyException;
+use ReviewX\DI\Definition\ArrayDefinition;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\DependencyException;
 use Exception;
 /**
  * Resolves an array definition to a value.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\DeepCopy\TypeFilter\Spl;
+namespace ReviewX\DeepCopy\TypeFilter\Spl;
 
 /**
  * @deprecated Use {@see SplDoublyLinkedListFilter} instead.

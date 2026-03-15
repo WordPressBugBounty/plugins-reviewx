@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
 use DateTime;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Facades\DB;
-class OrderItemSyncService extends \Rvx\Services\Service
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Facades\DB;
+class OrderItemSyncService extends \ReviewX\Services\Service
 {
     protected $orderFullfillmentStatusRelation;
     protected $validOrderIds = [];

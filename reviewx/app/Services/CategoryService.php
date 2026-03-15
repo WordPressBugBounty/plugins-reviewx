@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Apiz\Http\Response;
-use Rvx\WPDrill\Response as drillResponse;
-use Rvx\Api\CategoryApi;
-use Rvx\Utilities\Helper;
-class CategoryService extends \Rvx\Services\Service
+use ReviewX\Apiz\Http\Response;
+use ReviewX\WPDrill\Response as drillResponse;
+use ReviewX\Api\CategoryApi;
+use ReviewX\Utilities\Helper;
+class CategoryService extends \ReviewX\Services\Service
 {
     /**
      *

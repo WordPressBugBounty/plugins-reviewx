@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\DeepCopy\Matcher\Doctrine;
+namespace ReviewX\DeepCopy\Matcher\Doctrine;
 
-use Rvx\DeepCopy\Matcher\Matcher;
-use Rvx\Doctrine\Persistence\Proxy;
+use ReviewX\DeepCopy\Matcher\Matcher;
+use ReviewX\Doctrine\Persistence\Proxy;
 /**
  * @final
  */

@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Api\SettingApi;
-class SettingService extends \Rvx\Services\Service
+use ReviewX\Api\SettingApi;
+class SettingService extends \ReviewX\Services\Service
 {
     protected $settingApi;
     public function __construct()
@@ -35,9 +35,9 @@ class SettingService extends \Rvx\Services\Service
     {
         $review_settings = $this->getReviewSettings($post_type);
         $widget_settings = $this->getWidgetSettings();
-        $rvx_settings = $this->formatSettings($review_settings, $widget_settings);
+        $reviewx_settings = $this->formatSettings($review_settings, $widget_settings);
         // Ensure we always return an array even if invalid data exists
-        return \is_array($rvx_settings) ? $rvx_settings : [];
+        return \is_array($reviewx_settings) ? $reviewx_settings : [];
     }
     public function getReviewSettings($post_type = null) : array
     {
@@ -46,20 +46,20 @@ class SettingService extends \Rvx\Services\Service
             $default_cpt_name = $post_type;
         }
         $option_name = '_rvx_settings_' . $default_cpt_name;
-        $rvx_settings = \get_option($option_name, \false);
-        if ($post_type === 'product' && $rvx_settings === \false) {
-            $rvx_settings = \get_option('_rvx_settings_data');
+        $reviewx_settings = \get_option($option_name, \false);
+        if ($post_type === 'product' && $reviewx_settings === \false) {
+            $reviewx_settings = \get_option('_rvx_settings_data');
         }
-        return $rvx_settings['setting']['review_settings'] ?? [];
+        return $reviewx_settings['setting']['review_settings'] ?? [];
     }
     public function getWidgetSettings() : array
     {
         $option_name = '_rvx_settings_widget';
-        $rvx_settings = \get_option($option_name, \false);
-        if ($rvx_settings === \false) {
-            $rvx_settings = \get_option('_rvx_settings_data');
+        $reviewx_settings = \get_option($option_name, \false);
+        if ($reviewx_settings === \false) {
+            $reviewx_settings = \get_option('_rvx_settings_data');
         }
-        return $rvx_settings['setting']['widget_settings'] ?? [];
+        return $reviewx_settings['setting']['widget_settings'] ?? [];
     }
     /**
      * Upadte Settings Data
@@ -180,8 +180,9 @@ class SettingService extends \Rvx\Services\Service
     public function removeCredentials($requestData)
     {
         global $wpdb;
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name from $wpdb->prefix, safe
-        $result = $wpdb->query("TRUNCATE TABLE {$wpdb->prefix}rvx_sites");
+        $rvxSites = esc_sql($wpdb->prefix . 'rvx_sites');
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Rare cleanup operation on plugin-owned table
+        $result = $wpdb->query('TRUNCATE TABLE `' . $rvxSites . '`');
         // Clear general cache if any site ID exists.
         // We don't know the UIDs here so we can't clear specific site caches easily,
         // but TRUNCATE is a rare operation.
@@ -195,7 +196,7 @@ class SettingService extends \Rvx\Services\Service
     public function updateSiteData($requestHeaders)
     {
         global $wpdb;
-        $table_name = $wpdb->prefix . 'rvx_sites';
+        $table_name = esc_sql($wpdb->prefix . 'rvx_sites');
         // --- Extract headers (headers come as arrays) ---
         $user_email = isset($requestHeaders['x_user_email'][0]) ? sanitize_email($requestHeaders['x_user_email'][0]) : '';
         $user_name = isset($requestHeaders['x_user_name'][0]) ? \sanitize_text_field($requestHeaders['x_user_name'][0]) : '';
@@ -231,30 +232,36 @@ class SettingService extends \Rvx\Services\Service
             return ['status' => 'fail', 'message' => 'No valid update fields provided.'];
         }
         // --- Fetch existing row to detect no-op updates and to ensure the row exists ---
-        // Whitelist allowed column names for WHERE clause to prevent SQL injection
-        $allowed_columns = array('uid', 'id', 'domain');
-        $where_clauses = [];
-        $where_values = [];
-        foreach ($where as $col => $val) {
-            if (!\in_array($col, $allowed_columns, \true)) {
-                continue;
-            }
-            $where_clauses[] = "`{$col}` = %s";
-            $where_values[] = (string) $val;
+        $where_column = \array_key_first($where);
+        $where_value = null;
+        if (\is_string($where_column) && \array_key_exists($where_column, $where)) {
+            $where_value = $where[$where_column];
         }
-        if (empty($where_clauses)) {
+        if (!\is_string($where_column) || null === $where_value) {
             return ['status' => 'fail', 'message' => 'Invalid where clause columns.'];
         }
-        $where_sql = \implode(' AND ', $where_clauses);
-        $cache_key = 'rvx_site_' . \md5($where_sql . \serialize($where_values));
+        $cache_key = 'rvx_site_' . \md5($where_column . ':' . (string) $where_value);
         $existing = \wp_cache_get($cache_key, 'reviewx');
         if (\false === $existing) {
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table query, no WP API equivalent
-            $existing = $wpdb->get_row(
-                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where_sql uses whitelisted column names with %s placeholders
-                $wpdb->prepare("SELECT * FROM {$wpdb->prefix}rvx_sites WHERE {$where_sql} LIMIT 1", $where_values),
-                ARRAY_A
-            );
+            $query = null;
+            switch ($where_column) {
+                case 'uid':
+                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Custom table name is dynamic but escaped/sanitized previously
+                    $query = $wpdb->prepare('SELECT * FROM `' . $table_name . '` WHERE uid = %s LIMIT 1', (string) $where_value);
+                    break;
+                case 'id':
+                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Custom table name is dynamic but escaped/sanitized previously
+                    $query = $wpdb->prepare('SELECT * FROM `' . $table_name . '` WHERE id = %d LIMIT 1', (int) $where_value);
+                    break;
+                case 'domain':
+                    // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Custom table name is dynamic but escaped/sanitized previously
+                    $query = $wpdb->prepare('SELECT * FROM `' . $table_name . '` WHERE domain = %s LIMIT 1', (string) $where_value);
+                    break;
+                default:
+                    return ['status' => 'fail', 'message' => 'Invalid where clause columns.'];
+            }
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table query, caching implemented above
+            $existing = $wpdb->get_row($query, ARRAY_A);
             \wp_cache_set($cache_key, $existing, 'reviewx', 3600);
         }
         if (null === $existing) {
@@ -272,10 +279,10 @@ class SettingService extends \Rvx\Services\Service
         if ($is_same) {
             return ['status' => 'success', 'message' => 'No changes required — data already up to date.', 'data' => $data, 'where' => $where];
         }
-        // --- Perform the update using $wpdb->update (safe) ---
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom table update, no standard WP API available
         $updated = $wpdb->update($table_name, $data, $where, $format, $where_fmt);
         // Clear cache
-        \wp_cache_delete('rvx_site_' . \md5($where_sql . \serialize($where_values)), 'reviewx');
+        \wp_cache_delete($cache_key, 'reviewx');
         if (!empty($site_uid)) {
             \wp_cache_delete('rvx_site_uid_' . $site_uid, 'reviewx');
             \wp_cache_delete('rvx_site_exists_' . $site_uid, 'reviewx');

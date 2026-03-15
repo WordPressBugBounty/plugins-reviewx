@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
 \defined('ABSPATH') || exit;
-use Rvx\Apiz\Http\Response;
+use ReviewX\Apiz\Http\Response;
 use Exception;
-use Rvx\Models\Post;
-use Rvx\Utilities\Auth\Client;
-class ReviewsApi extends \Rvx\Api\BaseApi
+use ReviewX\Models\Post;
+use ReviewX\Utilities\Auth\Client;
+class ReviewsApi extends \ReviewX\Api\BaseApi
 {
     public function getReviews($data) : Response
     {

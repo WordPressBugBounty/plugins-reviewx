@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Invoker\Exception;
+namespace ReviewX\Invoker\Exception;
 
 /**
  * Impossible to invoke the callable.

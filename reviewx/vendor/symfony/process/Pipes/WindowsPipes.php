@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Process\Pipes;
+namespace ReviewX\Symfony\Component\Process\Pipes;
 
-use Rvx\Symfony\Component\Process\Exception\RuntimeException;
-use Rvx\Symfony\Component\Process\Process;
+use ReviewX\Symfony\Component\Process\Exception\RuntimeException;
+use ReviewX\Symfony\Component\Process\Process;
 /**
  * WindowsPipes implementation uses temporary files as handles.
  *

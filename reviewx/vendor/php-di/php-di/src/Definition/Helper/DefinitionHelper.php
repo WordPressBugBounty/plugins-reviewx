@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Helper;
+namespace ReviewX\DI\Definition\Helper;
 
-use Rvx\DI\Definition\Definition;
+use ReviewX\DI\Definition\Definition;
 /**
  * Helps defining container entries.
  *

@@ -1,11 +1,12 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
 \defined("ABSPATH") || exit;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
-use Rvx\Services\SettingService;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
+use ReviewX\Services\SettingService;
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 do_action('woocommerce_before_account_orders', $has_orders);
 ?>
 
@@ -169,7 +170,7 @@ if ($has_orders) {
                 }
                 if (\is_array($saas_order_status) && \array_key_exists($order_current_status, $saas_order_status) && $saas_order_status[$order_current_status] === \true) {
                     ?>
-                                    <a href="#reviewxForm" class="woocommerce-button button rvx-elem"
+                                    <a href="#reviewxForm" class="woocommerce-button button reviewx-elem"
                                     data-order-id="<?php 
                     echo \esc_attr($order->get_id());
                     ?>"
@@ -269,7 +270,7 @@ do_action('woocommerce_after_account_orders', $has_orders);
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const rvxElems = document.querySelectorAll(".rvx-elem");
+        const rvxElems = document.querySelectorAll(".reviewx-elem");
         rvxElems.forEach(function (rvxElem) {
             rvxElem.addEventListener("click", function (event) {
                 event.preventDefault();
@@ -281,14 +282,14 @@ do_action('woocommerce_after_account_orders', $has_orders);
                 const reviewId = rvxElem.getAttribute('data-review-id');
 
                 // Set product and order details in the modal
-                document.getElementById('rvx-order-id-display').textContent = orderId;
-                document.getElementById('rvx-product-id-display').textContent = productId;
-                document.getElementById('rvx-product-name-display').textContent = productName;
-                document.getElementById('rvx-product-image-display').innerHTML = productImageHtml;
-                document.getElementById('rvx-review-id-display').innerHTML = reviewId;
+                document.getElementById('reviewx-order-id-display').textContent = orderId;
+                document.getElementById('reviewx-product-id-display').textContent = productId;
+                document.getElementById('reviewx-product-name-display').textContent = productName;
+                document.getElementById('reviewx-product-image-display').innerHTML = productImageHtml;
+                document.getElementById('reviewx-review-id-display').innerHTML = reviewId;
 
                 // Show the product/order details
-                document.getElementById('rvx-order-form').classList.remove('hidden');
+                document.getElementById('reviewx-order-form').classList.remove('hidden');
 
                 // Show the modal and "Go Back" button
                 document.getElementById("reviewxForm").classList.remove("hidden");

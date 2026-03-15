@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Nyholm\Psr7\Factory;
+namespace ReviewX\Nyholm\Psr7\Factory;
 
-use Rvx\Nyholm\Psr7\Request;
-use Rvx\Nyholm\Psr7\Response;
-use Rvx\Nyholm\Psr7\ServerRequest;
-use Rvx\Nyholm\Psr7\Stream;
-use Rvx\Nyholm\Psr7\UploadedFile;
-use Rvx\Nyholm\Psr7\Uri;
-use Rvx\Psr\Http\Message\RequestFactoryInterface;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseFactoryInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\ServerRequestFactoryInterface;
-use Rvx\Psr\Http\Message\ServerRequestInterface;
-use Rvx\Psr\Http\Message\StreamFactoryInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Psr\Http\Message\UploadedFileFactoryInterface;
-use Rvx\Psr\Http\Message\UploadedFileInterface;
-use Rvx\Psr\Http\Message\UriFactoryInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\Nyholm\Psr7\Request;
+use ReviewX\Nyholm\Psr7\Response;
+use ReviewX\Nyholm\Psr7\ServerRequest;
+use ReviewX\Nyholm\Psr7\Stream;
+use ReviewX\Nyholm\Psr7\UploadedFile;
+use ReviewX\Nyholm\Psr7\Uri;
+use ReviewX\Psr\Http\Message\RequestFactoryInterface;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseFactoryInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\ServerRequestFactoryInterface;
+use ReviewX\Psr\Http\Message\ServerRequestInterface;
+use ReviewX\Psr\Http\Message\StreamFactoryInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\UploadedFileFactoryInterface;
+use ReviewX\Psr\Http\Message\UploadedFileInterface;
+use ReviewX\Psr\Http\Message\UriFactoryInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  * @author Martijn van der Ven <martijn@vanderven.se>

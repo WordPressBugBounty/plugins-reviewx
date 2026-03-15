@@ -1,18 +1,18 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Exception;
-use Rvx\Services\Api\LoginService;
-use Rvx\Services\ReviewService;
-use Rvx\Services\CacheServices;
-use Rvx\Services\SettingService;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
+use ReviewX\Services\Api\LoginService;
+use ReviewX\Services\ReviewService;
+use ReviewX\Services\CacheServices;
+use ReviewX\Services\SettingService;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
 use Throwable;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class StoreFrontReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;
@@ -121,11 +121,9 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function resetSiteWiseTransientMeta($site_id, $post_type)
     {
-        global $wpdb;
         $post_type = $post_type != null ? $post_type : 'all';
         $review_key = "rvx_{$site_id}_{$post_type}_reviews";
-        // Prepare and execute the deletion query
-        $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE meta_key = %s", $review_key));
+        \delete_transient($review_key);
     }
     public function getWidgetReviewsListShortcode($request)
     {
@@ -263,8 +261,8 @@ class StoreFrontReviewController implements InvokableContract
     }
     public function getOnlyApproveReviewCount($id) : int
     {
-        global $wpdb;
-        return (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) \n             FROM {$wpdb->comments} \n             WHERE comment_post_ID = %d \n             AND comment_approved = '1' \n             AND comment_parent = 0\n             AND comment_type IN ('comment', 'review')", $id));
+        $count = \get_comments(['post_id' => (int) $id, 'status' => 'approve', 'parent' => 0, 'type__in' => ['comment', 'review'], 'count' => \true, 'no_found_rows' => \true, 'update_comment_meta_cache' => \false, 'update_comment_post_cache' => \false]);
+        return (int) $count;
     }
     public function insightReviewCount($id) : int
     {

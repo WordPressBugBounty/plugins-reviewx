@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\DeepCopy\Filter\Doctrine;
+namespace ReviewX\DeepCopy\Filter\Doctrine;
 
-use Rvx\DeepCopy\Filter\Filter;
-use Rvx\DeepCopy\Reflection\ReflectionHelper;
+use ReviewX\DeepCopy\Filter\Filter;
+use ReviewX\DeepCopy\Reflection\ReflectionHelper;
 /**
  * @final
  */

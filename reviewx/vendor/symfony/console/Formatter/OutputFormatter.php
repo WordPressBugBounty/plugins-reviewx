@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Formatter;
+namespace ReviewX\Symfony\Component\Console\Formatter;
 
-use Rvx\Symfony\Component\Console\Exception\InvalidArgumentException;
-use function Rvx\Symfony\Component\String\b;
+use ReviewX\Symfony\Component\Console\Exception\InvalidArgumentException;
+use function ReviewX\Symfony\Component\String\b;
 /**
  * Formatter class for console output.
  *

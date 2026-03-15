@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\DB\Migration;
+namespace ReviewX\WPDrill\DB\Migration;
 
 class Sql
 {

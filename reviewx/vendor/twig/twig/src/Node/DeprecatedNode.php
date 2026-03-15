@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node;
+namespace ReviewX\Twig\Node;
 
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Expression\AbstractExpression;
-use Rvx\Twig\Node\Expression\ConstantExpression;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Node\Expression\AbstractExpression;
+use ReviewX\Twig\Node\Expression\ConstantExpression;
 /**
  * Represents a deprecated node.
  *

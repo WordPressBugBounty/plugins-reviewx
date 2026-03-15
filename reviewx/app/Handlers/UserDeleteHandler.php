@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Handlers;
+namespace ReviewX\Handlers;
 
-use Rvx\Api\UserApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\UserApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Response;
 class UserDeleteHandler
 {
     public function __construct()

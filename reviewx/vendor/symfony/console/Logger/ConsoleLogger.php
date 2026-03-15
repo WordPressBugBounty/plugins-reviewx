@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\Logger;
+namespace ReviewX\Symfony\Component\Console\Logger;
 
-use Rvx\Psr\Log\AbstractLogger;
-use Rvx\Psr\Log\InvalidArgumentException;
-use Rvx\Psr\Log\LogLevel;
-use Rvx\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Psr\Log\AbstractLogger;
+use ReviewX\Psr\Log\InvalidArgumentException;
+use ReviewX\Psr\Log\LogLevel;
+use ReviewX\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
 /**
  * PSR-3 compliant console logger.
  *

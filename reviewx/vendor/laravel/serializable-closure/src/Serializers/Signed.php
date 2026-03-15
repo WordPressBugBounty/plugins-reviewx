@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Laravel\SerializableClosure\Serializers;
+namespace ReviewX\Laravel\SerializableClosure\Serializers;
 
-use Rvx\Laravel\SerializableClosure\Contracts\Serializable;
-use Rvx\Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
-use Rvx\Laravel\SerializableClosure\Exceptions\MissingSecretKeyException;
+use ReviewX\Laravel\SerializableClosure\Contracts\Serializable;
+use ReviewX\Laravel\SerializableClosure\Exceptions\InvalidSignatureException;
+use ReviewX\Laravel\SerializableClosure\Exceptions\MissingSecretKeyException;
 class Signed implements Serializable
 {
     /**

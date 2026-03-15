@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Cookie;
+namespace ReviewX\GuzzleHttp\Cookie;
 
-use Rvx\GuzzleHttp\Utils;
+use ReviewX\GuzzleHttp\Utils;
 /**
  * Persists non-session cookies using a JSON formatted file
  */

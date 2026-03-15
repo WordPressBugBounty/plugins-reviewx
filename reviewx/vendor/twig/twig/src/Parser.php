@@ -9,21 +9,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig;
+namespace ReviewX\Twig;
 
-use Rvx\Twig\Error\SyntaxError;
-use Rvx\Twig\Node\BlockNode;
-use Rvx\Twig\Node\BlockReferenceNode;
-use Rvx\Twig\Node\BodyNode;
-use Rvx\Twig\Node\Expression\AbstractExpression;
-use Rvx\Twig\Node\MacroNode;
-use Rvx\Twig\Node\ModuleNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\Node\NodeCaptureInterface;
-use Rvx\Twig\Node\NodeOutputInterface;
-use Rvx\Twig\Node\PrintNode;
-use Rvx\Twig\Node\TextNode;
-use Rvx\Twig\TokenParser\TokenParserInterface;
+use ReviewX\Twig\Error\SyntaxError;
+use ReviewX\Twig\Node\BlockNode;
+use ReviewX\Twig\Node\BlockReferenceNode;
+use ReviewX\Twig\Node\BodyNode;
+use ReviewX\Twig\Node\Expression\AbstractExpression;
+use ReviewX\Twig\Node\MacroNode;
+use ReviewX\Twig\Node\ModuleNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\Node\NodeCaptureInterface;
+use ReviewX\Twig\Node\NodeOutputInterface;
+use ReviewX\Twig\Node\PrintNode;
+use ReviewX\Twig\Node\TextNode;
+use ReviewX\Twig\TokenParser\TokenParserInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

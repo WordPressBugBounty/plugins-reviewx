@@ -1,11 +1,11 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Apiz\Http\Response;
-use Rvx\Api\EmailApi;
-class EmailService extends \Rvx\Services\Service
+use ReviewX\Apiz\Http\Response;
+use ReviewX\Api\EmailApi;
+class EmailService extends \ReviewX\Services\Service
 {
     /**
      * @return Response

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Helper;
+namespace ReviewX\DI\Definition\Helper;
 
-use Rvx\DI\Definition\AutowireDefinition;
+use ReviewX\DI\Definition\AutowireDefinition;
 /**
  * Helps defining how to create an instance of a class using autowiring.
  *

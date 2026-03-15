@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx;
+namespace ReviewX;
 
-use Rvx\WPDrill\DB\Migration\Migration;
-use Rvx\WPDrill\DB\Migration\Sql;
+use ReviewX\WPDrill\DB\Migration\Migration;
+use ReviewX\WPDrill\DB\Migration\Sql;
 class create_sites_table extends Migration
 {
     public function up() : Sql
@@ -29,4 +29,4 @@ class create_sites_table extends Migration
         return $this->dropTable('sites');
     }
 }
-\class_alias('Rvx\\create_sites_table', 'create_sites_table', \false);
+\class_alias('ReviewX\\create_sites_table', 'create_sites_table', \false);

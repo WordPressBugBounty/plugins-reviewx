@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Tests\Feature\Mocks;
+namespace ReviewX\Tests\Feature\Mocks;
 
-use Rvx\Apiz\AbstractApi;
+use ReviewX\Apiz\AbstractApi;
 class BasicHTTPAPI extends AbstractApi
 {
     protected function getBaseURL()

@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\GuzzleHttp\Client;
-use Rvx\GuzzleHttp\Exception\RequestException;
-use Rvx\Utilities\Helper;
+use ReviewX\GuzzleHttp\Client;
+use ReviewX\GuzzleHttp\Exception\RequestException;
+use ReviewX\Utilities\Helper;
 class WpApi
 {
     protected string $baseUrl;

@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Profiler\NodeVisitor;
+namespace ReviewX\Twig\Profiler\NodeVisitor;
 
-use Rvx\Twig\Environment;
-use Rvx\Twig\Node\BlockNode;
-use Rvx\Twig\Node\BodyNode;
-use Rvx\Twig\Node\MacroNode;
-use Rvx\Twig\Node\ModuleNode;
-use Rvx\Twig\Node\Node;
-use Rvx\Twig\NodeVisitor\NodeVisitorInterface;
-use Rvx\Twig\Profiler\Node\EnterProfileNode;
-use Rvx\Twig\Profiler\Node\LeaveProfileNode;
-use Rvx\Twig\Profiler\Profile;
+use ReviewX\Twig\Environment;
+use ReviewX\Twig\Node\BlockNode;
+use ReviewX\Twig\Node\BodyNode;
+use ReviewX\Twig\Node\MacroNode;
+use ReviewX\Twig\Node\ModuleNode;
+use ReviewX\Twig\Node\Node;
+use ReviewX\Twig\NodeVisitor\NodeVisitorInterface;
+use ReviewX\Twig\Profiler\Node\EnterProfileNode;
+use ReviewX\Twig\Profiler\Node\LeaveProfileNode;
+use ReviewX\Twig\Profiler\Profile;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */

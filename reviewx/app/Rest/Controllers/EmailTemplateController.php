@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
-use Rvx\Services\EmailService;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
+use ReviewX\Services\EmailService;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
 class EmailTemplateController implements InvokableContract
 {
     protected $emailService;

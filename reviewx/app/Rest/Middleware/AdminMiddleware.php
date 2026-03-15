@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Rest\Middleware;
+namespace ReviewX\Rest\Middleware;
 
 \defined("ABSPATH") || exit;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Utilities\Auth\Client;
 class AdminMiddleware
 {
     /**

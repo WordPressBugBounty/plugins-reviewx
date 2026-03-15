@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node\Expression\Test;
+namespace ReviewX\Twig\Node\Expression\Test;
 
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Expression\TestExpression;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Node\Expression\TestExpression;
 /**
  * Checks if a variable is divisible by a number.
  *

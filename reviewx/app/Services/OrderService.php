@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\Services;
+namespace ReviewX\Services;
 
 \defined("ABSPATH") || exit;
-use Rvx\Api\OrderApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Response;
-class OrderService extends \Rvx\Services\Service
+use ReviewX\Api\OrderApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Response;
+class OrderService extends \ReviewX\Services\Service
 {
     public function __construct()
     {
@@ -34,7 +34,7 @@ class OrderService extends \Rvx\Services\Service
         $date_modified = $order->get_date_modified();
         $updated_at = $date_modified ? \wp_date('Y-m-d H:i:s', $date_modified->getTimestamp()) : \wp_date('Y-m-d H:i:s');
         // Get the order state, ensure a fallback if 'date_paid' doesn't exist
-        $order_state = $this->wooOrderState($order->get_id());
+        $order_state = $this->wooOrderState($order);
         $paid_at = $order_state['date_paid'] ?? null;
         $orderData = ["wp_id" => (int) $order->get_id(), "customer_wp_unique_id" => Client::getUid() . '-' . (int) $order->get_customer_id(), "subtotal" => (float) $order->get_subtotal(), "tax" => (float) $order->get_total_tax(), "total" => (float) $order->get_total(), "status" => Helper::orderStatus($order->get_status()), "review_request_email_sent_at" => null, "review_reminder_email_sent_at" => null, "photo_review_email_sent_at" => null, "paid_at" => $paid_at, "created_at" => $created_at, "updated_at" => $updated_at];
         if (isset($status_mapping[$status])) {
@@ -46,22 +46,18 @@ class OrderService extends \Rvx\Services\Service
     {
         return ['processing' => 'processing_at', 'pending_payment' => 'pending_payment_at', 'on_hold' => 'on_hold_at', 'completed' => 'completed_at', 'cancelled' => 'cancelled_at', 'refunded' => 'refunded_at', 'failed' => 'failed_at', 'draft' => 'draft_at'];
     }
-    public function wooOrderState($order_id)
+    public function wooOrderState($order)
     {
-        $cache_key = 'rvx_wc_order_stats_' . $order_id;
-        $results = \wp_cache_get($cache_key, 'reviewx');
-        if (\false === $results) {
-            $results = $wpdb->get_row($wpdb->prepare("SELECT date_paid, date_completed FROM {$wpdb->prefix}wc_order_stats WHERE order_id = %d", $order_id));
-            \wp_cache_set($cache_key, $results, 'reviewx', 3600);
+        if (!$order) {
+            return ['date_paid' => null, 'date_completed' => null];
         }
-        if ($results) {
-            return ['date_paid' => !empty($results->date_paid) && \strtotime($results->date_paid) ? \wp_date('Y-m-d H:i:s', \strtotime($results->date_paid)) : null, 'date_completed' => !empty($results->date_completed) && \strtotime($results->date_completed) ? \wp_date('Y-m-d H:i:s', \strtotime($results->date_completed)) : null];
-        }
-        return ['date_paid' => null, 'date_completed' => null];
+        $date_paid = $order->get_date_paid();
+        $date_completed = $order->get_date_completed();
+        return ['date_paid' => $date_paid ? \wp_date('Y-m-d H:i:s', $date_paid->getTimestamp()) : null, 'date_completed' => $date_completed ? \wp_date('Y-m-d H:i:s', $date_completed->getTimestamp()) : null];
     }
     public function orderItems($order, $orderData = [])
     {
-        $date = $this->wooOrderState($order->get_id());
+        $date = $this->wooOrderState($order);
         $items_data = [];
         $order_items = $order->get_items();
         foreach ($order_items as $order_item) {

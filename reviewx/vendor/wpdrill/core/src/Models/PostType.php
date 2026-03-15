@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\WPDrill\Models;
+namespace ReviewX\WPDrill\Models;
 
 class PostType extends Model
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\CPT;
+namespace ReviewX\CPT;
 
 class CptReviewsCount
 {

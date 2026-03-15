@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Compiler;
+namespace ReviewX\DI\Compiler;
 
-use Rvx\DI\Factory\RequestedEntry;
+use ReviewX\DI\Factory\RequestedEntry;
 /**
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */

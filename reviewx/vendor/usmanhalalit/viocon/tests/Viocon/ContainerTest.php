@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Viocon;
+namespace ReviewX\Viocon;
 
-class ContainerTest extends \Rvx\PHPUnit_Framework_TestCase
+class ContainerTest extends \ReviewX\PHPUnit_Framework_TestCase
 {
     protected static $container;
     public static function setupBeforeClass()
@@ -16,9 +16,9 @@ class ContainerTest extends \Rvx\PHPUnit_Framework_TestCase
     }
     public function testBuildWithClassNameAsKeyWithConstructorParams()
     {
-        $reflectionClass = static::$container->build('\\ReflectionClass', array('Rvx\\Viocon\\ContainerTest'));
+        $reflectionClass = static::$container->build('\\ReflectionClass', array('ReviewX\\Viocon\\ContainerTest'));
         $this->assertInstanceOf('\\ReflectionClass', $reflectionClass);
-        $this->assertEquals('Rvx\\Viocon\\ContainerTest', $reflectionClass->name);
+        $this->assertEquals('ReviewX\\Viocon\\ContainerTest', $reflectionClass->name);
     }
     public function testSetAndBuild()
     {
@@ -70,9 +70,9 @@ class ContainerTest extends \Rvx\PHPUnit_Framework_TestCase
     public function testAlias()
     {
         new Container('VContainer');
-        \Rvx\VContainer::set('myClosure', function () {
+        \ReviewX\VContainer::set('myClosure', function () {
             return 'Test';
         });
-        $this->assertEquals('Test', \Rvx\VContainer::build('myClosure'));
+        $this->assertEquals('Test', \ReviewX\VContainer::build('myClosure'));
     }
 }

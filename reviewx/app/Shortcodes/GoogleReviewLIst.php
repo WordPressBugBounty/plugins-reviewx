@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Shortcodes;
+namespace ReviewX\Shortcodes;
 
-use Rvx\Api\GoogleReviewApi;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Contracts\ShortcodeContract;
-use Rvx\WPDrill\Facades\View;
-use Rvx\Services\GoogleReviewService;
+use ReviewX\Api\GoogleReviewApi;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Contracts\ShortcodeContract;
+use ReviewX\WPDrill\Facades\View;
+use ReviewX\Services\GoogleReviewService;
 class GoogleReviewLIst implements ShortcodeContract
 {
     protected $googleReview;

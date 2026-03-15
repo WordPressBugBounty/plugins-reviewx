@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Symfony\Component\Console\DependencyInjection;
+namespace ReviewX\Symfony\Component\Console\DependencyInjection;
 
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Command\LazyCommand;
-use Rvx\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use Rvx\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use Rvx\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Rvx\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use Rvx\Symfony\Component\DependencyInjection\ContainerBuilder;
-use Rvx\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Rvx\Symfony\Component\DependencyInjection\Reference;
-use Rvx\Symfony\Component\DependencyInjection\TypedReference;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Command\LazyCommand;
+use ReviewX\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+use ReviewX\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use ReviewX\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use ReviewX\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use ReviewX\Symfony\Component\DependencyInjection\ContainerBuilder;
+use ReviewX\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use ReviewX\Symfony\Component\DependencyInjection\Reference;
+use ReviewX\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers console commands.
  *

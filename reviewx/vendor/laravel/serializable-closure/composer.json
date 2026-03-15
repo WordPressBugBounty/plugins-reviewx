@@ -33,12 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Rvx\\Laravel\\SerializableClosure\\": "src\/"
+            "ReviewX\\Laravel\\SerializableClosure\\": "src\/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rvx\\Tests\\": "tests\/"
+            "ReviewX\\Tests\\": "tests\/"
         }
     },
     "extra": {

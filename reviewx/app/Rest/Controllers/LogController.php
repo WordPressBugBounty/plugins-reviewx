@@ -1,18 +1,18 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Exception;
-use Rvx\Services\CategorySyncService;
-use Rvx\Services\DataSyncService;
-use Rvx\Services\OrderItemSyncService;
-use Rvx\Services\ProductSyncService;
-use Rvx\Services\ReviewSyncService;
-use Rvx\Services\UserSyncService;
-use Rvx\Utilities\Helper;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\Services\CacheServices;
+use ReviewX\Services\CategorySyncService;
+use ReviewX\Services\DataSyncService;
+use ReviewX\Services\OrderItemSyncService;
+use ReviewX\Services\ProductSyncService;
+use ReviewX\Services\ReviewSyncService;
+use ReviewX\Services\UserSyncService;
+use ReviewX\Utilities\Helper;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\Services\CacheServices;
 class LogController implements InvokableContract
 {
     protected CacheServices $cacheServices;
@@ -41,7 +41,7 @@ class LogController implements InvokableContract
                 require_once \ABSPATH . 'wp-admin/includes/file.php';
                 \WP_Filesystem();
             }
-            $log_folder = RVX_DIR_PATH . 'log/';
+            $log_folder = REVIEWX_DIR_PATH . 'log/';
             if (!$wp_filesystem->exists($log_folder)) {
                 if (!$wp_filesystem->mkdir($log_folder, 0755)) {
                     throw new \RuntimeException(\sprintf('Directory "%s" was not created', \esc_html($log_folder)));
@@ -57,7 +57,7 @@ class LogController implements InvokableContract
                 require_once \ABSPATH . 'wp-admin/includes/file.php';
                 \WP_Filesystem();
             }
-            $logPath = RVX_DIR_PATH . 'log/';
+            $logPath = REVIEWX_DIR_PATH . 'log/';
             $files = \glob($logPath . '*');
             // glob is generally acceptable if WP_Filesystem doesn't provide a direct equivalent that is as easy to use here, but we'll stick to contents if possible.
             if (empty($files)) {
@@ -93,7 +93,7 @@ class LogController implements InvokableContract
                 require_once \ABSPATH . 'wp-admin/includes/file.php';
                 \WP_Filesystem();
             }
-            $log_folder = RVX_DIR_PATH . 'log/';
+            $log_folder = REVIEWX_DIR_PATH . 'log/';
             if (!$wp_filesystem->is_dir($log_folder)) {
                 \esc_html_e('Log folder does not exist', 'reviewx');
                 return;
@@ -150,7 +150,7 @@ class LogController implements InvokableContract
                 $order->syncOrder($file_buffer);
                 $order->syncOrderItem($file_buffer);
             }
-            $file_path = RVX_DIR_PATH . 'sync.jsonl';
+            $file_path = REVIEWX_DIR_PATH . 'sync.jsonl';
             $wp_filesystem->put_contents($file_path, $file_buffer, \FS_CHMOD_FILE);
             \esc_html_e('jsonl create done', 'reviewx');
         } catch (Exception $e) {
@@ -159,7 +159,7 @@ class LogController implements InvokableContract
     }
     public function downloadJsonl()
     {
-        $syncJsonlDownload = RVX_DIR_PATH . 'sync.jsonl';
+        $syncJsonlDownload = REVIEWX_DIR_PATH . 'sync.jsonl';
         global $wp_filesystem;
         if (empty($wp_filesystem)) {
             require_once \ABSPATH . 'wp-admin/includes/file.php';

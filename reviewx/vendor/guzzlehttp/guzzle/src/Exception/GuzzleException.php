@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Exception;
+namespace ReviewX\GuzzleHttp\Exception;
 
-use Rvx\Psr\Http\Client\ClientExceptionInterface;
+use ReviewX\Psr\Http\Client\ClientExceptionInterface;
 interface GuzzleException extends ClientExceptionInterface
 {
 }

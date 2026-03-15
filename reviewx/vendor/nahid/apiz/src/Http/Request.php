@@ -1,16 +1,16 @@
 <?php
 
-namespace Rvx\Apiz\Http;
+namespace ReviewX\Apiz\Http;
 
-use Rvx\Apiz\GraphQL\AbstractRequest;
-use Rvx\Apiz\Http\Clients\AbstractClient;
-use Rvx\Apiz\Http\Clients\GuzzleClient;
+use ReviewX\Apiz\GraphQL\AbstractRequest;
+use ReviewX\Apiz\Http\Clients\AbstractClient;
+use ReviewX\Apiz\Http\Clients\GuzzleClient;
 use Exception;
-use Rvx\Apiz\Exceptions\ClientNotDefinedException;
-use Rvx\Apiz\Exceptions\InvalidResponseClassException;
-use Rvx\GuzzleHttp\Psr7\MultipartStream;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
+use ReviewX\Apiz\Exceptions\ClientNotDefinedException;
+use ReviewX\Apiz\Exceptions\InvalidResponseClassException;
+use ReviewX\GuzzleHttp\Psr7\MultipartStream;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
 class Request
 {
     /**

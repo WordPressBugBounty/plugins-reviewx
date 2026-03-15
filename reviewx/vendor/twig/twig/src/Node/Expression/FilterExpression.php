@@ -9,10 +9,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Rvx\Twig\Node\Expression;
+namespace ReviewX\Twig\Node\Expression;
 
-use Rvx\Twig\Compiler;
-use Rvx\Twig\Node\Node;
+use ReviewX\Twig\Compiler;
+use ReviewX\Twig\Node\Node;
 class FilterExpression extends CallExpression
 {
     public function __construct(Node $node, ConstantExpression $filterName, Node $arguments, int $lineno, string $tag = null)

@@ -1,23 +1,23 @@
 <?php
 
-namespace Rvx\Rest\Controllers;
+namespace ReviewX\Rest\Controllers;
 
 \defined("ABSPATH") || exit;
 use Exception;
-use Rvx\Api\AuthApi;
-use Rvx\CPT\CptHelper;
-use Rvx\Handlers\MigrationRollback\MigrationPrompt;
-use Rvx\Handlers\MigrationRollback\ReviewXChecker;
-use Rvx\Models\Site;
-use Rvx\Services\Api\LoginService;
-use Rvx\Services\DataSyncService;
-use Rvx\Services\SettingService;
-use Rvx\Utilities\Auth\Client;
-use Rvx\Utilities\Helper;
+use ReviewX\Api\AuthApi;
+use ReviewX\CPT\CptHelper;
+use ReviewX\Handlers\MigrationRollback\MigrationPrompt;
+use ReviewX\Handlers\MigrationRollback\ReviewXChecker;
+use ReviewX\Models\Site;
+use ReviewX\Services\Api\LoginService;
+use ReviewX\Services\DataSyncService;
+use ReviewX\Services\SettingService;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\Utilities\Helper;
 use Throwable;
-use Rvx\WPDrill\Contracts\InvokableContract;
-use Rvx\WPDrill\Response;
-use Rvx\Services\CacheServices;
+use ReviewX\WPDrill\Contracts\InvokableContract;
+use ReviewX\WPDrill\Response;
+use ReviewX\Services\CacheServices;
 class AuthController implements InvokableContract
 {
     protected LoginService $loginService;
@@ -63,7 +63,7 @@ class AuthController implements InvokableContract
             Client::set(Site::where('uid', $site_info['uid'])->first());
             $dataResponse = $this->dataSyncService->dataSync('login', 'product');
             if (!$dataResponse) {
-                return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', $dataResponse->getStatusCode());
+                return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             // Sleep for 1 seconds
             \sleep(1);
@@ -79,6 +79,8 @@ class AuthController implements InvokableContract
             $this->loginService->resetPostMeta();
             // Set the localStorage isAlreadySyncSuccess
             \set_transient('rvx_reset_sync_flag', \true);
+            \delete_metadata('user', 0, $insight_key, '', \true);
+            \delete_metadata('user', 0, $review_key, '', \true);
             return Helper::saasResponse($response);
         } catch (Exception $e) {
             $errorCode = $e->getCode() === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $e->getCode();
@@ -112,7 +114,7 @@ class AuthController implements InvokableContract
             Client::set(Site::where('uid', $site_info['uid'])->first());
             $dataResponse = $this->dataSyncService->dataSync('login', 'product');
             if (!$dataResponse) {
-                return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', $dataResponse->getStatusCode());
+                return Helper::rvxApi(['error' => 'Data sync fails'])->fails('Data sync fails', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             // Sleep for 1 seconds
             \sleep(1);
@@ -210,7 +212,7 @@ class AuthController implements InvokableContract
             Client::set(Site::where('uid', $site_info['uid'])->first());
             $dataResponse = $this->dataSyncService->dataSync('register', 'product');
             if (!$dataResponse) {
-                return Helper::rvxApi(['error' => "Registration Fail"])->fails('Registration Fail', $dataResponse->getStatusCode());
+                return Helper::rvxApi(['error' => "Registration Fail"])->fails('Registration Fail', Response::HTTP_INTERNAL_SERVER_ERROR);
             }
             $this->cacheServices->removeCache();
             $this->loginService->resetPostMeta();
@@ -229,9 +231,9 @@ class AuthController implements InvokableContract
         $migrationData = new MigrationPrompt();
         $result = \false;
         if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
-            $result = $migrationData->rvx_retrieve_old_plugin_options_data();
+            $result = $migrationData->reviewx_retrieve_old_plugin_options_data();
         } elseif (ReviewXChecker::isReviewXSaasExists()) {
-            $result = $migrationData->rvx_retrieve_saas_plugin_options_data();
+            $result = $migrationData->reviewx_retrieve_saas_plugin_options_data();
         }
         if ($result !== \false) {
             $successMessage = "Old Data found";
@@ -243,14 +245,9 @@ class AuthController implements InvokableContract
     }
     public function removeUserSettingsFormLocal()
     {
-        global $wpdb;
         $option_name = '__user_setting_access';
-        $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = %s", $option_name));
-        if ($exists > 0) {
-            $result = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name = %s", $option_name));
-            if ($result !== \false) {
-                return ["Success" => "Options Table Delete"];
-            }
+        if (\delete_option($option_name)) {
+            return ["Success" => "Options Table Delete"];
         }
     }
     /**

@@ -1,19 +1,19 @@
 <?php
 
-namespace Rvx\GuzzleHttp\Handler;
+namespace ReviewX\GuzzleHttp\Handler;
 
-use Rvx\GuzzleHttp\Exception\ConnectException;
-use Rvx\GuzzleHttp\Exception\RequestException;
-use Rvx\GuzzleHttp\Promise as P;
-use Rvx\GuzzleHttp\Promise\FulfilledPromise;
-use Rvx\GuzzleHttp\Promise\PromiseInterface;
-use Rvx\GuzzleHttp\Psr7;
-use Rvx\GuzzleHttp\TransferStats;
-use Rvx\GuzzleHttp\Utils;
-use Rvx\Psr\Http\Message\RequestInterface;
-use Rvx\Psr\Http\Message\ResponseInterface;
-use Rvx\Psr\Http\Message\StreamInterface;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Exception\ConnectException;
+use ReviewX\GuzzleHttp\Exception\RequestException;
+use ReviewX\GuzzleHttp\Promise as P;
+use ReviewX\GuzzleHttp\Promise\FulfilledPromise;
+use ReviewX\GuzzleHttp\Promise\PromiseInterface;
+use ReviewX\GuzzleHttp\Psr7;
+use ReviewX\GuzzleHttp\TransferStats;
+use ReviewX\GuzzleHttp\Utils;
+use ReviewX\Psr\Http\Message\RequestInterface;
+use ReviewX\Psr\Http\Message\ResponseInterface;
+use ReviewX\Psr\Http\Message\StreamInterface;
+use ReviewX\Psr\Http\Message\UriInterface;
 /**
  * HTTP handler that uses PHP's HTTP stream wrapper.
  *
@@ -251,9 +251,9 @@ class StreamHandler
         return $this->createResource(function () use($uri, $contextResource, $context, $options, $request) {
             $resource = @\fopen((string) $uri, 'r', \false, $contextResource);
             // See https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_the_http_response_header_predefined_variable
-            if (\function_exists('Rvx\\http_get_last_response_headers')) {
+            if (\function_exists('ReviewX\\http_get_last_response_headers')) {
                 /** @var array|null */
-                $http_response_header = \Rvx\http_get_last_response_headers();
+                $http_response_header = \ReviewX\http_get_last_response_headers();
             }
             $this->lastHeaders = $http_response_header ?? [];
             if (\false === $resource) {

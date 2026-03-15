@@ -1,12 +1,12 @@
 <?php
 
-namespace Rvx\Shortcodes\Products;
+namespace ReviewX\Shortcodes\Products;
 
-use Rvx\WPDrill\Contracts\ShortcodeContract;
-use Rvx\Utilities\Helper;
-use Rvx\Form\ReviewFormHelper;
-use Rvx\Utilities\Auth\Client;
-use Rvx\WPDrill\Facades\View;
+use ReviewX\WPDrill\Contracts\ShortcodeContract;
+use ReviewX\Utilities\Helper;
+use ReviewX\Form\ReviewFormHelper;
+use ReviewX\Utilities\Auth\Client;
+use ReviewX\WPDrill\Facades\View;
 class ReviewListShortcode implements ShortcodeContract
 {
     protected $reviewFormHelper;

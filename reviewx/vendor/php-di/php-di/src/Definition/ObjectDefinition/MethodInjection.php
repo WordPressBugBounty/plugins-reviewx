@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\ObjectDefinition;
+namespace ReviewX\DI\Definition\ObjectDefinition;
 
-use Rvx\DI\Definition\Definition;
+use ReviewX\DI\Definition\Definition;
 /**
  * Describe an injection in an object method.
  *

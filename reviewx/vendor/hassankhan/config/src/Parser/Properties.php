@@ -1,6 +1,6 @@
 <?php
 
-namespace Rvx\Noodlehaus\Parser;
+namespace ReviewX\Noodlehaus\Parser;
 
 /**
  * Properties parser.

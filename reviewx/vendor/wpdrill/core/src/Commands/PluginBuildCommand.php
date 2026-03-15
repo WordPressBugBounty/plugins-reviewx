@@ -1,15 +1,15 @@
 <?php
 
-namespace Rvx\WPDrill\Commands;
+namespace ReviewX\WPDrill\Commands;
 
 use DateTime;
 use DateTimeZone;
-use Rvx\Symfony\Component\Console\Command\Command;
-use Rvx\Symfony\Component\Console\Input\InputInterface;
-use Rvx\Symfony\Component\Console\Input\InputOption;
-use Rvx\Symfony\Component\Console\Output\OutputInterface;
-use Rvx\Symfony\Component\Console\Style\SymfonyStyle;
-use Rvx\WPDrill\Facades\Config;
+use ReviewX\Symfony\Component\Console\Command\Command;
+use ReviewX\Symfony\Component\Console\Input\InputInterface;
+use ReviewX\Symfony\Component\Console\Input\InputOption;
+use ReviewX\Symfony\Component\Console\Output\OutputInterface;
+use ReviewX\Symfony\Component\Console\Style\SymfonyStyle;
+use ReviewX\WPDrill\Facades\Config;
 class PluginBuildCommand extends BaseCommand
 {
     protected function configure()

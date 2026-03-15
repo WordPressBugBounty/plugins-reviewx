@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Providers;
+namespace ReviewX\WPDrill\Providers;
 
-use Rvx\WPDrill\Facades\Config;
-use Rvx\WPDrill\ServiceProvider;
+use ReviewX\WPDrill\Facades\Config;
+use ReviewX\WPDrill\ServiceProvider;
 class CommonServiceProvider extends ServiceProvider
 {
     public function register() : void

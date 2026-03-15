@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Handlers\Product;
+namespace ReviewX\Handlers\Product;
 
-use Rvx\Api\ProductApi;
-use Rvx\WPDrill\Response;
+use ReviewX\Api\ProductApi;
+use ReviewX\WPDrill\Response;
 class ProductImportHandler
 {
     public function __invoke($product, $data)
@@ -62,11 +62,11 @@ class ProductImportHandler
         foreach ($product_categories as $category_id) {
             $category = \get_term($category_id, 'product_cat');
             if ($category && $category->parent == 0) {
-                $parent_category_ids[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . $category_id;
+                $parent_category_ids[] = \ReviewX\Utilities\Auth\Client::getUid() . '-' . $category_id;
             }
         }
         if (empty($parent_category_ids)) {
-            $parent_category_ids[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . '1';
+            $parent_category_ids[] = \ReviewX\Utilities\Auth\Client::getUid() . '-' . '1';
             return $parent_category_ids;
         }
         return $parent_category_ids;
@@ -74,7 +74,7 @@ class ProductImportHandler
     public function customPost($post)
     {
         $image_url = get_the_post_thumbnail_url($post->ID, 'full');
-        $data = ["wp_id" => $post->ID, "title" => $post->post_title, "url" => get_permalink($post->ID), "description" => $post->post_excerpt, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => '', "status" => $this->productStatus($post->post_status), "post_type" => \get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => 0.0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => [\Rvx\Utilities\Auth\Client::getUid() . '-' . 0]];
+        $data = ["wp_id" => $post->ID, "title" => $post->post_title, "url" => get_permalink($post->ID), "description" => $post->post_excerpt, "price" => 0, "discounted_price" => 0, "slug" => $post->post_name, "image" => '', "status" => $this->productStatus($post->post_status), "post_type" => \get_post_type($post->ID), "total_reviews" => (int) get_comments_number($post->ID) ?? 0, "avg_rating" => 0.0, "stars" => ["one" => 0, "two" => 0, "three" => 0, "four" => 0, "five" => 0], "one_stars" => 0, "two_stars" => 0, "three_stars" => 0, "four_stars" => 0, "five_stars" => 0, "category_wp_unique_ids" => [\ReviewX\Utilities\Auth\Client::getUid() . '-' . 0]];
         return $data;
     }
     public function getPostCategoryIds($post_ids)
@@ -87,11 +87,11 @@ class ProductImportHandler
         }
         $parent_category_ids = [];
         foreach ($category_ids as $category_id) {
-            $parent_category_ids[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . $category_id;
+            $parent_category_ids[] = \ReviewX\Utilities\Auth\Client::getUid() . '-' . $category_id;
         }
         if ($parent_category_ids) {
             return $parent_category_ids;
         }
-        return $parent_category_ids[] = \Rvx\Utilities\Auth\Client::getUid() . '-' . 0;
+        return $parent_category_ids[] = \ReviewX\Utilities\Auth\Client::getUid() . '-' . 0;
     }
 }

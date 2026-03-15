@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Definition\Resolver;
+namespace ReviewX\DI\Definition\Resolver;
 
-use Rvx\DI\Definition\Definition;
-use Rvx\DI\Definition\Exception\InvalidDefinition;
-use Rvx\DI\Definition\ObjectDefinition\MethodInjection;
+use ReviewX\DI\Definition\Definition;
+use ReviewX\DI\Definition\Exception\InvalidDefinition;
+use ReviewX\DI\Definition\ObjectDefinition\MethodInjection;
 use ReflectionMethod;
 use ReflectionParameter;
 /**

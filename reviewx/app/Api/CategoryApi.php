@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Api;
+namespace ReviewX\Api;
 
-use Rvx\Apiz\Http\Response;
-class CategoryApi extends \Rvx\Api\BaseApi
+use ReviewX\Apiz\Http\Response;
+class CategoryApi extends \ReviewX\Api\BaseApi
 {
     /**
      * @param $id

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\DI\Annotation;
+namespace ReviewX\DI\Annotation;
 
 /**
  * "Injectable" annotation.

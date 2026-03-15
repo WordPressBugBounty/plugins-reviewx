@@ -1,13 +1,13 @@
 <?php
 
-namespace Rvx\GuzzleHttp;
+namespace ReviewX\GuzzleHttp;
 
-use Rvx\GuzzleHttp\Exception\InvalidArgumentException;
-use Rvx\GuzzleHttp\Handler\CurlHandler;
-use Rvx\GuzzleHttp\Handler\CurlMultiHandler;
-use Rvx\GuzzleHttp\Handler\Proxy;
-use Rvx\GuzzleHttp\Handler\StreamHandler;
-use Rvx\Psr\Http\Message\UriInterface;
+use ReviewX\GuzzleHttp\Exception\InvalidArgumentException;
+use ReviewX\GuzzleHttp\Handler\CurlHandler;
+use ReviewX\GuzzleHttp\Handler\CurlMultiHandler;
+use ReviewX\GuzzleHttp\Handler\Proxy;
+use ReviewX\GuzzleHttp\Handler\StreamHandler;
+use ReviewX\Psr\Http\Message\UriInterface;
 final class Utils
 {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rvx\Apiz\GraphQL;
+namespace ReviewX\Apiz\GraphQL;
 
-use Rvx\Apiz\Constants\GraphQLRequestType;
+use ReviewX\Apiz\Constants\GraphQLRequestType;
 abstract class AbstractRequest
 {
     protected array $variables = [];

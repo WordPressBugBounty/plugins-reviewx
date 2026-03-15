@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\WPDrill\Facades;
+namespace ReviewX\WPDrill\Facades;
 
-use Rvx\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
-use Rvx\WPDrill\Facade;
+use ReviewX\WPDrill\DB\QueryBuilder\QueryBuilderHandler;
+use ReviewX\WPDrill\Facade;
 /**
  * @method static QueryBuilderHandler table(string ...$tables)
  * @method static QueryBuilderHandler from(string ...$tables)

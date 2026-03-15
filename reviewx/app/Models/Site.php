@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\Models;
+namespace ReviewX\Models;
 
 \defined("ABSPATH") || exit;
-use Rvx\WPDrill\Models\Model;
+use ReviewX\WPDrill\Models\Model;
 class Site extends Model
 {
     protected static $table = 'rvx_sites';

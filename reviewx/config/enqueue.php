@@ -1,8 +1,8 @@
 <?php
 
 defined( "ABSPATH" ) || exit;
-use Rvx\Utilities\Helper;
-$rvx_user_access_script = get_option('__user_setting_access') ?? '';
+use ReviewX\Utilities\Helper;
+$reviewx_user_access_script = get_option('__user_setting_access') ?? '';
 
 return [
     'admin' => [
@@ -116,8 +116,8 @@ return [
         ],
    
        'localize_scripts' => [
-        ['handle' => 'rvx_user_access_script', 'objectName' => 'rvxUserAccess', 'data' => [
-           'rvx_user_settings_access' => json_decode($rvx_user_access_script),
+       ['handle' => 'rvx_user_access_script', 'objectName' => 'rvxUserAccess', 'data' => [
+           'rvx_user_settings_access' => json_decode($reviewx_user_access_script),
        ]],
     ],
        
@@ -212,7 +212,7 @@ return [
             ],
         ],
     //    'localize_scripts' => [['handle' => 'reviewx-storeFront-js', 'objectName' => 'rvx_locals', 'data' => [
-    //        'rvx_user_settings_access' => json_decode($rvx_user_access_script),
+    //        'rvx_user_settings_access' => json_decode($reviewx_user_access_script),
     //    ]]],
         'styles' => [
             [

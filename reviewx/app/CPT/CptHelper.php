@@ -1,9 +1,9 @@
 <?php
 
-namespace Rvx\CPT;
+namespace ReviewX\CPT;
 
-use Rvx\Rest\Controllers\CptController;
-use Rvx\Utilities\Auth\Client;
+use ReviewX\Rest\Controllers\CptController;
+use ReviewX\Utilities\Auth\Client;
 class CptHelper
 {
     public function enabledCPT() : array

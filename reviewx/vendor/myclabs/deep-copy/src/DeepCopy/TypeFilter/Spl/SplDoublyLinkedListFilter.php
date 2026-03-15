@@ -1,10 +1,10 @@
 <?php
 
-namespace Rvx\DeepCopy\TypeFilter\Spl;
+namespace ReviewX\DeepCopy\TypeFilter\Spl;
 
 use Closure;
-use Rvx\DeepCopy\DeepCopy;
-use Rvx\DeepCopy\TypeFilter\TypeFilter;
+use ReviewX\DeepCopy\DeepCopy;
+use ReviewX\DeepCopy\TypeFilter\TypeFilter;
 use SplDoublyLinkedList;
 /**
  * @final

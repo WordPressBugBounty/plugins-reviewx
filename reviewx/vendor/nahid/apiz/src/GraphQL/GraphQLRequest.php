@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rvx\Apiz\GraphQL;
+namespace ReviewX\Apiz\GraphQL;
 
 class GraphQLRequest extends AbstractRequest
 {
