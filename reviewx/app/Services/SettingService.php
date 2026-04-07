@@ -173,9 +173,12 @@ class SettingService extends \ReviewX\Services\Service
     }
     public function allSettingsSave($data)
     {
-        $payload_json = \json_encode($data['settings']);
-        \update_option('rvx_all_setting_data', $payload_json);
-        return ['message' => \__('Settings saved successfully', 'reviewx'), 'data' => $data['settings']];
+        $settings = $data['settings'] ?? null;
+        if (\is_array($settings)) {
+            $payload_json = \json_encode($settings);
+            \update_option('rvx_all_setting_data', $payload_json);
+        }
+        return ['message' => \__('Settings saved successfully', 'reviewx'), 'data' => $settings];
     }
     public function removeCredentials($requestData)
     {

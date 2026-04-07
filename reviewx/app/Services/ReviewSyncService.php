@@ -263,7 +263,7 @@ class ReviewSyncService extends \ReviewX\Services\Service
         $ratingValue = \get_comment_meta($commentId, 'rating', \true);
         $currentRating = (float) \is_numeric($ratingValue) ? (float) \round($ratingValue, 2) : (float) 0.0;
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
-        $critriaAllowed = $this->migrationData->rvx_retrieve_old_plugin_options_data()['multicriteria']['enable'] ?? \false;
+        $critriaAllowed = $this->migrationData->reviewx_retrieve_old_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
             \update_comment_meta($commentId, 'rating', $averageRating);
         }
@@ -302,7 +302,7 @@ class ReviewSyncService extends \ReviewX\Services\Service
         $ratingValue = \get_comment_meta($commentId, 'rating', \true);
         $currentRating = (float) \is_numeric($ratingValue) ? (float) \round($ratingValue, 2) : (float) 0.0;
         $averageRating = $this->reviewService->calculateAverageRating($newCriteria);
-        $critriaAllowed = $this->migrationData->rvx_retrieve_saas_plugin_options_data()['multicriteria']['enable'] ?? \false;
+        $critriaAllowed = $this->migrationData->reviewx_retrieve_saas_plugin_options_data()['multicriteria']['enable'] ?? \false;
         if ($currentRating !== $averageRating && !empty($metaValue) && $critriaAllowed === \true) {
             \update_comment_meta($commentId, 'rating', $averageRating);
         }

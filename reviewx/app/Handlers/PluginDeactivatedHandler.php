@@ -29,7 +29,7 @@ class PluginDeactivatedHandler implements InvokableContract
             \set_transient('rvx_reset_sync_flag', \true);
             try {
                 // Attempt API call — skip gracefully on failure
-                (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 0, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
+                (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 0, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => \get_bloginfo('version')]);
             } catch (Exception $e) {
                 // continue silently
             }

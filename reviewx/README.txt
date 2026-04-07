@@ -7,7 +7,7 @@ Tested up to: 6.9
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 10.5
-Stable tag: 2.3.6
+Stable tag: 2.3.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -220,6 +220,11 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.3.7 - 04-06-2026 =
+- Regular Update
+- Improved Security
+- Fixed few minor bugs
+
 = 2.3.6 - 03-15-2026 =
 - Core Refactor: Standardized all 'Rvx' namespaces, shortcodes, and classes to fully qualified 'ReviewX' terminology.
 - Core Refactor: Standardized frontend HTML IDs and CSS classes from 'rvx-*' to 'reviewx-*'.

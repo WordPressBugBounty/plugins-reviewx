@@ -40,19 +40,23 @@ class TaxonomyHandler
         $term = \get_term($term_id, $taxonomy);
         return !$term || \is_wp_error($term) ? null : $term;
     }
-    public function getTaxonomyByTermIdFromDB($term_id)
+    public function getTaxonomyByTermIdFromDB($term_id, $wpdb = null)
     {
         // Ensure $term_id is a valid integer
         if (!\is_int($term_id)) {
             return \false;
         }
-        // Use standard WP function to get taxonomies for a term
-        $taxonomies = \get_term_taxonomies($term_id);
-        if (empty($taxonomies)) {
+        if (!$wpdb) {
+            global $wpdb;
+        }
+        // Use direct SQL to get taxonomies for a term from the DB
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- fallback to direct DB query as get_term_taxonomies is not a standard WP function
+        $tax_names = $wpdb->get_col($wpdb->prepare("SELECT taxonomy FROM {$wpdb->term_taxonomy} WHERE term_id = %d", $term_id));
+        if (empty($tax_names)) {
             return \false;
         }
         $taxonomy_array = [];
-        foreach ($taxonomies as $tax_name) {
+        foreach ($tax_names as $tax_name) {
             $taxonomy_data = \get_taxonomy($tax_name);
             if ($taxonomy_data) {
                 $taxonomy_array[] = ['taxonomy' => $tax_name, 'label' => $taxonomy_data->labels->name, 'hierarchical' => $taxonomy_data->hierarchical];

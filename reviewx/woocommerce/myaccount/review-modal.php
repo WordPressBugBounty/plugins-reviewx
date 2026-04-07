@@ -7,11 +7,11 @@ use ReviewX\Handlers\Customize\WCUserDashboardAddReview;
 ?>
 
 <!-- Review Modal -->
-<div id="reviewxForm" class="hidden">
+<div id="reviewxForm" class="rvx-d-none">
     <div id="show-elem">
         <button id="back-prev-elem">Go Back</button>
         <div id="reviewx-order-form">
-            <div class="hidden">
+            <div class="rvx-d-none">
                 <p><strong>Order ID:</strong> <span id="reviewx-order-id-display"></span></p>
                 <p><strong>Product ID:</strong> <span id="reviewx-product-id-display"></span></p>
                 <p><strong>Review ID:</strong> <span id="reviewx-review-id-display"></span></p>
@@ -28,10 +28,10 @@ $reviewx_review_form->renderRvxReviewForm();
 </div>
 
 <style>
-    .hidden {
-        display: none;
+    .rvx-d-none {
+        display: none !important;
     }
-    .visible {
-        display: block;
+    .rvx-visible {
+        display: block !important;
     }
 </style><?php 

@@ -52,7 +52,7 @@ class PluginActivatedHandler implements InvokableContract
                 $wpdb->update("{$wpdb->prefix}rvx_sites", ['is_saas_sync' => 0], ['uid' => $uid], ['%d'], ['%s']);
                 try {
                     // Attempt SaaS activation
-                    (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
+                    (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => \get_bloginfo('version')]);
                     // Start initial sync
                     $dataResponse = $this->dataSyncService->dataSync('login', 'product');
                     if ($dataResponse) {

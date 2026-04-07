@@ -80,7 +80,7 @@ class SharedMethods
             // Optionally, display a notice if the plugin is not found
         }
     }
-    public function rvxOldReviewCriteriaConverter()
+    public function reviewx_old_review_criteria_converter()
     {
         $data = \get_option('_rx_option_review_criteria');
         $keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];

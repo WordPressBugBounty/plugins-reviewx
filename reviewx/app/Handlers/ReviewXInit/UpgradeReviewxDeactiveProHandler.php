@@ -29,7 +29,7 @@ class UpgradeReviewxDeactiveProHandler
                     $uid = $wpdb->get_var("SELECT uid FROM {$wpdb->prefix}rvx_sites ORDER BY id DESC LIMIT 1");
                     $plugin_version = $plugin_data->version;
                     if ($uid) {
-                        (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => $plugin_version ?? REVIEWX_VERSION, 'wp_version' => get_bloginfo('version')]);
+                        (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 1, 'plugin_version' => $plugin_version ?? REVIEWX_VERSION, 'wp_version' => \get_bloginfo('version')]);
                     }
                 }
             }

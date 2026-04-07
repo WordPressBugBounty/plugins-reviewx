@@ -53,6 +53,8 @@ class DataSyncService extends Service
             $total_objects = 0;
             if ($post_type === 'product') {
                 $total_objects += $this->userSyncService->syncUser($buffer);
+                // error_log('[ReviewX Debug] Data Sync Buffer Size before put_contents: ' . strlen($buffer));
+                // error_log('[ReviewX Debug] Data Sync Path: ' . $file_path);
                 if (\class_exists('WooCommerce') || $this->dataSyncHandler->wc_data_exists_in_db()) {
                     $total_objects += $this->productSyncService->processProductForSync($buffer, $post_type);
                     $total_objects += $this->reviewSyncService->processReviewForSync($buffer, $post_type);
@@ -63,10 +65,17 @@ class DataSyncService extends Service
                 $total_objects += $this->productSyncService->processProductForSync($buffer, $post_type);
                 $total_objects += $this->reviewSyncService->processReviewForSync($buffer, $post_type);
             }
-            $wp_filesystem->put_contents($file_path, $buffer, \FS_CHMOD_FILE);
+            $result = $wp_filesystem->put_contents($file_path, $buffer, \FS_CHMOD_FILE);
+            // if (!$result) {
+            //     error_log('[ReviewX Debug] put_contents FAILED for path: ' . $file_path . ' Buffer length: ' . strlen($buffer));
+            // } else {
+            //     error_log('[ReviewX Debug] put_contents SUCCESS for path: ' . $file_path . ' File size: ' . $wp_filesystem->size($file_path));
+            // }
             (new WebhookRequestApi())->finishedWebhook(['total_objects' => $total_objects, 'status' => 'finished', 'from' => $from, 'post_type' => $post_type, 'resource_url' => Helper::getRestAPIurl() . '/api/v1/synced/data?post_type=' . $post_type]);
             return \true;
         } catch (\Throwable $e) {
+            \error_log('[ReviewX Debug] Data Sync Error: ' . $e->getMessage());
+            \error_log('[ReviewX Debug] Data Sync Trace: ' . $e->getTraceAsString());
             return \false;
         }
     }

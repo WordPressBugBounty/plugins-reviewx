@@ -11,7 +11,7 @@ class MigrationPrompt
         $sharedMethods = new \ReviewX\Handlers\MigrationRollback\SharedMethods();
         // Options to retrieve
         if ($sharedMethods->key_exists('_rx_option_review_criteria')) {
-            $data['multicriteria'] = $sharedMethods->rvxOldReviewCriteriaConverter();
+            $data['multicriteria'] = $sharedMethods->reviewx_old_review_criteria_converter();
         }
         if ($sharedMethods->key_exists('_rx_option_allow_like_dislike')) {
             $data['enable_likes_dislikes']['enabled'] = \get_option('_rx_option_allow_like_dislike');

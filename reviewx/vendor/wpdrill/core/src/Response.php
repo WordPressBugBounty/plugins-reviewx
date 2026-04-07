@@ -79,7 +79,7 @@ class Response extends \WP_REST_Response
          */
         $this->code = $code ?? $httpCode * 100;
         $this->message = $message;
-        $response = ['status' => 'SUCCESS', 'code' => $this->code, 'message' => $message, 'details' => $this->details, 'locale' => get_locale(), 'data' => $this->data];
+        $response = ['status' => 'SUCCESS', 'code' => $this->code, 'message' => $message, 'details' => $this->details, 'locale' => \get_locale(), 'data' => $this->data];
         $this->set_data($response);
         $this->set_status($httpCode);
         return $this;
@@ -92,7 +92,7 @@ class Response extends \WP_REST_Response
          */
         $this->code = $code ?? $httpCode * 100;
         $this->message = $message;
-        $response = ['status' => 'ERROR', 'code' => $this->code, 'message' => $message, 'details' => $this->details, 'locale' => get_locale(), 'data' => $this->data];
+        $response = ['status' => 'ERROR', 'code' => $this->code, 'message' => $message, 'details' => $this->details, 'locale' => \get_locale(), 'data' => $this->data];
         $this->set_status($httpCode);
         $this->set_data($response);
         return $this;

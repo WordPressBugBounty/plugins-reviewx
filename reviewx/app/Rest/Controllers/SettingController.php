@@ -40,8 +40,10 @@ class SettingController
     }
     public function userSettingsAccess($request)
     {
-        $data = $request->get_params()['user_access'];
-        \update_option('__user_setting_access', \json_encode($data));
+        $data = $request->get_param('user_access');
+        if (\is_array($data)) {
+            \update_option('__user_setting_access', \json_encode($data));
+        }
     }
     public function saveApiReviewSettings($request)
     {

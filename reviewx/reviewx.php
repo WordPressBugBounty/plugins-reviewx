@@ -6,7 +6,7 @@ namespace ReviewX;
  * Plugin Name: ReviewX – Multi-Criteria Rating & Reviews
  * Plugin URI:  https://reviewx.io
  * Description: Advanced Multi-Criteria Rating & Reviews for WooCommerce. Turn customer reviews into sales by leveraging reviews with multiple criteria, reminder emails, Google reviews, review schemas, and incentives like discounts.
- * Version:     2.3.6
+ * Version:     2.3.7
  * Author:      ReviewX
  * Author URI:  https://reviewx.io
  * Text Domain: reviewx
@@ -22,7 +22,7 @@ namespace ReviewX;
 \defined('ABSPATH') || die;
 // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 @\ini_set('display_errors', 0);
-\define('REVIEWX_VERSION', '2.3.6');
+\define('REVIEWX_VERSION', '2.3.7');
 \define('REVIEWX_DIR_PATH', plugin_dir_path(__FILE__));
 \define('REVIEWX_DIR_NAME', \basename(\REVIEWX_DIR_PATH));
 \define('REVIEWX_PREFIX', 'rvx_');

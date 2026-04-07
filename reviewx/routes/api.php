@@ -31,9 +31,6 @@ Route::group(['prefix' => '/api/v1'], function () {
     Route::post('/reset/password', [AuthController::class, 'resetPassword']);
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/migration/prompt', [AuthController::class, 'migrationPrompt']);
-    Route::post('/user/plan/access', [SettingController::class, 'userSettingsAccess']);
-    Route::get('/user/current/plan', [SettingController::class, 'userCurrentPlan']);
-    Route::post('/site/all/settings', [SettingController::class, 'allSettingsSave']);
     /**
      * Frontend API
      * Store Front
@@ -43,14 +40,11 @@ Route::group(['prefix' => '/api/v1'], function () {
     Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/insight', [StoreFrontReviewController::class, 'getWidgetInsight']);
     Route::post('/storefront/reviews', [StoreFrontReviewController::class, 'saveWidgetReviewsForProduct']);
     Route::post('/storefront/request/review/email/attachments/items', [StoreFrontReviewController::class, 'requestReviewEmailAttachment']);
-    Route::post('data/sync/complete', [DataSyncController::class, 'dataSynComplete']);
-    Route::post('reviews/single/action/product/meta', [StoreFrontReviewController::class, 'singleActionProductMata']);
     Route::post('/storefront/reviews/(?P<uniq_id>[a-zA-Z0-9-]+)/preference', [StoreFrontReviewController::class, 'likeDislikePreference']);
     Route::get('/storefront/(?P<product_id>[a-zA-Z0-9-]+)/wp', [StoreFrontReviewController::class, 'wpLocalStorageData']);
     Route::post('/storefront/request/review/email/(?P<uid>[a-zA-Z0-9-]+)/store/items', [StoreFrontReviewController::class, 'reviewRequestStoreItem']);
     Route::get('/storefront/thanks/message', [StoreFrontReviewController::class, 'thanksMessage']);
     Route::post('/storefront/test', [StoreFrontReviewController::class, 'test']);
-    Route::post('/setting/meta', [StoreFrontReviewController::class, 'settingMeta']);
     Route::post('/storefront/widgets/short/code/reviews', [StoreFrontReviewController::class, 'getSpecificReviewItem']);
     //wp setting get form db
     Route::get('/storefront/wp/settings', [StoreFrontReviewController::class, 'getLocalSettings']);
@@ -62,6 +56,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
      * Reviews API
      */
     Route::get('/reviews', [ReviewController::class, 'index']);
+    Route::get('/user/current/plan', [SettingController::class, 'userCurrentPlan']);
     Route::post('/reviews/create/manual', [ReviewController::class, 'store']);
     Route::get('/reviews/list', [ReviewController::class, 'reviewList']);
     Route::post('/reviews/bulk/trash', [ReviewController::class, 'reviewBulkTrash']);
@@ -215,6 +210,14 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthSaasMiddleware::class],
     Route::post('/reviews/bulk/ten/response', [ReviewController::class, 'bulkTenReviews']);
     Route::post('/reviews/bulk/action/product/meta', [ReviewController::class, 'bulkActionProductMeta']);
     Route::post('/reviews/import/rollback', [ImportExportController::class, 'rollbackReviews']);
+    /**
+     * Settings sync from SaaS
+     */
+    Route::post('/user/plan/access', [SettingController::class, 'userSettingsAccess']);
+    Route::post('/site/all/settings', [SettingController::class, 'allSettingsSave']);
+    Route::post('data/sync/complete', [DataSyncController::class, 'dataSynComplete']);
+    Route::post('reviews/single/action/product/meta', [StoreFrontReviewController::class, 'singleActionProductMata']);
+    Route::post('/setting/meta', [StoreFrontReviewController::class, 'settingMeta']);
     /**
      * Remove/Update table and user/site information
      */

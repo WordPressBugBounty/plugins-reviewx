@@ -570,8 +570,10 @@ class ReviewService extends \ReviewX\Services\Service
     public function settingMeta($request)
     {
         try {
-            $settings = $request->get_params()['meta'];
-            (new \ReviewX\Services\SettingService())->updateSettingsData($settings);
+            $settings = $request->get_param('meta');
+            if (\is_array($settings)) {
+                (new \ReviewX\Services\SettingService())->updateSettingsData($settings);
+            }
             return Helper::rest()->success("Success");
         } catch (Exception $th) {
             return Helper::rest()->fails("Fails");

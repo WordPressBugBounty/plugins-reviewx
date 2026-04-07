@@ -37,6 +37,10 @@ class DataSyncHandler
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- result is cached above
         $row = $wpdb->get_row($wpdb->prepare("SELECT \n                    (EXISTS(SELECT 1 FROM {$wpdb->posts} WHERE post_type = %s LIMIT 1)) AS has_product,\n                    (EXISTS(SELECT 1 FROM {$wpdb->posts} WHERE post_type = %s LIMIT 1)) AS has_order,\n                    (EXISTS(SELECT 1 FROM {$wpdb->term_taxonomy} WHERE taxonomy IN (%s, %s) LIMIT 1)) AS has_taxonomy", 'product', 'shop_order', 'product_cat', 'product_tag'), ARRAY_A);
         $exists = \in_array(1, $row, \true);
+        // error_log('[ReviewX Debug] wc_data_exists_in_db Result: ' . ($exists ? 'true' : 'false'));
+        // if (!$exists) {
+        //     error_log('[ReviewX Debug] wc_data_exists_in_db Row Data: ' . print_r($row, true));
+        // }
         \wp_cache_set($cache_key, (int) $exists, 'reviewx', 3600);
         // Cache for 1 hour
         return $exists;

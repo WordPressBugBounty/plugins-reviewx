@@ -296,7 +296,7 @@ class ImportExportServices extends \ReviewX\Services\Service
             return $url;
         }
         // 1. Same-Domain Check
-        $homeUrl = \ReviewX\home_url();
+        $homeUrl = \home_url();
         $parsedHome = \wp_parse_url($homeUrl);
         $parsedUrl = \wp_parse_url($url);
         if (isset($parsedUrl['host'], $parsedHome['host']) && $parsedUrl['host'] === $parsedHome['host']) {

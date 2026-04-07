@@ -46,7 +46,7 @@ class Helper
     }
     public static function getWpDomainNameOnly() : string
     {
-        return \trim(\wp_parse_url(home_url(), \PHP_URL_HOST), '/');
+        return \trim(\wp_parse_url(\home_url(), \PHP_URL_HOST), '/');
     }
     public static function getApiResponse($response)
     {
@@ -288,6 +288,6 @@ class Helper
         $current_user = wp_get_current_user();
         $first_name = $current_user->first_name ?: $current_user->user_login;
         $last_name = $current_user->last_name ?: '';
-        return ['domain' => \ReviewX\Utilities\Helper::getWpDomainNameOnly(), 'url' => home_url(), 'site_locale' => get_locale(), 'first_name' => \sanitize_text_field($first_name), 'last_name' => \sanitize_text_field($last_name)];
+        return ['domain' => \ReviewX\Utilities\Helper::getWpDomainNameOnly(), 'url' => \home_url(), 'site_locale' => \get_locale(), 'first_name' => \sanitize_text_field($first_name), 'last_name' => \sanitize_text_field($last_name)];
     }
 }

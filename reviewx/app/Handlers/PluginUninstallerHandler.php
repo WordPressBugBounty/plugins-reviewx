@@ -15,7 +15,7 @@ class PluginUninstallerHandler
         if ($uid) {
             try {
                 // Try to inform the API about uninstall
-                (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 2, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => get_bloginfo('version')]);
+                (new AuthApi())->changePluginStatus(['site_uid' => $uid, 'status' => 2, 'plugin_version' => \defined('REVIEWX_VERSION') ? REVIEWX_VERSION : 'unknown', 'wp_version' => \get_bloginfo('version')]);
             } catch (Exception $e) {
                 // continue silently
             }

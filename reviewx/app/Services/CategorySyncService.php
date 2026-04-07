@@ -17,10 +17,10 @@ class CategorySyncService extends \ReviewX\Services\Service
     protected $syncedCategories;
     protected $postTermRelation = [];
     protected $taxonomyTerm;
-    protected $datSyncHandler;
+    protected $dataSyncHandler;
     public function __construct()
     {
-        $this->datSyncHandler = new DataSyncHandler();
+        $this->dataSyncHandler = new DataSyncHandler();
     }
     public function syncCategory(&$buffer)
     {
@@ -69,7 +69,7 @@ class CategorySyncService extends \ReviewX\Services\Service
     }
     public function syncTermTaxonomy() : void
     {
-        DB::table('term_taxonomy')->select(['term_taxonomy_id', 'term_id', 'taxonomy', 'parent'])->whereIn('taxonomy', $this->datSyncHandler->getProductTaxonomies())->chunk(100, function ($allTermTaxonomy) {
+        DB::table('term_taxonomy')->select(['term_taxonomy_id', 'term_id', 'taxonomy', 'parent'])->whereIn('taxonomy', $this->dataSyncHandler->getProductTaxonomies())->chunk(100, function ($allTermTaxonomy) {
             foreach ($allTermTaxonomy as $termTaxonomy) {
                 $this->taxonomyTerm[$termTaxonomy->term_taxonomy_id] = (int) $termTaxonomy->term_id;
                 $this->selectedTerms[] = (int) $termTaxonomy->term_id;

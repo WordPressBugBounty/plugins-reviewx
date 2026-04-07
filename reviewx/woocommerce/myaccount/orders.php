@@ -289,11 +289,11 @@ do_action('woocommerce_after_account_orders', $has_orders);
                 document.getElementById('reviewx-review-id-display').innerHTML = reviewId;
 
                 // Show the product/order details
-                document.getElementById('reviewx-order-form').classList.remove('hidden');
+                document.getElementById('reviewx-order-form').classList.remove('rvx-d-none');
 
                 // Show the modal and "Go Back" button
-                document.getElementById("reviewxForm").classList.remove("hidden");
-                document.querySelector("#isShowTable").classList.add("hidden");
+                document.getElementById("reviewxForm").classList.remove("rvx-d-none");
+                document.querySelector("#isShowTable").classList.add("rvx-d-none");
                 
                 const alpineComponent = document.querySelector('[x-data="__reviewXState__()"]');
                 if (alpineComponent) {
@@ -311,8 +311,8 @@ do_action('woocommerce_after_account_orders', $has_orders);
         backToPrev.addEventListener("click", function (event) {
             event.preventDefault();
             // Hide the product/order details
-            document.getElementById("reviewxForm").classList.add("hidden");
-            document.querySelector("#isShowTable").classList.remove("hidden");
+            document.getElementById("reviewxForm").classList.add("rvx-d-none");
+            document.querySelector("#isShowTable").classList.remove("rvx-d-none");
         });
     });
 </script><?php 
