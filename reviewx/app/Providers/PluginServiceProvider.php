@@ -19,6 +19,7 @@ use ReviewX\Utilities\Auth\Client;
 use ReviewX\Form\ReviewForm;
 use ReviewX\Handlers\BulkAction\CustomBulkActionsForReviewsHandler;
 use ReviewX\Handlers\BulkAction\RegisterBulkActionsForReviewsHandler;
+use ReviewX\Handlers\BulkAction\ReviewTrashScreenHandler;
 use ReviewX\Handlers\CategoryCreateHandler;
 use ReviewX\Handlers\CategoryDeleteHandler;
 use ReviewX\Handlers\CategoryUpdateHandler;
@@ -57,6 +58,7 @@ use ReviewX\Models\Site;
 use ReviewX\Utilities\Auth\ClientManager;
 use ReviewX\Utilities\Auth\WpUserManager;
 use ReviewX\Utilities\Auth\WpUser;
+use ReviewX\Services\ReviewService;
 use ReviewX\WPDrill\ServiceProvider;
 // use ReviewX\Handlers\WcTemplates\WcAccountDetailsError;
 class PluginServiceProvider extends ServiceProvider
@@ -215,16 +217,18 @@ class PluginServiceProvider extends ServiceProvider
         // Removed redundant save_post hook for CptAverageRating as it's now registered above with correct priority
         \add_action('deleted_comment', function ($comment_id, $comment) {
             if ($comment && $comment->comment_post_ID) {
-                // 1. Sync deletion to SaaS
-                $reviewsApi = new ReviewsApi();
-                if ($comment->comment_parent > 0) {
-                    // It's a reply
-                    $wpUniqueId = Client::getUid() . '-' . $comment->comment_parent;
-                    $reviewsApi->deleteCommentReply($wpUniqueId);
-                } else {
-                    // It's a review
-                    $wpUniqueId = Client::getUid() . '-' . $comment_id;
-                    $reviewsApi->deleteReviewData($wpUniqueId);
+                if (!ReviewService::shouldSkipDeletedCommentSync()) {
+                    // 1. Sync deletion to SaaS
+                    $reviewsApi = new ReviewsApi();
+                    if ($comment->comment_parent > 0) {
+                        // It's a reply
+                        $wpUniqueId = Client::getUid() . '-' . $comment->comment_parent;
+                        $reviewsApi->deleteCommentReply($wpUniqueId);
+                    } else {
+                        // It's a review
+                        $wpUniqueId = Client::getUid() . '-' . $comment_id;
+                        $reviewsApi->deleteReviewData($wpUniqueId);
+                    }
                 }
                 // 2. Update average rating locally
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
@@ -233,6 +237,10 @@ class PluginServiceProvider extends ServiceProvider
                 if ($post) {
                     (new CptPostHandler())->__invoke($post->ID, $post, \true);
                 }
+                $cacheServices = new \ReviewX\Services\CacheServices();
+                $cacheServices->removeCache();
+                \delete_transient("rvx_{$comment->comment_post_ID}_latest_reviews");
+                \delete_transient("rvx_{$comment->comment_post_ID}_latest_reviews_insight");
             }
         }, 999, 2);
         /**
@@ -247,7 +255,10 @@ class PluginServiceProvider extends ServiceProvider
          */
         // add_action('wp_set_comment_status', new WoocommerceCommentStatusChangeHandler(), 10, 2);
         \add_filter('bulk_actions-edit-comments', new CustomBulkActionsForReviewsHandler());
-        \add_filter('handle_bulk_actions', new RegisterBulkActionsForReviewsHandler(), 10, 3);
+        \add_filter('handle_bulk_actions-edit-comments', new RegisterBulkActionsForReviewsHandler(), 10, 3);
+        \add_action('admin_init', [new ReviewTrashScreenHandler(), 'maybeHandleEmptyTrash'], 15);
+        \add_action('admin_head', [new ReviewTrashScreenHandler(), 'styleEmptyTrashButton']);
+        \add_action('admin_footer', [new ReviewTrashScreenHandler(), 'printActionLoaderScript']);
         \add_action('woocommerce_settings_save_products', [new WoocommerceSettingsSaveHandler(), 'wooProductSaveHandler'], 10);
         /**
          * Woocommerce Edit Comment/Review

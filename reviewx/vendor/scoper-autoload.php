@@ -45,6 +45,7 @@ humbug_phpscoper_expose_class('__TwigTemplate_3cac02e8f1f5359a8353412fb7a20061',
 humbug_phpscoper_expose_class('__TwigTemplate_3b89707d60ed72699fba7c2207eccdc4', 'ReviewX\__TwigTemplate_3b89707d60ed72699fba7c2207eccdc4');
 humbug_phpscoper_expose_class('__TwigTemplate_8faac5b4f74e15948603f918368cbf1c', 'ReviewX\__TwigTemplate_8faac5b4f74e15948603f918368cbf1c');
 humbug_phpscoper_expose_class('__TwigTemplate_813f38329e41dbe578409fbf36eb7b54', 'ReviewX\__TwigTemplate_813f38329e41dbe578409fbf36eb7b54');
+humbug_phpscoper_expose_class('__TwigTemplate_d7369879e07eb9542b6586b391407c3a', 'ReviewX\__TwigTemplate_d7369879e07eb9542b6586b391407c3a');
 humbug_phpscoper_expose_class('__TwigTemplate_132c709430a7c708f07540927d9554de', 'ReviewX\__TwigTemplate_132c709430a7c708f07540927d9554de');
 humbug_phpscoper_expose_class('__TwigTemplate_761b9a96eb5519844feb9ef1daf181a0', 'ReviewX\__TwigTemplate_761b9a96eb5519844feb9ef1daf181a0');
 humbug_phpscoper_expose_class('__TwigTemplate_c1d92319eda09969a9e4f5d9cfaf1bb6', 'ReviewX\__TwigTemplate_c1d92319eda09969a9e4f5d9cfaf1bb6');
@@ -68,6 +69,7 @@ humbug_phpscoper_expose_class('__TwigTemplate_b0e43ee95fc6ce07968e06801eba29c9',
 humbug_phpscoper_expose_class('__TwigTemplate_af96a9686cbaa0156ed7f19a7cc52604', 'ReviewX\__TwigTemplate_af96a9686cbaa0156ed7f19a7cc52604');
 humbug_phpscoper_expose_class('__TwigTemplate_6b9250a159965807fe2fc2170b821390', 'ReviewX\__TwigTemplate_6b9250a159965807fe2fc2170b821390');
 humbug_phpscoper_expose_class('__TwigTemplate_8fd4c00939c2a919e6ad2ac89b2cdb7d', 'ReviewX\__TwigTemplate_8fd4c00939c2a919e6ad2ac89b2cdb7d');
+humbug_phpscoper_expose_class('__TwigTemplate_ada44aba73411aeea0812b9823ed92c4', 'ReviewX\__TwigTemplate_ada44aba73411aeea0812b9823ed92c4');
 humbug_phpscoper_expose_class('__TwigTemplate_b11c373b0d0259aa7a3a1274c2105e74', 'ReviewX\__TwigTemplate_b11c373b0d0259aa7a3a1274c2105e74');
 humbug_phpscoper_expose_class('__TwigTemplate_cc8cdfa56dc16ba0f4ffce52e89913cc', 'ReviewX\__TwigTemplate_cc8cdfa56dc16ba0f4ffce52e89913cc');
 humbug_phpscoper_expose_class('__TwigTemplate_5f6d4d0e061fcfc8094db3a3bdd8e9d1', 'ReviewX\__TwigTemplate_5f6d4d0e061fcfc8094db3a3bdd8e9d1');
@@ -118,6 +120,7 @@ if (!function_exists('_x')) { function _x() { return \ReviewX\_x(...func_get_arg
 if (!function_exists('activate_plugin')) { function activate_plugin() { return \ReviewX\activate_plugin(...func_get_args()); } }
 if (!function_exists('array_key_first')) { function array_key_first() { return \ReviewX\array_key_first(...func_get_args()); } }
 if (!function_exists('array_key_last')) { function array_key_last() { return \ReviewX\array_key_last(...func_get_args()); } }
+if (!function_exists('clean_comment_cache')) { function clean_comment_cache() { return \ReviewX\clean_comment_cache(...func_get_args()); } }
 if (!function_exists('convert_to_array')) { function convert_to_array() { return \ReviewX\convert_to_array(...func_get_args()); } }
 if (!function_exists('ctype_alnum')) { function ctype_alnum() { return \ReviewX\ctype_alnum(...func_get_args()); } }
 if (!function_exists('ctype_alpha')) { function ctype_alpha() { return \ReviewX\ctype_alpha(...func_get_args()); } }
@@ -276,5 +279,6 @@ if (!function_exists('wc_get_order_status_name')) { function wc_get_order_status
 if (!function_exists('wc_get_product')) { function wc_get_product() { return \ReviewX\wc_get_product(...func_get_args()); } }
 if (!function_exists('wc_print_notice')) { function wc_print_notice() { return \ReviewX\wc_print_notice(...func_get_args()); } }
 if (!function_exists('wp_get_attachment_image')) { function wp_get_attachment_image() { return \ReviewX\wp_get_attachment_image(...func_get_args()); } }
+if (!function_exists('wp_untrash_comment')) { function wp_untrash_comment() { return \ReviewX\wp_untrash_comment(...func_get_args()); } }
 
 return $loader;

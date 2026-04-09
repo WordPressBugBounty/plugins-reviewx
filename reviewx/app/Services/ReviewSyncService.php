@@ -85,7 +85,7 @@ class ReviewSyncService extends \ReviewX\Services\Service
         }
         $trashed_at = null;
         if ($comment->comment_approved === 'trash') {
-            $status = !empty($this->reviewTrashStatus[$comment->comment_ID]) && $this->reviewTrashStatus[$comment->comment_ID] === 0 ? 'pending' : 'published';
+            $status = $this->getTrashedCommentStatus((int) $comment->comment_ID);
             $metaTrashTime = $this->reviewTrashTime[$comment->comment_ID] ?? null;
             $trashed_at = $metaTrashTime ? Helper::validateReturnDate($metaTrashTime) : null;
         } else {
@@ -110,7 +110,7 @@ class ReviewSyncService extends \ReviewX\Services\Service
     }
     public function syncReviewMata() : void
     {
-        DB::table('commentmeta')->whereIn('meta_key', ['rvx_review_version', 'reviewx_title', 'verified', 'rating', 'rvx_criterias', 'reviewx_rating', 'reviewx_attachments', 'reviewx_video_url', 'is_recommended', 'reviewx_recommended', 'is_anonymous', 'reviewx_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time', 'reviewx_order', 'rvx_comment_order_item'])->chunk(100, function ($allCommentMeta) {
+        DB::table('commentmeta')->whereIn('meta_key', ['rvx_review_version', 'rvx_title', 'rvx_comment_title', 'reviewx_title', 'verified', 'rating', 'rvx_criterias', 'reviewx_rating', 'rvx_attachments', 'reviewx_attachments', 'reviewx_video_url', 'is_recommended', 'reviewx_recommended', 'is_anonymous', 'reviewx_anonymous', '_wp_trash_meta_status', '_wp_trash_meta_time', 'reviewx_order', 'rvx_comment_order_item'])->chunk(100, function ($allCommentMeta) {
             $orderIds = [];
             foreach ($allCommentMeta as $commentMeta) {
                 $commentId = $commentMeta->comment_id;
@@ -122,7 +122,7 @@ class ReviewSyncService extends \ReviewX\Services\Service
                     $this->reviewMetaOrderItem[$commentId] = $commentMeta->meta_value;
                 }
                 // Process each meta_key
-                if ($commentMeta->meta_key === 'reviewx_title') {
+                if (\in_array($commentMeta->meta_key, ['rvx_title', 'rvx_comment_title', 'reviewx_title'], \true)) {
                     $this->reviewMetaTitle[$commentId] = $commentMeta->meta_value;
                 }
                 if ($commentMeta->meta_key === 'verified') {
@@ -133,6 +133,12 @@ class ReviewSyncService extends \ReviewX\Services\Service
                     if (!ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
                         $this->reviewMultiCriteriasRating[$commentId] = $this->criteriaMappingWC($commentId, $commentMeta->meta_value);
                     }
+                }
+                if ($commentMeta->meta_key === 'rvx_criterias') {
+                    $this->reviewMultiCriteriasRating[$commentId] = $this->criteriaMappingV2($commentId, $commentMeta->meta_value);
+                }
+                if ($commentMeta->meta_key === 'rvx_attachments') {
+                    $this->reviewMetaAttachmentsAll[$commentId] = $this->attachmentsV2($commentId, $commentMeta->meta_value);
                 }
                 if (ReviewXChecker::isReviewXExists() && !ReviewXChecker::isReviewXSaasExists()) {
                     if ($commentMeta->meta_key === 'reviewx_rating') {
@@ -151,10 +157,7 @@ class ReviewSyncService extends \ReviewX\Services\Service
                     }
                 }
                 if (ReviewXChecker::isReviewXSaasExists()) {
-                    if ($commentMeta->meta_key === 'rvx_criterias') {
-                        $this->reviewMultiCriteriasRating[$commentId] = $this->criteriaMappingV2($commentId, $commentMeta->meta_value);
-                    }
-                    if ($commentMeta->meta_key === 'reviewx_attachments') {
+                    if (\in_array($commentMeta->meta_key, ['reviewx_attachments', 'rvx_attachments'], \true)) {
                         $this->reviewMetaAttachmentsAll[$commentId] = $this->attachmentsV2($commentId, $commentMeta->meta_value);
                     }
                     if ($commentMeta->meta_key === 'is_recommended') {
@@ -192,6 +195,17 @@ class ReviewSyncService extends \ReviewX\Services\Service
             default:
                 return null;
         }
+    }
+    private function getTrashedCommentStatus(int $comment_id) : string
+    {
+        $status = $this->reviewTrashStatus[$comment_id] ?? null;
+        if ($status === 0 || $status === '0' || $status === 'hold' || $status === 'pending' || $status === 'unapproved') {
+            return 'pending';
+        }
+        if ($status === 'spam') {
+            return 'spam';
+        }
+        return 'published';
     }
     private function criteriaMappingWC($commentId, $metaValue)
     {
@@ -288,12 +302,6 @@ class ReviewSyncService extends \ReviewX\Services\Service
         // Ensure $metaValue is always an array
         if (!\is_array($metaValue)) {
             $metaValue = [];
-        }
-        // Retrieve the criteria mapping
-        $multCritria_data = $this->getCriteria();
-        if (empty($multCritria_data)) {
-            return null;
-            // No criteria data available
         }
         // Initialize the new criteria array
         $newCriteria = $metaValue;

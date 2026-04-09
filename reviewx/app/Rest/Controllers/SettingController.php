@@ -48,23 +48,17 @@ class SettingController
     public function saveApiReviewSettings($request)
     {
         try {
-            $response = $this->settingService->saveApiReviewSettings($request->get_params());
+            $request_params = $request->get_params();
+            $response = $this->settingService->saveApiReviewSettings($request_params);
             if ($response->getStatusCode() === Response::HTTP_OK) {
                 // Update Review Settings
                 $review_settings = $response->getApiData()['review_settings'];
-                if (!empty($review_settings['reviews']['show_verified_badge']) && $review_settings['reviews']['show_verified_badge'] === \true) {
-                    \update_option('woocommerce_review_rating_verification_label', 'yes');
+                $post_type = $request['post_type'] ?? 'product';
+                if (!isset($request_params['multicriteria']) || !\is_array($request_params['multicriteria']) || $request_params['multicriteria'] === []) {
+                    $review_settings = $this->settingService->preserveStoredMulticriteria($review_settings, $post_type, \true);
                 }
-                if (!empty($review_settings['reviews']['show_verified_badge']) && $review_settings['reviews']['show_verified_badge'] === \false) {
-                    \update_option('woocommerce_review_rating_verification_label', 'no');
-                }
-                if (!empty($review_settings['reviews']['review_submission_policy']['options']['verified_customer']) && $review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \true) {
-                    \update_option('woocommerce_review_rating_verification_required', 'yes');
-                }
-                if (!empty($review_settings['reviews']['review_submission_policy']['options']['verified_customer']) && $review_settings['reviews']['review_submission_policy']['options']['verified_customer'] === \false) {
-                    \update_option('woocommerce_review_rating_verification_required', 'no');
-                }
-                $this->settingService->updateReviewSettings($review_settings, $request['post_type']);
+                $this->settingService->syncWooCommerceOptionsFromReviewSettings($review_settings, $post_type);
+                $this->settingService->updateReviewSettings($review_settings, $post_type);
             }
             return Helper::saasResponse($response);
         } catch (Throwable $e) {

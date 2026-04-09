@@ -12,10 +12,24 @@ use ReviewX\Utilities\TransactionManager;
 use ReviewX\WPDrill\Response;
 class ReviewService extends \ReviewX\Services\Service
 {
+    protected static int $skipDeletedCommentSync = 0;
     protected ReviewsApi $reviewApi;
     public function __construct()
     {
         $this->reviewApi = new ReviewsApi();
+    }
+    public static function withDeletedCommentSyncSuspended(callable $callback)
+    {
+        self::$skipDeletedCommentSync++;
+        try {
+            return $callback();
+        } finally {
+            self::$skipDeletedCommentSync = \max(0, self::$skipDeletedCommentSync - 1);
+        }
+    }
+    public static function shouldSkipDeletedCommentSync() : bool
+    {
+        return self::$skipDeletedCommentSync > 0;
     }
     public function getReviews($data)
     {
@@ -115,12 +129,8 @@ class ReviewService extends \ReviewX\Services\Service
         if (\get_post_type($request['wp_post_id']) !== 'product') {
             $review_type = 'comment';
         }
-        $status = Helper::arrayGet($request->get_params(), 'status') ?? $data['reviews']['auto_approve_reviews'];
-        if (!$status || $status === 'false' || $status === '0') {
-            $status = 0;
-        } else {
-            $status = 1;
-        }
+        $default_status = !empty($data['reviews']['auto_approve_reviews']) ? 'approve' : 'hold';
+        $status = $this->mapSubmittedStatusToWpCommentStatus(Helper::arrayGet($request->get_params(), 'status'), $default_status);
         return ['comment_post_ID' => \absint($request['wp_post_id']), 'comment_content' => \wp_strip_all_tags($request->get_param('feedback')), 'comment_author' => \sanitize_text_field($request['reviewer_name']), 'comment_author_email' => \sanitize_text_field($request['reviewer_email']), 'comment_type' => $review_type, 'comment_approved' => $status, 'comment_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? \sanitize_text_field(\wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '', 'comment_author_IP' => isset($_SERVER['REMOTE_ADDR']) ? \sanitize_text_field(\wp_unslash($_SERVER['REMOTE_ADDR'])) : '', 'comment_date_gmt' => \current_time('mysql', 1), 'user_id' => \sanitize_text_field($request['user_id']) ?? 0, 'comment_date' => \current_time('mysql', \true)];
     }
     /**
@@ -166,18 +176,28 @@ class ReviewService extends \ReviewX\Services\Service
     {
         $wpUniqueId = \sanitize_text_field($request->get_param('wpUniqueId'));
         $review_id = $this->getLastSegment($wpUniqueId);
-        $this->reviewDelete($request->get_params());
-        $delete_rev = (new ReviewsApi())->deleteReviewData($wpUniqueId);
-        if ($delete_rev) {
-            $this->reviewCacheDelete($review_id);
-            return Helper::rest($delete_rev)->success();
+        if (\get_comment($review_id)) {
+            $deletedInWp = self::withDeletedCommentSyncSuspended(function () use($request) {
+                return $this->reviewDelete($request->get_params());
+            });
+            if (!$deletedInWp) {
+                return Helper::rest(null)->fails(\__("Review Delete Fails", "reviewx"));
+            }
         }
-        return Helper::rest(null)->fails(\__("Review Delete Fails", "reviewx"));
+        $delete_rev = (new ReviewsApi())->deleteReviewData($wpUniqueId);
+        if ($delete_rev && $delete_rev->getStatusCode() >= 200 && $delete_rev->getStatusCode() < 300) {
+            $this->reviewCacheDelete($review_id);
+        }
+        return Helper::saasResponse($delete_rev);
     }
-    public function reviewDelete($data)
+    public function reviewDelete($data) : bool
     {
         $parts = \explode('-', $data['wpUniqueId']);
         $last_part = \end($parts);
+        $comment = \get_comment((int) $last_part);
+        if (!$comment) {
+            return \false;
+        }
         // Find and delete replies (child comments)
         $replies = \get_comments(['parent' => $last_part]);
         if (!empty($replies)) {
@@ -185,31 +205,33 @@ class ReviewService extends \ReviewX\Services\Service
                 \wp_delete_comment($reply->comment_ID, \true);
             }
         }
-        \wp_delete_comment($last_part, \true);
+        return (bool) \wp_delete_comment($last_part, \true);
     }
     public function restoreReview($request)
     {
         $wpUniqueId = \sanitize_text_field($request->get_param('wpUniqueId'));
-        return TransactionManager::run(function () use($wpUniqueId) {
-            $this->restoreTrashToPublish($wpUniqueId);
-            return \true;
-        }, function () use($wpUniqueId) {
-            $resp = $this->reviewApi->restoreReview($wpUniqueId);
+        $status = $request->get_param('status');
+        return TransactionManager::run(function () use($wpUniqueId, $status) {
+            if (!$this->restoreTrashToStatus($wpUniqueId, $status)) {
+                throw new Exception(\__('Review restore failed in WordPress', 'reviewx'));
+            }
+            return $this->resolveReviewStatusCode($status);
+        }, function ($resolvedStatus) use($wpUniqueId) {
+            $resp = $this->reviewApi->restoreReview($wpUniqueId, $resolvedStatus);
             if ($resp->getStatusCode() === 200) {
                 $this->reviewCacheDelete($this->getLastSegment($wpUniqueId));
             }
             return $resp;
         });
     }
-    public function restoreTrashToPublish($review_unique_id)
+    public function restoreTrashToPublish($review_unique_id) : bool
+    {
+        return $this->restoreTrashToStatus($review_unique_id, null);
+    }
+    public function restoreTrashToStatus($review_unique_id, $status = null) : bool
     {
         $id = $this->getLastSegment($review_unique_id);
-        $status = \get_comment_meta($id, '_wp_trash_meta_status', \true);
-        if ($status) {
-            \wp_set_comment_status($id, 'approve');
-        } else {
-            \wp_set_comment_status($id, 'hold');
-        }
+        return $this->restoreCommentFromTrash((int) $id, $status);
     }
     public function getReview($request)
     {
@@ -218,30 +240,27 @@ class ReviewService extends \ReviewX\Services\Service
     }
     public function restoreTrashItem($data)
     {
-        //Bulk trash restore
-        $response = (new ReviewsApi())->restoreTrashItem($data);
-        if ((int) $response->getStatusCode() === 200) {
-            $this->bulkRestoreTrashItem($data);
-            $this->bulkReviewCacheDelete($data['wp_id'] ?? []);
-        }
-        return $response;
+        return TransactionManager::run(function () use($data) {
+            if (!$this->bulkRestoreTrashItem($data)) {
+                throw new Exception(\__('Bulk review restore failed in WordPress', 'reviewx'));
+            }
+            return $data;
+        }, function ($payload) {
+            $response = (new ReviewsApi())->restoreTrashItem($payload);
+            if ((int) $response->getStatusCode() === 200) {
+                $this->bulkReviewCacheDelete($this->resolveRestoreWpIds($payload));
+            }
+            return $response;
+        });
     }
-    public function bulkRestoreTrashItem($data)
+    public function bulkRestoreTrashItem($data) : bool
     {
-        foreach ($data['wp_id'] as $id) {
-            $status = \get_comment_meta($id, '_wp_trash_meta_status', \true);
-            if ($status == 'approve' || $status == ReviewStatusEnum::APPROVED) {
-                \wp_set_comment_status($id, 'approve');
-            } elseif ($status == 'hold' || $status == ReviewStatusEnum::PENDING) {
-                \wp_set_comment_status($id, 'hold');
-            } elseif ($status == 'unapproved' || $status == ReviewStatusEnum::UNPUBLISHED) {
-                \wp_set_comment_status($id, 'hold');
-            } elseif ($status == 'spam' || $status == ReviewStatusEnum::SPAM) {
-                \wp_set_comment_status($id, 'spam');
-            } else {
-                \wp_set_comment_status($id, 'approve');
+        foreach ($this->resolveRestoreWpIds($data) as $id) {
+            if (!$this->restoreCommentFromTrash((int) $id, $data['status'] ?? null)) {
+                return \false;
             }
         }
+        return \true;
     }
     public function isVerify($request)
     {
@@ -355,6 +374,154 @@ class ReviewService extends \ReviewX\Services\Service
             return $string;
         }
         return \substr($string, $lastHyphenPos + 1);
+    }
+    private function resolveRestoreCommentStatus($status) : string
+    {
+        if ($status === 1 || $status === '1' || $status == 'approve' || $status == ReviewStatusEnum::APPROVED) {
+            return 'approve';
+        }
+        if ($status === 0 || $status === '0' || $status == 'hold' || $status == 'unapproved' || $status == 'pending' || $status == ReviewStatusEnum::PENDING || $status == ReviewStatusEnum::UNPUBLISHED) {
+            return 'hold';
+        }
+        if ($status == 'spam' || $status == ReviewStatusEnum::SPAM) {
+            return 'spam';
+        }
+        return 'approve';
+    }
+    private function restoreCommentFromTrash(int $comment_id, $requested_status = null) : bool
+    {
+        $comment = \get_comment($comment_id);
+        if (!$comment) {
+            return \false;
+        }
+        $status = $requested_status;
+        if ($status === null || $status === '') {
+            $status = \get_comment_meta($comment_id, '_wp_trash_meta_status', \true);
+        }
+        $target_status = $this->resolveRestoreCommentStatus($status);
+        $current_status = $this->normalizeCommentApprovedStatus($comment->comment_approved ?? '');
+        if ($current_status === 'trash') {
+            $untrashed = \ReviewX\wp_untrash_comment($comment_id);
+            if ($untrashed === \false) {
+                $this->clearTrashCommentMeta($comment_id);
+            }
+        }
+        $comment = \get_comment($comment_id);
+        if (!$comment) {
+            return \false;
+        }
+        if ($this->normalizeCommentApprovedStatus($comment->comment_approved ?? '') === 'trash') {
+            $this->clearTrashCommentMeta($comment_id);
+        }
+        if (\wp_set_comment_status($comment_id, $target_status) === \false) {
+            return \false;
+        }
+        \ReviewX\clean_comment_cache($comment_id);
+        $updated_comment = \get_comment($comment_id);
+        return $updated_comment instanceof \WP_Comment && $this->normalizeCommentApprovedStatus($updated_comment->comment_approved ?? '') === $target_status;
+    }
+    private function resolveReviewStatusCode($status) : ?int
+    {
+        if ($status === null || $status === '') {
+            return null;
+        }
+        if ($status === ReviewStatusEnum::APPROVED || $status === 'approve' || $status === 'approved' || $status === 'publish' || $status === 'published' || $status === 1 || $status === '1') {
+            return ReviewStatusEnum::APPROVED;
+        }
+        if ($status === ReviewStatusEnum::PENDING || $status === ReviewStatusEnum::UNPUBLISHED || $status === 'hold' || $status === 'pending' || $status === 'unapproved' || $status === 0 || $status === '0') {
+            return ReviewStatusEnum::PENDING;
+        }
+        if ($status === ReviewStatusEnum::SPAM || $status === 'spam') {
+            return ReviewStatusEnum::SPAM;
+        }
+        return null;
+    }
+    private function clearTrashCommentMeta(int $comment_id) : void
+    {
+        \delete_comment_meta($comment_id, '_wp_trash_meta_status');
+        \delete_comment_meta($comment_id, '_wp_trash_meta_time');
+    }
+    private function normalizeCommentApprovedStatus($status) : string
+    {
+        if ($status === 1 || $status === '1' || $status === 'approve' || $status === 'approved') {
+            return 'approve';
+        }
+        if ($status === 0 || $status === '0' || $status === 'hold' || $status === 'unapproved') {
+            return 'hold';
+        }
+        if ($status === 'spam') {
+            return 'spam';
+        }
+        if ($status === 'trash') {
+            return 'trash';
+        }
+        return (string) $status;
+    }
+    private function mapSubmittedStatusToWpCommentStatus($status, string $fallbackStatus = 'approve') : string
+    {
+        if ($status === null || $status === '') {
+            return $fallbackStatus;
+        }
+        if (\is_bool($status)) {
+            return $status ? 'approve' : 'hold';
+        }
+        if (\is_numeric($status)) {
+            $numeric_status = (int) $status;
+            switch ($numeric_status) {
+                case ReviewStatusEnum::APPROVED:
+                    return 'approve';
+                case ReviewStatusEnum::UNPUBLISHED:
+                case ReviewStatusEnum::PENDING:
+                case 0:
+                    return 'hold';
+                case ReviewStatusEnum::SPAM:
+                    return 'spam';
+                case ReviewStatusEnum::TRASH:
+                    return 'trash';
+                default:
+                    return $fallbackStatus;
+            }
+        }
+        if (\is_string($status)) {
+            $normalized_status = \strtolower(\trim($status));
+            switch ($normalized_status) {
+                case 'approve':
+                case 'approved':
+                case 'publish':
+                case 'published':
+                case '1':
+                case 'true':
+                    return 'approve';
+                case 'hold':
+                case 'pending':
+                case 'unapproved':
+                case 'unpublished':
+                case 'draft':
+                case '0':
+                case 'false':
+                    return 'hold';
+                case 'spam':
+                    return 'spam';
+                case 'trash':
+                    return 'trash';
+                default:
+                    return $fallbackStatus;
+            }
+        }
+        return $fallbackStatus;
+    }
+    private function resolveRestoreWpIds(array $data) : array
+    {
+        $wp_ids = $data['wp_id'] ?? [];
+        if (!empty($wp_ids) && \is_array($wp_ids)) {
+            return \array_map('intval', $wp_ids);
+        }
+        $review_unique_ids = $data['review_wp_unique_ids'] ?? [];
+        $resolved_ids = [];
+        foreach ((array) $review_unique_ids as $review_unique_id) {
+            $resolved_ids[] = (int) $this->getLastSegment((string) $review_unique_id);
+        }
+        return \array_filter($resolved_ids);
     }
     public function reviewRepliesUpdate($request)
     {
@@ -519,7 +686,7 @@ class ReviewService extends \ReviewX\Services\Service
      */
     public function prepareUpdateWpComment($request, $existingReview)
     {
-        return ['comment_content' => \wp_strip_all_tags($request->get_param('feedback') ?? $existingReview->comment_content), 'comment_approved' => \sanitize_text_field($request['status'] ?? $existingReview->comment_approved), 'comment_author_email' => \sanitize_text_field($request['reviewer_email'] ?? $existingReview->comment_author_email), 'comment_author' => \sanitize_text_field($request['reviewer_name'] ?? $existingReview->comment_author)];
+        return ['comment_content' => \wp_strip_all_tags($request->get_param('feedback') ?? $existingReview->comment_content), 'comment_approved' => $this->mapSubmittedStatusToWpCommentStatus($request->get_param('status'), $this->normalizeCommentApprovedStatus($existingReview->comment_approved ?? '')), 'comment_author_email' => \sanitize_text_field($request['reviewer_email'] ?? $existingReview->comment_author_email), 'comment_author' => \sanitize_text_field($request['reviewer_name'] ?? $existingReview->comment_author)];
     }
     public function prepareUpdateAppReview(array $payloadData, array $files)
     {
@@ -694,7 +861,9 @@ class ReviewService extends \ReviewX\Services\Service
     public function reviewBulkSoftDelete($data)
     {
         Helper::rvxLog('reviewBulkSoftDelete started', 'debug');
-        $cleared_ids = $this->emptyTrashInWp($data);
+        $cleared_ids = self::withDeletedCommentSyncSuspended(function () use($data) {
+            return $this->emptyTrashInWp($data);
+        });
         Helper::rvxLog(['cleared_ids' => $cleared_ids], 'debug');
         // Always call SaaS API to ensure we return a valid ApiResponse object
         // that the controller's Helper::saasResponse expects.
@@ -706,7 +875,9 @@ class ReviewService extends \ReviewX\Services\Service
         Helper::rvxLog($data, 'debug');
         // Check if this is a targeted bulk delete from the trash tab or a global empty
         $is_targeted = !empty($data['wp_ids']) || !empty($data['wp_id']) || !empty($data['review_ids']);
-        $cleared_ids = $this->emptyTrashInWp($data);
+        $cleared_ids = self::withDeletedCommentSyncSuspended(function () use($data) {
+            return $this->emptyTrashInWp($data);
+        });
         Helper::rvxLog(['cleared_ids' => $cleared_ids], 'debug');
         if ($is_targeted) {
             Helper::rvxLog('Executing TARGETED bulk delete', 'debug');

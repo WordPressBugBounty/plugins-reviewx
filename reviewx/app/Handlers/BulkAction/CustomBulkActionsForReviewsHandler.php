@@ -2,72 +2,47 @@
 
 namespace ReviewX\Handlers\BulkAction;
 
-use ReviewX\Api\ReviewsApi;
-use ReviewX\Utilities\Auth\Client;
+use ReviewX\CPT\CptHelper;
 use ReviewX\Services\CacheServices;
+use WP_Screen;
 class CustomBulkActionsForReviewsHandler
 {
     protected $cacheServices;
+    protected CptHelper $cptHelper;
     public function __construct()
     {
         $this->cacheServices = new CacheServices();
+        $this->cptHelper = new CptHelper();
     }
-    public function __invoke()
+    public function __invoke($actions)
     {
         $screen = \get_current_screen();
-        // Ensure we are on the 'edit-comments' screen
-        if (!$screen instanceof \ReviewX\Handlers\BulkAction\WP_Screen || $screen->id !== 'edit-comments') {
-            return;
+        if (!$screen instanceof WP_Screen || $screen->id !== 'edit-comments') {
+            return $actions;
         }
-        if (empty($_REQUEST['action']) || empty($_REQUEST['delete_comments'])) {
-            return;
+        if (!$this->isReviewxCommentsScreen()) {
+            return $actions;
         }
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_REQUEST['_wpnonce'])), 'bulk-comments')) {
-            return;
+        $comment_status = isset($_REQUEST['comment_status']) ? sanitize_key(\wp_unslash($_REQUEST['comment_status'])) : 'all';
+        if (isset($actions['unapprove'])) {
+            $actions['unapprove'] = \__('Mark as Pending', 'reviewx');
         }
-        $action = \sanitize_text_field(\wp_unslash($_REQUEST['action']));
-        $comment_ids = \array_map('intval', (array) $_REQUEST['delete_comments']);
-        // Define valid actions
-        $valid_actions = ['approve', 'unapprove', 'spam', 'trash', 'unspam', 'restore'];
-        if (!\in_array($action, $valid_actions, \true)) {
-            return;
+        if (isset($actions['approve'])) {
+            $actions['approve'] = \__('Publish', 'reviewx');
         }
-        $data = [];
-        $reviewApi = new ReviewsApi();
-        // Process actions
-        switch ($action) {
-            case 'approve':
-                $data['status'] = 1;
-                $data['review_wp_unique_ids'] = $this->modifiyIds($comment_ids);
-                $reviewApi->reviewBulkUpdate($data);
-                break;
-            case 'unapprove':
-                $data['status'] = 2;
-                $data['review_wp_unique_ids'] = $this->modifiyIds($comment_ids);
-                $reviewApi->reviewBulkUpdate($data);
-                break;
-            case 'spam':
-                $data['status'] = 3;
-                $data['review_wp_unique_ids'] = $this->modifiyIds($comment_ids);
-                $reviewApi->reviewBulkUpdate($data);
-                break;
-            case 'trash':
-                $data['review_wp_unique_ids'] = $this->modifiyIds($comment_ids);
-                $reviewApi->reviewBulkTrash($data);
-                break;
-            case 'unspam':
-            case 'restore':
-                $data['status'] = 1;
-                $data['review_wp_unique_ids'] = $this->modifiyIds($comment_ids);
-                $reviewApi->reviewBulkTrash($data);
-                break;
+        if ($comment_status === 'trash') {
+            return ['rvx_restore_publish' => \__('Restore as Published', 'reviewx'), 'rvx_restore_pending' => \__('Restore as Pending', 'reviewx'), 'rvx_restore_spam' => \__('Restore as Spam', 'reviewx'), 'delete' => $actions['delete'] ?? \__('Delete permanently')];
         }
-        $this->cacheServices->removeCache();
+        return $actions;
     }
-    public function modifiyIds($comment_ids)
+    private function isReviewxCommentsScreen() : bool
     {
-        return \array_map(function ($id) {
-            return Client::getUid() . '-' . $id;
-        }, $comment_ids);
+        $enabled_post_types = $this->cptHelper->enabledCPT();
+        $post_type = isset($_REQUEST['post_type']) ? sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
+        $comment_type = isset($_REQUEST['comment_type']) ? sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
+        if ($comment_type === 'review') {
+            return \true;
+        }
+        return !empty($post_type) && \in_array($post_type, $enabled_post_types, \true);
     }
 }

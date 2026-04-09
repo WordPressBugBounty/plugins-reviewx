@@ -2,78 +2,50 @@
 
 namespace ReviewX\Handlers\BulkAction;
 
+use ReviewX\CPT\CptHelper;
 use ReviewX\Services\CacheServices;
+use WP_Screen;
 class RegisterBulkActionsForReviewsHandler
 {
     protected $cacheServices;
+    protected CptHelper $cptHelper;
     public function __construct()
     {
         $this->cacheServices = new CacheServices();
+        $this->cptHelper = new CptHelper();
     }
-    public function __invoke($new_status, $old_status, $comment)
+    public function __invoke($redirect_to, $doaction, $comment_ids)
     {
         $screen = \get_current_screen();
-        if ($screen->id !== 'edit-comments') {
-            return;
+        if (!$screen instanceof WP_Screen || $screen->id !== 'edit-comments') {
+            return $redirect_to;
         }
-        if (isset($_REQUEST['action']) && $_REQUEST['action'] != -1) {
-            $doaction = \sanitize_text_field(\wp_unslash($_REQUEST['action']));
-        } elseif (isset($_REQUEST['action2']) && $_REQUEST['action2'] != -1) {
-            $doaction = \sanitize_text_field(\wp_unslash($_REQUEST['action2']));
-        } else {
-            return;
+        if (!$this->isReviewxCommentsScreen()) {
+            return $redirect_to;
         }
-        // Nonce check
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(\sanitize_text_field(\wp_unslash($_REQUEST['_wpnonce'])), 'bulk-comments')) {
-            // Bulk actions usually have nonces, but we should be careful about which one to check.
-            // WordPress uses 'bulk-comments' for comment bulk actions.
+        $target_status = match ($doaction) {
+            'rvx_restore_publish' => 'approve',
+            'rvx_restore_pending' => 'hold',
+            'rvx_restore_spam' => 'spam',
+            default => null,
+        };
+        if ($target_status === null) {
+            return $redirect_to;
         }
-        // Check if we are in the comments admin page
-        if (!isset($_REQUEST['comment'])) {
-            return;
-        }
-        $comment_ids = \array_map('absint', \wp_unslash($_REQUEST['comment']));
-        // Process each bulk action
-        if ($doaction === 'approve') {
-            foreach ($comment_ids as $comment_id) {
-                // Approve the comment
-                \wp_set_comment_status($comment_id, 'approve');
-            }
-            $this->cacheServices->removeCache();
-            $redirect_to = \add_query_arg('bulk_approved_comments', \count($comment_ids), \wp_get_referer());
-            \wp_safe_redirect($redirect_to);
-            exit;
-        }
-        if ($this->cacheServices && $doaction === 'unapprove') {
-            foreach ($comment_ids as $comment_id) {
-                // Unapprove the comment
-                \wp_set_comment_status($comment_id, 'hold');
-            }
-            $this->cacheServices->removeCache();
-            $redirect_to = \add_query_arg('bulk_unapproved_comments', \count($comment_ids), \wp_get_referer());
-            \wp_safe_redirect($redirect_to);
-            exit;
-        }
-        if ($doaction === 'spam') {
-            foreach ($comment_ids as $comment_id) {
-                // Mark the comment as spam
-                \wp_spam_comment($comment_id);
-            }
-            $this->cacheServices->removeCache();
-            $redirect_to = \add_query_arg('bulk_spam_comments', \count($comment_ids), \wp_get_referer());
-            \wp_safe_redirect($redirect_to);
-            exit;
-        }
-        if ($doaction === 'trash') {
-            foreach ($comment_ids as $comment_id) {
-                // Move the comment to trash
-                \wp_trash_comment($comment_id);
-            }
-            $this->cacheServices->removeCache();
-            $redirect_to = \add_query_arg('bulk_trash_comments', \count($comment_ids), \wp_get_referer());
-            \wp_safe_redirect($redirect_to);
-            exit;
+        foreach ((array) $comment_ids as $comment_id) {
+            \wp_set_comment_status((int) $comment_id, $target_status);
         }
         $this->cacheServices->removeCache();
+        return \add_query_arg(['rvx_bulk_restored' => $doaction, 'rvx_bulk_count' => \count((array) $comment_ids)], $redirect_to);
+    }
+    private function isReviewxCommentsScreen() : bool
+    {
+        $enabled_post_types = $this->cptHelper->enabledCPT();
+        $post_type = isset($_REQUEST['post_type']) ? sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
+        $comment_type = isset($_REQUEST['comment_type']) ? sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
+        if ($comment_type === 'review') {
+            return \true;
+        }
+        return !empty($post_type) && \in_array($post_type, $enabled_post_types, \true);
     }
 }

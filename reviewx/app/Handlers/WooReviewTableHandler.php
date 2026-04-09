@@ -101,9 +101,7 @@ class WooReviewTableHandler
     private function restoreFromTrash($wpUniqueId, $new_status)
     {
         try {
-            $statusMap = ["approved" => 1, "unapproved" => 2, "hold" => 4, "pending" => 4, "spam" => 5];
-            $status = isset($statusMap[$new_status]) ? $statusMap[$new_status] : 1;
-            // Default to published if unknown
+            $status = $this->resolveReviewStatus($new_status) ?? 1;
             (new ReviewsApi())->restoreReview($wpUniqueId, $status);
         } catch (Exception $e) {
             // Restored Form trash failed
@@ -115,26 +113,30 @@ class WooReviewTableHandler
     private function changeVisibility($new_status, $old_status, $wpUniqueId)
     {
         try {
-            $statusMap = [
-                "approved" => 1,
-                // WordPress default
-                "published" => 1,
-                "unapproved" => 2,
-                // WordPress default
-                "unpublished" => 2,
-                "pending" => 4,
-                "hold" => 4,
-                "spam" => 5,
-                "trash" => 3,
-                "delete" => 3,
-            ];
-            if (!isset($statusMap[$new_status])) {
+            $status = $this->resolveReviewStatus($new_status);
+            if ($status === null) {
                 return;
             }
-            $status = $statusMap[$new_status];
             (new ReviewsApi())->visibilityReviewData(["status" => $status], $wpUniqueId);
         } catch (Exception $e) {
             // Change Visibility failed
         }
+    }
+    private function resolveReviewStatus($status) : ?int
+    {
+        if ($status === 1 || $status === '1') {
+            return 1;
+        }
+        if ($status === 0 || $status === '0') {
+            return 4;
+        }
+        $normalized_status = \is_string($status) ? \strtolower(\trim($status)) : $status;
+        return match ($normalized_status) {
+            'approved', 'approve', 'publish', 'published' => 1,
+            'unapproved', 'unapprove', 'hold', 'pending', 'unpublished' => 4,
+            'spam' => 5,
+            'trash', 'delete' => 3,
+            default => null,
+        };
     }
 }

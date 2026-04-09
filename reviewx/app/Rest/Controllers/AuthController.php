@@ -39,8 +39,7 @@ class AuthController implements InvokableContract
     public function login($request)
     {
         $data = $request->get_params();
-        $data['multicriteria'] = $this->multicriteriaOptions();
-        $payload = \array_merge($data, Helper::getWpClientInfo());
+        $payload = $this->buildAuthPayload($data);
         //return Helper::rvxApi(['error' => 'Invalid request', 'data' => $payload])->fails('Invalid request', Response::HTTP_BAD_REQUEST);
         try {
             $response = (new AuthApi())->login($payload);
@@ -91,8 +90,7 @@ class AuthController implements InvokableContract
     public function license_key($request)
     {
         $data = $request->get_params();
-        $data['multicriteria'] = $this->multicriteriaOptions();
-        $payload = \array_merge($data, Helper::getWpClientInfo());
+        $payload = $this->buildAuthPayload($data);
         try {
             $response = (new AuthApi())->licenseLogin($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
@@ -190,7 +188,7 @@ class AuthController implements InvokableContract
     public function register($request)
     {
         $data = $request->get_params();
-        $payload = \array_merge($data, Helper::getWpClientInfo());
+        $payload = $this->buildAuthPayload($data);
         try {
             $response = (new AuthApi())->register($payload);
             if ($response->getStatusCode() !== Response::HTTP_OK) {
@@ -266,5 +264,24 @@ class AuthController implements InvokableContract
     protected function prepareRegisterData(array $site) : array
     {
         return ['site_id' => $site['id'], 'uid' => $site['uid'], 'name' => $site['name'], 'domain' => $site['domain'], 'url' => $site['url'], 'locale' => $site['locale'], 'email' => $site['email'], 'secret' => $site['key'], 'is_saas_sync' => 0, 'created_at' => \wp_date('Y-m-d H:i:s'), 'updated_at' => \wp_date('Y-m-d H:i:s')];
+    }
+    private function buildAuthPayload(array $data) : array
+    {
+        $multicriteria = $this->multicriteriaOptions();
+        if (!empty($multicriteria)) {
+            $data['multicriteria'] = $multicriteria;
+            $data['multi_criteria_reviews'] = $this->legacyMultiCriteriaOptions($multicriteria);
+        }
+        return \array_merge($data, Helper::getWpClientInfo());
+    }
+    private function legacyMultiCriteriaOptions(array $multicriteria) : array
+    {
+        $criteriaNames = [];
+        foreach ($multicriteria['criterias'] ?? [] as $criteria) {
+            if (\is_array($criteria) && !empty($criteria['name'])) {
+                $criteriaNames[] = $criteria['name'];
+            }
+        }
+        return ['enabled' => !empty($multicriteria['enable']), 'criteria' => $criteriaNames];
     }
 }

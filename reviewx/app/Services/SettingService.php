@@ -94,6 +94,7 @@ class SettingService extends \ReviewX\Services\Service
     }
     public function updateReviewSettingsOnSync(array $review_settings, $post_type = null) : void
     {
+        $review_settings = $this->preserveStoredMulticriteria($review_settings, $post_type, \true);
         $default_cpt_name = 'product';
         if ($post_type !== null) {
             $default_cpt_name = $post_type;
@@ -113,10 +114,76 @@ class SettingService extends \ReviewX\Services\Service
         }
         \update_option($option_name, $data);
     }
+    public function preserveStoredMulticriteria(array $review_settings, $post_type = null, bool $preserveWhenIncomingIsEmpty = \false) : array
+    {
+        $post_type = $this->normalizeReviewPostType($post_type);
+        $existing_settings = $this->getReviewSettings($post_type);
+        $existing_multicriteria = $existing_settings['reviews']['multicriteria'] ?? null;
+        if (!$this->hasMeaningfulMulticriteria($existing_multicriteria)) {
+            return $review_settings;
+        }
+        if (isset($review_settings['reviews']) && \is_array($review_settings['reviews'])) {
+            $incoming_multicriteria = $review_settings['reviews']['multicriteria'] ?? null;
+            if (!\array_key_exists('multicriteria', $review_settings['reviews']) || $preserveWhenIncomingIsEmpty && !$this->hasMeaningfulMulticriteria($incoming_multicriteria)) {
+                $review_settings['reviews']['multicriteria'] = $existing_multicriteria;
+            }
+            return $review_settings;
+        }
+        $incoming_multicriteria = $review_settings['multicriteria'] ?? null;
+        if (!\array_key_exists('multicriteria', $review_settings) || $preserveWhenIncomingIsEmpty && !$this->hasMeaningfulMulticriteria($incoming_multicriteria)) {
+            $review_settings['multicriteria'] = $existing_multicriteria;
+        }
+        return $review_settings;
+    }
     public function updateWidgetSettings(array $widget_settings) : void
     {
         $data = ["setting" => ["widget_settings" => $widget_settings]];
         \update_option("_rvx_settings_widget", $data);
+    }
+    public function hasMeaningfulReviewSettings($review_settings) : bool
+    {
+        if (!\is_array($review_settings) || $review_settings === []) {
+            return \false;
+        }
+        $reviews = isset($review_settings['reviews']) && \is_array($review_settings['reviews']) ? $review_settings['reviews'] : $review_settings;
+        return $reviews !== [];
+    }
+    public function hasMeaningfulWidgetSettings($widget_settings) : bool
+    {
+        return \is_array($widget_settings) && $widget_settings !== [];
+    }
+    public function mergeSettingsWithLocalPreference(array $fallback_settings, array $local_settings) : array
+    {
+        return \array_replace_recursive($fallback_settings, $local_settings);
+    }
+    public function mergeReviewSettingsForSync(array $fallback_settings, array $local_settings) : array
+    {
+        $fallback_settings = isset($fallback_settings['reviews']) && \is_array($fallback_settings['reviews']) ? $fallback_settings : ['reviews' => $fallback_settings];
+        $local_settings = isset($local_settings['reviews']) && \is_array($local_settings['reviews']) ? $local_settings : ['reviews' => $local_settings];
+        $merged_settings = \array_replace_recursive($fallback_settings, $local_settings);
+        $local_multicriteria = $local_settings['reviews']['multicriteria'] ?? null;
+        if (\is_array($local_multicriteria)) {
+            $merged_settings['reviews']['multicriteria'] = \array_replace_recursive($fallback_settings['reviews']['multicriteria'] ?? [], $local_multicriteria);
+            foreach (['criterias', 'criteria_key', 'criteria_value'] as $field) {
+                if (\array_key_exists($field, $local_multicriteria)) {
+                    $merged_settings['reviews']['multicriteria'][$field] = $local_multicriteria[$field];
+                }
+            }
+        }
+        return $merged_settings;
+    }
+    public function syncWooCommerceOptionsFromReviewSettings(array $review_settings, $post_type = 'product') : void
+    {
+        if ($this->normalizeReviewPostType($post_type) !== 'product') {
+            return;
+        }
+        $reviews = isset($review_settings['reviews']) && \is_array($review_settings['reviews']) ? $review_settings['reviews'] : $review_settings;
+        if (\array_key_exists('show_verified_badge', $reviews)) {
+            \update_option('woocommerce_review_rating_verification_label', $reviews['show_verified_badge'] ? 'yes' : 'no');
+        }
+        if (isset($reviews['review_submission_policy']['options']['verified_customer'])) {
+            \update_option('woocommerce_review_rating_verification_required', $reviews['review_submission_policy']['options']['verified_customer'] ? 'yes' : 'no');
+        }
     }
     private function formatSettings(array $review_settings, array $widget_settings) : array
     {
@@ -303,5 +370,19 @@ class SettingService extends \ReviewX\Services\Service
     public function getLocalSettings($post_type)
     {
         return (new SettingApi())->getLocalSettings($post_type);
+    }
+    private function normalizeReviewPostType($post_type = null) : string
+    {
+        return $post_type !== null ? (string) $post_type : 'product';
+    }
+    private function hasMeaningfulMulticriteria($multicriteria) : bool
+    {
+        if (!\is_array($multicriteria) || $multicriteria === []) {
+            return \false;
+        }
+        if (\array_key_exists('enable', $multicriteria)) {
+            return \true;
+        }
+        return !empty($multicriteria['criterias']) || !empty($multicriteria['criteria_key']) || !empty($multicriteria['criteria_value']);
     }
 }
