@@ -13,7 +13,7 @@ class ProductHandler
             if ($post->post_type === 'product') {
                 switch ($new_status) {
                     case 'publish':
-                        $currentProduct = wc_get_product($product->ID);
+                        $currentProduct = \wc_get_product($product->ID);
                         $payload = $this->prepareData($currentProduct);
                         $response = (new ProductApi())->create($payload);
                         if ($response->getStatusCode() !== Response::HTTP_OK) {

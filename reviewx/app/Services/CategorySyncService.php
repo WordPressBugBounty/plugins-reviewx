@@ -32,14 +32,12 @@ class CategorySyncService extends \ReviewX\Services\Service
                 if (\in_array((int) $term->term_id, $this->selectedTerms, \true)) {
                     $formatedTerm = $this->formatCategoryData($term);
                     $this->setSyncCategories($formatedTerm);
-                    Helper::rvxLog($formatedTerm);
                     if (Helper::appendToJsonl($buffer, $formatedTerm)) {
                         $catCount++;
                     }
                 }
             }
         });
-        Helper::rvxLog($catCount, "Category Done");
         return $catCount;
     }
     public function getPostTermRelation()

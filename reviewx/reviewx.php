@@ -6,7 +6,7 @@ namespace ReviewX;
  * Plugin Name: ReviewX – Multi-Criteria Rating & Reviews
  * Plugin URI:  https://reviewx.io
  * Description: Advanced Multi-Criteria Rating & Reviews for WooCommerce. Turn customer reviews into sales by leveraging reviews with multiple criteria, reminder emails, Google reviews, review schemas, and incentives like discounts.
- * Version:     2.3.8
+ * Version:     2.3.9
  * Author:      ReviewX
  * Author URI:  https://reviewx.io
  * Text Domain: reviewx
@@ -20,20 +20,24 @@ namespace ReviewX;
  */
 // don't call the file directly
 \defined('ABSPATH') || die;
+if (\defined('REVIEWX_BOOTSTRAPPED')) {
+    return;
+}
+\define('REVIEWX_BOOTSTRAPPED', \true);
 // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 @\ini_set('display_errors', 0);
-\define('REVIEWX_VERSION', '2.3.8');
-\define('REVIEWX_DIR_PATH', plugin_dir_path(__FILE__));
-\define('REVIEWX_DIR_NAME', \basename(\REVIEWX_DIR_PATH));
-\define('REVIEWX_PREFIX', 'rvx_');
-\define('REVIEWX_FILE', __FILE__);
-\define('REVIEWX_URL', plugins_url('/', __FILE__));
-\define('REVIEWX_CUSTOMIZER_URL', \REVIEWX_URL . 'app/Customize/');
+\defined('REVIEWX_VERSION') || \define('REVIEWX_VERSION', '2.3.9');
+\defined('REVIEWX_DIR_PATH') || \define('REVIEWX_DIR_PATH', \plugin_dir_path(__FILE__));
+\defined('REVIEWX_DIR_NAME') || \define('REVIEWX_DIR_NAME', \basename(\REVIEWX_DIR_PATH));
+\defined('REVIEWX_PREFIX') || \define('REVIEWX_PREFIX', 'rvx_');
+\defined('REVIEWX_FILE') || \define('REVIEWX_FILE', __FILE__);
+\defined('REVIEWX_URL') || \define('REVIEWX_URL', \plugins_url('/', __FILE__));
+\defined('REVIEWX_CUSTOMIZER_URL') || \define('REVIEWX_CUSTOMIZER_URL', \REVIEWX_URL . 'app/Customize/');
 if (\php_sapi_name() === 'cli') {
     return;
 }
 // Load Composer
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 // Silence PHP deprecation warnings from vendor packages
 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.prevent_path_disclosure_error_reporting
 \error_reporting(\error_reporting() & ~\E_DEPRECATED);

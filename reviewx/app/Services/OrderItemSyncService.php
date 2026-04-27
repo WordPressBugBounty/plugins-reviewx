@@ -36,7 +36,6 @@ class OrderItemSyncService extends \ReviewX\Services\Service
                 }
             }
         });
-        Helper::rvxLog($orderCount, "Order Done");
         return $orderCount;
     }
     public function formatOrderData($order) : array
@@ -60,7 +59,7 @@ class OrderItemSyncService extends \ReviewX\Services\Service
         $orderItemCount = 0;
         // Early exit if no valid orders to process
         if (empty($this->validOrderIds)) {
-            // Helper::rvxLog(0, "No valid orders found, skipping order item sync");
+            // No valid orders found, skipping order item sync.
             return 0;
         }
         // Step 1: Collect valid order items and their IDs
@@ -75,7 +74,7 @@ class OrderItemSyncService extends \ReviewX\Services\Service
         });
         // Early exit if no valid order items found
         if (empty($this->validOrdersMetaIds)) {
-            // Helper::rvxLog(0, "No valid order items found, skipping meta sync");
+            // No valid order items found, skipping meta sync.
             return 0;
         }
         // Step 2: Fetch associated meta data for the collected order items
@@ -90,7 +89,6 @@ class OrderItemSyncService extends \ReviewX\Services\Service
                 $orderItemCount++;
             }
         }
-        Helper::rvxLog($orderItemCount, "Order Item Done");
         return $orderItemCount;
     }
     public function formatOrderItem($orderItem) : array

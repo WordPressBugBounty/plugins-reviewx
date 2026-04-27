@@ -5,6 +5,7 @@ namespace ReviewX\Rest\Controllers;
 \defined("ABSPATH") || exit;
 use Exception;
 use Throwable;
+use ReviewX\Services\ReviewDuplicateService;
 use ReviewX\Services\ReviewService;
 use ReviewX\Utilities\Helper;
 use ReviewX\Services\CacheServices;
@@ -14,16 +15,22 @@ class ReviewController implements InvokableContract
 {
     protected ReviewService $reviewService;
     protected CacheServices $cacheServices;
+    protected ReviewDuplicateService $reviewDuplicateService;
     public function __construct()
     {
         $this->reviewService = new ReviewService();
         $this->cacheServices = new CacheServices();
+        $this->reviewDuplicateService = new ReviewDuplicateService();
     }
     /**
      * @return void
      */
     public function __invoke()
     {
+    }
+    private function refreshPendingReviewSummary() : void
+    {
+        $this->cacheServices->refreshPendingReviewNoticeSummary();
     }
     /**
      * @return Response
@@ -169,23 +176,24 @@ class ReviewController implements InvokableContract
     {
         try {
             // Temporarily disable comment notification emails
-            remove_action('comment_post', 'wp_notify_postauthor');
+            \remove_action('comment_post', 'wp_notify_postauthor');
             \add_filter('comments_notify', '__return_false');
             $resp = $this->reviewService->createReview($request);
             // Re-enable the comment notification emails
             \add_action('comment_post', 'wp_notify_postauthor');
-            remove_filter('comments_notify', '__return_false');
+            \remove_filter('comments_notify', '__return_false');
             // Clear caches
             $this->cacheServices->removeCache();
             $postId = $request->get_param('wp_post_id');
             if ($postId) {
                 $this->cacheServices->removeProductCache($postId);
             }
+            $this->refreshPendingReviewSummary();
             return Helper::getApiResponse($resp);
         } catch (Exception $e) {
             // Re-enable the comment notification emails in case of error
             \add_action('comment_post', 'wp_notify_postauthor');
-            remove_filter('comments_notify', '__return_false');
+            \remove_filter('comments_notify', '__return_false');
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Not Create', $e->getCode());
         }
     }
@@ -197,7 +205,7 @@ class ReviewController implements InvokableContract
     {
         try {
             $resp = $this->reviewService->updateReview($request);
-            if ($resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300) {
+            if ($resp === \true) {
                 // 1. Clear site-wide generic caches
                 $this->cacheServices->removeCache();
                 // 2. Clear product-specific caches (Insight & Latest Reviews)
@@ -206,9 +214,25 @@ class ReviewController implements InvokableContract
                     \delete_transient("rvx_{$postId}_latest_reviews_insight");
                     \delete_transient("rvx_{$postId}_latest_reviews");
                 }
+                $this->refreshPendingReviewSummary();
+                return Helper::rest([])->success('Review updated successfully');
+            }
+            if ($resp === \false) {
+                return Helper::rest([])->fails('Review Update Failed');
+            }
+            if (\is_object($resp) && \method_exists($resp, 'getStatusCode') && $resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300) {
+                // 1. Clear site-wide generic caches
+                $this->cacheServices->removeCache();
+                // 2. Clear product-specific caches (Insight & Latest Reviews)
+                $postId = $request->get_param('wp_post_id');
+                if ($postId) {
+                    \delete_transient("rvx_{$postId}_latest_reviews_insight");
+                    \delete_transient("rvx_{$postId}_latest_reviews");
+                }
+                $this->refreshPendingReviewSummary();
             }
             return Helper::getApiResponse($resp);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Update Failed', $e->getCode());
         }
     }
@@ -221,6 +245,7 @@ class ReviewController implements InvokableContract
         try {
             $resp = $this->reviewService->deleteReview($request);
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return $resp;
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
@@ -235,6 +260,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->restoreReview($request);
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Change', $e->getCode());
@@ -263,6 +289,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->isvisibility($request);
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Visibility Not Change', $e->getCode());
@@ -332,17 +359,18 @@ class ReviewController implements InvokableContract
     {
         try {
             // Temporarily disable comment notification emails
-            remove_action('comment_post', 'wp_notify_postauthor');
+            \remove_action('comment_post', 'wp_notify_postauthor');
             \add_filter('comments_notify', '__return_false');
             $resp = $this->reviewService->aiReview($request);
             // Re-enable the comment notification emails
             \add_action('comment_post', 'wp_notify_postauthor');
-            remove_filter('comments_notify', '__return_false');
+            \remove_filter('comments_notify', '__return_false');
+            $this->refreshPendingReviewSummary();
             return Helper::getApiResponse($resp);
         } catch (Throwable $e) {
             // Re-enable the comment notification emails in case of error
             \add_action('comment_post', 'wp_notify_postauthor');
-            remove_filter('comments_notify', '__return_false');
+            \remove_filter('comments_notify', '__return_false');
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
         }
     }
@@ -377,6 +405,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->reviewBulkUpdate($request->get_params());
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -391,6 +420,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->reviewBulkTrash($request->get_params());
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -405,6 +435,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->reviewBulkSoftDelete($request->get_params());
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Delete Fails', $e->getCode());
@@ -415,9 +446,21 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->reviewEmptyTrash($request->get_params());
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Empty Fails', $e->getCode());
+        }
+    }
+    public function reviewEmptySpam($request)
+    {
+        try {
+            $response = $this->reviewService->reviewEmptySpam($request->get_params());
+            $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
+            return Helper::saasResponse($response);
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Spam Empty Fails', $e->getCode());
         }
     }
     /**
@@ -430,6 +473,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->restoreTrashItem($request->get_params());
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Bulk Fails', $e->getCode());
@@ -458,6 +502,7 @@ class ReviewController implements InvokableContract
         try {
             $response = $this->reviewService->reviewMoveToTrash($request->get_params());
             $this->cacheServices->removeCache();
+            $this->refreshPendingReviewSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Move to trash Fails', $e->getCode());
@@ -512,6 +557,30 @@ class ReviewController implements InvokableContract
     {
         $resp = $this->reviewService->reviewListMultiCriteria();
         return Helper::getApiResponse($resp);
+    }
+    public function duplicateReviewList()
+    {
+        $response = $this->reviewDuplicateService->getDuplicateReviewGroups();
+        return Helper::rest($response)->success(\__('Duplicate review report loaded successfully.', 'reviewx'));
+    }
+    public function scanDuplicateReviews()
+    {
+        try {
+            $response = $this->reviewDuplicateService->scanDuplicateReviewGroups();
+            return Helper::rest($response)->success(\__('Duplicate review scan completed successfully.', 'reviewx'));
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Duplicate Review Scan Failed', $e->getCode());
+        }
+    }
+    public function removeDuplicateReviews($request)
+    {
+        try {
+            $groupKeys = $request->get_param('group_keys');
+            $response = $this->reviewDuplicateService->removeDuplicateReviews(\is_array($groupKeys) ? $groupKeys : []);
+            return Helper::rest($response)->success($response['message'] ?? \__('Duplicate reviews removed successfully.', 'reviewx'));
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Duplicate Review Removal Failed', $e->getCode());
+        }
     }
     /**
      * @param $request

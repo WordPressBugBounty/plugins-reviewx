@@ -58,7 +58,10 @@ use ReviewX\Models\Site;
 use ReviewX\Utilities\Auth\ClientManager;
 use ReviewX\Utilities\Auth\WpUserManager;
 use ReviewX\Utilities\Auth\WpUser;
+use ReviewX\Utilities\UploadMimeSupport;
 use ReviewX\Services\ReviewService;
+use ReviewX\Services\ImportExportServices;
+use ReviewX\Services\CacheServices;
 use ReviewX\WPDrill\ServiceProvider;
 // use ReviewX\Handlers\WcTemplates\WcAccountDetailsError;
 class PluginServiceProvider extends ServiceProvider
@@ -69,8 +72,14 @@ class PluginServiceProvider extends ServiceProvider
             global $wpdb;
             $table_name = $wpdb->prefix . 'rvx_sites';
             $site = null;
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-            if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name)) === $table_name) {
+            $table_exists = \wp_cache_get('rvx_sites_table_exists', 'reviewx');
+            if (\false === $table_exists) {
+                // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Table existence check is cached
+                $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name)) === $table_name;
+                \wp_cache_set('rvx_sites_table_exists', $table_exists, 'reviewx', 3600);
+                // Cache for 1 hour
+            }
+            if ($table_exists) {
                 $site = Site::first();
             }
             return new ClientManager($site);
@@ -81,6 +90,8 @@ class PluginServiceProvider extends ServiceProvider
     }
     public function boot() : void
     {
+        UploadMimeSupport::bootstrapGlobalHooks();
+        \add_action(ImportExportServices::IMPORT_EVENT_HOOK, [new ImportExportServices(), 'processScheduledImport'], 10, 1);
         \add_action('plugins_loaded', function () {
             if (\is_admin() && \get_transient('rvx_reset_sync_flag')) {
                 (new \ReviewX\Handlers\IsAlreadySyncSucess())->resetSyncFlag();
@@ -88,8 +99,8 @@ class PluginServiceProvider extends ServiceProvider
             require_once \ABSPATH . 'wp-admin/includes/image.php';
         }, 15);
         \add_action('rest_api_init', function () {
-            WpUser::setLoggedInStatus(is_user_logged_in());
-            WpUser::setAbility(is_user_logged_in() && (current_user_can('manage_options') || current_user_can('edit_others_posts') || current_user_can('manage_woocommerce')) ? \true : \false);
+            WpUser::setLoggedInStatus(\is_user_logged_in());
+            WpUser::setAbility(\is_user_logged_in() && (\current_user_can('manage_options') || \current_user_can('edit_others_posts') || \current_user_can('manage_woocommerce')) ? \true : \false);
         }, 5);
         \add_action('init', new ReviewXoldPluginDeactivateHandler(), 10);
         \add_action('init', new PageBuilderHandler(), 20);
@@ -167,6 +178,9 @@ class PluginServiceProvider extends ServiceProvider
          * CPT comments / reviews
          */
         \add_action('wp_insert_comment', function ($comment_id, $comment) {
+            if (ImportExportServices::shouldSuspendCommentSideEffects()) {
+                return;
+            }
             if ($comment && $comment->comment_post_ID) {
                 // 1. Update average rating locally
                 CptAverageRating::update_average_rating($comment->comment_post_ID);
@@ -178,6 +192,9 @@ class PluginServiceProvider extends ServiceProvider
             }
         }, 999, 2);
         \add_action('comment_post', function ($comment_id, $comment_approved, $comment) {
+            if (ImportExportServices::shouldSuspendCommentSideEffects()) {
+                return;
+            }
             // 1. Update average rating locally
             CptAverageRating::handle_comment_rating($comment_id, $comment_approved, $comment);
             // 2. Sync updated post data to SaaS if we have a comment object
@@ -286,15 +303,66 @@ class PluginServiceProvider extends ServiceProvider
         \add_filter('comments_template', [ReviewForm::class, 'comments_template_init'], \PHP_INT_MAX);
         // Load plugin textdomain removed - handled by WordPress.org
         // Defer localization until scripts are enqueued
+        \add_action('init', [$this, 'schedulePendingReviewNoticeSummarySync'], 20);
+        \add_action(CacheServices::PENDING_REVIEW_NOTICE_SYNC_HOOK, [$this, 'refreshPendingReviewNoticeSummarySync']);
         \add_action('admin_enqueue_scripts', [$this, 'localizeScripts'], 20);
+        \add_action('admin_enqueue_scripts', [$this, 'enqueuePendingReviewNoticeScript'], 20);
         \add_action('wp_enqueue_scripts', [$this, 'localizeScripts'], 20);
+        \add_action('wp_ajax_rvx_pending_review_summary', [$this, 'handlePendingReviewSummaryAjax']);
     }
     public function localizeScripts() : void
     {
-        $locals = ['rvx_localization_data_for_admin' => \ReviewX\Utilities\Helper::prepareLangArray(), 'rvx_full_domain_name' => \ReviewX\Utilities\Helper::domainSupport(), 'rvx_full_domain_api' => \ReviewX\Utilities\Helper::getRestAPIurl()];
+        $pendingReviewNotice = $this->getPendingReviewNoticeConfig();
+        $locals = ['rvx_localization_data_for_admin' => \ReviewX\Utilities\Helper::prepareLangArray(), 'rvx_full_domain_name' => \ReviewX\Utilities\Helper::domainSupport(), 'rvx_full_domain_api' => \ReviewX\Utilities\Helper::getRestAPIurl(), 'rvx_pending_review_notice' => $pendingReviewNotice];
         // Localize for admin handles if they exist
         wp_localize_script('rvx_user_access_script', 'rvx_locals', $locals);
         // Localize for frontend handles if needed
         wp_localize_script('reviewx-storefront', 'rvx_locals', $locals);
+    }
+    public function enqueuePendingReviewNoticeScript() : void
+    {
+        if (!\is_admin() || !$this->canAccessPendingReviewNotice()) {
+            return;
+        }
+        wp_enqueue_script('reviewx-admin-pending-review-notice', REVIEWX_URL . 'resources/js/reviewx-admin-pending-review-notice.js', [], REVIEWX_VERSION, \true);
+        wp_localize_script('reviewx-admin-pending-review-notice', 'reviewxPendingReviewNotice', $this->getPendingReviewNoticeConfig());
+    }
+    public function handlePendingReviewSummaryAjax() : void
+    {
+        if (!$this->canAccessPendingReviewNotice()) {
+            wp_send_json_error(['message' => \__('You are not allowed to access pending review summary.', 'reviewx')], 403);
+        }
+        \check_ajax_referer('reviewx_pending_review_notice');
+        $summary = (new CacheServices())->pendingReviewNoticeSummary();
+        wp_send_json_success($summary);
+    }
+    private function getPendingReviewNoticeConfig() : array
+    {
+        $initialCount = 0;
+        if ($this->canAccessPendingReviewNotice()) {
+            $summary = (new CacheServices())->pendingReviewNoticeSummary();
+            $initialCount = (int) ($summary['pending'] ?? 0);
+        }
+        return ['ajaxUrl' => \admin_url('admin-ajax.php'), 'nonce' => wp_create_nonce('reviewx_pending_review_notice'), 'initialCount' => $initialCount, 'pollInterval' => (int) \apply_filters('reviewx_pending_review_notice_poll_interval', 15000)];
+    }
+    public function schedulePendingReviewNoticeSummarySync() : void
+    {
+        if (!Client::has()) {
+            return;
+        }
+        if (!wp_next_scheduled(CacheServices::PENDING_REVIEW_NOTICE_SYNC_HOOK)) {
+            wp_schedule_event(\time() + HOUR_IN_SECONDS, 'hourly', CacheServices::PENDING_REVIEW_NOTICE_SYNC_HOOK);
+        }
+    }
+    public function refreshPendingReviewNoticeSummarySync() : void
+    {
+        if (!Client::has()) {
+            return;
+        }
+        (new CacheServices())->refreshPendingReviewNoticeSummary();
+    }
+    private function canAccessPendingReviewNotice() : bool
+    {
+        return Client::has() && (new CacheServices())->currentUserCanAccessReviewx();
     }
 }

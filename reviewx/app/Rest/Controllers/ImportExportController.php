@@ -53,6 +53,16 @@ class ImportExportController implements InvokableContract
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Import Failed', $e->getCode());
         }
     }
+    public function importStatus()
+    {
+        try {
+            $this->importExportServices->processScheduledImport();
+            $response = $this->importExportServices->getImportProgress();
+            return Helper::rest($response)->success('Review Import Status');
+        } catch (Throwable $e) {
+            return Helper::rvxApi(['error' => $e->getMessage()])->fails('Review Import Status Failed', $e->getCode());
+        }
+    }
     /**
      * @param $request
      * @return Response

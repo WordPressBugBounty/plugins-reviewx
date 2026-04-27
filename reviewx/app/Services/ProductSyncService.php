@@ -99,7 +99,6 @@ class ProductSyncService extends \ReviewX\Services\Service
             }
         });
         $this->setPostAttachemtRelation($attachmentRelation);
-        Helper::rvxLog($productCount, "Product Done");
         return $productCount;
     }
     public function setPostAttachemtRelation($attachmentRelation) : void

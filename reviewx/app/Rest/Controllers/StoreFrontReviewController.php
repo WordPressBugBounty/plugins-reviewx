@@ -282,6 +282,7 @@ class StoreFrontReviewController implements InvokableContract
         try {
             $response = $this->reviewService->saveWidgetReviewsForProduct($request);
             $this->cacheService->removeCache();
+            $this->cacheService->refreshPendingReviewNoticeSummary();
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(["error" => $e->getMessage()])->fails("failed", $e->getCode());
@@ -381,13 +382,14 @@ class StoreFrontReviewController implements InvokableContract
     {
         // Get API param
         $post_type = $request->get_param('cpt_type') ? \strtolower($request->get_param('cpt_type')) : 'product';
-        $data = (array) (new SettingService())->getSettingsData($post_type) ?? [];
+        $settings_data = (new SettingService())->getSettingsData($post_type);
+        $data = \is_array($settings_data) ? $settings_data : [];
         if ($data) {
             return Helper::rest($data)->success("Success");
         } else {
             $response = $this->settingService->getLocalSettings($post_type);
             $apiResponse = Helper::getApiResponse($response);
-            $review_setting = $apiResponse->data['data']['setting']['review_settings'];
+            $review_setting = $apiResponse->data['data']['setting']['review_settings'] ?? [];
             $this->settingService->updateReviewSettings($review_setting, $post_type);
             return $apiResponse;
         }

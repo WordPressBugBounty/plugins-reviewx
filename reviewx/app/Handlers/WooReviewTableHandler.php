@@ -24,10 +24,12 @@ class WooReviewTableHandler
         $is_reply = $comment->comment_parent > 0;
         $sync_comment_id = $is_reply ? $comment->comment_parent : $comment_id;
         $wpUniqueId = $this->getWpUniqueId($sync_comment_id);
-        if ($is_reply) {
-            $this->handleReplyAction($new_status, $old_status, $wpUniqueId, $comment);
-        } else {
-            $this->handleReviewAction($new_status, $old_status, $wpUniqueId);
+        if (!$this->isPermanentDelete($new_status)) {
+            if ($is_reply) {
+                $this->handleReplyAction($new_status, $old_status, $wpUniqueId, $comment);
+            } else {
+                $this->handleReviewAction($new_status, $old_status, $wpUniqueId);
+            }
         }
         if ($comment && $comment->comment_post_ID) {
             \ReviewX\CPT\CptAverageRating::update_average_rating($comment->comment_post_ID);
@@ -41,7 +43,7 @@ class WooReviewTableHandler
             if ($new_status === 'trash' || $new_status === 'spam') {
                 $reviewsApi->deleteCommentReply($wpUniqueId);
             } else {
-                $replies = ['reply' => $comment->comment_content, 'wp_id' => $comment->comment_parent];
+                $replies = ['reply' => $comment->comment_content, 'wp_id' => $comment->comment_parent, 'replied_at' => !empty($comment->comment_date_gmt) ? $comment->comment_date_gmt : $comment->comment_date ?? null];
                 $reviewsApi->commentReply($replies, $wpUniqueId);
             }
         } catch (Exception $e) {
@@ -82,6 +84,15 @@ class WooReviewTableHandler
     private function isRestoreFromTrash($new_status, $old_status)
     {
         return $old_status === "trash";
+    }
+    /**
+     * WordPress emits a "delete" transition for permanent removals.
+     * Those deletions are synced through deleted_comment or explicit bulk delete calls,
+     * so translating them into a status change would incorrectly move reviews to trash.
+     */
+    private function isPermanentDelete($new_status) : bool
+    {
+        return $new_status === 'delete';
     }
     /**
      * Move a review to Trash.
@@ -131,12 +142,24 @@ class WooReviewTableHandler
             return 4;
         }
         $normalized_status = \is_string($status) ? \strtolower(\trim($status)) : $status;
-        return match ($normalized_status) {
-            'approved', 'approve', 'publish', 'published' => 1,
-            'unapproved', 'unapprove', 'hold', 'pending', 'unpublished' => 4,
-            'spam' => 5,
-            'trash', 'delete' => 3,
-            default => null,
-        };
+        switch ($normalized_status) {
+            case 'approved':
+            case 'approve':
+            case 'publish':
+            case 'published':
+                return 1;
+            case 'unapproved':
+            case 'unapprove':
+            case 'hold':
+            case 'pending':
+            case 'unpublished':
+                return 4;
+            case 'spam':
+                return 5;
+            case 'trash':
+                return 3;
+            default:
+                return null;
+        }
     }
 }

@@ -4,8 +4,10 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     modalClass?: string | undefined;
     showCloseIcon?: boolean | undefined;
     dialogClass?: string | undefined;
+    dismissible?: boolean | undefined;
 }>, {
     showCloseIcon: boolean;
+    dismissible: boolean;
 }>>, {}, {}, {}, {}, import('vue').ComponentOptionsMixin, import('vue').ComponentOptionsMixin, {
     close: () => void;
 }, string, import('vue').PublicProps, Readonly<import('vue').ExtractPropTypes<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<{
@@ -14,12 +16,15 @@ declare const _default: __VLS_WithTemplateSlots<import('vue').DefineComponent<im
     modalClass?: string | undefined;
     showCloseIcon?: boolean | undefined;
     dialogClass?: string | undefined;
+    dismissible?: boolean | undefined;
 }>, {
     showCloseIcon: boolean;
+    dismissible: boolean;
 }>>> & Readonly<{
     onClose?: (() => any) | undefined;
 }>, {
     showCloseIcon: boolean;
+    dismissible: boolean;
 }, {}, {}, {}, string, import('vue').ComponentProvideOptions, true, {}, any>, {
     default?(_: {}): any;
 }>;

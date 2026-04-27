@@ -9,7 +9,7 @@ class WcOrderTableProductImageHandler
         $items = $order->get_items();
         foreach ($items as $item_id => $item) {
             $product_id = $item->get_product_id();
-            $product = wc_get_product($product_id);
+            $product = \wc_get_product($product_id);
             if ($product) {
                 $image_url = wp_get_attachment_image_url($product->get_image_id(), 'thumbnail');
                 if ($image_url) {

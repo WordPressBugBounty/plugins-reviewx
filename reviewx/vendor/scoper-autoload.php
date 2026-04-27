@@ -70,6 +70,7 @@ humbug_phpscoper_expose_class('__TwigTemplate_af96a9686cbaa0156ed7f19a7cc52604',
 humbug_phpscoper_expose_class('__TwigTemplate_6b9250a159965807fe2fc2170b821390', 'ReviewX\__TwigTemplate_6b9250a159965807fe2fc2170b821390');
 humbug_phpscoper_expose_class('__TwigTemplate_8fd4c00939c2a919e6ad2ac89b2cdb7d', 'ReviewX\__TwigTemplate_8fd4c00939c2a919e6ad2ac89b2cdb7d');
 humbug_phpscoper_expose_class('__TwigTemplate_ada44aba73411aeea0812b9823ed92c4', 'ReviewX\__TwigTemplate_ada44aba73411aeea0812b9823ed92c4');
+humbug_phpscoper_expose_class('__TwigTemplate_aff0300e1f1b6fce2c247c59d20a4203', 'ReviewX\__TwigTemplate_aff0300e1f1b6fce2c247c59d20a4203');
 humbug_phpscoper_expose_class('__TwigTemplate_b11c373b0d0259aa7a3a1274c2105e74', 'ReviewX\__TwigTemplate_b11c373b0d0259aa7a3a1274c2105e74');
 humbug_phpscoper_expose_class('__TwigTemplate_cc8cdfa56dc16ba0f4ffce52e89913cc', 'ReviewX\__TwigTemplate_cc8cdfa56dc16ba0f4ffce52e89913cc');
 humbug_phpscoper_expose_class('__TwigTemplate_5f6d4d0e061fcfc8094db3a3bdd8e9d1', 'ReviewX\__TwigTemplate_5f6d4d0e061fcfc8094db3a3bdd8e9d1');
@@ -84,6 +85,7 @@ humbug_phpscoper_expose_class('__TwigTemplate_f0ea36ae5237295fdbf104e6897f7740',
 humbug_phpscoper_expose_class('__TwigTemplate_0fda7a98092ef155a00d7e757ed36947', 'ReviewX\__TwigTemplate_0fda7a98092ef155a00d7e757ed36947');
 humbug_phpscoper_expose_class('__TwigTemplate_d674b392b23e2f9c8a9127b9ffe1e140', 'ReviewX\__TwigTemplate_d674b392b23e2f9c8a9127b9ffe1e140');
 humbug_phpscoper_expose_class('__TwigTemplate_30f22d978d0908c5b7daf2f83e08d8cb', 'ReviewX\__TwigTemplate_30f22d978d0908c5b7daf2f83e08d8cb');
+humbug_phpscoper_expose_class('__TwigTemplate_cb12ddc890c5f9e18a223a471709c5fa', 'ReviewX\__TwigTemplate_cb12ddc890c5f9e18a223a471709c5fa');
 humbug_phpscoper_expose_class('__TwigTemplate_485bae6480a114abdda9e874f48d4c47', 'ReviewX\__TwigTemplate_485bae6480a114abdda9e874f48d4c47');
 humbug_phpscoper_expose_class('__TwigTemplate_ec004d8aefeeb23b63ae34980fbebe39', 'ReviewX\__TwigTemplate_ec004d8aefeeb23b63ae34980fbebe39');
 humbug_phpscoper_expose_class('__TwigTemplate_f2f8f3d4f24516e8398fee3b8f7af9be', 'ReviewX\__TwigTemplate_f2f8f3d4f24516e8398fee3b8f7af9be');
@@ -98,6 +100,7 @@ humbug_phpscoper_expose_class('__TwigTemplate_289a2801a2c64dc519628fef81f8431e',
 humbug_phpscoper_expose_class('__TwigTemplate_4d88586a500fda0a54e69ba75bfe5191', 'ReviewX\__TwigTemplate_4d88586a500fda0a54e69ba75bfe5191');
 humbug_phpscoper_expose_class('__TwigTemplate_32bdf51779606dc379aac327af581811', 'ReviewX\__TwigTemplate_32bdf51779606dc379aac327af581811');
 humbug_phpscoper_expose_class('__TwigTemplate_2d17c45b68d8e8ef792d97e9dc2c1b74', 'ReviewX\__TwigTemplate_2d17c45b68d8e8ef792d97e9dc2c1b74');
+humbug_phpscoper_expose_class('__TwigTemplate_5190e97440e2b43e2d6f85f2b462f29f', 'ReviewX\__TwigTemplate_5190e97440e2b43e2d6f85f2b462f29f');
 humbug_phpscoper_expose_class('__TwigTemplate_bf7a745f2729ceacc1500f38597c2adb', 'ReviewX\__TwigTemplate_bf7a745f2729ceacc1500f38597c2adb');
 humbug_phpscoper_expose_class('__TwigTemplate_1c884c248cf783643f1566b35112915a', 'ReviewX\__TwigTemplate_1c884c248cf783643f1566b35112915a');
 humbug_phpscoper_expose_class('__TwigTemplate_7ab305a6242f9fb37e430ea96e0a5770', 'ReviewX\__TwigTemplate_7ab305a6242f9fb37e430ea96e0a5770');
@@ -116,11 +119,8 @@ humbug_phpscoper_expose_class('ValueError', 'ReviewX\ValueError');
 // https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md#function-aliases
 if (!function_exists('_twig_default_filter')) { function _twig_default_filter() { return \ReviewX\_twig_default_filter(...func_get_args()); } }
 if (!function_exists('_wpdrill')) { function _wpdrill() { return \ReviewX\_wpdrill(...func_get_args()); } }
-if (!function_exists('_x')) { function _x() { return \ReviewX\_x(...func_get_args()); } }
-if (!function_exists('activate_plugin')) { function activate_plugin() { return \ReviewX\activate_plugin(...func_get_args()); } }
 if (!function_exists('array_key_first')) { function array_key_first() { return \ReviewX\array_key_first(...func_get_args()); } }
 if (!function_exists('array_key_last')) { function array_key_last() { return \ReviewX\array_key_last(...func_get_args()); } }
-if (!function_exists('clean_comment_cache')) { function clean_comment_cache() { return \ReviewX\clean_comment_cache(...func_get_args()); } }
 if (!function_exists('convert_to_array')) { function convert_to_array() { return \ReviewX\convert_to_array(...func_get_args()); } }
 if (!function_exists('ctype_alnum')) { function ctype_alnum() { return \ReviewX\ctype_alnum(...func_get_args()); } }
 if (!function_exists('ctype_alpha')) { function ctype_alpha() { return \ReviewX\ctype_alpha(...func_get_args()); } }
@@ -133,14 +133,8 @@ if (!function_exists('ctype_punct')) { function ctype_punct() { return \ReviewX\
 if (!function_exists('ctype_space')) { function ctype_space() { return \ReviewX\ctype_space(...func_get_args()); } }
 if (!function_exists('ctype_upper')) { function ctype_upper() { return \ReviewX\ctype_upper(...func_get_args()); } }
 if (!function_exists('ctype_xdigit')) { function ctype_xdigit() { return \ReviewX\ctype_xdigit(...func_get_args()); } }
-if (!function_exists('current_user_can')) { function current_user_can() { return \ReviewX\current_user_can(...func_get_args()); } }
-if (!function_exists('deactivate_plugins')) { function deactivate_plugins() { return \ReviewX\deactivate_plugins(...func_get_args()); } }
-if (!function_exists('do_action')) { function do_action() { return \ReviewX\do_action(...func_get_args()); } }
-if (!function_exists('esc_attr_e')) { function esc_attr_e() { return \ReviewX\esc_attr_e(...func_get_args()); } }
 if (!function_exists('fdiv')) { function fdiv() { return \ReviewX\fdiv(...func_get_args()); } }
 if (!function_exists('get_debug_type')) { function get_debug_type() { return \ReviewX\get_debug_type(...func_get_args()); } }
-if (!function_exists('get_plugins')) { function get_plugins() { return \ReviewX\get_plugins(...func_get_args()); } }
-if (!function_exists('get_posts')) { function get_posts() { return \ReviewX\get_posts(...func_get_args()); } }
 if (!function_exists('get_resource_id')) { function get_resource_id() { return \ReviewX\get_resource_id(...func_get_args()); } }
 if (!function_exists('getallheaders')) { function getallheaders() { return \ReviewX\getallheaders(...func_get_args()); } }
 if (!function_exists('grapheme_extract')) { function grapheme_extract() { return \ReviewX\grapheme_extract(...func_get_args()); } }
@@ -153,10 +147,9 @@ if (!function_exists('grapheme_strripos')) { function grapheme_strripos() { retu
 if (!function_exists('grapheme_strrpos')) { function grapheme_strrpos() { return \ReviewX\grapheme_strrpos(...func_get_args()); } }
 if (!function_exists('grapheme_strstr')) { function grapheme_strstr() { return \ReviewX\grapheme_strstr(...func_get_args()); } }
 if (!function_exists('grapheme_substr')) { function grapheme_substr() { return \ReviewX\grapheme_substr(...func_get_args()); } }
-if (!function_exists('has_action')) { function has_action() { return \ReviewX\has_action(...func_get_args()); } }
 if (!function_exists('hrtime')) { function hrtime() { return \ReviewX\hrtime(...func_get_args()); } }
-if (!function_exists('http_get_last_response_headers')) { function http_get_last_response_headers() { return \ReviewX\http_get_last_response_headers(...func_get_args()); } }
 if (!function_exists('is_countable')) { function is_countable() { return \ReviewX\is_countable(...func_get_args()); } }
+if (!function_exists('maybe_unserialize')) { function maybe_unserialize() { return \ReviewX\maybe_unserialize(...func_get_args()); } }
 if (!function_exists('mb_check_encoding')) { function mb_check_encoding() { return \ReviewX\mb_check_encoding(...func_get_args()); } }
 if (!function_exists('mb_chr')) { function mb_chr() { return \ReviewX\mb_chr(...func_get_args()); } }
 if (!function_exists('mb_convert_case')) { function mb_convert_case() { return \ReviewX\mb_convert_case(...func_get_args()); } }
@@ -201,16 +194,11 @@ if (!function_exists('mb_substr')) { function mb_substr() { return \ReviewX\mb_s
 if (!function_exists('mb_substr_count')) { function mb_substr_count() { return \ReviewX\mb_substr_count(...func_get_args()); } }
 if (!function_exists('mb_trim')) { function mb_trim() { return \ReviewX\mb_trim(...func_get_args()); } }
 if (!function_exists('mb_ucfirst')) { function mb_ucfirst() { return \ReviewX\mb_ucfirst(...func_get_args()); } }
-if (!function_exists('media_handle_sideload')) { function media_handle_sideload() { return \ReviewX\media_handle_sideload(...func_get_args()); } }
 if (!function_exists('normalizer_is_normalized')) { function normalizer_is_normalized() { return \ReviewX\normalizer_is_normalized(...func_get_args()); } }
 if (!function_exists('normalizer_normalize')) { function normalizer_normalize() { return \ReviewX\normalizer_normalize(...func_get_args()); } }
-if (!function_exists('plugin_dir_path')) { function plugin_dir_path() { return \ReviewX\plugin_dir_path(...func_get_args()); } }
-if (!function_exists('plugins_url')) { function plugins_url() { return \ReviewX\plugins_url(...func_get_args()); } }
 if (!function_exists('preg_last_error_msg')) { function preg_last_error_msg() { return \ReviewX\preg_last_error_msg(...func_get_args()); } }
 if (!function_exists('qarray')) { function qarray() { return \ReviewX\qarray(...func_get_args()); } }
-if (!function_exists('sanitize_html_class')) { function sanitize_html_class() { return \ReviewX\sanitize_html_class(...func_get_args()); } }
 if (!function_exists('setproctitle')) { function setproctitle() { return \ReviewX\setproctitle(...func_get_args()); } }
-if (!function_exists('setup_postdata')) { function setup_postdata() { return \ReviewX\setup_postdata(...func_get_args()); } }
 if (!function_exists('str_contains')) { function str_contains() { return \ReviewX\str_contains(...func_get_args()); } }
 if (!function_exists('str_ends_with')) { function str_ends_with() { return \ReviewX\str_ends_with(...func_get_args()); } }
 if (!function_exists('str_starts_with')) { function str_starts_with() { return \ReviewX\str_starts_with(...func_get_args()); } }
@@ -270,15 +258,5 @@ if (!function_exists('twig_trim_filter')) { function twig_trim_filter() { return
 if (!function_exists('twig_upper_filter')) { function twig_upper_filter() { return \ReviewX\twig_upper_filter(...func_get_args()); } }
 if (!function_exists('twig_urlencode_filter')) { function twig_urlencode_filter() { return \ReviewX\twig_urlencode_filter(...func_get_args()); } }
 if (!function_exists('twig_var_dump')) { function twig_var_dump() { return \ReviewX\twig_var_dump(...func_get_args()); } }
-if (!function_exists('wc_format_datetime')) { function wc_format_datetime() { return \ReviewX\wc_format_datetime(...func_get_args()); } }
-if (!function_exists('wc_get_account_orders_actions')) { function wc_get_account_orders_actions() { return \ReviewX\wc_get_account_orders_actions(...func_get_args()); } }
-if (!function_exists('wc_get_account_orders_columns')) { function wc_get_account_orders_columns() { return \ReviewX\wc_get_account_orders_columns(...func_get_args()); } }
-if (!function_exists('wc_get_endpoint_url')) { function wc_get_endpoint_url() { return \ReviewX\wc_get_endpoint_url(...func_get_args()); } }
-if (!function_exists('wc_get_order')) { function wc_get_order() { return \ReviewX\wc_get_order(...func_get_args()); } }
-if (!function_exists('wc_get_order_status_name')) { function wc_get_order_status_name() { return \ReviewX\wc_get_order_status_name(...func_get_args()); } }
-if (!function_exists('wc_get_product')) { function wc_get_product() { return \ReviewX\wc_get_product(...func_get_args()); } }
-if (!function_exists('wc_print_notice')) { function wc_print_notice() { return \ReviewX\wc_print_notice(...func_get_args()); } }
-if (!function_exists('wp_get_attachment_image')) { function wp_get_attachment_image() { return \ReviewX\wp_get_attachment_image(...func_get_args()); } }
-if (!function_exists('wp_untrash_comment')) { function wp_untrash_comment() { return \ReviewX\wp_untrash_comment(...func_get_args()); } }
 
 return $loader;

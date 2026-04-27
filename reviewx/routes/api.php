@@ -62,6 +62,10 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
     Route::post('/reviews/bulk/trash', [ReviewController::class, 'reviewBulkTrash']);
     Route::put('/reviews/(?P<WpUniqueId>[a-zA-Z0-9-]+)/trash', [ReviewController::class, 'reviewMoveToTrash']);
     Route::delete('/reviews/empty/trash', [ReviewController::class, 'reviewEmptyTrash']);
+    Route::delete('/reviews/empty/spam', [ReviewController::class, 'reviewEmptySpam']);
+    Route::get('/reviews/duplicates', [ReviewController::class, 'duplicateReviewList']);
+    Route::post('/reviews/duplicates/scan', [ReviewController::class, 'scanDuplicateReviews']);
+    Route::post('/reviews/duplicates/remove', [ReviewController::class, 'removeDuplicateReviews']);
     Route::get('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)', [ReviewController::class, 'show']);
     Route::put('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/update', [ReviewController::class, 'update']);
     Route::delete('/reviews/(?P<wpUniqueId>[a-zA-Z0-9-]+)/delete', [ReviewController::class, 'delete']);
@@ -93,6 +97,7 @@ Route::group(['prefix' => '/api/v1', 'middleware' => AuthMiddleware::class], fun
      * Reviews Import and Export
      */
     Route::get('/admin/import/history', [ImportExportController::class, 'importHistory']);
+    Route::get('/admin/import/status', [ImportExportController::class, 'importStatus']);
     Route::post('/admin/import/supported/app/store', [ImportExportController::class, 'importSupportedAppStore']);
     Route::post('/reviews/import/store', [ImportExportController::class, 'importStore']);
     Route::post('/admin/import/rollback/(?P<uid>[a-zA-Z0-9-]+)', [ImportExportController::class, 'importRollback']);

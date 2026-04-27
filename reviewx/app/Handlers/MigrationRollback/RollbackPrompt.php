@@ -27,18 +27,20 @@ class RollbackPrompt
     // Handles the rollback of plugin options data
     public function reviewx_retrieve_saas_plugin_options_data()
     {
-        $settings_data = (array) (new SettingService())->getSettingsData()['setting'] ?? [];
+        $settings = (new SettingService())->getSettingsData();
+        $settings_data = isset($settings['setting']) && \is_array($settings['setting']) ? $settings['setting'] : [];
+        $review_settings = [];
         // If settings data is an array, extract and update widget/review settings
         if (\is_array($settings_data)) {
             $widget_settings = $settings_data['widget_settings'] ?? [];
-            $review_settings = $settings_data['review_settings']['reviews'] ?? [];
+            $review_settings = isset($settings_data['review_settings']['reviews']) && \is_array($settings_data['review_settings']['reviews']) ? $settings_data['review_settings']['reviews'] : [];
             $this->update_widget_settings($widget_settings);
             $this->update_review_settings($review_settings);
         }
         $sharedMethods = new \ReviewX\Handlers\MigrationRollback\SharedMethods();
         // Convert multi-criteria data if available
-        if (isset($existing_data['reviews']['multicriteria'])) {
-            $oldCriteriaData = $sharedMethods->rvxRollbackReverseReviewCriteriaConverter($existing_data['reviews']['multicriteria']);
+        if (isset($review_settings['multicriteria'])) {
+            $oldCriteriaData = $sharedMethods->rvxRollbackReverseReviewCriteriaConverter($review_settings['multicriteria']);
             if ($sharedMethods->key_exists('_rx_option_review_criteria')) {
                 \update_option('_rx_option_allow_multi_criteria', $oldCriteriaData['_rx_option_allow_multi_criteria']);
                 \update_option('_rx_option_review_criteria', $oldCriteriaData['_rx_option_review_criteria']);
@@ -163,7 +165,7 @@ class RollbackPrompt
             $serialized_key = $key_base . $index++;
             $serialized_array[$serialized_key] = (string) $value;
         }
-        return maybe_serialize($serialized_array);
+        return \maybe_serialize($serialized_array);
     }
     // Converts review attachments to match the required rollback format
     public function reviewx_retrieve_saas_plugin_reviews_attachments_data_converter($reviews_data)
@@ -178,7 +180,7 @@ class RollbackPrompt
                 $attachment_data = [];
                 foreach ($attachments as $attachment_url) {
                     if (\is_string($attachment_url)) {
-                        $attachment_id = attachment_url_to_postid($attachment_url);
+                        $attachment_id = \attachment_url_to_postid($attachment_url);
                         if ($attachment_id) {
                             $attachment_data[] = $attachment_id;
                         }

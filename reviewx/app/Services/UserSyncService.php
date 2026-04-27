@@ -19,7 +19,6 @@ class UserSyncService extends \ReviewX\Services\Service
                 }
             }
         });
-        Helper::rvxLog($userCount, "User Done");
         return $userCount;
     }
     public function formatUserData($user) : array

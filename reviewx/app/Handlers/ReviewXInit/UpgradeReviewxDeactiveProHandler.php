@@ -16,7 +16,7 @@ class UpgradeReviewxDeactiveProHandler
                 // Path to the plugin to deactivate
                 // Check if the target plugin is active
                 if (is_plugin_active($reviewxProDeactive)) {
-                    deactivate_plugins($reviewxProDeactive);
+                    \deactivate_plugins($reviewxProDeactive);
                     // Deactivate the plugin
                 }
             }

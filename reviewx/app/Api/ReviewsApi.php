@@ -129,6 +129,10 @@ class ReviewsApi extends \ReviewX\Api\BaseApi
         }
         return $this->get('reviews/get/aggregation');
     }
+    public function statusSummary() : Response
+    {
+        return $this->get('reviews/status-summary');
+    }
     /**
      * @return Response
      * @throws Exception
@@ -324,11 +328,25 @@ class ReviewsApi extends \ReviewX\Api\BaseApi
     }
     public function reviewBulkSoftDelete($data)
     {
+        if (empty($data['review_wp_unique_ids']) && !empty($data['wp_id']) && \is_array($data['wp_id'])) {
+            $siteUid = Client::getUid();
+            if (!empty($siteUid)) {
+                $data['review_wp_unique_ids'] = \array_values(\array_unique(\array_filter(\array_map(static function ($wpId) use($siteUid) {
+                    $wpId = (int) $wpId;
+                    return $wpId > 0 ? $siteUid . '-' . $wpId : null;
+                }, $data['wp_id']))));
+            }
+        }
+        unset($data['wp_id']);
         return $this->withJson($data)->post('/reviews/bulk/delete');
     }
     public function reviewEmptyTrash()
     {
         return $this->delete('reviews/empty/trash');
+    }
+    public function reviewEmptySpam(array $data = [])
+    {
+        return $this->withJson($data)->delete('reviews/empty/spam');
     }
     /**
      * @param $request

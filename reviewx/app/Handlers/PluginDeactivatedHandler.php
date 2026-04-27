@@ -10,7 +10,7 @@ class PluginDeactivatedHandler implements InvokableContract
     public function __invoke() : void
     {
         global $wpdb;
-        $rvxSites = esc_sql($wpdb->prefix . 'rvx_sites');
+        $rvxSites = \esc_sql($wpdb->prefix . 'rvx_sites');
         $cache_key = 'rvx_site_uid';
         $uid = \wp_cache_get($cache_key, 'reviewx');
         if (\false === $uid) {

@@ -45,7 +45,7 @@ class Starter
         //        $this->registered_extensions = apply_filters('rx/registered_extensions', Helper::arrayGet(config('settings'), 'rxextensions'));
         //
         //        // additional settings
-        $this->additional_settings = apply_filters('reviewx/additional_settings', ['quick_tools' => \true]);
+        $this->additional_settings = \apply_filters('reviewx/additional_settings', ['quick_tools' => \true]);
         // register hooks
         $this->register_hooks();
     }

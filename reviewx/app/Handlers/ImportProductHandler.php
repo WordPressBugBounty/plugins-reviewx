@@ -11,7 +11,7 @@ class ImportProductHandler
             if ($product->post_type === 'product') {
                 switch ($new_status) {
                     case 'publish':
-                        $currentProduct = wc_get_product($product->ID);
+                        $currentProduct = \wc_get_product($product->ID);
                         $payload = $this->prepareImportedData($currentProduct);
                         $this->appendToJsonl($payload, 'imported_product.jsonl');
                         (new \ReviewX\Handlers\ImportProductHandler())->productJsonlFileRead();
@@ -23,7 +23,7 @@ class ImportProductHandler
     public function appendToJsonl($payload, $file_name = 'imported_product.jsonl')
     {
         $file_path = REVIEWX_DIR_PATH . $file_name;
-        $json_data = wp_json_encode($payload) . \PHP_EOL;
+        $json_data = \wp_json_encode($payload) . \PHP_EOL;
         global $wp_filesystem;
         if (empty($wp_filesystem)) {
             require_once \ABSPATH . 'wp-admin/includes/file.php';
@@ -85,7 +85,7 @@ class ImportProductHandler
                 if ($result) {
                     $payload = $this->productPrepareForSync($result);
                     $sync_file = REVIEWX_DIR_PATH . 'product_sync.jsonl';
-                    $sync_json = wp_json_encode($payload) . \PHP_EOL;
+                    $sync_json = \wp_json_encode($payload) . \PHP_EOL;
                     $current_sync = $wp_filesystem->exists($sync_file) ? $wp_filesystem->get_contents($sync_file) : '';
                     $wp_filesystem->put_contents($sync_file, $current_sync . $sync_json, \FS_CHMOD_FILE);
                 }

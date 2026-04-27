@@ -46,7 +46,7 @@ class DataSyncService extends Service
             if (!$wp_filesystem->is_dir($storage_dir)) {
                 $wp_filesystem->mkdir($storage_dir, 0777);
             }
-            $post_type = sanitize_key($post_type);
+            $post_type = \sanitize_key($post_type);
             $file_name = $post_type === 'product' ? "shop-bulk-data.jsonl" : "{$post_type}-cpt-bulk-data.jsonl";
             $file_path = $storage_dir . '/' . $file_name;
             $buffer = "";
@@ -74,8 +74,8 @@ class DataSyncService extends Service
             (new WebhookRequestApi())->finishedWebhook(['total_objects' => $total_objects, 'status' => 'finished', 'from' => $from, 'post_type' => $post_type, 'resource_url' => Helper::getRestAPIurl() . '/api/v1/synced/data?post_type=' . $post_type]);
             return \true;
         } catch (\Throwable $e) {
-            \error_log('[ReviewX Debug] Data Sync Error: ' . $e->getMessage());
-            \error_log('[ReviewX Debug] Data Sync Trace: ' . $e->getTraceAsString());
+            // error_log('[ReviewX Debug] Data Sync Error: ' . $e->getMessage());
+            // error_log('[ReviewX Debug] Data Sync Trace: ' . $e->getTraceAsString());
             return \false;
         }
     }

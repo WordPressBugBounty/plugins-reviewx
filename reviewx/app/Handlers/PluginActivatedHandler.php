@@ -62,6 +62,7 @@ class PluginActivatedHandler implements InvokableContract
                         foreach ($enabled_post_types as $post_type) {
                             $this->dataSyncService->dataSync('login', $post_type);
                         }
+                        $this->cacheServices->refreshPendingReviewNoticeSummary();
                     }
                 } catch (Exception $e) {
                     // Clean up if AuthApi fails

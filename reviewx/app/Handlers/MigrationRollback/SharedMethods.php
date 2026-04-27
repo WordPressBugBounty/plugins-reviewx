@@ -17,12 +17,12 @@ class SharedMethods
     public function reviewx_activate_old_pro_plugin()
     {
         // Ensure WordPress functions are available
-        if (!\function_exists('ReviewX\\get_plugins') || !\function_exists('ReviewX\\activate_plugin')) {
+        if (!\function_exists('get_plugins') || !\function_exists('activate_plugin')) {
             return;
             // Exit if WordPress is not fully loaded
         }
         // Retrieve all installed plugins
-        $plugins = get_plugins();
+        $plugins = \get_plugins();
         $found_plugin = '';
         // Search for the ReviewX Pro plugin
         foreach ($plugins as $plugin_path => $plugin_data) {
@@ -38,7 +38,7 @@ class SharedMethods
         }
         // Activate the plugin if it is found and not already active
         if ($found_plugin && !is_plugin_active($found_plugin)) {
-            $result = activate_plugin($found_plugin);
+            $result = \activate_plugin($found_plugin);
             if (\is_wp_error($result)) {
                 // Optionally, handle errors if activation fails
             } else {
@@ -50,12 +50,12 @@ class SharedMethods
     }
     public function reviewx_deactivate_old_pro_plugin()
     {
-        if (!\function_exists('ReviewX\\get_plugins') || !\function_exists('ReviewX\\deactivate_plugins')) {
+        if (!\function_exists('get_plugins') || !\function_exists('deactivate_plugins')) {
             return;
             // Exit if WordPress is not fully loaded
         }
         // Retrieve all installed plugins
-        $plugins = get_plugins();
+        $plugins = \get_plugins();
         $found_plugin = '';
         // Search for the ReviewX Pro plugin
         foreach ($plugins as $plugin_path => $plugin_data) {
@@ -70,7 +70,7 @@ class SharedMethods
         }
         // Deactivate the plugin if it is found and not already deactive
         if ($found_plugin && is_plugin_active($found_plugin)) {
-            $result = deactivate_plugins($found_plugin);
+            $result = \deactivate_plugins($found_plugin);
             if (\is_wp_error($result)) {
                 // Optionally, handle errors if deactivation fails
             } else {

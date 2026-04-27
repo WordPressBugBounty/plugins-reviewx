@@ -24,7 +24,7 @@ class StorefrontReviewLinkClickScroll
             return;
         }
         // Check if WooCommerce is active and we are on a product page
-        if (\function_exists('ReviewX\\wc_get_product') && 'product' === $post_type) {
+        if (\function_exists('wc_get_product') && 'product' === $post_type) {
             ?>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {

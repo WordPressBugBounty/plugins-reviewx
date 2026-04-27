@@ -107,7 +107,7 @@ class OrderStatusChangedHandler
         if (!$order_id) {
             return;
         }
-        $order = wc_get_order($order_id);
+        $order = \wc_get_order($order_id);
         if (!$order) {
             return;
         }

@@ -9,7 +9,7 @@ class ProductUpdateHandler
 {
     public function __invoke($product_id)
     {
-        $product = wc_get_product($product_id);
+        $product = \wc_get_product($product_id);
         $payload = $this->updateData($product);
         $uid = Client::getUid() . '-' . $product_id;
         $response = (new ProductApi())->update($payload, $uid);

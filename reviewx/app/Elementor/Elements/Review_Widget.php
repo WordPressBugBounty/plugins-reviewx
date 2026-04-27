@@ -414,13 +414,13 @@ class Review_Widget extends Widget_Base
         if (\class_exists('WooCommerce')) {
             // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
             global $product;
-            $product = wc_get_product();
+            $product = \wc_get_product();
             if (empty($product)) {
                 echo '<h3>' . \esc_html__('This widget only works for the product page. In order to achieve, follow the steps: this  Dashboard >  Template  > Theme Builder > Add New > Choose Template Type \'Single Product\' > Create Template', 'reviewx') . '</h3>';
                 // phpcs:enable
                 return;
             }
-            setup_postdata($product->get_id());
+            \setup_postdata($product->get_id());
             \call_user_func('comments_template', 'reviews');
             // phpcs:enable
         }

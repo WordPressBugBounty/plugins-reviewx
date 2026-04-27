@@ -4,14 +4,17 @@ namespace ReviewX\Handlers\BulkAction;
 
 use ReviewX\CPT\CptHelper;
 use ReviewX\Services\CacheServices;
+use ReviewX\Services\ReviewService;
 class ReviewTrashScreenHandler
 {
     protected CptHelper $cptHelper;
     protected CacheServices $cacheServices;
+    protected ReviewService $reviewService;
     public function __construct()
     {
         $this->cptHelper = new CptHelper();
         $this->cacheServices = new CacheServices();
+        $this->reviewService = new ReviewService();
     }
     public function maybeHandleEmptyTrash() : void
     {
@@ -21,7 +24,7 @@ class ReviewTrashScreenHandler
         check_admin_referer('bulk-comments');
         $deleted = 0;
         foreach ($this->getScopedTrashCommentIds() as $comment_id) {
-            if (\wp_delete_comment((int) $comment_id, \true)) {
+            if ($this->reviewService->deleteCommentTreeInWp((int) $comment_id)) {
                 $deleted++;
             }
         }
@@ -227,18 +230,22 @@ class ReviewTrashScreenHandler
         if (!$this->isManagedTrashScreen()) {
             return \false;
         }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing delete_all from $_REQUEST is safe here as it's checked by check_admin_referer later or in context
         return isset($_REQUEST['delete_all']) || isset($_REQUEST['delete_all2']);
     }
     private function isManagedTrashScreen() : bool
     {
-        $comment_status = isset($_REQUEST['comment_status']) ? sanitize_key(\wp_unslash($_REQUEST['comment_status'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing comment_status from $_REQUEST for screen detection
+        $comment_status = isset($_REQUEST['comment_status']) ? \sanitize_key(\wp_unslash($_REQUEST['comment_status'])) : '';
         return $comment_status === 'trash' && $this->isReviewxCommentsScreen();
     }
     private function isReviewxCommentsScreen() : bool
     {
         $enabled_post_types = $this->cptHelper->enabledCPT();
-        $post_type = isset($_REQUEST['post_type']) ? sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
-        $comment_type = isset($_REQUEST['comment_type']) ? sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing post_type from $_REQUEST for screen detection
+        $post_type = isset($_REQUEST['post_type']) ? \sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing comment_type from $_REQUEST for screen detection
+        $comment_type = isset($_REQUEST['comment_type']) ? \sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
         if ($comment_type === 'review') {
             return \true;
         }
@@ -247,8 +254,11 @@ class ReviewTrashScreenHandler
     private function getScopedTrashCommentIds() : array
     {
         $query_args = ['status' => 'trash', 'fields' => 'ids', 'number' => 0, 'orderby' => 'comment_ID', 'order' => 'ASC', 'update_comment_meta_cache' => \false, 'update_comment_post_cache' => \false];
-        $post_type = isset($_REQUEST['post_type']) ? sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
-        $comment_type = isset($_REQUEST['comment_type']) ? sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing filter parameters from $_REQUEST
+        $post_type = isset($_REQUEST['post_type']) ? \sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing filter parameters from $_REQUEST
+        $comment_type = isset($_REQUEST['comment_type']) ? \sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Accessing filter parameters from $_REQUEST
         $pagegen_timestamp = isset($_REQUEST['pagegen_timestamp']) ? \sanitize_text_field(\wp_unslash($_REQUEST['pagegen_timestamp'])) : '';
         if (!empty($post_type)) {
             $query_args['post_type'] = $post_type;

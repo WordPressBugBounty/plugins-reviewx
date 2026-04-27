@@ -7,7 +7,7 @@ Tested up to: 6.9
 WC requires at least: 3.1
 Requires PHP: 7.4
 WC tested up to: 10.5
-Stable tag: 2.3.8
+Stable tag: 2.3.9
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -220,6 +220,13 @@ This ReviewX plugin is brought to you by the team [ReviewX](https://reviewx.io/)
 
 
 == Changelog ==
+= 2.3.9 - 04-27-2026 =
+- Regular Update
+- Fixed review import and export
+- Added duplicate review management
+- Added a live pending-review badge
+- Fixed few minor issues
+
 = 2.3.8 - 04-08-2026 =
 - Regular Update
 - Added new features

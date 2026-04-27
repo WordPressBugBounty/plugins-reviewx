@@ -7,7 +7,7 @@ use ReviewX\Utilities\Auth\Client;
 use ReviewX\Utilities\Helper;
 use ReviewX\Services\SettingService;
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-do_action('woocommerce_before_account_orders', $has_orders);
+\do_action('woocommerce_before_account_orders', $has_orders);
 ?>
 
 <?php 
@@ -19,7 +19,7 @@ if ($has_orders) {
             <thead>
             <tr>
                 <?php 
-    foreach (wc_get_account_orders_columns() as $column_id => $column_name) {
+    foreach (\wc_get_account_orders_columns() as $column_id => $column_name) {
         ?>
                     <th class="woocommerce-orders-table__header woocommerce-orders-table__header-<?php 
         echo \esc_attr($column_id);
@@ -53,11 +53,11 @@ if ($has_orders) {
             <tbody>
             <?php 
     foreach ($customer_orders->orders as $customer_order) {
-        $order = wc_get_order($customer_order);
+        $order = \wc_get_order($customer_order);
         $items = $order->get_items();
         foreach ($items as $item_id => $item) {
             $product_id = $item->get_product_id();
-            $product = wc_get_product($product_id);
+            $product = \wc_get_product($product_id);
             // Skip if product no longer exists (deleted/invalid)
             if (!$product) {
                 continue;
@@ -71,7 +71,7 @@ if ($has_orders) {
             }
             // Get product image if ID exists
             if ($product_image_id) {
-                $product_image = wp_get_attachment_image($product_image_id, [60, 60]);
+                $product_image = \wp_get_attachment_image($product_image_id, [60, 60]);
                 // Custom width and height
             }
             ?>
@@ -79,7 +79,7 @@ if ($has_orders) {
             echo \esc_attr($order->get_status());
             ?> order">
                         <?php 
-            foreach (wc_get_account_orders_columns() as $column_id => $column_name) {
+            foreach (\wc_get_account_orders_columns() as $column_id => $column_name) {
                 ?>
                             <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-<?php 
                 echo \esc_attr($column_id);
@@ -88,10 +88,10 @@ if ($has_orders) {
                 echo \esc_attr($column_name);
                 ?>">
                                 <?php 
-                if (has_action('woocommerce_my_account_my_orders_column_' . $column_id)) {
+                if (\has_action('woocommerce_my_account_my_orders_column_' . $column_id)) {
                     ?>
                                     <?php 
-                    do_action('woocommerce_my_account_my_orders_column_' . $column_id, $order, $item);
+                    \do_action('woocommerce_my_account_my_orders_column_' . $column_id, $order, $item);
                     ?>
                                 <?php 
                 } elseif ('order-number' === $column_id) {
@@ -100,7 +100,7 @@ if ($has_orders) {
                     echo \esc_url($order->get_view_order_url());
                     ?>">
                                         <?php 
-                    echo \esc_html(_x('#', 'hash before order number', 'reviewx') . $order->get_order_number());
+                    echo \esc_html(\_x('#', 'hash before order number', 'reviewx') . $order->get_order_number());
                     ?>
                                     </a>
                                 <?php 
@@ -110,14 +110,14 @@ if ($has_orders) {
                     echo $order->get_date_created() ? \esc_attr($order->get_date_created()->date('c')) : '';
                     ?>">
                                         <?php 
-                    echo $order->get_date_created() ? \esc_html(wc_format_datetime($order->get_date_created())) : 'N/A';
+                    echo $order->get_date_created() ? \esc_html(\wc_format_datetime($order->get_date_created())) : 'N/A';
                     ?>
                                     </time>
                                 <?php 
                 } elseif ('order-status' === $column_id) {
                     ?>
                                     <?php 
-                    echo \esc_html(wc_get_order_status_name($order->get_status()));
+                    echo \esc_html(\wc_get_order_status_name($order->get_status()));
                     ?>
                                 <?php 
                 } elseif ('order-total' === $column_id) {
@@ -129,10 +129,10 @@ if ($has_orders) {
                 } elseif ('order-actions' === $column_id) {
                     ?>
                                     <?php 
-                    $actions = wc_get_account_orders_actions($order);
+                    $actions = \wc_get_account_orders_actions($order);
                     if (!empty($actions)) {
                         foreach ($actions as $key => $action) {
-                            echo '<a href="' . \esc_url($action['url']) . '" class="woocommerce-button button ' . sanitize_html_class($key) . '">' . \esc_html($action['name']) . '</a>';
+                            echo '<a href="' . \esc_url($action['url']) . '" class="woocommerce-button button ' . \sanitize_html_class($key) . '">' . \esc_html($action['name']) . '</a>';
                         }
                     }
                     ?>
@@ -148,7 +148,7 @@ if ($has_orders) {
                 ?>
                             <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-product-image"
                                 data-title="<?php 
-                esc_attr_e('Product Image', 'reviewx');
+                \esc_attr_e('Product Image', 'reviewx');
                 ?>">
                                 <?php 
                 echo \wp_kses_post($product_image);
@@ -156,13 +156,13 @@ if ($has_orders) {
                             </td>
                             <td class="woocommerce-orders-table__cell woocommerce-orders-table__cell-review"
                                 data-title="<?php 
-                esc_attr_e('Details', 'reviewx');
+                \esc_attr_e('Details', 'reviewx');
                 ?>">
                                 <?php 
                 $review_id = Helper::retrieveReviewId($order->get_id(), $product_id, \get_current_user_id());
                 $review_id = !empty($review_id);
                 $saas_order_status = (new SettingService())->getReviewSettings('product')['reviews']['review_eligibility'];
-                $order_current_status = \str_replace(' ', '_', \strtolower(wc_get_order_status_name($order->get_status())));
+                $order_current_status = \str_replace(' ', '_', \strtolower(\wc_get_order_status_name($order->get_status())));
                 if ($order_current_status === 'completed') {
                     $order_current_status = 'completed_payment';
                 } elseif ($order_current_status === 'pending') {
@@ -215,7 +215,7 @@ if ($has_orders) {
     </div>
 
     <?php 
-    do_action('woocommerce_before_account_orders_pagination');
+    \do_action('woocommerce_before_account_orders_pagination');
     ?>
 
     <?php 
@@ -227,7 +227,7 @@ if ($has_orders) {
             ?>
                 <a class="woocommerce-button woocommerce-button--previous button"
                    href="<?php 
-            echo \esc_url(wc_get_endpoint_url('orders', $current_page - 1));
+            echo \esc_url(\wc_get_endpoint_url('orders', $current_page - 1));
             ?>"><?php 
             \esc_html_e('Previous', 'reviewx');
             ?></a>
@@ -240,7 +240,7 @@ if ($has_orders) {
             ?>
                 <a class="woocommerce-button woocommerce-button--next button"
                    href="<?php 
-            echo \esc_url(wc_get_endpoint_url('orders', $current_page + 1));
+            echo \esc_url(\wc_get_endpoint_url('orders', $current_page + 1));
             ?>"><?php 
             \esc_html_e('Next', 'reviewx');
             ?></a>
@@ -257,7 +257,7 @@ if ($has_orders) {
     ?>
 
     <?php 
-    wc_print_notice(\esc_html__('No order has been made yet.', 'reviewx'), 'notice');
+    \wc_print_notice(\esc_html__('No order has been made yet.', 'reviewx'), 'notice');
     ?>
 
 <?php 
@@ -265,7 +265,7 @@ if ($has_orders) {
 ?>
 
 <?php 
-do_action('woocommerce_after_account_orders', $has_orders);
+\do_action('woocommerce_after_account_orders', $has_orders);
 ?>
 
 <script>

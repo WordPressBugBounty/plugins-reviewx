@@ -3881,6 +3881,11 @@ const {
     method: "get"
   },
   {
+    name: "review-import-status",
+    url: "admin/import/status",
+    method: "get"
+  },
+  {
     name: "review-import",
     url: "reviews/import/store",
     method: "post"
@@ -3906,8 +3911,28 @@ const {
     method: "post"
   },
   {
+    name: "review-duplicate-list",
+    url: "reviews/duplicates",
+    method: "get"
+  },
+  {
+    name: "review-duplicate-scan",
+    url: "reviews/duplicates/scan",
+    method: "post"
+  },
+  {
+    name: "review-duplicate-remove",
+    url: "reviews/duplicates/remove",
+    method: "post"
+  },
+  {
     name: "review-empty-trash",
     url: "reviews/empty/trash",
+    method: "delete"
+  },
+  {
+    name: "review-empty-spam",
+    url: "reviews/empty/spam",
     method: "delete"
   }
 ], Sy = [
@@ -11922,20 +11947,24 @@ const Q2 = ["placeholder"], XI = /* @__PURE__ */ se({
     modalWrapperClass: {},
     modalClass: {},
     showCloseIcon: { type: Boolean, default: !0 },
-    dialogClass: {}
+    dialogClass: {},
+    dismissible: { type: Boolean, default: !0 }
   },
   emits: ["close"],
-  setup(e) {
-    return (t, n) => (J(), ge(ga, { to: "body" }, [
+  setup(e, { emit: t }) {
+    const n = t, r = e, o = () => {
+      r.dismissible && n("close");
+    };
+    return (a, i) => (J(), ge(ga, { to: "body" }, [
       $(X(Pa), {
         appear: "",
-        show: t.visibility,
+        show: a.visibility,
         as: "template"
       }, {
         default: ee(() => [
           $(X(fu), {
             as: "div",
-            onClose: n[1] || (n[1] = (r) => t.$emit("close")),
+            onClose: o,
             class: "rvx-relative rvx-z-10"
           }, {
             default: ee(() => [
@@ -11968,22 +11997,22 @@ const Q2 = ["placeholder"], XI = /* @__PURE__ */ se({
                       }, {
                         default: ee(() => [
                           $(X(du), {
-                            class: xe(["rvx-min-[476px] rvx-transform rvx-rounded-2xl rvx-bg-white rvx-text-left rvx-align-middle rvx-shadow-xl rvx-transition-all rvx-relative", t.modalWrapperClass])
+                            class: xe(["rvx-min-[476px] rvx-transform rvx-rounded-2xl rvx-bg-white rvx-text-left rvx-align-middle rvx-shadow-xl rvx-transition-all rvx-relative", a.modalWrapperClass])
                           }, {
                             default: ee(() => [
                               $(we, {
-                                class: xe(["rvx-bg-white rvx-w-full rvx-rounded-lg", t.modalClass])
+                                class: xe(["rvx-bg-white rvx-w-full rvx-rounded-lg", a.modalClass])
                               }, {
                                 default: ee(() => [
-                                  qe(t.$slots, "default", {}, () => [
-                                    n[2] || (n[2] = fe("h1", null, "How would you like to add reviews?", -1))
+                                  qe(a.$slots, "default", {}, () => [
+                                    i[1] || (i[1] = fe("h1", null, "How would you like to add reviews?", -1))
                                   ])
                                 ]),
                                 _: 3
                               }, 8, ["class"]),
-                              t.showCloseIcon ? (J(), ge(we, {
+                              a.showCloseIcon ? (J(), ge(we, {
                                 key: 0,
-                                onClick: n[0] || (n[0] = (r) => t.$emit("close")),
+                                onClick: i[0] || (i[0] = (l) => n("close")),
                                 class: "rvx-absolute rvx-top-[10px] rvx-right-[-23px] rvx-size-space24 rvx-bg-neutral-300 rvx-rounded-sm rvx-cursor-pointer rvx-flex rvx-justify-center rvx-items-center hover:rvx-bg-neutral-200 rvx-transform"
                               }, {
                                 default: ee(() => [
@@ -12027,34 +12056,39 @@ const Q2 = ["placeholder"], XI = /* @__PURE__ */ se({
   emits: ["save", "default"],
   setup(e) {
     return (t, n) => (J(), ge(ga, { to: "#wpwrap" }, [
-      $(we, { class: "rvx-flex rvx-justify-end rvx-gap-space16 rvx-bg-white rvx-shadow rvx-rounded-md rvx-p-space16 rvx-fixed rvx-bottom-[50px] rvx-right-[20px] rvx-left-[182px]" }, {
+      $(we, { class: "rvx-fixed rvx-inset-x-0 rvx-bottom-[50px] rvx-z-10 rvx-flex rvx-justify-end rvx-px-[20px] rvx-pl-[182px] rvx-pointer-events-none" }, {
         default: ee(() => [
-          t.showDefaultButton ? (J(), ge(Qi, {
-            key: 0,
-            loader: t.defaultLoader,
-            disabled: t.defaultButtonDisabled,
-            variant: "gray",
-            onClick: n[0] || (n[0] = (r) => t.$emit("default"))
-          }, {
+          $(we, { class: "rvx-pointer-events-auto rvx-flex rvx-justify-end rvx-gap-space16 rvx-rounded-md rvx-bg-white rvx-p-space16 rvx-shadow" }, {
             default: ee(() => [
-              qe(t.$slots, "default", {}, () => [
-                n[2] || (n[2] = je("Default"))
-              ])
+              t.showDefaultButton ? (J(), ge(Qi, {
+                key: 0,
+                loader: t.defaultLoader,
+                disabled: t.defaultButtonDisabled,
+                variant: "gray",
+                onClick: n[0] || (n[0] = (r) => t.$emit("default"))
+              }, {
+                default: ee(() => [
+                  qe(t.$slots, "default", {}, () => [
+                    n[2] || (n[2] = je("Default"))
+                  ])
+                ]),
+                _: 3
+              }, 8, ["loader", "disabled"])) : Ie("", !0),
+              $(X1, {
+                loader: t.loader,
+                disabled: t.disabled,
+                onClick: n[1] || (n[1] = (r) => t.$emit("save"))
+              }, {
+                default: ee(() => [
+                  qe(t.$slots, "save", {}, () => [
+                    n[3] || (n[3] = je(" Save "))
+                  ])
+                ]),
+                _: 3
+              }, 8, ["loader", "disabled"])
             ]),
             _: 3
-          }, 8, ["loader", "disabled"])) : Ie("", !0),
-          $(X1, {
-            loader: t.loader,
-            disabled: t.disabled,
-            onClick: n[1] || (n[1] = (r) => t.$emit("save"))
-          }, {
-            default: ee(() => [
-              qe(t.$slots, "save", {}, () => [
-                n[3] || (n[3] = je(" Save "))
-              ])
-            ]),
-            _: 3
-          }, 8, ["loader", "disabled"])
+          })
         ]),
         _: 3
       })
@@ -21777,7 +21811,7 @@ const _c = {
           default: ee(() => [
             $(we, { class: "rvx-relative" }, {
               default: ee(() => [
-                $(X(L0), { class: "rvx-absolute rvx-top-[10px] rvx-pr-2 rvx-flex rvx-items-center rvx-bg-transparent" }, {
+                $(X(L0), { class: "rvx-absolute rvx-left-[10px] rvx-top-[10px] rvx-flex rvx-items-center rvx-justify-center rvx-border-0 rvx-bg-transparent rvx-p-0 focus:rvx-outline-none" }, {
                   default: ee(() => [
                     $(Et, {
                       "icon-name": "search",
@@ -29477,10 +29511,10 @@ const na = /* @__PURE__ */ Js(JP), dN = /* @__PURE__ */ se({
     }), (u, c) => (J(), ge(ga, { to: "#wpcontent" }, [
       t.value ? (J(), ge(we, {
         key: 0,
-        class: "rvx-flex rvx-bg-neutral-900/40 rvx-z-10 rvx-p-space16 rvx-fixed rvx-top-0 rvx-left-[160px] rvx-right-[20px] rvx-h-full rvx-w-full"
+        class: "rvx-fixed rvx-inset-y-0 rvx-left-[160px] rvx-right-[20px] rvx-z-10 rvx-flex rvx-bg-neutral-900/40 rvx-p-space16"
       }, {
         default: ee(() => [
-          $(we, { class: "rvx-w-full rvx-mt-[80px] rvx-mr-[160px] rvx-border rvx-border-warning rvx-rounded-md rvx-bg-warning-50 rvx-p-space16 rvx-h-[100px] rvx-overflow-hidden" }, {
+          $(we, { class: "rvx-mt-[80px] rvx-h-[100px] rvx-w-full rvx-overflow-hidden rvx-rounded-md rvx-border rvx-border-warning rvx-bg-warning-50 rvx-p-space16" }, {
             default: ee(() => [
               $(we, { class: "rvx-flex rvx-justify-between rvx-items-center rvx-gap-space16 rvx-w-full !rvx-mb-space8" }, {
                 default: ee(() => [
@@ -29533,7 +29567,7 @@ const na = /* @__PURE__ */ Js(JP), dN = /* @__PURE__ */ se({
       })) : Ie("", !0)
     ]));
   }
-}), yN = /* @__PURE__ */ sn(vI, [["__scopeId", "data-v-65ea4d22"]]), hI = { class: "rvx-w-full rvx-bg-[#D9D9D9] rvx-overflow-hidden" }, bN = /* @__PURE__ */ se({
+}), yN = /* @__PURE__ */ sn(vI, [["__scopeId", "data-v-53270ee5"]]), hI = { class: "rvx-w-full rvx-bg-[#D9D9D9] rvx-overflow-hidden" }, bN = /* @__PURE__ */ se({
   __name: "UISweetAlert",
   props: {
     visibility: { type: Boolean, default: !1 },

@@ -75,6 +75,7 @@ class AuthController implements InvokableContract
                 $this->dataSyncService->dataSync('default', $post_type);
             }
             $this->cacheServices->removeCache();
+            $this->cacheServices->refreshPendingReviewNoticeSummary();
             $this->loginService->resetPostMeta();
             // Set the localStorage isAlreadySyncSuccess
             \set_transient('rvx_reset_sync_flag', \true);
@@ -125,6 +126,7 @@ class AuthController implements InvokableContract
                 $this->dataSyncService->dataSync('default', $post_type);
             }
             $this->cacheServices->removeCache();
+            $this->cacheServices->refreshPendingReviewNoticeSummary();
             $this->loginService->resetPostMeta();
             // Set the localStorage isAlreadySyncSuccess
             \set_transient('rvx_reset_sync_flag', \true);
@@ -159,7 +161,7 @@ class AuthController implements InvokableContract
             $data = ["enable" => $multicrtriaEnableorDisable == 1 ? \true : \false, "criterias" => $criterias];
         } elseif ($isReviewXSaaSExists) {
             $data = (array) (new SettingService())->getReviewSettings('product') ?? [];
-            $data = $data['reviews']['multicriteria'];
+            $data = $data['reviews']['multicriteria'] ?? $data['multicriteria'] ?? [];
         }
         return $data;
     }

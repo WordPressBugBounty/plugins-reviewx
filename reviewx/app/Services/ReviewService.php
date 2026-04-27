@@ -9,6 +9,7 @@ use ReviewX\Enum\ReviewStatusEnum;
 use ReviewX\Utilities\Auth\Client;
 use ReviewX\Utilities\Helper;
 use ReviewX\Utilities\TransactionManager;
+use ReviewX\Utilities\UploadMimeSupport;
 use ReviewX\WPDrill\Response;
 class ReviewService extends \ReviewX\Services\Service
 {
@@ -162,11 +163,15 @@ class ReviewService extends \ReviewX\Services\Service
         $uploaded_urls = [];
         foreach ($uploaded_images['name'] as $key => $image_name) {
             $file = ['name' => $uploaded_images['name'][$key], 'type' => $uploaded_images['type'][$key], 'tmp_name' => $uploaded_images['tmp_name'][$key], 'error' => $uploaded_images['error'][$key], 'size' => $uploaded_images['size'][$key]];
-            $upload = \wp_handle_upload($file, ['test_form' => \false]);
+            $upload = UploadMimeSupport::withAllowedUploads(function () use($file) {
+                return \wp_handle_upload($file, UploadMimeSupport::getWpHandleUploadOverrides());
+            });
             if (isset($upload['url'])) {
                 $attachment_id = \wp_insert_attachment(['guid' => $upload['url'], 'post_mime_type' => $upload['type'], 'post_title' => \sanitize_file_name($file['name']), 'post_content' => '', 'post_status' => 'publish'], $upload['file']);
-                $attachment_data = \wp_generate_attachment_metadata($attachment_id, $upload['file']);
-                \wp_update_attachment_metadata($attachment_id, $attachment_data);
+                $attachment_data = UploadMimeSupport::generateAttachmentMetadata($attachment_id, $upload['file'], $upload['type'] ?? null);
+                if (!empty($attachment_data)) {
+                    \wp_update_attachment_metadata($attachment_id, $attachment_data);
+                }
                 $uploaded_urls[] = \wp_get_attachment_url($attachment_id);
             }
         }
@@ -181,7 +186,7 @@ class ReviewService extends \ReviewX\Services\Service
                 return $this->reviewDelete($request->get_params());
             });
             if (!$deletedInWp) {
-                return Helper::rest(null)->fails(\__("Review Delete Fails", "reviewx"));
+                return Helper::rest(null)->fails(\esc_html__("Review Delete Fails", "reviewx"));
             }
         }
         $delete_rev = (new ReviewsApi())->deleteReviewData($wpUniqueId);
@@ -198,14 +203,7 @@ class ReviewService extends \ReviewX\Services\Service
         if (!$comment) {
             return \false;
         }
-        // Find and delete replies (child comments)
-        $replies = \get_comments(['parent' => $last_part]);
-        if (!empty($replies)) {
-            foreach ($replies as $reply) {
-                \wp_delete_comment($reply->comment_ID, \true);
-            }
-        }
-        return (bool) \wp_delete_comment($last_part, \true);
+        return $this->deleteCommentTreeInWp((int) $last_part);
     }
     public function restoreReview($request)
     {
@@ -213,7 +211,7 @@ class ReviewService extends \ReviewX\Services\Service
         $status = $request->get_param('status');
         return TransactionManager::run(function () use($wpUniqueId, $status) {
             if (!$this->restoreTrashToStatus($wpUniqueId, $status)) {
-                throw new Exception(\__('Review restore failed in WordPress', 'reviewx'));
+                throw new Exception(\esc_html__('Review restore failed in WordPress', 'reviewx'));
             }
             return $this->resolveReviewStatusCode($status);
         }, function ($resolvedStatus) use($wpUniqueId) {
@@ -242,7 +240,7 @@ class ReviewService extends \ReviewX\Services\Service
     {
         return TransactionManager::run(function () use($data) {
             if (!$this->bulkRestoreTrashItem($data)) {
-                throw new Exception(\__('Bulk review restore failed in WordPress', 'reviewx'));
+                throw new Exception(\esc_html__('Bulk review restore failed in WordPress', 'reviewx'));
             }
             return $data;
         }, function ($payload) {
@@ -271,7 +269,7 @@ class ReviewService extends \ReviewX\Services\Service
             $this->reviewCacheDelete($this->getLastSegment($wpUniqueId));
             return Helper::rest($verifyData()->from('data')->toArray())->success();
         }
-        return Helper::rest(null)->fails(\__('Verify Fail', 'reviewx'));
+        return Helper::rest(null)->fails(\esc_html__('Verify Fail', 'reviewx'));
     }
     public function isvisibility($request)
     {
@@ -309,9 +307,9 @@ class ReviewService extends \ReviewX\Services\Service
         $wpUniqueId = $request['wpUniqueId'];
         $verifyData = (new ReviewsApi())->sendUpdateReviewRequestEmail($data, $wpUniqueId);
         if ($verifyData) {
-            return Helper::rest($verifyData()->from('data')->toArray())->success(\__("Verify", "reviewx"));
+            return Helper::rest($verifyData()->from('data')->toArray())->success(\esc_html__("Verify", "reviewx"));
         }
-        return Helper::rest(null)->fails(\__('Fail', 'reviewx'));
+        return Helper::rest(null)->fails(\esc_html__('Fail', 'reviewx'));
     }
     public function reviewReplies($request)
     {
@@ -321,9 +319,9 @@ class ReviewService extends \ReviewX\Services\Service
         if ($commentReply) {
             $this->reviewRepliesForWp($replies);
             $this->reviewCacheDelete($this->getLastSegment($wpUniqueId));
-            return Helper::rvxApi(['success' => null])->success(\__('Reply submitted sucesfully.', 'reviewx'), 200);
+            return Helper::rvxApi(['success' => null])->success(\esc_html__('Reply submitted sucesfully.', 'reviewx'), 200);
         }
-        return Helper::rest(null)->fails(\__('Replies Fail', 'reviewx'));
+        return Helper::rest(null)->fails(\esc_html__('Replies Fail', 'reviewx'));
     }
     public function reviewCacheDelete($review_id)
     {
@@ -401,7 +399,7 @@ class ReviewService extends \ReviewX\Services\Service
         $target_status = $this->resolveRestoreCommentStatus($status);
         $current_status = $this->normalizeCommentApprovedStatus($comment->comment_approved ?? '');
         if ($current_status === 'trash') {
-            $untrashed = \ReviewX\wp_untrash_comment($comment_id);
+            $untrashed = \wp_untrash_comment($comment_id);
             if ($untrashed === \false) {
                 $this->clearTrashCommentMeta($comment_id);
             }
@@ -416,7 +414,7 @@ class ReviewService extends \ReviewX\Services\Service
         if (\wp_set_comment_status($comment_id, $target_status) === \false) {
             return \false;
         }
-        \ReviewX\clean_comment_cache($comment_id);
+        \clean_comment_cache($comment_id);
         $updated_comment = \get_comment($comment_id);
         return $updated_comment instanceof \WP_Comment && $this->normalizeCommentApprovedStatus($updated_comment->comment_approved ?? '') === $target_status;
     }
@@ -533,7 +531,7 @@ class ReviewService extends \ReviewX\Services\Service
             $this->reviewCacheDelete($this->getLastSegment($wpUniqueId));
             return Helper::rest($commentReply()->from('data')->toArray())->success();
         }
-        return Helper::rest(null)->fails(\__('Update Fail', 'reviewx'));
+        return Helper::rest(null)->fails(\esc_html__('Update Fail', 'reviewx'));
     }
     private function reviewRepliesUpdateForWp($wpUniqueId, $repliesUpdate)
     {
@@ -548,7 +546,7 @@ class ReviewService extends \ReviewX\Services\Service
         if ($commentReply) {
             return Helper::rest($commentReply()->from('data')->toArray())->success();
         }
-        return Helper::rest(null)->fails(\__('Delete Fail', 'reviewx'));
+        return Helper::rest(null)->fails(\esc_html__('Delete Fail', 'reviewx'));
     }
     public function aiReview($request)
     {
@@ -584,7 +582,7 @@ class ReviewService extends \ReviewX\Services\Service
             }
             return Helper::rest()->success("Success");
         } catch (Exception $e) {
-            return Helper::rest(\esc_html($e->getMessage()))->fails(\__("Fails", "reviewx"));
+            return Helper::rest(\esc_html($e->getMessage()))->fails(\esc_html__("Fails", "reviewx"));
         }
     }
     public function aiReviewApp($request, $comment_id)
@@ -860,33 +858,98 @@ class ReviewService extends \ReviewX\Services\Service
     }
     public function reviewBulkSoftDelete($data)
     {
-        Helper::rvxLog('reviewBulkSoftDelete started', 'debug');
         $cleared_ids = self::withDeletedCommentSyncSuspended(function () use($data) {
             return $this->emptyTrashInWp($data);
         });
-        Helper::rvxLog(['cleared_ids' => $cleared_ids], 'debug');
         // Always call SaaS API to ensure we return a valid ApiResponse object
         // that the controller's Helper::saasResponse expects.
         return $this->reviewApi->reviewBulkSoftDelete(['wp_id' => $cleared_ids]);
     }
     public function reviewEmptyTrash($data)
     {
-        Helper::rvxLog('reviewEmptyTrash started with payload:', 'debug');
-        Helper::rvxLog($data, 'debug');
         // Check if this is a targeted bulk delete from the trash tab or a global empty
         $is_targeted = !empty($data['wp_ids']) || !empty($data['wp_id']) || !empty($data['review_ids']);
         $cleared_ids = self::withDeletedCommentSyncSuspended(function () use($data) {
             return $this->emptyTrashInWp($data);
         });
-        Helper::rvxLog(['cleared_ids' => $cleared_ids], 'debug');
         if ($is_targeted) {
-            Helper::rvxLog('Executing TARGETED bulk delete', 'debug');
             return $this->reviewApi->reviewBulkSoftDelete(['wp_id' => $cleared_ids]);
         }
-        Helper::rvxLog('Executing GLOBAL empty trash', 'debug');
         return $this->reviewApi->reviewEmptyTrash();
     }
+    public function reviewEmptySpam($data)
+    {
+        $cleared_ids = self::withDeletedCommentSyncSuspended(function () use($data) {
+            return $this->emptySpamInWp($data);
+        });
+        return $this->reviewApi->reviewEmptySpam(['wp_id' => $cleared_ids]);
+    }
     public function emptyTrashInWp($data)
+    {
+        return $this->emptyCommentsInWpByStatus($data, 'trash');
+    }
+    public function emptySpamInWp($data)
+    {
+        return $this->emptyCommentsInWpByStatus($data, 'spam');
+    }
+    private function emptyCommentsInWpByStatus($data, string $status) : array
+    {
+        $review_ids = $this->extractReviewIdsFromPayload($data);
+        if (empty($review_ids)) {
+            $review_ids = $this->getManagedReviewCommentIdsByStatus($status);
+        }
+        if (empty($review_ids)) {
+            return [];
+        }
+        $cleared_ids = [];
+        foreach ($review_ids as $review_id) {
+            $review_id = (int) $review_id;
+            if ($review_id <= 0) {
+                continue;
+            }
+            if ($this->deleteCommentTreeInWp($review_id)) {
+                $cleared_ids[] = $review_id;
+            }
+        }
+        return \array_values(\array_unique(\array_map('intval', $cleared_ids)));
+    }
+    public function deleteCommentTreeInWp(int $comment_id) : bool
+    {
+        $comment = \get_comment($comment_id);
+        if (!$comment) {
+            return \false;
+        }
+        $deletion_order = $this->getCommentDescendantIdsForDeletion($comment_id);
+        $deletion_order[] = $comment_id;
+        foreach ($deletion_order as $delete_id) {
+            if (!\get_comment($delete_id)) {
+                continue;
+            }
+            if (!\wp_delete_comment($delete_id, \true)) {
+                return \false;
+            }
+        }
+        return \true;
+    }
+    private function getCommentDescendantIdsForDeletion(int $comment_id) : array
+    {
+        global $wpdb;
+        $descendant_ids = [];
+        $parent_ids = [$comment_id];
+        while (!empty($parent_ids)) {
+            $placeholders = \implode(', ', \array_fill(0, \count($parent_ids), '%d'));
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- Placeholder list is generated from integer IDs and then safely bound through prepare().
+            $child_ids = $wpdb->get_col($wpdb->prepare("SELECT comment_ID FROM {$wpdb->comments} WHERE comment_parent IN ({$placeholders}) ORDER BY comment_ID ASC", $parent_ids));
+            $child_ids = \array_values(\array_unique(\array_map('intval', (array) $child_ids)));
+            if (empty($child_ids)) {
+                break;
+            }
+            $descendant_ids = \array_merge($descendant_ids, $child_ids);
+            $parent_ids = $child_ids;
+        }
+        return \array_reverse($descendant_ids);
+    }
+    private function extractReviewIdsFromPayload($data) : array
     {
         $review_ids = [];
         if (isset($data['wp_ids']) && \is_array($data['wp_ids'])) {
@@ -895,46 +958,23 @@ class ReviewService extends \ReviewX\Services\Service
             $review_ids = $data['wp_id'];
         } elseif (isset($data['review_ids']) && \is_array($data['review_ids'])) {
             $review_ids = $data['review_ids'];
-        } else {
-            // Global empty - fetch all trashed comments (reviews)
-            $review_ids = \get_comments([
-                'status' => 'trash',
-                'fields' => 'ids',
-                'number' => 0,
-                // No limit
-                'type' => '',
-                // All types (including 'review' and 'comment')
-                'no_found_rows' => \true,
-                'update_comment_meta_cache' => \false,
-                'update_comment_post_cache' => \false,
-            ]);
         }
-        Helper::rvxLog(['extracted_review_ids' => $review_ids], 'debug');
-        if (empty($review_ids)) {
-            return [];
+        return \array_values(\array_unique(\array_filter(\array_map('intval', (array) $review_ids))));
+    }
+    private function getManagedReviewCommentIdsByStatus(string $status) : array
+    {
+        $postTypes = (new \ReviewX\CPT\CptHelper())->usedCPTOnSync('used');
+        if (!\is_array($postTypes)) {
+            $postTypes = [];
         }
-        $cleared_ids = [];
-        foreach ($review_ids as $review_id) {
-            $comment = \get_comment($review_id);
-            // If the comment doesn't exist, it's an orphan on the SaaS side.
-            // We consider it "cleared" so we can notify SaaS to delete it permanently.
-            if (!$comment) {
-                $cleared_ids[] = $review_id;
-                continue;
-            }
-            // Also delete replies
-            $replies = \get_comments(['parent' => $review_id, 'fields' => 'ids', 'status' => 'all']);
-            if (!empty($replies)) {
-                foreach ($replies as $reply_id) {
-                    \wp_delete_comment($reply_id, \true);
-                }
-            }
-            // Permanently delete the comment
-            if (\wp_delete_comment($review_id, \true)) {
-                $cleared_ids[] = $review_id;
-            }
+        $postTypes = \array_values(\array_unique(\array_filter(\array_map('sanitize_key', $postTypes))));
+        if (empty($postTypes)) {
+            $postTypes = ['product'];
+        } elseif (!\in_array('product', $postTypes, \true)) {
+            $postTypes[] = 'product';
         }
-        return $cleared_ids;
+        $args = ['status' => $status, 'fields' => 'ids', 'number' => 0, 'orderby' => 'comment_ID', 'order' => 'ASC', 'parent' => 0, 'post_type' => $postTypes, 'type__in' => ['review', 'comment', ''], 'update_comment_meta_cache' => \false, 'update_comment_post_cache' => \false];
+        return \array_values(\array_unique(\array_map('intval', (array) \get_comments($args))));
     }
     public function reviewAggregation($data)
     {
@@ -973,7 +1013,7 @@ class ReviewService extends \ReviewX\Services\Service
         $criterias = Helper::arrayGet($data, 'criterias');
         $post_type = \get_post_type($productId);
         $review_setting = (new \ReviewX\Services\SettingService())->getReviewSettings($post_type);
-        $criteria_enabled = $review_setting['reviews']['multicriteria']['enable'];
+        $criteria_enabled = $review_setting['reviews']['multicriteria']['enable'] ?? \false;
         if ($criterias && $criteria_enabled === \true) {
             $data['criterias'] = \array_map('intval', $criterias);
             // Rating Modified
@@ -997,7 +1037,6 @@ class ReviewService extends \ReviewX\Services\Service
         $maxFileSize = 5 * 1024 * 1024;
         // 5 MB
         // Allowed mime types for images
-        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/webm', 'video/ogg'];
         // Loop through the reviews array
         foreach ($wpUniqueId['reviews'] as $index => $reviewData) {
             if (isset($reviewData['wp_unique_id'])) {
@@ -1012,13 +1051,16 @@ class ReviewService extends \ReviewX\Services\Service
                         if ($file_info['size'] > $maxFileSize) {
                             continue;
                         }
-                        // Validate file type (mime type)
-                        if (!\in_array($file_info['type'], $allowedMimeTypes)) {
+                        // Validate file type from mime and filename so webp/svg can still pass
+                        // even when the browser leaves the mime blank or generic.
+                        if (!UploadMimeSupport::isAllowedAttachmentFile($file_info['name'] ?? '', $file_info['type'] ?? '')) {
                             continue;
                         }
                         if ($file_info['error'] === \UPLOAD_ERR_OK) {
                             // Upload the file to WordPress
-                            $upload = \wp_handle_upload($file_info, ['test_form' => \false]);
+                            $upload = UploadMimeSupport::withAllowedUploads(function () use($file_info) {
+                                return \wp_handle_upload($file_info, UploadMimeSupport::getWpHandleUploadOverrides());
+                            });
                             if (!isset($upload['error']) && isset($upload['url'])) {
                                 // Add the file URL to the files array
                                 $files[] = ['file' => $upload['url']];

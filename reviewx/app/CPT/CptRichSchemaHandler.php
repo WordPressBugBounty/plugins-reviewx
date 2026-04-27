@@ -34,7 +34,7 @@ class CptRichSchemaHandler
         if (\function_exists('has_filter')) {
             $priority = \has_filter('get_comment_metadata', $divi_callback);
             if ($priority !== \false) {
-                remove_filter('get_comment_metadata', $divi_callback, (int) $priority);
+                \remove_filter('get_comment_metadata', $divi_callback, (int) $priority);
                 $divi_removed = \true;
             }
         }
@@ -97,7 +97,7 @@ class CptRichSchemaHandler
         if (!empty($markup)) {
             /* translators: %s: Post type */
             \printf("\n<!-- %s -->\n", \esc_html(\sprintf(\__('ReviewX Rich Schema for %s', 'reviewx'), $post->post_type)));
-            echo '<script type="application/ld+json">' . wp_json_encode($markup, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES) . '</script>';
+            echo '<script type="application/ld+json">' . \wp_json_encode($markup, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES) . '</script>';
             \printf("\n<!-- %s -->\n", \esc_html__('/ReviewX Rich Schema', 'reviewx'));
         }
     }

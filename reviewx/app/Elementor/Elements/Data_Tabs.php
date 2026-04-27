@@ -412,7 +412,7 @@ class Data_Tabs extends Widget_Base
         if (\class_exists('WooCommerce')) {
             // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
             global $product;
-            $product = wc_get_product();
+            $product = \wc_get_product();
             //$title = $settings['rvx_review_form__description_text'];
             //var_dump($title);
             if (empty($product)) {
@@ -420,7 +420,7 @@ class Data_Tabs extends Widget_Base
                 // phpcs:enable
                 return;
             }
-            setup_postdata($product->get_id());
+            \setup_postdata($product->get_id());
             wc_get_template('single-product/tabs/tabs.php');
             // phpcs:enable
         }

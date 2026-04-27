@@ -23,13 +23,14 @@ class GoogleReviewService extends \ReviewX\Services\Service
     }
     public function googleRecaptchaVerify($data)
     {
-        $secret = (new \ReviewX\Services\SettingService())->getReviewSettings()['reviews']['recaptcha']['secret_key'];
-        $token = $data['token'];
+        $review_settings = (new \ReviewX\Services\SettingService())->getReviewSettings();
+        $secret = $review_settings['reviews']['recaptcha']['secret_key'] ?? '';
+        $token = $data['token'] ?? '';
         $recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . \urlencode($secret) . '&response=' . \urlencode($token);
         $response = wp_remote_get($recaptcha_url);
         $body = wp_remote_retrieve_body($response);
         $result = \json_decode($body, \true);
-        return ['result' => $result['success']];
+        return ['result' => $result['success'] ?? \false];
     }
     public function googleReviewKey($request)
     {

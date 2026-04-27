@@ -80,7 +80,7 @@ class Helper
     }
     public static function loggedIn()
     {
-        return is_user_logged_in() ? 1 : 0;
+        return \is_user_logged_in() ? 1 : 0;
     }
     public static function getWpCurrentUser()
     {
@@ -109,8 +109,7 @@ class Helper
     }
     public static function debugLog($message = "")
     {
-        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
-        $logMessage = \is_array($message) ? "Output is: " . \print_r($message, \true) : "Output is: " . $message;
+        $logMessage = "Output is: " . self::stringifyLogMessage($message);
         return $logMessage;
     }
     public static function arrayValue($array, $key, $default = null)
@@ -191,7 +190,7 @@ class Helper
     }
     public static function appendToJsonl(&$buffer, $data, $jsonOptions = \JSON_UNESCAPED_UNICODE | \JSON_INVALID_UTF8_SUBSTITUTE)
     {
-        $json = wp_json_encode($data, $jsonOptions);
+        $json = \wp_json_encode($data, $jsonOptions);
         if ($json === \false) {
             return \false;
         }
@@ -204,25 +203,10 @@ class Helper
     }
     public static function rvxLog($message, $context = 'debug')
     {
-        global $wp_filesystem;
-        if (empty($wp_filesystem)) {
-            require_once \ABSPATH . 'wp-admin/includes/file.php';
-            \WP_Filesystem();
-        }
-        $log_folder = REVIEWX_DIR_PATH . 'log/';
-        if (!$wp_filesystem->is_dir($log_folder)) {
-            return;
-        }
-        $log_file = $log_folder . 'log-' . \wp_date('Y-m-d') . '.log';
-        $formatted_message = \sprintf(
-            "[%s] [%s]: %s\n",
-            \wp_date('Y-m-d H:i:s'),
-            \strtoupper($context),
-            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_print_r
-            \print_r($message, \true)
-        );
-        $current = $wp_filesystem->exists($log_file) ? $wp_filesystem->get_contents($log_file) : '';
-        $wp_filesystem->put_contents($log_file, $current . $formatted_message, \FS_CHMOD_FILE);
+        $normalizedMessage = self::stringifyLogMessage($message);
+        $formattedMessage = \sprintf("[ReviewX] [%s] [%s]: %s", \wp_date('Y-m-d H:i:s'), \strtoupper($context), \trim($normalizedMessage));
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        \error_log($formattedMessage);
     }
     public static function domainSupport()
     {
@@ -289,5 +273,16 @@ class Helper
         $first_name = $current_user->first_name ?: $current_user->user_login;
         $last_name = $current_user->last_name ?: '';
         return ['domain' => \ReviewX\Utilities\Helper::getWpDomainNameOnly(), 'url' => \home_url(), 'site_locale' => \get_locale(), 'first_name' => \sanitize_text_field($first_name), 'last_name' => \sanitize_text_field($last_name)];
+    }
+    private static function stringifyLogMessage($message) : string
+    {
+        if (\is_string($message)) {
+            return $message;
+        }
+        if (\is_scalar($message) || null === $message) {
+            return (string) $message;
+        }
+        $encodedMessage = \wp_json_encode($message, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        return \false !== $encodedMessage ? $encodedMessage : '[unserializable log payload]';
     }
 }

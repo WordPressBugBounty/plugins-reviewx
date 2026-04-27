@@ -15,7 +15,7 @@ class ReviewXoldPluginDeactivateHandler
         // Path to the plugin to deactivate
         // Check if the plugin is active
         if (is_plugin_active($reviewxProPath)) {
-            deactivate_plugins($reviewxProPath);
+            \deactivate_plugins($reviewxProPath);
             // Deactivate the plugin
         }
     }

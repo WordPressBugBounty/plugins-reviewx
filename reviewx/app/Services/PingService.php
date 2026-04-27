@@ -55,11 +55,11 @@ class PingService extends \ReviewX\Services\Service
     }
     private function get_plugins_status()
     {
-        if (!\function_exists('ReviewX\\get_plugins')) {
+        if (!\function_exists('get_plugins')) {
             require_once \ABSPATH . 'wp-admin/includes/plugin.php';
         }
         $plugins = [];
-        foreach (get_plugins() as $path => $plugin) {
+        foreach (\get_plugins() as $path => $plugin) {
             if (is_plugin_active($path)) {
                 $plugins[$plugin['TextDomain'] ?? $path] = ['version' => $plugin['Version'], 'network_active' => is_plugin_active_for_network($path), 'author' => $plugin['Author'], 'update_available' => $this->check_plugin_update($path, $plugin)];
             }

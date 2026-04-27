@@ -10,7 +10,7 @@ class OnboardMenuHandler implements InvokableContract
     public function __invoke()
     {
         global $wpdb;
-        $rvxSites = esc_sql($wpdb->prefix . 'rvx_sites');
+        $rvxSites = \esc_sql($wpdb->prefix . 'rvx_sites');
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time cleanup action
         $wpdb->query('TRUNCATE TABLE `' . $rvxSites . '`');
         $sharedMethods = new SharedMethods();

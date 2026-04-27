@@ -233,7 +233,7 @@ class Cpt_Widgets extends Widget_Base
             return;
         }
         $rx_template_type = $this->get_settings_for_display();
-        setup_postdata($post->ID);
+        \setup_postdata($post->ID);
         \call_user_func('comments_template', 'reviews');
     }
     /**

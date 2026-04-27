@@ -41,8 +41,10 @@ class RegisterBulkActionsForReviewsHandler
     private function isReviewxCommentsScreen() : bool
     {
         $enabled_post_types = $this->cptHelper->enabledCPT();
-        $post_type = isset($_REQUEST['post_type']) ? sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
-        $comment_type = isset($_REQUEST['comment_type']) ? sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Contextual check in bulk actions screen
+        $post_type = isset($_REQUEST['post_type']) ? \sanitize_key(\wp_unslash($_REQUEST['post_type'])) : '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Contextual check in bulk actions screen
+        $comment_type = isset($_REQUEST['comment_type']) ? \sanitize_key(\wp_unslash($_REQUEST['comment_type'])) : '';
         if ($comment_type === 'review') {
             return \true;
         }

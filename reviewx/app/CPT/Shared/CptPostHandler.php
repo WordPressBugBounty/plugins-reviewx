@@ -85,7 +85,7 @@ class CptPostHandler
     private function createProductData($product_id, $post)
     {
         // Get the product object
-        $product = wc_get_product($product_id);
+        $product = \wc_get_product($product_id);
         // Initialize variables
         $product_images = [];
         // Get the main product image
@@ -114,7 +114,7 @@ class CptPostHandler
     private function updatedProductData($product_id, $post)
     {
         // Get the product object
-        $product = wc_get_product($product_id);
+        $product = \wc_get_product($product_id);
         // Initialize variables
         $product_images = [];
         // Get the main product image

@@ -75,7 +75,7 @@ class SettingService extends \ReviewX\Services\Service
         if ($post_type !== null) {
             $default_cpt_name = $post_type;
             if ($post_type === 'product') {
-                $review_settings = $review_settings['reviews'];
+                $review_settings = $this->extractReviewsPayload($review_settings);
             }
         }
         $option_name = '_rvx_settings_' . $default_cpt_name;
@@ -98,7 +98,7 @@ class SettingService extends \ReviewX\Services\Service
         $default_cpt_name = 'product';
         if ($post_type !== null) {
             $default_cpt_name = $post_type;
-            $review_settings = $review_settings['reviews'];
+            $review_settings = $this->extractReviewsPayload($review_settings);
         }
         $option_name = '_rvx_settings_' . $default_cpt_name;
         $data = ["setting" => ["review_settings" => ["reviews" => $review_settings]]];
@@ -177,13 +177,20 @@ class SettingService extends \ReviewX\Services\Service
         if ($this->normalizeReviewPostType($post_type) !== 'product') {
             return;
         }
-        $reviews = isset($review_settings['reviews']) && \is_array($review_settings['reviews']) ? $review_settings['reviews'] : $review_settings;
+        $reviews = $this->extractReviewsPayload($review_settings);
         if (\array_key_exists('show_verified_badge', $reviews)) {
             \update_option('woocommerce_review_rating_verification_label', $reviews['show_verified_badge'] ? 'yes' : 'no');
         }
         if (isset($reviews['review_submission_policy']['options']['verified_customer'])) {
             \update_option('woocommerce_review_rating_verification_required', $reviews['review_submission_policy']['options']['verified_customer'] ? 'yes' : 'no');
         }
+    }
+    private function extractReviewsPayload(array $review_settings) : array
+    {
+        if (isset($review_settings['reviews']) && \is_array($review_settings['reviews'])) {
+            return $review_settings['reviews'];
+        }
+        return $review_settings;
     }
     private function formatSettings(array $review_settings, array $widget_settings) : array
     {
@@ -250,7 +257,7 @@ class SettingService extends \ReviewX\Services\Service
     public function removeCredentials($requestData)
     {
         global $wpdb;
-        $rvxSites = esc_sql($wpdb->prefix . 'rvx_sites');
+        $rvxSites = \esc_sql($wpdb->prefix . 'rvx_sites');
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Rare cleanup operation on plugin-owned table
         $result = $wpdb->query('TRUNCATE TABLE `' . $rvxSites . '`');
         // Clear general cache if any site ID exists.
@@ -266,7 +273,7 @@ class SettingService extends \ReviewX\Services\Service
     public function updateSiteData($requestHeaders)
     {
         global $wpdb;
-        $table_name = esc_sql($wpdb->prefix . 'rvx_sites');
+        $table_name = \esc_sql($wpdb->prefix . 'rvx_sites');
         // --- Extract headers (headers come as arrays) ---
         $user_email = isset($requestHeaders['x_user_email'][0]) ? sanitize_email($requestHeaders['x_user_email'][0]) : '';
         $user_name = isset($requestHeaders['x_user_name'][0]) ? \sanitize_text_field($requestHeaders['x_user_name'][0]) : '';

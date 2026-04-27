@@ -5,6 +5,7 @@ namespace ReviewX\Rest\Controllers;
 \defined("ABSPATH") || exit;
 use WP_REST_Request;
 use ReviewX\Models\Site;
+use ReviewX\Services\CacheServices;
 use ReviewX\Services\CptService;
 use ReviewX\Services\DataSyncService;
 use ReviewX\Services\SettingService;
@@ -15,16 +16,19 @@ class DataSyncController
     protected SettingService $settingService;
     protected DataSyncService $dataSyncService;
     protected CptService $cptService;
+    protected CacheServices $cacheServices;
     public function __construct()
     {
         $this->dataSyncService = new DataSyncService();
         $this->settingService = new SettingService();
         $this->cptService = new CptService();
+        $this->cacheServices = new CacheServices();
     }
     public function dataSync()
     {
         $resp = $this->dataSyncService->dataSync('default');
         if ($resp) {
+            $this->cacheServices->refreshPendingReviewNoticeSummary();
             return Helper::rvxApi()->success('Data Sync Success');
         } else {
             return Helper::rvxApi()->fails('Data Sync Failed');
@@ -34,6 +38,7 @@ class DataSyncController
     {
         // Update all DB settings from API to WP DB
         $this->updateSettingsOnSync();
+        $this->cacheServices->refreshPendingReviewNoticeSummary();
         return Site::where("is_saas_sync", 0)->update(['is_saas_sync' => 1]);
     }
     public function syncStatus()
@@ -45,6 +50,7 @@ class DataSyncController
         if (!empty($response->getApiData()['sync_stats']) && $response->getApiData()['sync_stats'] === 1) {
             // Update all DB settings from API to WP DB
             $this->updateSettingsOnSync();
+            $this->cacheServices->refreshPendingReviewNoticeSummary();
             Site::where("is_saas_sync", 0)->update(['is_saas_sync' => 1]);
         }
         return Helper::saasResponse($response);
@@ -69,6 +75,9 @@ class DataSyncController
     {
         try {
             $response = $this->dataSyncService->dataManualSync($request->get_params());
+            if ($this->isSuccessfulApiResponse($response)) {
+                $this->cacheServices->refreshPendingReviewNoticeSummary();
+            }
             return Helper::saasResponse($response);
         } catch (Throwable $e) {
             return Helper::rvxApi(['error' => $e->getMessage()])->fails('General settings saved failed', $e->getCode());
@@ -78,7 +87,7 @@ class DataSyncController
     {
         $post_type = $request->get_param('post_type') ?? 'product';
         // Sanitize just in case:
-        $post_type = sanitize_key($post_type);
+        $post_type = \sanitize_key($post_type);
         if ($post_type === 'product') {
             $file_name = "shop-bulk-data.jsonl";
         } else {
@@ -270,10 +279,10 @@ class DataSyncController
         $criterias = [];
         foreach ($criteria_items as $index => $criteria_item) {
             if (\is_array($criteria_item)) {
-                $key = sanitize_key($criteria_item['key'] ?? $criteria_keys[$index] ?? '');
+                $key = \sanitize_key($criteria_item['key'] ?? $criteria_keys[$index] ?? '');
                 $name = \sanitize_text_field((string) ($criteria_item['name'] ?? ''));
             } else {
-                $key = sanitize_key($criteria_keys[$index] ?? '');
+                $key = \sanitize_key($criteria_keys[$index] ?? '');
                 $name = \sanitize_text_field((string) $criteria_item);
             }
             if ($key === '' || $name === '') {

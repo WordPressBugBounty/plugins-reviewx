@@ -85,7 +85,6 @@ class DiscountSyncService extends \ReviewX\Services\Service
                 }
             }
         });
-        Helper::rvxLog($discountCount, "Cuopn Done");
         return $discountCount;
     }
     public function processDiscount($discount) : array
