@@ -4,12 +4,13 @@ namespace ReviewX\Handlers;
 
 use ReviewX\Api\ReviewsApi;
 use ReviewX\Utilities\Auth\Client;
+use WP_Screen;
 class WoocommerceCommentStatusChangeHandler
 {
     public function __invoke($comment_id, $status)
     {
         $screen = \get_current_screen();
-        if ($screen instanceof \ReviewX\Handlers\WP_Screen || $screen->id == "edit-comments") {
+        if ($screen instanceof \WP_Screen || $screen->id == "edit-comments") {
             $this->prepareData($comment_id, $status);
         }
         if (wp_doing_ajax()) {
@@ -25,6 +26,10 @@ class WoocommerceCommentStatusChangeHandler
             switch ($status) {
                 case "approve":
                     $data["status"] = 1;
+                    (new ReviewsApi())->visibilityReviewData($data, Client::getUid() . "-" . $comment_id);
+                    break;
+                case "pending":
+                    $data["status"] = 0;
                     (new ReviewsApi())->visibilityReviewData($data, Client::getUid() . "-" . $comment_id);
                     break;
                 case "hold":

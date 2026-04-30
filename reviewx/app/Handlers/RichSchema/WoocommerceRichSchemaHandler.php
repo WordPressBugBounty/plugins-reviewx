@@ -4,7 +4,7 @@ namespace ReviewX\Handlers\RichSchema;
 
 \defined('ABSPATH') || exit;
 use ReviewX\Services\SettingService;
-use ReviewX\WC_Product;
+use WC_Product;
 /**
  * Handles rich schema markup for WooCommerce single product pages.
  */

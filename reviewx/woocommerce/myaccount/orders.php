@@ -66,7 +66,7 @@ if ($has_orders) {
             $product_image_id = 0;
             $product_image = '';
             // Check if $product is valid and method exists
-            if ($product instanceof WC_Product && \method_exists($product, 'get_image_id')) {
+            if ($product instanceof \WC_Product && \method_exists($product, 'get_image_id')) {
                 $product_image_id = $product->get_image_id();
             }
             // Get product image if ID exists
